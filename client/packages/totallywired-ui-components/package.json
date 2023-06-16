@@ -1,0 +1,28 @@
+{
+  "name": "totallywired-ui-components",
+  "version": "0.0.0",
+  "description": "Totallywired UI Components",
+  "author": "Chromatic <https://chromatic.com/>",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chromaui/intro-storybook-react-template"
+  },
+  "bugs": {
+    "url": "https://github.com/chromaui/intro-storybook-react-template/issues"
+  },
+  "license": "MIT",
+  "private": true,
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "prettify": "npx prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "2.8.8",
+    "typescript": "^5.0.4"
+  }
+}

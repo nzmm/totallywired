@@ -1,0 +1,42 @@
+.vlist {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.vlist.x-auto {
+  overflow-x: auto;
+}
+
+.vlist.x-scroll {
+  overflow-x: scroll;
+}
+
+.vlist.x-hidden {
+  overflow-x: hidden;
+}
+
+.vlist.y-auto {
+  overflow-y: auto;
+}
+
+.vlist.y-scroll {
+  overflow-y: scroll;
+}
+
+.vlist.y-hidden {
+  overflow-y: hidden;
+}
+
+.vlist > ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  position: relative;
+}
+
+.vlist > ol > li {
+  width: 100%;
+  position: absolute;
+}
