@@ -1,4 +1,4 @@
-import { VirtualList, ListItemRenderer } from "@totallywired/ui-compoents";
+import { VirtualList, ListItemRenderer } from "@totallywired/ui-components";
 
 const VL_STYLE = {
   height: "80vh",

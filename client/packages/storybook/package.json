@@ -12,14 +12,13 @@
     "src"
   ],
   "dependencies": {
+    "@totallywired/ui-components": "file:../ui-components",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "@totallywired/ui-compoents": "0.0.0"
+    "react-dom": "^18.2.0"
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
+    "build": "tsc",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "prettify": "npx prettier --write .",
@@ -37,14 +36,12 @@
     "@storybook/testing-library": "^0.1.0",
     "@types/react": "^18.2.11",
     "@types/react-dom": "^18.2.4",
-    "@vitejs/plugin-react": "^3.1.0",
     "msw": "^1.2.1",
     "msw-storybook-addon": "^1.8.0",
     "prettier": "2.8.8",
     "prop-types": "^15.8.1",
     "react-docgen-typescript": "^2.2.2",
     "storybook": "^7.0.20",
-    "typescript": "^5.0.4",
-    "vite": "^4.2.0"
+    "typescript": "^5.0.4"
   }
 }

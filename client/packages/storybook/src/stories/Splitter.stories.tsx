@@ -1,4 +1,4 @@
-import { Splitter } from "@totallywired/ui-compoents";
+import { Splitter } from "@totallywired/ui-components";
 
 const SPLIT_STYLE = { height: 300, border: "1px solid gray", borderRadius: 4 };
 const SIDE_STYLE = {

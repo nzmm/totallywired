@@ -8,7 +8,7 @@
   "private": true,
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
-  "types": "dist/index.d.ts",
+  "types": "dist/types.d.ts",
   "directories": {
     "src": "src"
   },

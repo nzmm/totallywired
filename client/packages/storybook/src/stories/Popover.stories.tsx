@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Popover, PopoverProps } from "@totallywired/ui-compoents";
+import { Popover, PopoverProps } from "@totallywired/ui-components";
 
 const BG_STYLE = {
   width: "60%",
