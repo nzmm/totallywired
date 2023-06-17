@@ -129,4 +129,4 @@ const Popover = forwardRef<HTMLElement, PopoverProps>(
 );
 
 export { Popover };
-export type { PopoverProps }
+export type { PopoverProps };

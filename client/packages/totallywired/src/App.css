@@ -35,14 +35,14 @@ main {
   padding: 0 10px;
 }
 
+li > .track:hover {
+  background-color: rgb(255, 240, 235);
+}
+
 li:focus > .track {
   background-color: rgb(255, 145, 167);
 }
 
 li > .track:active {
   background-color: red;
-}
-
-li > .track:hover {
-  background-color: rgb(255, 226, 215);
 }

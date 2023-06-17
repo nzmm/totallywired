@@ -1,7 +1,8 @@
 import { Splitter, VirtualList } from "@totallywired/ui-components";
+import { TrackItem } from "./components/TrackItem";
 
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
-import './App.css';
+import "./App.css";
 
 const createItems = (n: number, height = 50) => {
   n = isNaN(n) ? 20 : n;
@@ -11,15 +12,12 @@ const createItems = (n: number, height = 50) => {
     .map((_, i) => {
       return {
         height,
-        label: `Item ${i + 1}`      };
+        label: `Item ${i + 1}`,
+      };
     });
 };
 
 const tracks = createItems(10_000);
-
-const ListItem = (props: any)  => {
-  return <div className="track">{`track > ${props.label}`}</div>
-}
 
 function App() {
   return (
@@ -27,19 +25,21 @@ function App() {
       <header>
         <h1>Totallywired</h1>
       </header>
-      <Splitter orientation="horizontal" initialPosition="220px" minSize="200px">
+      <Splitter
+        orientation="horizontal"
+        initialPosition="220px"
+        minSize="200px"
+      >
         <aside>
           <p>Aside</p>
         </aside>
         <main>
-          <VirtualList items={tracks} renderer={ListItem} />
+          <VirtualList items={tracks} renderer={TrackItem} />
         </main>
       </Splitter>
-      <footer>
-
-      </footer>
+      <footer></footer>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

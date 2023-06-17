@@ -80,7 +80,7 @@ export const Anchored = {
 
 export const Orientation = {
   args: {
-    orientation: 'south'
+    orientation: "south"
   },
   render: (args: Partial<PopoverProps>) => {
     const anchor = useRef<HTMLButtonElement>(null);
