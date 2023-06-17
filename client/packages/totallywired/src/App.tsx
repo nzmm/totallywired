@@ -25,6 +25,7 @@ function App() {
       <header>
         <h1>Totallywired</h1>
       </header>
+
       <Splitter
         orientation="horizontal"
         initialPosition="220px"
@@ -37,7 +38,9 @@ function App() {
           <VirtualList items={tracks} renderer={TrackItem} />
         </main>
       </Splitter>
-      <footer></footer>
+      
+      <footer>
+      </footer>
     </>
   );
 }
