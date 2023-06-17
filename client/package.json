@@ -4,6 +4,9 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "storybook": "npx lerna run storybook --scope=@totallywired/storybook"
+  },
   "devDependencies": {
     "lerna": "^7.0.2"
   }

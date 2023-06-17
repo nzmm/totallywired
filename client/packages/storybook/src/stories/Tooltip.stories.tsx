@@ -1,4 +1,4 @@
-import { Tooltip as Tip } from "../components/Tooltip";
+import { Tooltip as Tip } from "@totallywired/ui-compoents";
 
 const BG_STYLE = {
   width: "60%",
