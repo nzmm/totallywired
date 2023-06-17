@@ -154,4 +154,4 @@ const VirtualList = <T extends IVirtualListItem>({
 };
 
 export { VirtualList };
-export type { ListItemRenderer, VirtualListProps };
+export type { ListItemRenderer, VirtualListProps, VirtualListItemProps };

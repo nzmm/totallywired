@@ -5,6 +5,8 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "npx lerna run dev --scope=@totallywired/react",
+    "build": "npx lerna run build",
     "storybook": "npx lerna run storybook --scope=@totallywired/storybook"
   },
   "devDependencies": {
