@@ -28,7 +28,7 @@ export default [
       peerDepsExternal(),
       resolve(),
       commonjs(),
-      scss({ output: "totallywired.css" }),
+      scss({ fileName: "totallywired.css" }),
       typescript({ tsconfig: "./tsconfig.json" }),
       terser()
     ],

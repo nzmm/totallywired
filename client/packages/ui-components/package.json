@@ -24,6 +24,7 @@
   },
   "scripts": {
     "build": "rollup -c --bundleConfigAsCjs",
+    "watch": "rollup -c --watch --bundleConfigAsCjs",
     "prettify": "npx prettier --write ."
   },
   "devDependencies": {

@@ -1,5 +1,7 @@
 import { Splitter, VirtualList } from "@totallywired/ui-components";
 import { TrackItem } from "./components/TrackItem";
+import { NowPlaying } from "./components/NowPlaying";
+import { MeMenu } from "./components/MeMenu";
 
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
 import "./App.css";
@@ -17,13 +19,14 @@ const createItems = (n: number, height = 50) => {
     });
 };
 
-const tracks = createItems(10_000);
+const tracks = createItems(6_000);
 
 function App() {
   return (
     <>
       <header>
         <h1>Totallywired</h1>
+        <MeMenu />
       </header>
 
       <Splitter
@@ -32,14 +35,33 @@ function App() {
         minSize="200px"
       >
         <aside>
-          <p>Aside</p>
+          <nav>
+            <ul>
+              <li>
+                <a href="#" aria-current="page">
+                  Tracks
+                </a>
+              </li>
+              <li>
+                <a href="#">Albums</a>
+              </li>
+              <li>
+                <a href="#">Artists</a>
+              </li>
+              <li>
+                <a href="#">Sources</a>
+              </li>
+            </ul>
+          </nav>
         </aside>
+
         <main>
           <VirtualList items={tracks} renderer={TrackItem} />
         </main>
       </Splitter>
-      
+
       <footer>
+        <NowPlaying />
       </footer>
     </>
   );

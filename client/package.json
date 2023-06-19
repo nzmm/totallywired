@@ -7,9 +7,11 @@
   "scripts": {
     "dev": "npx lerna run dev --scope=@totallywired/react",
     "build": "npx lerna run build",
+    "prettify": "npx lerna run prettify",
     "storybook": "npx lerna run storybook --scope=@totallywired/storybook"
   },
   "devDependencies": {
-    "lerna": "^7.0.2"
+    "lerna": "^7.0.2",
+    "prettier": "2.8.8"
   }
 }

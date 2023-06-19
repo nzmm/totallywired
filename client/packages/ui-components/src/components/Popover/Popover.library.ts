@@ -7,7 +7,7 @@ import React, {
 
 type PathResult = [string, CSSProperties];
 
-type Orientaion = "north" | "south" | "east" | "west";
+type Orientaion = "north" | "south" | "east" | "west" | "southwest";
 
 type PopoverProps = React.PropsWithChildren & {
   /**
@@ -91,7 +91,7 @@ const getPositionStyle = (
   width: number,
   height: number,
   offset: number,
-  gap = 2
+  gap = 0
 ) => {
   switch (orientation) {
     case "north":
@@ -103,6 +103,11 @@ const getPositionStyle = (
     case "south":
       return {
         left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
+        top: el.offsetTop + el.offsetHeight - offset + gap
+      };
+    case "southwest":
+      return {
+        left: el.offsetLeft + offset + el.offsetWidth - width,
         top: el.offsetTop + el.offsetHeight - offset + gap
       };
   }
@@ -122,7 +127,7 @@ const getPath = (
   aw: number,
   ah: number,
   ao: number,
-  po = 1
+  po = .5
 ): PathResult => {
   return useMemo(() => {
     switch (orientation) {
@@ -150,6 +155,7 @@ const getPath = (
           }
         ];
       case "south":
+      case "southwest":
         return [
           compress(`
             M${x + po} ${y + br + ah + po}

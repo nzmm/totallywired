@@ -132,7 +132,6 @@ const VirtualList = <T extends IVirtualListItem>({
 
   return (
     <div
-      tabIndex={0}
       className={`vlist x-${xOverflow} y-${yOverflow}`}
       ref={vlist}
     >

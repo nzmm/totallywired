@@ -55,11 +55,12 @@ const Splitter = ({
       }
 
       e.stopPropagation();
-      dragOwner = null;
 
       const pos = getPosition(e, orientation, splitter.current);
       setPosition(pos);
       setDragging("");
+      dragOwner = null;
+      console.log('drag over');
     };
 
     const handleDragOver = (e: DragEvent) => {
