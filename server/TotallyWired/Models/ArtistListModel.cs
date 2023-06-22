@@ -1,0 +1,7 @@
+namespace TotallyWired.Models;
+
+public class ArtistListModel
+{
+    public Guid Id { get; set; }
+    public string Name { get; set; } = default!;
+}

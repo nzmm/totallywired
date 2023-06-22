@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Npgsql">
+        <HintPath>..\..\..\..\.nuget\packages\npgsql\7.0.1\lib\net7.0\Npgsql.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

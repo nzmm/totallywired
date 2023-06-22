@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Graph" Version="4.49.0" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="wwwroot\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="wwwroot\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="wwwroot\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\dist\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\dist\totallywired.bundle.css" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\totallywired.bundle.js" />
+      <_ContentIncludedByDefault Remove="wwwroot\dist\totallywired.bundle.js.map" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TotallyWired\TotallyWired.csproj" />
+    </ItemGroup>
+
+</Project>

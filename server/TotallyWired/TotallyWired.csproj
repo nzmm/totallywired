@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Core" Version="1.26.0" />
+      <PackageReference Include="MediatR" Version="11.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Graph" Version="4.49.0" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="MediatR">
+        <HintPath>..\..\..\.nuget\packages\mediatr\11.0.0\lib\netstandard2.1\MediatR.dll</HintPath>
+      </Reference>
+      <Reference Include="MediatR.Contracts">
+        <HintPath>..\..\..\.nuget\packages\mediatr.contracts\1.0.1\lib\netstandard2.0\MediatR.Contracts.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Graph">
+        <HintPath>..\..\..\.nuget\packages\microsoft.graph\4.36.0\lib\netstandard2.0\Microsoft.Graph.dll</HintPath>
+      </Reference>
+      <Reference Include="Microsoft.Graph.Core">
+        <HintPath>..\..\..\.nuget\packages\microsoft.graph.core\2.0.11\lib\netstandard2.0\Microsoft.Graph.Core.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\TotallyWired.Domain\TotallyWired.Domain.csproj" />
+      <ProjectReference Include="..\TotallyWired.Infrastructure\TotallyWired.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
