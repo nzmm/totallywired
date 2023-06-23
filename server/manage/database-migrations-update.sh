@@ -1,2 +1,2 @@
-cd ../webapi/TotallyWired.Infrastructure || exit
+cd ../TotallyWired.Infrastructure || exit
 dotnet ef database update
