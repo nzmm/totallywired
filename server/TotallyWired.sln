@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TotallyWired.WebApi", "TotallyWired.WebApi\TotallyWired.WebApi.csproj", "{2BAB3B53-3523-4E46-9193-7A9E5665AFCE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TotallyWired", "TotallyWired\TotallyWired.csproj", "{D8FDEE6B-6807-49D6-8DB8-6994E08A4CB8}"
@@ -11,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TotallyWired.Domain", "TotallyWired.Domain\TotallyWired.Domain.csproj", "{F428DA79-10F9-4104-ADAB-0569615C59DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TotallyWired.Tests", "tests\TotallyWired.Tests\TotallyWired.Tests.csproj", "{443F7EE5-DBB2-4FAC-A0CC-137E3DD08EF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxy", "Proxy\Proxy.csproj", "{E069510E-05B7-487C-96C3-10E1DE6C73E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +41,10 @@ Global
 		{443F7EE5-DBB2-4FAC-A0CC-137E3DD08EF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{443F7EE5-DBB2-4FAC-A0CC-137E3DD08EF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{443F7EE5-DBB2-4FAC-A0CC-137E3DD08EF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E069510E-05B7-487C-96C3-10E1DE6C73E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E069510E-05B7-487C-96C3-10E1DE6C73E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E069510E-05B7-487C-96C3-10E1DE6C73E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E069510E-05B7-487C-96C3-10E1DE6C73E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{443F7EE5-DBB2-4FAC-A0CC-137E3DD08EF6} = {17F470CE-7BD9-4DCA-9412-9EC688B20165}
