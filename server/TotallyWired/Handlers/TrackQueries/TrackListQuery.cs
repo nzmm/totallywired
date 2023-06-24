@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
@@ -8,7 +8,7 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackListQuery : IRequest<IEnumerable<TrackListModel>>
+public class TrackListQuery
 {
     public string? Terms { get; init; }
     public bool RestrictToLiked { get; init; }
@@ -25,7 +25,7 @@ public class TrackListHandler : IRequestHandler<TrackListQuery, IEnumerable<Trac
         _user = user;
     }
 
-    public async Task<IEnumerable<TrackListModel>> Handle(TrackListQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<TrackListModel>> HandleAsync(TrackListQuery request, CancellationToken cancellationToken)
     {
         var terms = request.Terms?.Trim() ?? string.Empty;
 

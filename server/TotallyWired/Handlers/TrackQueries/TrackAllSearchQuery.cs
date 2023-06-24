@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
@@ -8,7 +8,7 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackAllSearchQuery : IRequest<TrackAllSearchModel>
+public class TrackAllSearchQuery
 {
     public string Terms { get; init; } = default!;
 }
@@ -24,7 +24,7 @@ public class TrackAllSearchHandler : IRequestHandler<TrackAllSearchQuery, TrackA
         _user = user;
     }
 
-    public async Task<TrackAllSearchModel> Handle(TrackAllSearchQuery request, CancellationToken cancellationToken)
+    public async Task<TrackAllSearchModel> HandleAsync(TrackAllSearchQuery request, CancellationToken cancellationToken)
     {
         var terms = request.Terms.Trim();
         if (terms.Length < 3)

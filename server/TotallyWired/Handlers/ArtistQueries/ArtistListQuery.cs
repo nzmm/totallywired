@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Infrastructure.EntityFramework.Extensions;
@@ -7,7 +7,7 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ArtistQueries;
 
-public class ArtistListQuery : IRequest<IEnumerable<ArtistListModel>>
+public class ArtistListQuery
 {
     public string? Terms { get; set; }
 }
@@ -23,7 +23,7 @@ public class ArtistListHandler : IRequestHandler<ArtistListQuery, IEnumerable<Ar
         _user = user;
     }
 
-    public async Task<IEnumerable<ArtistListModel>> Handle(ArtistListQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ArtistListModel>> HandleAsync(ArtistListQuery request, CancellationToken cancellationToken)
     {
         var terms = request.Terms?.Trim() ?? string.Empty;
 

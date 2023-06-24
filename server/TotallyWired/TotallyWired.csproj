@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <PackageReference Include="Azure.Core" Version="1.26.0" />
-      <PackageReference Include="MediatR" Version="11.1.0" />
       <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
       <PackageReference Include="Microsoft.Graph" Version="4.49.0" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
@@ -30,8 +29,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\TotallyWired.Domain\TotallyWired.Domain.csproj" />
-      <ProjectReference Include="..\TotallyWired.Infrastructure\TotallyWired.Infrastructure.csproj" />
+      <Folder Include="Domain\" />
+      <Folder Include="Infrastructure\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_artists.0.sql" />
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_releases.0.sql" />
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_tracks.0.sql" />
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\update_modified_column.0.sql" />
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Triggers\auto_update_modtime.0.sql" />
     </ItemGroup>
 
 </Project>

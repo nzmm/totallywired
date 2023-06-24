@@ -9,3 +9,157 @@ body,
   margin: 0;
   overflow: hidden;
 }
+
+#root > .split.horizontal {
+  overflow: hidden;
+}
+
+main {
+  height: 100%;
+  background-color: #f7f7f7;
+}
+
+main.home {
+  padding: 8px;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  min-height: 40px;
+  border-bottom: 1px solid gray;
+
+  > h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+  }
+}
+
+aside {
+  padding: 8px;
+
+  > nav > ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    > li + li {
+      margin-top: 8px;
+    }
+  }
+}
+
+.vlist {
+  > ol {
+    > li {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      background-color: white;
+      border-top: 1px solid #e4e4e4;
+      gap: 12px;
+
+      .track.num {
+        width: 1.8rem;
+        text-align: center;
+        padding-left: 10px;
+      }
+      .track.name {
+        flex-grow: 1;
+      }
+      .track.album {
+        width: 23%;
+      }
+      .track.artist {
+        width: 23%;
+      }
+      .track.duration {
+        width: 3rem;
+        text-align: center;
+        padding-right: 10px;
+      }
+    }
+
+    li:hover {
+      background-color: rgb(255, 240, 235);
+    }
+
+    li:focus > .track {
+      background-color: rgb(255, 145, 167);
+    }
+
+    li:active {
+      background-color: red;
+    }
+  }
+}
+
+footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  min-height: 100px;
+  border-top: 1px solid gray;
+
+  > .panel {
+    width: 33%;
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  > .now-playing {
+    > .cover-art {
+      width: 90px;
+      height: 90px;
+      border-radius: 4px;
+      background-color: #e4e4e4;
+      border: 1px solid gray;
+    }
+
+    > .track {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      justify-content: center;
+
+      > .name {
+        font-weight: bold;
+      }
+    }
+  }
+
+  > .playback-ctrl {
+    width: 33%;
+    justify-content: center;
+  }
+
+  > .output-ctrl {
+    width: 33%;
+    justify-content: end;
+  }
+}
+
+.me-menu {
+  > .avatar {
+    aspect-ratio: 1 / 1;
+    min-width: 40px;
+    border-radius: 100%;
+    border: 1px solid gray;
+    background-color: #e4e4e4;
+  }
+
+  & nav > ul {
+    width: 150px;
+    text-align: left;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+}

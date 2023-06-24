@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
@@ -7,7 +7,7 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.SourceQueries;
 
-public class SourceListQuery : IRequest<IEnumerable<SourceTypeListModel>>
+public class SourceListQuery
 {
 }
 
@@ -22,7 +22,7 @@ public class SourceListHandler : IRequestHandler<SourceListQuery, IEnumerable<So
         _user = user;
     }
 
-    public async Task<IEnumerable<SourceTypeListModel>> Handle(SourceListQuery _, CancellationToken cancellationToken)
+    public async Task<IEnumerable<SourceTypeListModel>> HandleAsync(SourceListQuery _, CancellationToken cancellationToken)
     {
         var sources = await _context.Sources
             .Where(x => x.UserId == _user.UserId)

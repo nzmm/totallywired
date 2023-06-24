@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Domain.Enums;
@@ -7,7 +7,7 @@ using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.TrackCommands;
 
-public class TrackReactionCommand : IRequest<(bool, ReactionType)>
+public class TrackReactionCommand
 {
     public Guid TrackId { get; set; }
     public ReactionType Reaction { get; set; }
@@ -24,7 +24,7 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
         _user = user;
     }
 
-    public async Task<(bool, ReactionType)> Handle(TrackReactionCommand request, CancellationToken cancellationToken)
+    public async Task<(bool, ReactionType)> HandleAsync(TrackReactionCommand request, CancellationToken cancellationToken)
     {
         var track = await _context.Tracks
             .Include(x => x.Reactions)

@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
@@ -7,7 +6,7 @@ using TotallyWired.Vendors.MicrosoftGraph;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackDownloadUrlQuery : IRequest<string>
+public class TrackDownloadUrlQuery
 {
     public Guid TrackId { get; set; }
 }
@@ -27,7 +26,7 @@ public class TrackDownloadUrlHandler : IRequestHandler<TrackDownloadUrlQuery, st
         _clientProvider = clientProvider;
     }
     
-    public async Task<string> Handle(TrackDownloadUrlQuery request, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(TrackDownloadUrlQuery request, CancellationToken cancellationToken)
     {
         var resource = await _context.Tracks
             .Where(t => t.Id == request.TrackId && t.UserId == _user.UserId)

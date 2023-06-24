@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
@@ -7,7 +7,7 @@ using TotallyWired.Vendors.MicrosoftGraph;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackFileInfoQuery : IRequest<TrackFileInfoModel>
+public class TrackFileInfoQuery
 {
     public Guid TrackId { get; init; }
 }
@@ -25,7 +25,7 @@ public class ReleaseFilenameHandler : IRequestHandler<TrackFileInfoQuery, TrackF
         _clientProvider = clientProvider;
     }
 
-    public async Task<TrackFileInfoModel> Handle(TrackFileInfoQuery request, CancellationToken cancellationToken)
+    public async Task<TrackFileInfoModel> HandleAsync(TrackFileInfoQuery request, CancellationToken cancellationToken)
     {
         var track = await _context.Tracks
             .Where(r => r.Id == request.TrackId && r.UserId == _user.UserId)

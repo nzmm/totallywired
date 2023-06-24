@@ -60,7 +60,7 @@ const Splitter = ({
       setPosition(pos);
       setDragging("");
       dragOwner = null;
-      console.log('drag over');
+      console.log("drag over");
     };
 
     const handleDragOver = (e: DragEvent) => {

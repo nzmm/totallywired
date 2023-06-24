@@ -127,7 +127,7 @@ const getPath = (
   aw: number,
   ah: number,
   ao: number,
-  po = .5
+  po = 0.5
 ): PathResult => {
   return useMemo(() => {
     switch (orientation) {

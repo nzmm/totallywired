@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
@@ -8,7 +8,7 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseListQuery : IRequest<IEnumerable<ReleaseListModel>>
+public class ReleaseListQuery
 {
     public string? Terms { get; init; }
     public bool IncludeTracks { get; init; }
@@ -25,7 +25,7 @@ public class ReleaseListHandler : IRequestHandler<ReleaseListQuery, IEnumerable<
         _user = user;
     }
 
-    public async Task<IEnumerable<ReleaseListModel>> Handle(ReleaseListQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ReleaseListModel>> HandleAsync(ReleaseListQuery request, CancellationToken cancellationToken)
     {
         var terms = request.Terms?.Trim() ?? string.Empty;
 

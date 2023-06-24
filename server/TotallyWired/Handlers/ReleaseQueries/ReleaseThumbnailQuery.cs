@@ -1,14 +1,14 @@
 using System.Net.Http.Headers;
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Vendors.MicrosoftGraph;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseThumbnailQuery : IRequest<string>
+public class ReleaseThumbnailQuery
 {
     public Guid ReleaseId { get; set; }
 }
@@ -42,7 +42,7 @@ public class ReleaseThumbnailHandler : IRequestHandler<ReleaseThumbnailQuery, st
         };
     }
 
-    public async Task<string> Handle(ReleaseThumbnailQuery request, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(ReleaseThumbnailQuery request, CancellationToken cancellationToken)
     {
         var resource = await _context.Releases
             .Where(r => r.Id == request.ReleaseId && r.UserId == _user.UserId)

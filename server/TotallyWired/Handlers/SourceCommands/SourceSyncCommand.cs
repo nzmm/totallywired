@@ -1,4 +1,3 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
@@ -6,12 +5,7 @@ using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.SourceCommands;
 
-public class SourceSyncCommand : IRequest<(bool, string)>
-{
-    public Guid SourceId { get; init; }
-}
-
-public class SourceSyncHandler : IRequestHandler<SourceSyncCommand, (bool, string)>
+public class SourceSyncHandler : IRequestHandler<Guid, (bool, string)>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
@@ -27,15 +21,15 @@ public class SourceSyncHandler : IRequestHandler<SourceSyncCommand, (bool, strin
         _indexers = indexers;
     }
 
-    public async Task<(bool, string)> Handle(SourceSyncCommand request, CancellationToken cancellationToken)
+    public async Task<(bool, string)> HandleAsync(Guid sourceId, CancellationToken cancellationToken)
     {
         var source = await _context.Sources
             .Include(x => x.User)
-            .FirstOrDefaultAsync(x => x.Id == request.SourceId && x.UserId == _user.UserId, cancellationToken: cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == sourceId && x.UserId == _user.UserId, cancellationToken: cancellationToken);
         
         if (source is null)
         {
-            return (false, $"Source '{request.SourceId}' does not exist");
+            return (false, $"Source '{sourceId}' does not exist");
         }
         
         foreach (var synchroniser in _indexers)

@@ -1,5 +1,5 @@
-using MediatR;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Extensions;
@@ -8,7 +8,7 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseCommands;
 
-public class ReleaseMetadataUpdateCommand : IRequest<ReleaseMetadataUpdateResult>
+public class ReleaseMetadataUpdateCommand
 {
     public Guid ReleaseId { get; init; }
     public ReleaseMetadataModel Metadata { get; init; } = default!;
@@ -112,7 +112,7 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
         return (artistsRemoved, releasesRemoved);
     }
 
-    public async Task<ReleaseMetadataUpdateResult> Handle(
+    public async Task<ReleaseMetadataUpdateResult> HandleAsync(
         ReleaseMetadataUpdateCommand request,
         CancellationToken cancellationToken)
     {

@@ -1,13 +1,11 @@
-using MediatR;
+using DbMigrator;
+using TotallyWired;
 using TotallyWired.Common;
 using TotallyWired.Contracts;
-using TotallyWired.Handlers.SourceCommands;
-using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Vendors.MicrosoftGraph;
+using TotallyWired.WebApi.Auth;
 using TotallyWired.WebApi.Middleware;
-using TotallyWired.WebApi.Routing;
-using TotallyWired.WebApi.Routing.Api.v1;
-using TotallyWired.WebApi.Services;
+using TotallyWired.WebApi.Routes;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -26,12 +24,12 @@ builder.Services.AddSingleton(new HttpClient(new SocketsHttpHandler
     PooledConnectionLifetime = TimeSpan.FromMinutes(2)
 }));
 
-builder.Services.AddMediatR(typeof(SourceSyncHandler).Assembly);
-builder.Services.AddScoped<CurrentUserMiddleware>();
 builder.Services.AddSingleton<IUtcProvider, UtcProvider>();
+builder.Services.AddScoped<CurrentUserMiddleware>();
 builder.Services.AddScoped<MicrosoftGraphOAuthUriHelper>();
 builder.Services.AddScoped<MicrosoftGraphTokenProvider>();
 builder.Services.AddScoped<MicrosoftGraphClientProvider>();
+builder.Services.AddTotallyWiredHandlers();
 
 builder.Services.AddTransient<ISourceIndexer, MicrosoftGraphSourceIndexer>();
 

@@ -131,10 +131,7 @@ const VirtualList = <T extends IVirtualListItem>({
   );
 
   return (
-    <div
-      className={`vlist x-${xOverflow} y-${yOverflow}`}
-      ref={vlist}
-    >
+    <div className={`vlist x-${xOverflow} y-${yOverflow}`} ref={vlist}>
       <ol style={{ height }}>
         {visible.map((v) => (
           <VirtualListItem
