@@ -6,15 +6,18 @@ const extractAntiforgeryToken = (res: Response) =>
         ?.split("=")[1] ?? ""
     : "";
 
-export const getAntiforgeryToken = () =>
+const getAntiforgeryToken = () =>
   fetch("/antiforgery/token").then(extractAntiforgeryToken);
+
+const isJsonContent = (res: Response) => 
+  (res.headers.get('content-type')?.indexOf('application/json') ?? -1) !== -1;
 
 export const sendQuery = async <T>(
   url: string,
   queryParams?: URLSearchParams
 ): Promise<T> => {
   const res = await fetch(`${queryParams ? `${url}?${queryParams}` : url}`);
-  return await res.json();
+  return isJsonContent(res) ? await res.json() : await res.text();
 };
 
 export const sendCommand = async <T = never>(

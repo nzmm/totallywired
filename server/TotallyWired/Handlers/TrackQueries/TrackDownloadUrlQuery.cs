@@ -6,12 +6,7 @@ using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackDownloadUrlQuery
-{
-    public Guid TrackId { get; set; }
-}
-
-public class TrackDownloadUrlHandler : IRequestHandler<TrackDownloadUrlQuery, string>
+public class TrackDownloadUrlHandler : IRequestHandler<Guid, string>
 {
     private const string DownloadUrlAttribute = "@microsoft.graph.downloadUrl";
     
@@ -26,10 +21,10 @@ public class TrackDownloadUrlHandler : IRequestHandler<TrackDownloadUrlQuery, st
         _clientProvider = clientProvider;
     }
     
-    public async Task<string> HandleAsync(TrackDownloadUrlQuery request, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(Guid trackId, CancellationToken cancellationToken)
     {
         var resource = await _context.Tracks
-            .Where(t => t.Id == request.TrackId && t.UserId == _user.UserId)
+            .Where(t => t.Id == trackId && t.UserId == _user.UserId)
             .Select(t => new { t.ResourceId, t.SourceId })
             .FirstOrDefaultAsync(cancellationToken);
 

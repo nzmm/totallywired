@@ -1,5 +1,8 @@
-type ListItem<T> = T & T & { height: number };
+type ListItem<T> = T & { height: number };
 
+/**
+ * Creates dummy data
+ */
 export function createItems<T>(
   n: number,
   ctor: (i: number) => ListItem<T>

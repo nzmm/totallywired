@@ -41,6 +41,7 @@ public class TrackListHandler : IRequestHandler<TrackListQuery, IEnumerable<Trac
         return await query
             .OrderBy(t => t.Artist)
             .ThenBy(t => t.Release)
+            .ThenBy(t => t.Disc)
             .ThenBy(t => t.Position)
             .Select(t => new TrackListModel
         {

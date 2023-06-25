@@ -68,9 +68,16 @@ export default function Providers() {
                 <ul>
                   {c.providers.map((p) => {
                     return (
-                      <li>
-                        ({p.trackCount}){p.createdOn}
-                        {p.modifiedOn}
+                      <li key={p.sourceId}>
+                        <dl>
+                          <dt>Track count</dt>
+                          <dd>{p.trackCount}</dd>
+                          <dt>Created</dt>
+                          <dd>{p.createdOn}</dd>
+                          <dt>Modified</dt>
+                          <dd>{p.modifiedOn}</dd>
+                        </dl>
+
                         <button onClick={(e) => handleClick(e, p.sourceId)}>
                           Sync
                         </button>

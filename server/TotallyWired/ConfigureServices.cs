@@ -11,6 +11,7 @@ public static class ConfigureServices
     {
         // tracks
         services.AddScoped<TrackListHandler>();
+        services.AddScoped<TrackDownloadUrlHandler>();
 
         // providers
         services.AddScoped<SourceListHandler>();

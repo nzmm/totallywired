@@ -1,43 +1,45 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { VirtualList } from "@totallywired/ui-components";
-
-import { getTracks } from "../lib/requests";
 import { Track } from "../lib/types";
+import { getDownloadUrl, getTracks } from "../lib/requests";
+import { usePlayer } from "../providers/AudioProvider";
 import Loading from "../components/Loading";
 
-type TrackItemProps = {
-  id: string;
-  position: number;
-  number: string;
-  name: string;
-  releaseName: string;
-  artistName: string;
-  displayLength: string;
-  length: number;
-  liked: boolean;
+type TrackItemProps = Track & {
+  onPlay(e: React.MouseEvent): void;
+  onQueue(e: React.MouseEvent): void;
 };
+
+function PlayButton({
+  id,
+  number,
+  className,
+  onClick,
+}: {
+  id: string;
+  number: string;
+  className: string;
+  onClick(e: React.MouseEvent): void;
+}) {
+  return <button className={className} title="Play now" data-id={id} onClick={onClick}>{`${number}.`}</button>;
+}
 
 function TrackItem(track: TrackItemProps) {
   return (
     <>
-      <div className="track num">{`${track.number}.`}</div>
-      <div className="track name">{`${track.name}`}</div>
-      <div className="track album">
-        <a href="#">{`${track.releaseName}`}</a>
-      </div>
-      <div className="track artist">
-        <a href="#">{`${track.artistName}`}</a>
-      </div>
-      <div className="track liked">
-        <a href="#">{`${track.liked}`}</a>
-      </div>
-      <div className="track duration">{`${track.displayLength}`}</div>
+      <PlayButton id={track.id} number={track.number} className="track num" onClick={track.onPlay} />
+      <span className="track name">{`${track.name}`}</span>
+      <a className="track album" href="#">{`${track.releaseName}`}</a>
+      <a className="track artist" href="#">{`${track.artistName}`}</a>
+      <a className="track liked" href="#">{`${track.liked}`}</a>
+      <span className="track duration">{`${track.displayLength}`}</span>
     </>
   );
 }
 
 export default function Tracks() {
+  const player = usePlayer();
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -49,10 +51,30 @@ export default function Tracks() {
     });
   }, []);
 
+  const WiredTrackItem = useMemo(() => {
+    const handlePlay = async (e: React.MouseEvent<HTMLButtonElement>) => {
+      const trackId = e.currentTarget.dataset.id;
+
+      if (!trackId) {
+        return;
+      } 
+
+      const url = await getDownloadUrl(trackId);
+      player.addTrack(url);
+      player.play();
+    }
+
+    const handleQueue = (e: React.MouseEvent) => {}
+
+    return (track: Track) => {
+      return <TrackItem {...track} onPlay={handlePlay} onQueue={handleQueue} />
+    }
+  }, [player])
+
   return loading ? (
     <Loading />
   ) : tracks.length ? (
-    <VirtualList items={tracks} renderer={TrackItem} />
+    <VirtualList items={tracks} renderer={WiredTrackItem} />
   ) : (
     <section>
       <p>You have no tracks in your library.</p>

@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@regosen/gapless-5": "^1.4.1",
     "@totallywired/ui-components": "file:../ui-components",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

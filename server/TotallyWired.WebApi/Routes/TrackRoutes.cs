@@ -22,6 +22,13 @@ public static class TrackRoutes
             return Results.Ok(tracks);
         });
 
+        group.MapGet("/{trackId:guid}/downloadUrl", async (TrackDownloadUrlHandler handler, Guid trackId, CancellationToken cancellationToken) =>
+        {
+            var downloadUrl = await handler.HandleAsync(trackId, cancellationToken);
+
+            return Results.Ok(downloadUrl);
+        });
+        
         /*
         group.MapGet("/search/all", async (TrackAllSearchHandler handler, string? q, CancellationToken cancellationToken) =>
         {
@@ -31,16 +38,6 @@ public static class TrackRoutes
             }, cancellationToken);
             
             return Results.Ok(matches);
-        });
-        
-        group.MapGet("/{trackId:guid}/downloadUrl", async (TrackDownloadUrlHandler handler, Guid trackId, CancellationToken cancellationToken) =>
-        {
-            var downloadUrl = await handler.HandleAsync(new TrackDownloadUrlQuery
-            {
-                TrackId = trackId
-            }, cancellationToken);
-
-            return Results.Ok(downloadUrl);
         });
 
         group.MapGet("/{trackId:guid}/fileInfo", async (ReleaseFilenameHandler handler, Guid trackId, CancellationToken cancellationToken) =>

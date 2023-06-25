@@ -6,8 +6,14 @@ export type User = {
 };
 
 export type Track = {
-  trackId: string;
+  id: string;
   name: string;
+  number: string;
+  releaseName: string;
+  artistName: string;
+  length: number;
+  displayLength: string;
+  liked: boolean;
 };
 
 export type Provider = {

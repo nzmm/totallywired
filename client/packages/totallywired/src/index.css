@@ -60,6 +60,7 @@ aside {
       align-items: center;
       background-color: white;
       border-top: 1px solid #e4e4e4;
+      user-select: none;
       gap: 12px;
 
       .track {
@@ -69,12 +70,19 @@ aside {
       }
 
       .track.num {
-        inline-size: 2rem;
-        text-align: center;
+        padding: 1px;
         padding-left: 10px;
+        position: relative;
+        height: 24px;
+        width: 3rem;
+        border: 0;
+        background-color: transparent;
+      }
+      .track.num:hover {
+        cursor: pointer;
       }
       .track.name {
-        flex-grow: 1;
+        inline-size: 30%;
       }
       .track.album {
         inline-size: 25%;
@@ -82,8 +90,11 @@ aside {
       .track.artist {
         inline-size: 25%;
       }
+      .track.liked {
+        flex-shrink: 0;
+      }
       .track.duration {
-        inline-size: 5rem;
+        inline-size: 4rem;
         text-align: center;
         padding-right: 10px;
       }
@@ -91,6 +102,23 @@ aside {
 
     > li:hover {
       background-color: rgb(255, 240, 235);
+
+      > .track.num {
+        color: transparent;
+      }
+
+      > .track.num::before {
+        content: "";
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="coral" stroke-width="1" stroke="red" d="M1 1 L25 12 L1 23Z" /></svg>');
+        left: 5px;
+        width: 3rem;
+        height: 14px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: block;
+        position: absolute;
+      }
     }
 
     > li:focus,
@@ -98,10 +126,20 @@ aside {
       background-color: rgb(255, 145, 167);
       border-top: 1px solid red;
       border-bottom: 1px solid red;
+
+      > .track.num::before,
+      > .track.num:hover::before {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
+      }
     }
 
     > li:active {
       background-color: red;
+
+      > .track.num::before,
+      > .track.num:hover::before {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
+      }
     }
   }
 }
