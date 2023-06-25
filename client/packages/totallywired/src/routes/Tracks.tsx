@@ -1,45 +1,65 @@
-import { VirtualList } from "@totallywired/ui-components";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { VirtualList } from "@totallywired/ui-components";
+
 import { getTracks } from "../lib/requests";
 import { Track } from "../lib/types";
+import Loading from "../components/Loading";
 
 type TrackItemProps = {
-  trackNumber: string | number;
-  trackName: string;
-  trackAlbum: string;
-  trackArtist: string;
-  duration: string;
+  id: string;
+  position: number;
+  number: string;
+  name: string;
+  releaseName: string;
+  artistName: string;
+  displayLength: string;
+  length: number;
   liked: boolean;
 };
 
-function TrackItem(props: TrackItemProps) {
+function TrackItem(track: TrackItemProps) {
   return (
     <>
-      <div className="track num">{`${props.trackNumber}.`}</div>
-      <div className="track name">{`${props.trackName}`}</div>
+      <div className="track num">{`${track.number}.`}</div>
+      <div className="track name">{`${track.name}`}</div>
       <div className="track album">
-        <a href="#">{`${props.trackAlbum}`}</a>
+        <a href="#">{`${track.releaseName}`}</a>
       </div>
       <div className="track artist">
-        <a href="#">{`${props.trackArtist}`}</a>
+        <a href="#">{`${track.artistName}`}</a>
       </div>
       <div className="track liked">
-        <a href="#">{`${props.liked}`}</a>
+        <a href="#">{`${track.liked}`}</a>
       </div>
-      <div className="track duration">{`${props.duration}`}</div>
+      <div className="track duration">{`${track.displayLength}`}</div>
     </>
   );
 }
 
 export default function Tracks() {
   const [tracks, setTracks] = useState<Track[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getTracks().then(async res => {
-      const trackData = await res.json();
-      setTracks(trackData);
+    getTracks().then((data) => {
+      const tracks = data.map((x) => ({ ...x, height: 42 }));
+      setTracks(tracks);
+      setLoading(false);
     });
   }, []);
-  
-  return <VirtualList items={tracks} renderer={TrackItem} />;
+
+  return loading ? (
+    <Loading />
+  ) : tracks.length ? (
+    <VirtualList items={tracks} renderer={TrackItem} />
+  ) : (
+    <section>
+      <p>You have no tracks in your library.</p>
+      <p>
+        Get started by setting up a{" "}
+        <Link to="/lib/providers">content provider</Link>.
+      </p>
+    </section>
+  );
 }

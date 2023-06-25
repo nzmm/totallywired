@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { useUser, userDispatch } from "../lib/providers/UserProvider";
-import { User } from "../lib/types";
+import { useUser, userDispatch } from "../providers/UserProvider";
+import { whoami } from "../lib/requests";
+import Loading from "../components/Loading";
 
 export default function Root() {
   const user = useUser();
@@ -13,13 +14,13 @@ export default function Root() {
       return;
     }
 
-    fetch("/api/v1/whoami").then(async (res) => {
-      const userData: User = await res.json();
-      dispatch({ type: "set", object: userData });
-      setTimeout(() => setLoading(false), 1000);
-    });
+    const t0 = Date.now();
 
+    whoami().then((data) => {
+      dispatch({ type: "set", object: data });
+      setTimeout(() => setLoading(false), 1000 - (Date.now() - t0));
+    });
   }, [user, dispatch]);
 
-  return loading ? "Loading..." : <Outlet />;
+  return loading ? <Loading /> : <Outlet />;
 }

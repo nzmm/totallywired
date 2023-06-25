@@ -1,7 +1,7 @@
 using System.Net.Http.Headers;
 using Microsoft.Graph;
 
-namespace TotallyWired.Vendors.MicrosoftGraph;
+namespace TotallyWired.ContentProviders.MicrosoftGraph;
 
 public class MicrosoftGraphClientProvider
 {

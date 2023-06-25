@@ -46,6 +46,7 @@ const VirtualList = <T extends IVirtualListItem>({
 
   const [height, setHeight] = useState<number>(0);
   const [visible, setVisible] = useState<VisibleItem<T>[]>([]);
+  const [focusIndex, setFocusIndex] = useState<number>(0);
 
   useEffect(() => {
     if (!vlist.current) {
@@ -73,6 +74,8 @@ const VirtualList = <T extends IVirtualListItem>({
       }
 
       scrollTop.current = vlist.current.scrollTop;
+
+      // if focusIndex now within range -> focus element
     };
 
     const handleResize = () => {
@@ -113,12 +116,13 @@ const VirtualList = <T extends IVirtualListItem>({
     };
   }, [items]);
 
-  const onFocus = useCallback(
-    (i: number) => {
-      if (vlist.current == null) {
-        return;
-      }
+  const onFocus = useCallback((i: number) => {
+    if (vlist.current == null) {
+      return;
+    }
 
+    setFocusIndex(i);
+    /*
       const [imin, imax] = indexRange.current;
 
       if (i >= imax - 1) {
@@ -126,9 +130,8 @@ const VirtualList = <T extends IVirtualListItem>({
       } else if (i <= imin + 1) {
         vlist.current.scrollBy(0, -items[imin].height);
       }
-    },
-    [items]
-  );
+      */
+  }, []);
 
   return (
     <div className={`vlist x-${xOverflow} y-${yOverflow}`} ref={vlist}>

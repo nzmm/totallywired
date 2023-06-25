@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Contracts;
-using TotallyWired.Vendors.MicrosoftGraph;
 using TotallyWired.WebApi.Middleware;
 
 namespace TotallyWired.WebApi.Auth;

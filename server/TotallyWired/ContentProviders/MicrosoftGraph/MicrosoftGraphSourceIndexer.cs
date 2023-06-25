@@ -6,7 +6,7 @@ using TotallyWired.Domain.Enums;
 using TotallyWired.Extensions;
 using TotallyWired.Infrastructure.EntityFramework;
 
-namespace TotallyWired.Vendors.MicrosoftGraph;
+namespace TotallyWired.ContentProviders.MicrosoftGraph;
 
 public class MicrosoftGraphSourceIndexer : ISourceIndexer
 {

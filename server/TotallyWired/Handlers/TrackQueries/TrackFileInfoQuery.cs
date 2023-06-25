@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
-using TotallyWired.Vendors.MicrosoftGraph;
 
 namespace TotallyWired.Handlers.TrackQueries;
 

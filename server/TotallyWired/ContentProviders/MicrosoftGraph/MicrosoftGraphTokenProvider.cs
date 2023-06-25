@@ -8,7 +8,7 @@ using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
 
-namespace TotallyWired.Vendors.MicrosoftGraph;
+namespace TotallyWired.ContentProviders.MicrosoftGraph;
 
 public class MicrosoftGraphTokenProvider : ITokenProvider
 {
@@ -117,7 +117,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         return await StoreTokensAsync(tokenResult);
     }
 
-    public async Task<(string, System.DateTime)> GetAccessTokenAsync(Guid sourceId)
+    public async Task<(string, DateTime)> GetAccessTokenAsync(Guid sourceId)
     {
         var cachedTokens = await GetSource()
             .Where(x => x.Id == sourceId)

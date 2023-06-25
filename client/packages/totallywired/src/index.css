@@ -10,6 +10,7 @@ body,
   overflow: hidden;
 }
 
+/* This ensures the vlist does not overflow the footer */
 #root > .split.horizontal {
   overflow: hidden;
 }
@@ -17,18 +18,17 @@ body,
 main {
   height: 100%;
   background-color: #f7f7f7;
-}
 
-main.home {
-  padding: 8px;
+  > section {
+    padding: 8px;
+  }
 }
 
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
-  min-height: 40px;
+  padding: 2px 8px;
   border-bottom: 1px solid gray;
 
   > h1 {
@@ -41,7 +41,7 @@ header {
 aside {
   padding: 8px;
 
-  > nav > ul {
+  > nav > menu {
     list-style-type: none;
     padding: 0;
     margin: 0;
@@ -55,7 +55,6 @@ aside {
 .vlist {
   > ol {
     > li {
-      height: 100%;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -63,8 +62,14 @@ aside {
       border-top: 1px solid #e4e4e4;
       gap: 12px;
 
+      .track {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
       .track.num {
-        width: 1.8rem;
+        inline-size: 2rem;
         text-align: center;
         padding-left: 10px;
       }
@@ -72,27 +77,30 @@ aside {
         flex-grow: 1;
       }
       .track.album {
-        width: 23%;
+        inline-size: 25%;
       }
       .track.artist {
-        width: 23%;
+        inline-size: 25%;
       }
       .track.duration {
-        width: 3rem;
+        inline-size: 5rem;
         text-align: center;
         padding-right: 10px;
       }
     }
 
-    li:hover {
+    > li:hover {
       background-color: rgb(255, 240, 235);
     }
 
-    li:focus > .track {
+    > li:focus,
+    > li.focus {
       background-color: rgb(255, 145, 167);
+      border-top: 1px solid red;
+      border-bottom: 1px solid red;
     }
 
-    li:active {
+    > li:active {
       background-color: red;
     }
   }
@@ -104,7 +112,7 @@ footer {
   align-items: center;
   justify-content: space-between;
   padding: 8px;
-  min-height: 100px;
+  min-height: 80px;
   border-top: 1px solid gray;
 
   > .panel {
@@ -116,9 +124,9 @@ footer {
 
   > .now-playing {
     > .cover-art {
-      width: 90px;
-      height: 90px;
-      border-radius: 4px;
+      width: 70px;
+      height: 70px;
+      border-radius: 3px;
       background-color: #e4e4e4;
       border: 1px solid gray;
     }
@@ -155,9 +163,19 @@ footer {
     background-color: #e4e4e4;
   }
 
-  & nav > ul {
+  & nav > menu {
     width: 150px;
     text-align: left;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+.provider.tabpanel-content {
+  padding: 12px;
+
+  > ul {
     list-style-type: none;
     padding: 0;
     margin: 0;

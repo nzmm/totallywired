@@ -1,10 +1,10 @@
 using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
+using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
-using TotallyWired.Vendors.MicrosoftGraph;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 

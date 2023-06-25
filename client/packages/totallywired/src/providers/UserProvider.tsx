@@ -1,5 +1,5 @@
 import { Reducer, createContext, useContext, useReducer } from "react";
-import { User } from "../types";
+import { User } from "../lib/types";
 
 type UserActions =
   | { type: "update"; object: User }

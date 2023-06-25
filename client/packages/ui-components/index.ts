@@ -1,4 +1,5 @@
 export { Popover } from "./src/components/Popover/Popover";
+export { TabList } from "./src/components/TabList/TabList";
 export { Tooltip } from "./src/components/Tooltip/Tooltip";
 export { Splitter } from "./src/components/Splitter/Splitter";
 export { VirtualList } from "./src/components/VirtualList/VirtualList";

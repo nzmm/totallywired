@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 
-namespace TotallyWired.Vendors.MicrosoftGraph;
+namespace TotallyWired.ContentProviders.MicrosoftGraph;
 
 public class MicrosoftGraphOAuthUriHelper : IOAuthUrlHelper
 {

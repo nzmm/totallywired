@@ -1,8 +1,8 @@
 using DbMigrator;
 using TotallyWired;
 using TotallyWired.Common;
+using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Contracts;
-using TotallyWired.Vendors.MicrosoftGraph;
 using TotallyWired.WebApi.Auth;
 using TotallyWired.WebApi.Middleware;
 using TotallyWired.WebApi.Routes;
@@ -55,7 +55,7 @@ app.UseTotallyWiredAuthentication();
 
 app.MapAuthRoutes();
 app.MapUserRoutes();
-app.MapSourceRoutes();
+app.MapProviderRoutes();
 app.MapArtistRoutes();
 app.MapReleaseRoutes();
 app.MapTrackRoutes();

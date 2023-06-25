@@ -30,6 +30,8 @@ public class SourceListHandler : IRequestHandler<SourceListQuery, IEnumerable<So
             {
                 SourceId = x.Id,
                 SourceType = x.Type,
+                CreatedOn = x.Created,
+                ModifiedOn = x.Modified,
                 TrackCount = x.Tracks.Count()
             })
             .GroupBy(x => x.SourceType, x => x)
@@ -43,7 +45,7 @@ public class SourceListHandler : IRequestHandler<SourceListQuery, IEnumerable<So
                 return new SourceTypeListModel
                 {
                     SourceType = t,
-                    Sources = typedSources ?? Enumerable.Empty<SourceListModel>()
+                    Providers = typedSources ?? Enumerable.Empty<SourceListModel>()
                 };
             });
     }

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { useUser } from "../lib/providers/UserProvider";
-import Header from "../lib/components/Header";
+import { useUser } from "../providers/UserProvider";
+import Header from "../components/Header";
 
 export default function Home() {
   const user = useUser();
@@ -9,19 +9,21 @@ export default function Home() {
     <>
       <Header />
 
-      <main className="home">
-        {user.isAuthenticated ? (
-          <>
-            <p>Hey {user.name},</p>
+      <main>
+        <section className="welcome">
+          {user.isAuthenticated ? (
+            <>
+              <p>Hey {user.name},</p>
+              <p>
+                Visit your <Link to="/lib/tracks">library</Link>&hellip;
+              </p>
+            </>
+          ) : (
             <p>
-              Visit your <Link to="/lib/tracks">library</Link>&hellip;
+              <a href="/accounts/sign-in">Login</a>
             </p>
-          </>
-        ) : (
-          <p>
-            <a href="/accounts/sign-in">Login</a>
-          </p>
-        )}
+          )}
+        </section>
       </main>
     </>
   );

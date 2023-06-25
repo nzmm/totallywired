@@ -1,9 +1,14 @@
-import { Track, User } from "./types";
+import { sendQuery, sendCommand } from "./requests.common";
+import { ProviderCollection, Track, User } from "./types";
 
 const API = "/api/v1";
 
-type ApiResponse<T> = Promise<Response & { data?: T }>;
+export const whoami = () => sendQuery<User>(`${API}/whoami`);
 
-export const whoami = (): ApiResponse<User> => fetch(`${API}/whoami`);
+export const getTracks = () => sendQuery<Track[]>(`${API}/tracks`);
 
-export const getTracks = (): ApiResponse<Track> => fetch(`${API}/tracks`);
+export const getProviders = () =>
+  sendQuery<ProviderCollection[]>(`${API}/providers`);
+
+export const syncProvider = async (sourceId: string) =>
+  sendCommand(`${API}/providers/${sourceId}/sync`);

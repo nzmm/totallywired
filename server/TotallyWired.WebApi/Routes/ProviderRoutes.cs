@@ -1,17 +1,17 @@
+using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
-using TotallyWired.Vendors.MicrosoftGraph;
 using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
 
-public static class SourceRoutes
+public static class ProviderRoutes
 {
-    public static void MapSourceRoutes(this WebApplication app)
+    public static void MapProviderRoutes(this WebApplication app)
     {
         var oauth = app
-            .MapGroup("/sources")
+            .MapGroup("/providers")
             .RequireAuthorization()
             .ValidateAntiforgery();
         
@@ -32,9 +32,8 @@ public static class SourceRoutes
             return Results.Redirect("/");
         });
         
-        /*
         var group = app
-            .MapGroup("/api/v1/sources")
+            .MapGroup("/api/v1/providers")
             .RequireAuthorization();
         
         group.MapGet("", async (SourceListHandler handler, CancellationToken cancellationToken) =>
@@ -50,6 +49,5 @@ public static class SourceRoutes
 
             return Results.Ok(new { success, message });
         });
-        */
     }
 }

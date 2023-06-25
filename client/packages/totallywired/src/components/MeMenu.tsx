@@ -25,7 +25,7 @@ export default function MeMenu() {
           show={show}
         >
           <nav>
-            <ul>
+            <menu>
               <li>
                 <a href="#">My Profile</a>
               </li>
@@ -36,7 +36,7 @@ export default function MeMenu() {
               <li>
                 <a href="#">Sign out</a>
               </li>
-            </ul>
+            </menu>
           </nav>
         </Popover>
       </div>

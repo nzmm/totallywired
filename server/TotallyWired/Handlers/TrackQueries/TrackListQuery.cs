@@ -38,7 +38,11 @@ public class TrackListHandler : IRequestHandler<TrackListQuery, IEnumerable<Trac
             query = query.Where(t => t.Reactions.Any(r => r.Reaction == ReactionType.Liked));
         }
 
-        return await query.Select(t => new TrackListModel
+        return await query
+            .OrderBy(t => t.Artist)
+            .ThenBy(t => t.Release)
+            .ThenBy(t => t.Position)
+            .Select(t => new TrackListModel
         {
             Id = t.Id,
             ArtistId = t.ArtistId,
