@@ -7,7 +7,8 @@ export const whoami = () => sendQuery<User>(`${API}/whoami`);
 
 export const getTracks = () => sendQuery<Track[]>(`${API}/tracks`);
 
-export const getDownloadUrl = (trackId: string) => sendQuery<string>(`${API}/tracks/${trackId}/downloadUrl`);
+export const getDownloadUrl = (trackId: string) =>
+  sendQuery<string>(`${API}/tracks/${trackId}/downloadUrl`);
 
 export const getProviders = () =>
   sendQuery<ProviderCollection[]>(`${API}/providers`);

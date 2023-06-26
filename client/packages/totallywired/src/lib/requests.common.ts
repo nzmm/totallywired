@@ -9,8 +9,8 @@ const extractAntiforgeryToken = (res: Response) =>
 const getAntiforgeryToken = () =>
   fetch("/antiforgery/token").then(extractAntiforgeryToken);
 
-const isJsonContent = (res: Response) => 
-  (res.headers.get('content-type')?.indexOf('application/json') ?? -1) !== -1;
+const isJsonContent = (res: Response) =>
+  (res.headers.get("content-type")?.indexOf("application/json") ?? -1) !== -1;
 
 export const sendQuery = async <T>(
   url: string,
