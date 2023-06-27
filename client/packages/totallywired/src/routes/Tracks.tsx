@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { VirtualList } from "@totallywired/ui-components";
 import { Track } from "../lib/types";
@@ -7,36 +7,20 @@ import { usePlayer } from "../providers/AudioProvider";
 import Loading from "../components/Loading";
 
 type TrackItemProps = Track & {
-  onPlay(e: React.MouseEvent): void;
-  onQueue(e: React.MouseEvent): void;
+  onPlay(e: React.MouseEvent, track: Track): void;
+  onQueue(e: React.MouseEvent, track: Track): void;
 };
 
-function PlayButton({
-  number,
-  className,
-  onClick,
-}: {
-  number: string;
-  className: string;
-  onClick(e: React.MouseEvent): void;
-}) {
-  return (
-    <button
-      className={className}
-      title="Play now"
-      onClick={onClick}
-    >{`${number}.`}</button>
-  );
-}
-
-function TrackItem(track: TrackItemProps) {
+function TrackItem({ onPlay, onQueue, ...track }: TrackItemProps) {
   return (
     <>
-      <PlayButton
-        number={track.number}
+      <button
         className="track num"
-        onClick={track.onPlay}
-      />
+        title="Play now"
+        onClick={(e) => onPlay(e, track)}
+      >
+        {`${track.number}.`}
+      </button>
       <span className="track name">{`${track.name}`}</span>
       <a className="track album" href="#">{`${track.releaseName}`}</a>
       <a className="track artist" href="#">{`${track.artistName}`}</a>
@@ -52,29 +36,28 @@ export default function Tracks() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getTracks().then((data) => {
-      const tracks = data.map((x) => ({ ...x, height: 42 }));
-      setTracks(tracks);
-      setLoading(false);
-    });
-  }, []);
-
-  const WiredTrackItem = useMemo(() => {
     const handlePlay = async (_: React.MouseEvent, track: Track) => {
       player.addTrack(track);
     };
 
-    const handleQueue = (_: React.MouseEvent) => {};
+    const handleQueue = (_: React.MouseEvent, __: Track) => {};
 
-    return (track: Track) => {
-      return <TrackItem {...track} onPlay={e => handlePlay(e, track)} onQueue={handleQueue} />;
-    };
+    getTracks().then((data) => {
+      const tracks: TrackItemProps[] = data.map((x) => ({
+        ...x,
+        height: 42,
+        onPlay: handlePlay,
+        onQueue: handleQueue,
+      }));
+      setTracks(tracks);
+      setLoading(false);
+    });
   }, [player]);
 
   return loading ? (
     <Loading />
   ) : tracks.length ? (
-    <VirtualList items={tracks} renderer={WiredTrackItem} />
+    <VirtualList items={tracks} renderer={TrackItem} />
   ) : (
     <section>
       <p>You have no tracks in your library.</p>

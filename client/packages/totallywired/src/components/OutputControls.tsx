@@ -1,7 +1,7 @@
 export default function OutputControls() {
   return (
     <div className="output-ctrl panel">
-      <div>Volume</div>
+      <button className="round md">vol</button>
     </div>
   );
 }

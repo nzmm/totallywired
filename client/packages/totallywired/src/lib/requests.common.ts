@@ -1,30 +1,36 @@
-const extractAntiforgeryToken = (res: Response) =>
-  res.ok
+function extractAntiforgeryToken(res: Response) {
+  return res.ok
     ? document?.cookie
         ?.split("; ")
         .find((row) => row.startsWith("XSRF-TOKEN="))
         ?.split("=")[1] ?? ""
     : "";
+}
 
-const getAntiforgeryToken = () =>
-  fetch("/antiforgery/token").then(extractAntiforgeryToken);
+function getAntiforgeryToken() {
+  return fetch("/antiforgery/token").then(extractAntiforgeryToken);
+}
 
-const isJsonContent = (res: Response) =>
-  (res.headers.get("content-type")?.indexOf("application/json") ?? -1) !== -1;
+function isJsonContent(res: Response) {
+  return (
+    (res.headers.get("content-type")?.indexOf("application/json") ?? -1) !== -1
+  );
+}
 
-export const sendQuery = async <T>(
+export async function sendQuery<T>(
   url: string,
   queryParams?: URLSearchParams
-): Promise<T> => {
+): Promise<T> {
   const res = await fetch(`${queryParams ? `${url}?${queryParams}` : url}`);
   return isJsonContent(res) ? await res.json() : await res.text();
-};
+}
 
-export const sendCommand = async <T = never>(
+export async function sendCommand<T = never>(
   url: string,
   data?: any
-): Promise<T> => {
+): Promise<T> {
   const token = await getAntiforgeryToken();
+
   const res = await fetch(url, {
     method: "POST",
     body: JSON.stringify(data),
@@ -33,5 +39,6 @@ export const sendCommand = async <T = never>(
       "X-XSRF-TOKEN": token,
     },
   });
+
   return await res.json();
-};
+}

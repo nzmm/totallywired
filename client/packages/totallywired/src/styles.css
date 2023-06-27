@@ -24,8 +24,10 @@ main {
   }
 }
 
+/*
+ * Component: Header.tsx
+ */
 header {
-  display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 2px 8px;
@@ -38,6 +40,9 @@ header {
   }
 }
 
+/*
+ * Component: Sidebar.tsx
+ */
 aside {
   padding: 8px;
 
@@ -52,6 +57,9 @@ aside {
   }
 }
 
+/*
+ * Component: Tracks.tsx
+ */
 .vlist {
   > ol {
     > li {
@@ -144,9 +152,10 @@ aside {
   }
 }
 
+/*
+ * Component: Footer.tsx
+ */
 footer {
-  display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
   padding: 8px;
@@ -160,6 +169,9 @@ footer {
     gap: 12px;
   }
 
+  /*
+   * Component: NowPlaying.tsx
+   */
   > .now-playing {
     > .cover-art {
       width: 70px;
@@ -170,8 +182,6 @@ footer {
     }
 
     > .track {
-      display: flex;
-      flex-direction: column;
       gap: 5px;
       justify-content: center;
 
@@ -181,24 +191,46 @@ footer {
     }
   }
 
+  /*
+   * Component: PlaybackControls.tsx
+   */
   > .playback-ctrl {
     width: 33%;
     justify-content: center;
+
+    > .actions {
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    > .progressbar {
+      height: 7px;
+      width: 100%;
+      background-color: gray;
+      border: 1px solid black;
+      border-radius: 4px;
+    }
   }
 
+  /*
+   * Component: OutputControls.tsx
+   */
   > .output-ctrl {
     width: 33%;
     justify-content: end;
   }
 }
 
+/*
+ * Component: MeMenu.tsx
+*/
 .me-menu {
+  align-items: center;
+  gap: 8px;
+
   > .avatar {
-    aspect-ratio: 1 / 1;
     min-width: 40px;
-    border-radius: 100%;
-    border: 1px solid gray;
-    background-color: #e4e4e4;
   }
 
   & nav > menu {
@@ -210,6 +242,9 @@ footer {
   }
 }
 
+/*
+ * Route: Provider.tsx
+*/
 .provider.tabpanel-content {
   padding: 12px;
 
@@ -217,5 +252,34 @@ footer {
     list-style-type: none;
     padding: 0;
     margin: 0;
+  }
+}
+
+/*
+ * UTILITIES
+*/
+
+.d-flex {
+  display: flex;
+
+  &.col {
+    flex-direction: column;
+  }
+
+  &.row {
+    flex-direction: row;
+  }
+}
+
+.round {
+  aspect-ratio: 1 / 1;
+  border-radius: 100%;
+
+  &.md {
+    min-width: 40px;
+  }
+
+  &.lg {
+    min-width: 50px;
   }
 }

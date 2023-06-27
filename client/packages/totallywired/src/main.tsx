@@ -7,7 +7,7 @@ import { AudioProvider } from "./providers/AudioProvider";
 import { UserProvider } from "./providers/UserProvider";
 
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
-import "./index.css";
+import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>

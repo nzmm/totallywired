@@ -3,7 +3,7 @@ import MeMenu from "./MeMenu";
 
 export default function Header() {
   return (
-    <header>
+    <header className="d-flex row">
       <h1>
         <Link to="/">Totallywired</Link>
       </h1>

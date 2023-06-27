@@ -3,7 +3,7 @@ export default function NowPlaying() {
     <div className="now-playing panel">
       <div className="cover-art"></div>
 
-      <div className="track">
+      <div className="track d-flex col">
         <div className="name">
           <a href="#">Song Title</a>
         </div>
