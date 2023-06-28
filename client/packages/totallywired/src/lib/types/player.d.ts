@@ -14,6 +14,10 @@ declare module "@regosen/gapless-5" {
 
     getIndex(): number;
 
+    getPosition(): number;
+
+    currentLength(): number;
+
     // Actions
 
     play(): void;

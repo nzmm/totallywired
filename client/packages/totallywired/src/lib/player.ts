@@ -188,7 +188,7 @@ export class AudioPlayer {
       return;
     }
 
-    const { state } = this._history[this._currentUrl];
+    const { state } = this.getCurrentState();
 
     if ((state & (TrackState.Finished | TrackState.Error)) > 0) {
       this.player.gotoTrack(url);
@@ -222,6 +222,18 @@ export class AudioPlayer {
 
   next() {
     this.player.next();
+  }
+
+  getCurrentState() {
+    return this._history[this._currentUrl];
+  }
+
+  getPosition() {
+    return this.player.getPosition();
+  }
+
+  getProgress() {
+    return this.getPosition() / this.player.currentLength();
   }
 
   getQueue() {
