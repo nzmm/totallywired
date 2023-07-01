@@ -1,7 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-using TotallyWired.Handlers.TrackCommands;
 using TotallyWired.Handlers.TrackQueries;
-using TotallyWired.Models;
 using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
@@ -15,31 +12,25 @@ public static class TrackRoutes
             .RequireAuthorization()
             .ValidateAntiforgery();
 
-        group.MapGet("", async (TrackListHandler handler, CancellationToken cancellationToken) =>
+        group.MapGet("", async (TrackListHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
         {
-            var tracks = await handler.HandleAsync(new TrackListQuery(), cancellationToken);
-
+            var tracks = await handler.HandleAsync(@params, cancellationToken);
             return Results.Ok(tracks);
         });
 
         group.MapGet("/{trackId:guid}/downloadUrl", async (TrackDownloadUrlHandler handler, Guid trackId, CancellationToken cancellationToken) =>
         {
             var downloadUrl = await handler.HandleAsync(trackId, cancellationToken);
-
             return Results.Ok(downloadUrl);
         });
         
-        /*
-        group.MapGet("/search/all", async (TrackAllSearchHandler handler, string? q, CancellationToken cancellationToken) =>
+        group.MapGet("/search", async (TrackSearchHandler handler, string q, CancellationToken cancellationToken) =>
         {
-            var matches = await handler.HandleAsync(new TrackAllSearchQuery
-            {
-                Terms = q ?? string.Empty
-            }, cancellationToken);
-            
+            var matches = await handler.HandleAsync(q, cancellationToken);
             return Results.Ok(matches);
         });
-
+        
+        /*
         group.MapGet("/{trackId:guid}/fileInfo", async (ReleaseFilenameHandler handler, Guid trackId, CancellationToken cancellationToken) =>
         {
             var fileInfo = await handler.HandleAsync(new TrackFileInfoQuery

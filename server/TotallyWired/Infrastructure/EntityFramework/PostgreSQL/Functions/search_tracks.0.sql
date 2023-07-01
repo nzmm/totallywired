@@ -24,9 +24,20 @@ SELECT
     t."DisplayLength",
     t."SearchVector_EN"
 FROM (
-    SELECT t.*, ts_rank(t."SearchVector_EN", query) AS rank
-    FROM "Tracks" AS t, to_tsquery('simple', $2) AS query
-    WHERE t."UserId" = $1 AND t."SearchVector_EN" @@ query
-    ORDER BY rank DESC, t."Position"
-) t
+     SELECT t.*,
+            ts_rank(t."SearchVector_EN", query) AS track_rank,
+            ts_rank(r."SearchVector_EN", query) AS release_rank,
+            ts_rank(a."SearchVector_EN", query) AS artist_rank
+     FROM "Tracks" AS t
+              CROSS JOIN to_tsquery('simple', $2) AS query
+              INNER JOIN "Releases" r on r."Id" = t."ReleaseId" and r."UserId" = t."UserId"
+              INNER JOIN "Artists" a on a."Id" = t."ArtistId" and a."UserId" = r."UserId"
+     WHERE
+         t."UserId" = $1 AND
+             (t."SearchVector_EN" @@ query OR
+              r."SearchVector_EN" @@ query OR
+              a."SearchVector_EN" @@ query)
+
+     ORDER BY track_rank DESC, release_rank DESC, artist_rank DESC
+ ) t
 $$ LANGUAGE SQL;

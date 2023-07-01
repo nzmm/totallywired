@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useUser } from "../providers/UserProvider";
+import { useUser } from "../providers/GenericProviders";
 import Header from "../components/Header";
 
 export default function Home() {

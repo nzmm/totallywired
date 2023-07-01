@@ -1,8 +1,5 @@
 using DbMigrator;
 using TotallyWired;
-using TotallyWired.Common;
-using TotallyWired.ContentProviders.MicrosoftGraph;
-using TotallyWired.Contracts;
 using TotallyWired.WebApi.Auth;
 using TotallyWired.WebApi.Middleware;
 using TotallyWired.WebApi.Routes;
@@ -24,14 +21,8 @@ builder.Services.AddSingleton(new HttpClient(new SocketsHttpHandler
     PooledConnectionLifetime = TimeSpan.FromMinutes(2)
 }));
 
-builder.Services.AddSingleton<IUtcProvider, UtcProvider>();
 builder.Services.AddScoped<CurrentUserMiddleware>();
-builder.Services.AddScoped<MicrosoftGraphOAuthUriHelper>();
-builder.Services.AddScoped<MicrosoftGraphTokenProvider>();
-builder.Services.AddScoped<MicrosoftGraphClientProvider>();
 builder.Services.AddTotallyWiredHandlers();
-
-builder.Services.AddTransient<ISourceIndexer, MicrosoftGraphSourceIndexer>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

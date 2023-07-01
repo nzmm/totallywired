@@ -1,18 +1,10 @@
 import { VirtualList } from "@totallywired/ui-components";
-import { createItems } from "../lib/dummy";
 
 type AlbumItemProps = {
   albumName: string;
   artistName: string;
   year: number;
 };
-
-const albums = createItems<AlbumItemProps>(1_000, (i) => ({
-  albumName: `AlbumName ${i}`,
-  artistName: `ArtistName ${i}`,
-  year: 2023,
-  height: 50,
-}));
 
 function AlbumItem(props: AlbumItemProps) {
   return (
@@ -31,5 +23,5 @@ function AlbumItem(props: AlbumItemProps) {
 }
 
 export default function Albums() {
-  return <VirtualList items={albums} renderer={AlbumItem} />;
+  return <VirtualList items={[]} renderer={AlbumItem} />;
 }

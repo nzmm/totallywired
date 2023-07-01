@@ -10,5 +10,4 @@ public class ReleaseListModel
     public string RecordLabel { get; init; } = default!;
     public string Country { get; init; } = default!;
     public string CoverArtUrl { get; init; } = default!;
-    public IEnumerable<TrackListModel> Tracks { get; init; } = default!;
 }

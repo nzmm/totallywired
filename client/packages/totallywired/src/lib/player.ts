@@ -1,8 +1,8 @@
 import { Gapless5 } from "@regosen/gapless-5";
-import { getDownloadUrl } from "../lib/requests";
+import { getTrackUrl } from "../lib/requests";
 import { Track } from "../lib/types";
 
-type PlayerEvent = "tracks-changed" | "state-change";
+type PlayerEvent = "tracks-changed" | "state-change" | "current-state-change";
 
 export enum TrackState {
   Unknown = 0,
@@ -55,11 +55,18 @@ export class AudioPlayer {
     p.onfinishedtrack = this._handleFinishedTrack.bind(this);
   }
 
+  private _emitStateChange(_: string, url: string, h: PlaybackState) {
+    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    if (this._currentUrl === url) {
+      this._handlers["current-state-change"]?.forEach((fn) => fn(url, h));
+    }
+  }
+
   private _handleLoadStart(url: string) {
     const h = this._history[url];
     h.state &= ~TrackState.Unloaded;
     h.state |= TrackState.Loading;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("loadstart", url, h);
   }
 
   private _handleLoad(url: string) {
@@ -67,7 +74,7 @@ export class AudioPlayer {
     h.state &= ~TrackState.Unloaded;
     h.state &= ~TrackState.Loading;
     h.state |= TrackState.Loaded;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("load", url, h);
   }
 
   private _handleUnload(url: string) {
@@ -75,7 +82,7 @@ export class AudioPlayer {
     h.state &= ~TrackState.Loading;
     h.state &= ~TrackState.Loaded;
     h.state |= TrackState.Unloaded;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("unload", url, h);
   }
 
   private _handlePlayRequest(url: string) {
@@ -86,7 +93,7 @@ export class AudioPlayer {
     h.state &= ~TrackState.Paused;
     h.state &= ~TrackState.Playing;
     h.state |= TrackState.PlaybackRequested;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("playrequested", url, h);
   }
 
   private _handlePlay(url: string) {
@@ -98,7 +105,7 @@ export class AudioPlayer {
     h.state &= ~TrackState.Paused;
     h.state &= ~TrackState.Stopped;
     h.state |= TrackState.Playing;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("play", url, h);
   }
 
   private _handlePause(url: string) {
@@ -106,7 +113,7 @@ export class AudioPlayer {
     h.state &= ~TrackState.PlaybackRequested;
     h.state &= ~TrackState.Playing;
     h.state |= TrackState.Paused;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("pause", url, h);
   }
 
   private _handleStop(url: string) {
@@ -115,7 +122,7 @@ export class AudioPlayer {
     h.state &= ~TrackState.Playing;
     h.state &= ~TrackState.Paused;
     h.state |= TrackState.Stopped;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("stop", url, h);
   }
 
   private _handleFinishedTrack(url: string) {
@@ -126,7 +133,7 @@ export class AudioPlayer {
     h.state &= ~TrackState.Paused;
     h.state &= ~TrackState.Stopped;
     h.state |= TrackState.Finished;
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
+    this._emitStateChange("trackfinished", url, h);
   }
 
   private async _add(track: Track) {
@@ -134,7 +141,7 @@ export class AudioPlayer {
       return { ok: true, url: "" };
     }
 
-    let url = await getDownloadUrl(track.id);
+    let url = await getTrackUrl(track.id);
 
     const ta = Date.now();
     url = `${url}#${ta}`;
@@ -144,6 +151,10 @@ export class AudioPlayer {
       ta,
       state: TrackState.Queued,
     };
+
+    if (!this._currentUrl) {
+      this._currentUrl = url;
+    }
 
     this._history[url] = h;
     this.player.addTrack(url);
@@ -183,15 +194,13 @@ export class AudioPlayer {
       return;
     }
 
-    if (!this._currentUrl) {
-      this.player.play();
-      return;
-    }
-
     const { state } = this.getCurrentState();
 
-    if ((state & (TrackState.Finished | TrackState.Error)) > 0) {
-      this.player.gotoTrack(url);
+    if ((state & (TrackState.PlaybackRequested | TrackState.Playing | TrackState.Paused)) === 0) {
+      if (this._currentUrl !== url) {
+        this._currentUrl = url;
+        this.player.gotoTrack(url);
+      }
       this.player.play();
     }
   }

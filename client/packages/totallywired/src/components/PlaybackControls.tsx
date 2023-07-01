@@ -1,42 +1,31 @@
 import { useEffect, useState } from "react";
-import { usePlayer } from "../providers/AudioProvider";
-import { TrackState } from "../lib/player";
+import { AudioPlayer, TrackState } from "../lib/player";
+import Progressbar from "./Progressbar";
 
-export default function PlaybackControls() {
-  const player = usePlayer();
-  const [progress, setProgress] = useState<string>("0");
-  const [playbackState, setPlaybackState] = useState<TrackState>(
-    TrackState.Unknown
-  );
+type PlaybackControlsProps = {
+  player: AudioPlayer;
+  currentState: TrackState;
+};
+
+export default function PlaybackControls({
+  player,
+  currentState
+}: PlaybackControlsProps) {
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    let i = 0;
+    if (!(currentState & TrackState.Playing)) {
+      return;
+    }
 
-    const stateChangeHandler = () => {
-      const currentState = player.getCurrentState();
-      if (!currentState) {
-        return;
-      }
+    const i = window.setInterval(() => {
+      const prog = player.getProgress();
+      const percent = Math.round(Math.min(100, prog * 100) * 2) / 2; 
+      setProgress(percent);
+    }, 500);
 
-      setPlaybackState(currentState.state);
-
-      if (currentState.state & TrackState.Playing) {
-        i = window.setInterval(() => {
-          const prog = player.getProgress();
-          setProgress(`${Math.min(100, prog * 100)}%`);
-        }, 500);
-      } else {
-        clearInterval(i);
-      }
-    };
-
-    player.addEventHandler("state-change", stateChangeHandler);
-
-    return () => {
-      clearInterval(i);
-      player.removeEventHandler("state-change", stateChangeHandler);
-    };
-  }, [player]);
+    return () => clearInterval(i);
+  }, [currentState]);
 
   return (
     <div className="playback-ctrl panel d-flex col">
@@ -44,21 +33,28 @@ export default function PlaybackControls() {
         <button className="round md" onClick={() => player.prev()}>
           prev
         </button>
-        <button className="round lg" onClick={() => player.playPause()}>
-          {(playbackState & TrackState.Playing) > 0 ? (
+        <button
+          className="round lg"
+          onClick={() => player.playPause()}
+          disabled={(currentState & TrackState.PlaybackRequested) > 0}
+        >
+          {(currentState & TrackState.Playing) > 0 ? (
             <>Pause</>
-          ) : (
+          ) : (currentState & TrackState.Paused) > 0 ? (
             <>Play</>
+          ) : (currentState & TrackState.PlaybackRequested) > 0 ? (
+            <>Loading</>
+          ) : (
+            <>?</>
           )}
+          {currentState}
         </button>
         <button className="round md" onClick={() => player.next()}>
           next
         </button>
       </div>
 
-      <div className="progressbar">
-        <div className="progress" style={{ width: progress }}></div>
-      </div>
+      <Progressbar progress={progress} />
     </div>
   );
 }

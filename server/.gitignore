@@ -398,3 +398,6 @@ FodyWeavers.xsd
 *.sln.iml
 
 TotallyWired.WebApi/wwwroot/avatars/*
+
+.run
+.idea

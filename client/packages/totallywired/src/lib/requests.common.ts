@@ -19,9 +19,9 @@ function isJsonContent(res: Response) {
 
 export async function sendQuery<T>(
   url: string,
-  queryParams?: URLSearchParams
+  searchParams?: URLSearchParams
 ): Promise<T> {
-  const res = await fetch(`${queryParams ? `${url}?${queryParams}` : url}`);
+  const res = await fetch(`${searchParams ? `${url}?${searchParams}` : url}`);
   return isJsonContent(res) ? await res.json() : await res.text();
 }
 

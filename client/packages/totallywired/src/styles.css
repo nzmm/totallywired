@@ -166,7 +166,7 @@ footer {
     width: 33%;
     display: flex;
     flex-direction: row;
-    gap: 12px;
+    gap: 6px;
   }
 
   /*
@@ -179,6 +179,12 @@ footer {
       border-radius: 3px;
       background-color: #e4e4e4;
       border: 1px solid gray;
+
+      > img {
+        width: 70px;
+        height: 70px;
+        object-fit: contain;
+      }
     }
 
     > .track {
@@ -232,11 +238,22 @@ footer {
  * Component: MeMenu.tsx
 */
 .me-menu {
+  display: flex;
   align-items: center;
-  gap: 8px;
 
   > .avatar {
     min-width: 40px;
+    max-width: 40px;
+    overflow: hidden;
+    padding: 0;
+    margin-left: 8px;
+
+    > img {
+      object-fit: cover;
+      border-radius: 100%;
+      width: 40px;
+      height: 40px;
+    }
   }
 
   & nav > menu {
@@ -261,6 +278,25 @@ footer {
   }
 }
 
+/* Component: SearchInput.tsx */
+.search-input {
+ 
+  > fieldset {
+    border: 0;
+    padding: 0;
+    margin: 0;
+    height: 100%;
+
+    > input {
+      width: 250px; 
+      height: 100%;
+      margin: 0;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+  }  
+}
+
 /*
  * UTILITIES
 */
@@ -282,10 +318,10 @@ footer {
   border-radius: 100%;
 
   &.md {
-    min-width: 40px;
+    width: 40px;
   }
 
   &.lg {
-    min-width: 50px;
+    width: 60px;
   }
 }

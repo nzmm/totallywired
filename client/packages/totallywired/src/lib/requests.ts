@@ -3,15 +3,30 @@ import { ProviderCollection, Track, User } from "./types";
 
 const API = "/api/v1";
 
-export const whoami = () => sendQuery<User>(`${API}/whoami`);
+export function whoami() {
+  return sendQuery<User>(`${API}/whoami`);
+}
 
-export const getTracks = () => sendQuery<Track[]>(`${API}/tracks`);
+export function getTracks(searchParams?: URLSearchParams) {
+  return sendQuery<Track[]>(`${API}/tracks`, searchParams);
+}
 
-export const getDownloadUrl = (trackId: string) =>
-  sendQuery<string>(`${API}/tracks/${trackId}/downloadUrl`);
+export function getTracksByAlbum(releaseId: string, searchParams?: URLSearchParams) {
+  return sendQuery<Track[]>(`${API}/releases/${releaseId}/tracks`, searchParams);
+}
 
-export const getProviders = () =>
-  sendQuery<ProviderCollection[]>(`${API}/providers`);
+export function getTrackUrl(trackId: string) {
+  return sendQuery<string>(`${API}/tracks/${trackId}/downloadUrl`);
+}
 
-export const syncProvider = async (sourceId: string) =>
-  sendCommand(`${API}/providers/${sourceId}/sync`);
+export function getAlbums(searchParams?: URLSearchParams) {
+  return sendQuery<Track[]>(`${API}/releases`, searchParams);
+}
+
+export function getProviders() {
+  return sendQuery<ProviderCollection[]>(`${API}/providers`);
+}
+
+export function syncProvider(sourceId: string) {
+  return sendCommand(`${API}/providers/${sourceId}/sync`);
+}

@@ -7,10 +7,10 @@ public static class StringExtensions
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
-    public static string TsQuery(this string s)
+    public static string TsQuery(this string? s)
     {
-        return string
-            .Join(" & ", s.Split(" ")
+        return s is null ? string.Empty : string
+            .Join(" & ", s.Trim().Split(" ")
             .Where(x => !string.IsNullOrEmpty(x))
             .Select(t => $"{t}:*")
             .TakeLast(10));

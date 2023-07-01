@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Popover } from "@totallywired/ui-components";
-import { useUser } from "../providers/UserProvider";
+import { useUser } from "../providers/GenericProviders";
 
 export default function MeMenu() {
   const subject = useRef<HTMLButtonElement>(null);
@@ -8,14 +8,19 @@ export default function MeMenu() {
   const user = useUser();
 
   return user?.isAuthenticated ? (
-    <div className="me-menu d-flex row">
+    <div className="me-menu">
       <span>{user.name}</span>
       <button
         ref={subject}
         className="avatar round md"
         onClick={() => setShow(!show)}
         onBlur={() => setShow(false)}
-      ></button>
+      >
+        <img
+          src={`/avatars/${user.userId}.jpg`}
+          alt="The current users avatar"
+        />
+      </button>
 
       <Popover
         subject={subject}

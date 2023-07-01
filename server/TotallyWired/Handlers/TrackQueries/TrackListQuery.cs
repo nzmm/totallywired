@@ -8,13 +8,14 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackListQuery
+public class TrackListSearchParams
 {
-    public string? Terms { get; init; }
-    public bool RestrictToLiked { get; init; }
+    public Guid? ReleaseId { get; set; }
+    public string? Q { get; set; }
+    public bool? Liked { get; set; }
 }
 
-public class TrackListHandler : IRequestHandler<TrackListQuery, IEnumerable<TrackListModel>>
+public class TrackListHandler : IRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
@@ -25,39 +26,57 @@ public class TrackListHandler : IRequestHandler<TrackListQuery, IEnumerable<Trac
         _user = user;
     }
 
-    public async Task<IEnumerable<TrackListModel>> HandleAsync(TrackListQuery request, CancellationToken cancellationToken)
+    private async Task<IEnumerable<TrackListModel>> GetQueryAsync(TrackListSearchParams @params, CancellationToken cancellationToken)
     {
-        var terms = request.Terms?.Trim() ?? string.Empty;
+        var userId = _user.UserId;
+        var releaseId = @params.ReleaseId;
+        var liked = @params.Liked;
 
-        var query = terms.Length < 3
-            ? _context.Tracks.Where(t => t.UserId == _user.UserId)
-            : _context.Tracks.FromSqlInterpolated($"SELECT * FROM search_tracks({_user.UserId}, {terms.TsQuery()})");
+        var tsQuery = @params.Q.TsQuery();
+        var hasQuery = tsQuery.Length >= 3;
+        
+        var query = hasQuery
+            ? _context.Tracks.FromSqlInterpolated($"SELECT * FROM search_tracks({userId}, {tsQuery})")
+            : _context.Tracks.Where(t => t.UserId == userId);
 
-        if (request.RestrictToLiked)
+        if (releaseId.HasValue)
         {
-            query = query.Where(t => t.Reactions.Any(r => r.Reaction == ReactionType.Liked));
+            query = query.Where(t => releaseId == t.ReleaseId);
+        }
+        if (liked ?? false)
+        {
+            query = query.Where(t => t.Reactions.Any(r => r.UserId == userId && r.Reaction == ReactionType.Liked));
+        }
+        if (!hasQuery)
+        {
+            query = query
+                .OrderBy(t => t.Artist)
+                .ThenBy(t => t.Release)
+                .ThenBy(t => t.Disc)
+                .ThenBy(t => t.Position);
         }
 
         return await query
-            .OrderBy(t => t.Artist)
-            .ThenBy(t => t.Release)
-            .ThenBy(t => t.Disc)
-            .ThenBy(t => t.Position)
             .Select(t => new TrackListModel
-        {
-            Id = t.Id,
-            ArtistId = t.ArtistId,
-            ReleaseId = t.ReleaseId,
-            Name = t.Name,
-            ArtistName = t.Artist.Name,
-            ArtistCredit = t.ArtistCredit,
-            ReleaseName = t.ReleaseName,
-            CoverArtUrl = t.Release.ThumbnailUrl,
-            Number = t.Number,
-            Disc = t.Disc,
-            DisplayLength = t.DisplayLength,
-            Length = t.Length,
-            Liked = t.Reactions.Any(r => r.Reaction == ReactionType.Liked)
-        }).ToArrayAsync(cancellationToken);
+            {
+                Id = t.Id,
+                ArtistId = t.ArtistId,
+                ReleaseId = t.ReleaseId,
+                Name = t.Name,
+                ArtistName = t.Artist.Name,
+                ArtistCredit = t.ArtistCredit,
+                ReleaseName = t.ReleaseName,
+                CoverArtUrl = t.Release.ThumbnailUrl,
+                Number = t.Number,
+                Disc = t.Disc,
+                DisplayLength = t.DisplayLength,
+                Length = t.Length,
+                Liked = t.Reactions.Any(r => r.Reaction == ReactionType.Liked)
+            }).ToArrayAsync(cancellationToken);
+    }
+    
+    public Task<IEnumerable<TrackListModel>> HandleAsync(TrackListSearchParams searchParams, CancellationToken cancellationToken)
+    {
+        return GetQueryAsync(searchParams, cancellationToken);
     }
 }

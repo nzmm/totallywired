@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { useUser, userDispatch } from "../providers/UserProvider";
+import { useUser, userStore } from "../providers/GenericProviders";
 import { whoami } from "../lib/requests";
 import Loading from "../components/Loading";
 
 export default function Root() {
   const user = useUser();
-  const dispatch = userDispatch();
+  const dispatch = userStore();
   const [loading, setLoading] = useState(!user.isAuthenticated);
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function Root() {
     const t0 = Date.now();
 
     whoami().then((data) => {
-      dispatch({ type: "set", object: data });
+      dispatch.set(data);
       setTimeout(() => setLoading(false), 1000 - (Date.now() - t0));
     });
   }, [user, dispatch]);

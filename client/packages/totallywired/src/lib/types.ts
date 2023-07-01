@@ -5,11 +5,21 @@ export type User = {
   isAuthenticated: boolean;
 };
 
+export type Album = {
+  id: string;
+  name: string;
+  artistId: string;
+  artistName: string;
+  year: number;
+};
+
 export type Track = {
   id: string;
   name: string;
   number: string;
+  releaseId: string;
   releaseName: string;
+  artistId: string;
   artistName: string;
   length: number;
   displayLength: string;

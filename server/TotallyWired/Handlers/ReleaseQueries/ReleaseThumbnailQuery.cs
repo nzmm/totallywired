@@ -8,12 +8,7 @@ using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseThumbnailQuery
-{
-    public Guid ReleaseId { get; set; }
-}
-
-public class ReleaseThumbnailHandler : IRequestHandler<ReleaseThumbnailQuery, string>
+public class ReleaseThumbnailHandler : IRequestHandler<Guid, string>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
@@ -42,10 +37,10 @@ public class ReleaseThumbnailHandler : IRequestHandler<ReleaseThumbnailQuery, st
         };
     }
 
-    public async Task<string> HandleAsync(ReleaseThumbnailQuery request, CancellationToken cancellationToken)
+    public async Task<string> HandleAsync(Guid releaseId, CancellationToken cancellationToken)
     {
         var resource = await _context.Releases
-            .Where(r => r.Id == request.ReleaseId && r.UserId == _user.UserId)
+            .Where(r => r.Id == releaseId && r.UserId == _user.UserId)
             .Select(r => new
                 { r.ResourceId, r.ThumbnailUrl, Tracks = r.Tracks.Select(t => new { t.ResourceId, t.SourceId }) })
             .FirstOrDefaultAsync(cancellationToken);

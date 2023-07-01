@@ -1,70 +1,56 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Suspense, useMemo } from "react";
+import { Await, Link, useParams, useSearchParams } from "react-router-dom";
 import { VirtualList } from "@totallywired/ui-components";
-import { Track } from "../lib/types";
-import { getTracks } from "../lib/requests";
+import { getTracks, getTracksByAlbum } from "../lib/requests";
 import { usePlayer } from "../providers/AudioProvider";
-import Loading from "../components/Loading";
+import { Track } from "../lib/types";
+import TrackItem, { TrackItemProps } from "../components/TrackItem";
 
-type TrackItemProps = Track & {
-  onPlay(e: React.MouseEvent, track: Track): void;
-  onQueue(e: React.MouseEvent, track: Track): void;
-};
-
-function TrackItem({ onPlay, onQueue, ...track }: TrackItemProps) {
+function TrackList({ tracks }: { tracks: TrackItemProps[] }) {
   return (
-    <>
-      <button
-        className="track num"
-        title="Play now"
-        onClick={(e) => onPlay(e, track)}
-      >
-        {`${track.number}.`}
-      </button>
-      <span className="track name">{`${track.name}`}</span>
-      <a className="track album" href="#">{`${track.releaseName}`}</a>
-      <a className="track artist" href="#">{`${track.artistName}`}</a>
-      <a className="track liked" href="#">{`${track.liked}`}</a>
-      <span className="track duration">{`${track.displayLength}`}</span>
-    </>
+    tracks.length ? (
+      <VirtualList items={tracks} renderer={TrackItem} />
+    ) : (
+      <section>
+        <p>You have no tracks in your library.</p>
+        <p>
+          Get started by setting up a{" "}
+          <Link to="/lib/providers">content provider</Link>.
+        </p>
+      </section>
+    )
   );
 }
 
 export default function Tracks() {
+  const [searchParams,] = useSearchParams();
+  const params = useParams();
   const player = usePlayer();
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const handlePlay = async (_: React.MouseEvent, track: Track) => {
-      player.addTrack(track);
+  const promise = useMemo(async () => {
+    const data = await (params.albumId ? getTracksByAlbum(params.albumId, searchParams) : getTracks(searchParams));
+
+    const onAction = async (_: React.MouseEvent, action: string, track: Track) => {
+      switch(action) {
+        case "play": {
+          player.addTrack(track);
+          break;
+        }
+      }
     };
+  
+    return data.map<TrackItemProps>((x) => ({
+      ...x,
+      height: 42,
+      onAction
+    }));
+  }, [player, params]);
 
-    const handleQueue = (_: React.MouseEvent, __: Track) => {};
-
-    getTracks().then((data) => {
-      const tracks: TrackItemProps[] = data.map((x) => ({
-        ...x,
-        height: 42,
-        onPlay: handlePlay,
-        onQueue: handleQueue,
-      }));
-      setTracks(tracks);
-      setLoading(false);
-    });
-  }, [player]);
-
-  return loading ? (
-    <Loading />
-  ) : tracks.length ? (
-    <VirtualList items={tracks} renderer={TrackItem} />
-  ) : (
-    <section>
-      <p>You have no tracks in your library.</p>
-      <p>
-        Get started by setting up a{" "}
-        <Link to="/lib/providers">content provider</Link>.
-      </p>
-    </section>
+  return (
+    <Suspense>
+      <Await resolve={promise} children={tracks => (
+        <TrackList tracks={tracks} />
+      )} />
+    </Suspense>
   );
 }
