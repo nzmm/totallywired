@@ -14,14 +14,8 @@ function ArtistItem(album: ArtistItemProps) {
       </button>
       <Link
         className="row name"
-        to={`/lib/albums/${album.id}/tracks`}
+        to={`/lib/artists/${album.id}/albums`}
       >{`${album.name}`}</Link>
-      <Link className="row year" to={`/lib/years/${album.year}/albums`}>{`${
-        album.year ?? "–"
-      }`}</Link>
-      <Link className="row artist" to={`/lib/artists/${album.artistId}/albums`}>
-        {`${album.artistName}`}
-      </Link>
     </>
   );
 }

@@ -7,7 +7,9 @@ import {
   VirtualListItemProps,
   VirtualListProps,
   getHeight,
-  getVisible
+  getVisible,
+  FocalItem,
+  NO_FOCUS
 } from "./VirtualList.library";
 
 import "./VirtualList.scss";
@@ -23,7 +25,7 @@ const VirtualListItem = ({
     <li
       tabIndex={0}
       style={{ top, height }}
-      onFocusCapture={() => onFocus(index)}
+      onFocus={(e) => onFocus(e, index, top)}
     >
       {children}
     </li>
@@ -43,10 +45,10 @@ const VirtualList = <T extends IVirtualListItem>({
   const scrollTop = useRef<number>(0);
   const indexRange = useRef<NumericRange>([0, 0]);
   const pixelRange = useRef<NumericRange>([0, 0]);
+  const focalItem = useRef<FocalItem>(NO_FOCUS);
 
   const [height, setHeight] = useState<number>(0);
   const [visible, setVisible] = useState<VisibleItem<T>[]>([]);
-  const [focusIndex, setFocusIndex] = useState<number>(0);
 
   useEffect(() => {
     if (!vlist.current) {
@@ -64,7 +66,8 @@ const VirtualList = <T extends IVirtualListItem>({
         pixelRange.current,
         vlist.current.scrollTop,
         vlist.current.scrollTop - scrollTop.current,
-        vlist.current.clientHeight
+        vlist.current.clientHeight,
+        focalItem.current
       );
 
       if (update) {
@@ -74,8 +77,6 @@ const VirtualList = <T extends IVirtualListItem>({
       }
 
       scrollTop.current = vlist.current.scrollTop;
-
-      // if focusIndex now within range -> focus element
     };
 
     const handleResize = () => {
@@ -116,12 +117,10 @@ const VirtualList = <T extends IVirtualListItem>({
     };
   }, [items]);
 
-  const onFocus = useCallback((i: number) => {
-    if (vlist.current == null) {
-      return;
+  const onFocus = useCallback((e: React.FocusEvent, i: number, y: number) => {
+    if (e.target.nodeName === 'LI') {
+      focalItem.current = { i, y };
     }
-
-    setFocusIndex(i);
     /*
       const [imin, imax] = indexRange.current;
 
@@ -133,8 +132,14 @@ const VirtualList = <T extends IVirtualListItem>({
       */
   }, []);
 
+  const onBlur = useCallback((e: React.FocusEvent) => {
+    if (e.target.nodeName === 'LI') {
+      focalItem.current = NO_FOCUS;
+    }
+  }, []);
+
   return (
-    <div className={`vlist x-${xOverflow} y-${yOverflow}`} ref={vlist}>
+    <div className={`vlist x-${xOverflow} y-${yOverflow}`} ref={vlist} onBlur={onBlur}>
       <ol style={{ height }}>
         {visible.map((v) => (
           <VirtualListItem

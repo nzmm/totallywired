@@ -45,7 +45,7 @@ export class AudioPlayer {
   init() {
     if (this.player) { return; }
 
-    const p = this.player = new Gapless5({ loadLimit: 5 });
+    const p = this.player = new Gapless5({ loadLimit: 5, exclusive: true });
     p.onloadstart = this._handleLoadStart.bind(this);
     p.onplayrequest = this._handlePlayRequest.bind(this);
 

@@ -1,6 +1,6 @@
 declare module "@regosen/gapless-5" {
   export class Gapless5 {
-    constructor(opts: { loadLimit: number });
+    constructor(opts: { loadLimit: number; exclusive: boolean; });
 
     // Parameterized Functions
 

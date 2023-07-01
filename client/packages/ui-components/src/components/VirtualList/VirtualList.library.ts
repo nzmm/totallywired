@@ -43,7 +43,7 @@ type VirtualListItemProps = PropsWithChildren & {
   index: number;
   top: number;
   height: number;
-  onFocus: (i: number) => void;
+  onFocus: (e: React.FocusEvent, i: number, y: number) => void;
 };
 
 type VisibleResult<T extends IVirtualListItem> = [
@@ -55,13 +55,16 @@ type VisibleResult<T extends IVirtualListItem> = [
 
 type NumericRange = [number, number];
 
+type FocalItem = { i: number; y: number; }
+
 const SKIP_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
 const EMPTY_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], true];
+const NO_FOCUS: FocalItem = { i: -1, y: -1 };
 
 const getHeight = (data: IVirtualListItem[]) =>
   data.reduce((acc, cur) => acc + cur.height, 0);
 
-const finalise = <T extends IVirtualListItem>(
+const getResponse = <T extends IVirtualListItem>(
   v: VisibleItem<T>[]
 ): VisibleResult<T> => {
   if (!v.length) {
@@ -79,6 +82,7 @@ const getVisibleUpward = <T extends IVirtualListItem>(
   pmax: number,
   topOffset: number,
   topExtent: number,
+  focalItem: FocalItem,
   force = false
 ): VisibleResult<T> => {
   const updateRequired =
@@ -91,6 +95,7 @@ const getVisibleUpward = <T extends IVirtualListItem>(
   }
 
   let y = pmin;
+  let focusSeen = false;
   const visible: VisibleItem<T>[] = [];
 
   for (let i = imin; i < items.length; i++) {
@@ -111,9 +116,16 @@ const getVisibleUpward = <T extends IVirtualListItem>(
 
     visible.push({ i, y, data });
     y += data.height;
+    focusSeen ||= i === focalItem.i;
   }
 
-  return finalise(visible);
+  const response = getResponse(visible);
+
+  if (!focusSeen && focalItem.i >= 0 && items.length) {
+    visible.push({ ...focalItem, data: items[focalItem.i] });
+  }
+
+  return response;
 };
 
 const getVisibleDownward = <T extends IVirtualListItem>(
@@ -122,7 +134,8 @@ const getVisibleDownward = <T extends IVirtualListItem>(
   pmin: number,
   pmax: number,
   topOffset: number,
-  topExtent: number
+  topExtent: number,
+  focalItem: FocalItem
 ): VisibleResult<T> => {
   const updateRequired =
     items[imax] && (topOffset <= pmin || topExtent < pmax - items[imax].height);
@@ -132,6 +145,7 @@ const getVisibleDownward = <T extends IVirtualListItem>(
   }
 
   let y = pmax;
+  let focusSeen = false;
   const visible: VisibleItem<T>[] = [];
 
   for (let i = imax; i >= 0; i--) {
@@ -150,10 +164,17 @@ const getVisibleDownward = <T extends IVirtualListItem>(
     }
 
     y -= data.height;
+    focusSeen ||= i === focalItem.i;
     visible.unshift({ i, y, data });
   }
 
-  return finalise(visible);
+  const response = getResponse(visible);
+
+  if (!focusSeen && focalItem.i >= 0 && items.length) {
+    visible.push({ ...focalItem, data: items[focalItem.i] });
+  }
+
+  return response;
 };
 
 const getVisible = (
@@ -162,7 +183,8 @@ const getVisible = (
   pixelRange: NumericRange,
   topOffset: number,
   scrollDelta: number,
-  clientHeight: number
+  clientHeight: number,
+  focalItem: FocalItem
 ) => {
   if (!items) {
     return SKIP_UPDATE;
@@ -182,12 +204,16 @@ const getVisible = (
         pmax,
         topOffset,
         topExtent,
+        focalItem,
         scrollDelta === 0
       )
     : // downward scrolling (up arrow clicked)
-      getVisibleDownward(items, imax, pmin, pmax, topOffset, topExtent);
+      getVisibleDownward(items, imax, pmin, pmax, topOffset, topExtent, focalItem);
 };
 
+/**
+ * Returns the `indexRange` and the `pixelRange`
+ */
 const getVisibleRanges = (v: VisibleItem[]): [NumericRange, NumericRange] => {
   const min = v[0];
   const max = v[v.length - 1];
@@ -196,12 +222,13 @@ const getVisibleRanges = (v: VisibleItem[]): [NumericRange, NumericRange] => {
   return [indexRange, pixelRange];
 };
 
-export { getHeight, getVisible };
+export { getHeight, getVisible, NO_FOCUS };
 export type {
   NumericRange,
   VirtualListProps,
   VirtualListItemProps,
   ListItemRenderer,
   IVirtualListItem,
-  VisibleItem
+  VisibleItem,
+  FocalItem
 };
