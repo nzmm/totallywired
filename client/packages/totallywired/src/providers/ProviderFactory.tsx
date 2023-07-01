@@ -8,7 +8,10 @@ type GenericReducer<T> = Reducer<T, GenericActions<T>>;
 
 type FactoryResult<T> = [
   () => T,
-  () => { set: (apply: T) => void; update: (apply: (existing: T) => T) => void; },
+  () => {
+    set: (apply: T) => void;
+    update: (apply: (existing: T) => T) => void;
+  },
   ({ children }: React.PropsWithChildren) => JSX.Element
 ];
 
@@ -28,7 +31,9 @@ export function providerFactory<T>(init: T): FactoryResult<T> {
   };
 
   const Context = createContext<T>(init);
-  const DispatchContext = createContext<React.Dispatch<GenericActions<T>>>((_) => undefined);
+  const DispatchContext = createContext<React.Dispatch<GenericActions<T>>>(
+    (_) => undefined
+  );
 
   const useGeneric = () => {
     return useContext(Context);
@@ -36,11 +41,14 @@ export function providerFactory<T>(init: T): FactoryResult<T> {
 
   const useStore = () => {
     const dc = useContext(DispatchContext);
-    
-    const actions = useMemo(() => ({
-      set: (apply: T) => dc({ type: 'set', apply }),
-      update: (apply: (existing: T) => T) => dc({ type: 'update', apply }) 
-    }), [dc]);
+
+    const actions = useMemo(
+      () => ({
+        set: (apply: T) => dc({ type: "set", apply }),
+        update: (apply: (existing: T) => T) => dc({ type: "update", apply }),
+      }),
+      [dc]
+    );
 
     return actions;
   };

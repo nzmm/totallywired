@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getProviders, syncProvider } from "../lib/requests";
+import { getProviders, syncProvider } from "../lib/webapi";
 import { ProviderCollection } from "../lib/types";
 import { TabList } from "@totallywired/ui-components";
 
@@ -70,7 +70,7 @@ export default function Providers() {
                     return (
                       <li key={p.sourceId}>
                         <dl>
-                          <dt>Track count</dt>
+                          <dt>Tracks</dt>
                           <dd>{p.trackCount}</dd>
                           <dt>Created</dt>
                           <dd>{p.createdOn}</dd>

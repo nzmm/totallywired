@@ -1,5 +1,5 @@
 import { Gapless5 } from "@regosen/gapless-5";
-import { getTrackUrl } from "../lib/requests";
+import { getTrackUrl } from "./webapi";
 import { Track } from "../lib/types";
 
 type PlayerEvent = "tracks-changed" | "state-change" | "current-state-change";
@@ -196,7 +196,13 @@ export class AudioPlayer {
 
     const { state } = this.getCurrentState();
 
-    if ((state & (TrackState.PlaybackRequested | TrackState.Playing | TrackState.Paused)) === 0) {
+    if (
+      (state &
+        (TrackState.PlaybackRequested |
+          TrackState.Playing |
+          TrackState.Paused)) ===
+      0
+    ) {
       if (this._currentUrl !== url) {
         this._currentUrl = url;
         this.player.gotoTrack(url);
@@ -231,6 +237,7 @@ export class AudioPlayer {
 
   next() {
     this.player.next();
+    this.player.play();
   }
 
   getCurrentState() {

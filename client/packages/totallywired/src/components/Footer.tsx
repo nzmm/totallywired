@@ -8,8 +8,12 @@ import { Track } from "../lib/types";
 
 export default function Footer() {
   const player = usePlayer();
-  const [currentState, setCurrentState] = useState<TrackState>(TrackState.Unknown);
-  const [currentTrack, setCurrentTrack] = useState<Track | undefined>(undefined);
+  const [currentState, setCurrentState] = useState<TrackState>(
+    TrackState.Unknown
+  );
+  const [currentTrack, setCurrentTrack] = useState<Track | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     const stateChangeHandler = (_: string, { state, track }: PlaybackState) => {
@@ -27,10 +31,7 @@ export default function Footer() {
     <footer className="d-flex row">
       <NowPlaying currentTrack={currentTrack} />
 
-      <PlaybackControls
-        player={player}
-        currentState={currentState}
-      />
+      <PlaybackControls player={player} currentState={currentState} />
 
       <OutputControls />
     </footer>

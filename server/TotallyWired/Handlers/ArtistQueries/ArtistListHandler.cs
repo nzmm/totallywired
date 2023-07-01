@@ -7,12 +7,12 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ArtistQueries;
 
-public class ArtistListQuery
+public class ArtistListSearchParams
 {
-    public string? Terms { get; set; }
+    public string? Q { get; set; }
 }
 
-public class ArtistListHandler : IRequestHandler<ArtistListQuery, IEnumerable<ArtistListModel>>
+public class ArtistListHandler : IRequestHandler<ArtistListSearchParams, IEnumerable<ArtistListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
@@ -23,22 +23,20 @@ public class ArtistListHandler : IRequestHandler<ArtistListQuery, IEnumerable<Ar
         _user = user;
     }
 
-    public async Task<IEnumerable<ArtistListModel>> HandleAsync(ArtistListQuery request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ArtistListModel>> HandleAsync(ArtistListSearchParams request, CancellationToken cancellationToken)
     {
-        var terms = request.Terms?.Trim() ?? string.Empty;
+        var q = request.Q?.Trim() ?? string.Empty;
 
-        var query = terms.Length < 3
+        var query = q.Length < 3
             ? _context.Artists.Where(t => t.UserId == _user.UserId)
-            : _context.Artists.FromSqlInterpolated($"SELECT * FROM search_artists({_user.UserId}, {terms.TsQuery()})");
+            : _context.Artists.FromSqlInterpolated($"SELECT * FROM search_artists({_user.UserId}, {q.TsQuery()})");
         
-        var artists = await query
+        return await query
             .Select(a => new ArtistListModel
             {
                 Id = a.Id,
                 Name = a.Name
             })
             .ToArrayAsync(cancellationToken);
-        
-        return artists;
     }
 }

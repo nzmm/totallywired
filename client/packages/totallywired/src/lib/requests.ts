@@ -1,32 +1,45 @@
-import { sendQuery, sendCommand } from "./requests.common";
-import { ProviderCollection, Track, User } from "./types";
-
-const API = "/api/v1";
-
-export function whoami() {
-  return sendQuery<User>(`${API}/whoami`);
+function extractAntiforgeryToken(res: Response) {
+  return res.ok
+    ? document?.cookie
+        ?.split("; ")
+        .find((row) => row.startsWith("XSRF-TOKEN="))
+        ?.split("=")[1] ?? ""
+    : "";
 }
 
-export function getTracks(searchParams?: URLSearchParams) {
-  return sendQuery<Track[]>(`${API}/tracks`, searchParams);
+async function getAntiforgeryToken() {
+  const res = await fetch("/antiforgery/token");
+  return extractAntiforgeryToken(res);
 }
 
-export function getTracksByAlbum(releaseId: string, searchParams?: URLSearchParams) {
-  return sendQuery<Track[]>(`${API}/releases/${releaseId}/tracks`, searchParams);
+function isJsonContent(res: Response) {
+  return (
+    (res.headers.get("content-type")?.indexOf("application/json") ?? -1) !== -1
+  );
 }
 
-export function getTrackUrl(trackId: string) {
-  return sendQuery<string>(`${API}/tracks/${trackId}/downloadUrl`);
+export async function sendQuery<T>(
+  url: string,
+  searchParams?: URLSearchParams
+): Promise<T> {
+  const res = await fetch(`${searchParams ? `${url}?${searchParams}` : url}`);
+  return isJsonContent(res) ? await res.json() : await res.text();
 }
 
-export function getAlbums(searchParams?: URLSearchParams) {
-  return sendQuery<Track[]>(`${API}/releases`, searchParams);
-}
+export async function sendCommand<T = never>(
+  url: string,
+  data?: any
+): Promise<T> {
+  const token = await getAntiforgeryToken();
 
-export function getProviders() {
-  return sendQuery<ProviderCollection[]>(`${API}/providers`);
-}
+  const res = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      "X-XSRF-TOKEN": token,
+    },
+  });
 
-export function syncProvider(sourceId: string) {
-  return sendCommand(`${API}/providers/${sourceId}/sync`);
+  return await res.json();
 }

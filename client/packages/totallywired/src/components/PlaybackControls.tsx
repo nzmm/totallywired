@@ -9,7 +9,7 @@ type PlaybackControlsProps = {
 
 export default function PlaybackControls({
   player,
-  currentState
+  currentState,
 }: PlaybackControlsProps) {
   const [progress, setProgress] = useState(0);
 
@@ -20,7 +20,7 @@ export default function PlaybackControls({
 
     const i = window.setInterval(() => {
       const prog = player.getProgress();
-      const percent = Math.round(Math.min(100, prog * 100) * 2) / 2; 
+      const percent = Math.round(Math.min(100, prog * 100) * 2) / 2;
       setProgress(percent);
     }, 500);
 

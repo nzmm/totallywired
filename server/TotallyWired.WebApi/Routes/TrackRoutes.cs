@@ -23,13 +23,7 @@ public static class TrackRoutes
             var downloadUrl = await handler.HandleAsync(trackId, cancellationToken);
             return Results.Ok(downloadUrl);
         });
-        
-        group.MapGet("/search", async (TrackSearchHandler handler, string q, CancellationToken cancellationToken) =>
-        {
-            var matches = await handler.HandleAsync(q, cancellationToken);
-            return Results.Ok(matches);
-        });
-        
+
         /*
         group.MapGet("/{trackId:guid}/fileInfo", async (ReleaseFilenameHandler handler, Guid trackId, CancellationToken cancellationToken) =>
         {

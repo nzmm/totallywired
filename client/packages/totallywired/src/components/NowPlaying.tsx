@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Track } from "../lib/types";
 
 type NowPlayingProps = {
@@ -20,10 +21,15 @@ export default function NowPlaying({ currentTrack }: NowPlayingProps) {
         <div className="track d-flex col">
           <div className="name">{currentTrack.name}</div>
           <div className="album">
-            <a href="#">{currentTrack.releaseName}</a> (<a href="#">2023</a>)
+            <Link to={`/lib/albums/${currentTrack.releaseId}/tracks`}>
+              {currentTrack.releaseName}
+            </Link>{" "}
+            (<Link to={`/lib/years/2023/tracks`}>2023</Link>)
           </div>
           <div className="artist">
-            <a href="#">{currentTrack.artistName}</a>
+            <Link to={`/lib/artists/${currentTrack.artistId}/tracks`}>
+              {currentTrack.artistName}
+            </Link>
           </div>
         </div>
       ) : null}

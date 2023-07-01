@@ -11,6 +11,7 @@ namespace TotallyWired.Handlers.TrackQueries;
 public class TrackListSearchParams
 {
     public Guid? ReleaseId { get; set; }
+    public Guid? ArtistId { get; set; }
     public string? Q { get; set; }
     public bool? Liked { get; set; }
 }
@@ -30,6 +31,7 @@ public class TrackListHandler : IRequestHandler<TrackListSearchParams, IEnumerab
     {
         var userId = _user.UserId;
         var releaseId = @params.ReleaseId;
+        var artistId = @params.ArtistId;
         var liked = @params.Liked;
 
         var tsQuery = @params.Q.TsQuery();
@@ -38,10 +40,14 @@ public class TrackListHandler : IRequestHandler<TrackListSearchParams, IEnumerab
         var query = hasQuery
             ? _context.Tracks.FromSqlInterpolated($"SELECT * FROM search_tracks({userId}, {tsQuery})")
             : _context.Tracks.Where(t => t.UserId == userId);
-
+        
         if (releaseId.HasValue)
         {
             query = query.Where(t => releaseId == t.ReleaseId);
+        }
+        else if (artistId.HasValue)
+        {
+            query = query.Where(t => artistId == t.ArtistId);
         }
         if (liked ?? false)
         {
@@ -64,13 +70,9 @@ public class TrackListHandler : IRequestHandler<TrackListSearchParams, IEnumerab
                 ReleaseId = t.ReleaseId,
                 Name = t.Name,
                 ArtistName = t.Artist.Name,
-                ArtistCredit = t.ArtistCredit,
                 ReleaseName = t.ReleaseName,
-                CoverArtUrl = t.Release.ThumbnailUrl,
                 Number = t.Number,
-                Disc = t.Disc,
                 DisplayLength = t.DisplayLength,
-                Length = t.Length,
                 Liked = t.Reactions.Any(r => r.Reaction == ReactionType.Liked)
             }).ToArrayAsync(cancellationToken);
     }

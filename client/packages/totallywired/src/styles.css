@@ -71,13 +71,12 @@ aside {
       user-select: none;
       gap: 12px;
 
-      .track {
+      .row {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
       }
-
-      .track.num {
+      .row.lgutter {
         padding: 1px;
         padding-left: 10px;
         position: relative;
@@ -86,22 +85,26 @@ aside {
         border: 0;
         background-color: transparent;
       }
-      .track.num:hover {
+      .row.lgutter:hover {
         cursor: pointer;
       }
-      .track.name {
+      .row.name {
         inline-size: 30%;
       }
-      .track.album {
+      .row.album {
         inline-size: 25%;
       }
-      .track.artist {
+      .row.artist {
         inline-size: 25%;
       }
-      .track.liked {
+      .row.year {
+        inline-size: 5rem;
+        text-align: center;
+      }
+      .row.liked {
         flex-shrink: 0;
       }
-      .track.duration {
+      .row.duration {
         inline-size: 4rem;
         text-align: center;
         padding-right: 10px;
@@ -111,11 +114,11 @@ aside {
     > li:hover {
       background-color: rgb(255, 240, 235);
 
-      > .track.num {
+      > .row.lgutter {
         color: transparent;
       }
 
-      > .track.num::before {
+      > .row.lgutter::before {
         content: "";
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="coral" stroke-width="1" stroke="red" d="M1 1 L25 12 L1 23Z" /></svg>');
         left: 5px;
@@ -129,14 +132,13 @@ aside {
       }
     }
 
-    > li:focus,
-    > li.focus {
+    > li:focus {
       background-color: rgb(255, 145, 167);
       border-top: 1px solid red;
       border-bottom: 1px solid red;
 
-      > .track.num::before,
-      > .track.num:hover::before {
+      > .row.lgutter::before,
+      > .row.lgutter:hover::before {
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
       }
     }
@@ -144,8 +146,8 @@ aside {
     > li:active {
       background-color: red;
 
-      > .track.num::before,
-      > .track.num:hover::before {
+      > .row.lgutter::before,
+      > .row.lgutter:hover::before {
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
       }
     }
@@ -280,21 +282,18 @@ footer {
 
 /* Component: SearchInput.tsx */
 .search-input {
- 
-  > fieldset {
-    border: 0;
-    padding: 0;
-    margin: 0;
-    height: 100%;
+  position: relative;
 
-    > input {
-      width: 250px; 
-      height: 100%;
-      margin: 0;
-      padding: 6px 12px;
-      border-radius: 8px;
-    }
-  }  
+  > input {
+    width: 280px;
+    padding: 6px 12px;
+  }
+
+  > button {
+    position: absolute;
+    height: 100%;
+    width: 30px;
+  }
 }
 
 /*

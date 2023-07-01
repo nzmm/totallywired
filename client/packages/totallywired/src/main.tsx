@@ -16,8 +16,8 @@ import Library from "./routes/Library";
 import Tracks from "./routes/Tracks";
 import Albums from "./routes/Albums";
 import Artists from "./routes/Artists";
-import Providers from "./routes/Providers";
 import Queue from "./routes/Queue";
+import Providers from "./routes/Providers";
 
 export const AppRouter = createBrowserRouter([
   {
@@ -35,10 +35,6 @@ export const AppRouter = createBrowserRouter([
         children: [
           {
             path: "tracks",
-            element: <Tracks />
-          },
-          {
-            path: "albums/:albumId/tracks",
             element: <Tracks />,
           },
           {
@@ -46,8 +42,16 @@ export const AppRouter = createBrowserRouter([
             element: <Albums />,
           },
           {
+            path: "albums/:albumId/tracks",
+            element: <Tracks />,
+          },
+          {
             path: "artists",
             element: <Artists />,
+          },
+          {
+            path: "artists/:artistId/tracks",
+            element: <Tracks />,
           },
           {
             path: "queue",

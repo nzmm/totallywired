@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { useUser, userStore } from "../providers/GenericProviders";
-import { whoami } from "../lib/requests";
+import { whoami } from "../lib/webapi";
 import Loading from "../components/Loading";
 
 export default function Root() {

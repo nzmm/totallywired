@@ -1,8 +1,6 @@
-using TotallyWired.Contracts;
-
 namespace TotallyWired.Common;
 
-public class UtcProvider : IUtcProvider
+public class UtcProvider
 {
-    public System.DateTime UtcNow => System.DateTime.UtcNow;
+    public static DateTime UtcNow => DateTime.UtcNow;
 }

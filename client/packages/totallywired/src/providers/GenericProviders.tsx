@@ -10,4 +10,3 @@ const INIT_USER: User = {
 
 const [useUser, userStore, UserProvider] = providerFactory(INIT_USER);
 export { useUser, userStore, UserProvider };
-

@@ -1,56 +1,57 @@
-import { Suspense, useMemo } from "react";
-import { Await, Link, useParams, useSearchParams } from "react-router-dom";
-import { VirtualList } from "@totallywired/ui-components";
-import { getTracks, getTracksByAlbum } from "../lib/requests";
+import { Suspense, useEffect, useState } from "react";
+import { Await, useParams, useSearchParams } from "react-router-dom";
+import { getTrackByArtist, getTracks, getTracksByAlbum } from "../lib/webapi";
 import { usePlayer } from "../providers/AudioProvider";
 import { Track } from "../lib/types";
-import TrackItem, { TrackItemProps } from "../components/TrackItem";
+import { getValidSearchParams } from "../lib/utils";
+import TrackList, { TrackItemProps } from "../components/TrackList";
 
-function TrackList({ tracks }: { tracks: TrackItemProps[] }) {
-  return (
-    tracks.length ? (
-      <VirtualList items={tracks} renderer={TrackItem} />
-    ) : (
-      <section>
-        <p>You have no tracks in your library.</p>
-        <p>
-          Get started by setting up a{" "}
-          <Link to="/lib/providers">content provider</Link>.
-        </p>
-      </section>
-    )
-  );
-}
+const loader = (
+  { albumId, artistId }: { albumId?: string; artistId?: string },
+  searchParams?: URLSearchParams
+) => {
+  const validSearchParams = getValidSearchParams(searchParams);
+  return albumId
+    ? getTracksByAlbum(albumId, validSearchParams)
+    : artistId
+    ? getTrackByArtist(artistId, validSearchParams)
+    : getTracks(validSearchParams);
+};
 
 export default function Tracks() {
-  const [searchParams,] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const params = useParams();
   const player = usePlayer();
+  const [promise, setPromise] = useState<Promise<TrackItemProps[]> | null>(
+    null
+  );
 
-  const promise = useMemo(async () => {
-    const data = await (params.albumId ? getTracksByAlbum(params.albumId, searchParams) : getTracks(searchParams));
-
-    const onAction = async (_: React.MouseEvent, action: string, track: Track) => {
-      switch(action) {
-        case "play": {
-          player.addTrack(track);
-          break;
+  useEffect(() => {
+    const req = loader(params, searchParams).then((data) => {
+      const onAction = (_: React.MouseEvent, action: string, track: Track) => {
+        switch (action) {
+          case "play": {
+            player.addTrack(track);
+            break;
+          }
         }
-      }
-    };
-  
-    return data.map<TrackItemProps>((x) => ({
-      ...x,
-      height: 42,
-      onAction
-    }));
-  }, [player, params]);
+      };
+
+      return data.map<TrackItemProps>((x) => ({
+        ...x,
+        height: 42,
+        onAction,
+      }));
+    });
+
+    setPromise(req);
+  }, [player, params, searchParams]);
 
   return (
     <Suspense>
-      <Await resolve={promise} children={tracks => (
-        <TrackList tracks={tracks} />
-      )} />
+      <Await resolve={promise}>
+        <TrackList />
+      </Await>
     </Suspense>
   );
 }

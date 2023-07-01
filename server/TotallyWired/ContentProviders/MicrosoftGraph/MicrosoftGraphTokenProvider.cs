@@ -1,6 +1,7 @@
 using System.Net.Http.Json;
 using System.Security.Authentication;
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.Common;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Entities;
@@ -14,7 +15,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
 {
     private readonly ICurrentUser _user;
     private readonly HttpClient _httpClient;
-    private readonly IUtcProvider _utcProvider;
+    private readonly UtcProvider _utcProvider;
     private readonly TotallyWiredDbContext _context;
     private readonly MicrosoftGraphOAuthConfiguration _config;
     private readonly MicrosoftGraphOAuthUriHelper _uriHelper;
@@ -22,7 +23,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
     public MicrosoftGraphTokenProvider(
         ICurrentUser user,
         HttpClient httpClient,
-        IUtcProvider utcProvider,
+        UtcProvider utcProvider,
         TotallyWiredDbContext dbContext,
         MicrosoftGraphOAuthConfiguration config,
         MicrosoftGraphOAuthUriHelper uriHelper)
@@ -50,7 +51,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         };
 
         var created = source.Id == Guid.Empty;
-        var expiry = _utcProvider.UtcNow.AddSeconds(tokens.ext_expires_in * .9);
+        var expiry = UtcProvider.UtcNow.AddSeconds(tokens.ext_expires_in * .9);
         
         source.RefreshToken = tokens.refresh_token;
         source.AccessToken = tokens.access_token;
@@ -128,7 +129,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         {
             throw new ArgumentNullException(nameof(cachedTokens), "cached tokens do not., exist");
         }
-        if (_utcProvider.UtcNow <= cachedTokens.ExpiresAt)
+        if (UtcProvider.UtcNow <= cachedTokens.ExpiresAt)
         {
             return (cachedTokens.AccessToken, cachedTokens.ExpiresAt);
         }

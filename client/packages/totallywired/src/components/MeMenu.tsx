@@ -1,11 +1,10 @@
 import { useRef, useState } from "react";
 import { Popover } from "@totallywired/ui-components";
-import { useUser } from "../providers/GenericProviders";
+import { User } from "../lib/types";
 
-export default function MeMenu() {
+export default function MeMenu({ user }: { user: User }) {
   const subject = useRef<HTMLButtonElement>(null);
   const [show, setShow] = useState(false);
-  const user = useUser();
 
   return user?.isAuthenticated ? (
     <div className="me-menu">

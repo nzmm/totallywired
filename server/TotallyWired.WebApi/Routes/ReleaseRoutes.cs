@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
 using TotallyWired.Handlers.ReleaseQueries;
 using TotallyWired.Handlers.TrackQueries;
 using TotallyWired.WebApi.Security;
