@@ -35,15 +35,17 @@ export class AudioPlayer {
    * https://github.com/regosen/Gapless-5
    *
    */
-  player = new Gapless5({ loadLimit: 5 });
+  player?: Gapless5; 
 
   private _history: History = {};
   private _handlers: Handlers = {};
 
   private _currentUrl: string = "";
 
-  constructor() {
-    const p = this.player;
+  init() {
+    if (this.player) { return; }
+
+    const p = this.player = new Gapless5({ loadLimit: 5 });
     p.onloadstart = this._handleLoadStart.bind(this);
     p.onplayrequest = this._handlePlayRequest.bind(this);
 
@@ -137,8 +139,10 @@ export class AudioPlayer {
   }
 
   private async _add(track: Track) {
+    this.init();
+
     if (!track?.id) {
-      return { ok: true, url: "" };
+      return { ok: false, url: "" };
     }
 
     let url = await getTrackUrl(track.id);
@@ -157,7 +161,7 @@ export class AudioPlayer {
     }
 
     this._history[url] = h;
-    this.player.addTrack(url);
+    this.player!.addTrack(url);
     this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h));
 
     return { ok: true, url };
@@ -205,9 +209,9 @@ export class AudioPlayer {
     ) {
       if (this._currentUrl !== url) {
         this._currentUrl = url;
-        this.player.gotoTrack(url);
+        this.player!.gotoTrack(url);
       }
-      this.player.play();
+      this.player!.play();
     }
   }
 
@@ -219,25 +223,28 @@ export class AudioPlayer {
     }
 
     if (!this._currentUrl) {
-      this.player.play();
+      this.player!.play();
       return;
     }
 
-    this.player.gotoTrack(url);
-    this.player.play();
+    this.player!.gotoTrack(url);
+    this.player!.play();
   }
 
   playPause() {
-    this.player.playpause();
+    this.init();
+    this.player!.playpause();
   }
 
   prev() {
-    this.player.prev();
+    this.init();
+    this.player!.prev();
   }
 
   next() {
-    this.player.next();
-    this.player.play();
+    this.init();
+    this.player!.next();
+    this.player!.play();
   }
 
   getCurrentState() {
@@ -245,16 +252,18 @@ export class AudioPlayer {
   }
 
   getPosition() {
-    return this.player.getPosition();
+    return this.player?.getPosition() ?? 0;
   }
 
   getProgress() {
-    return this.getPosition() / this.player.currentLength();
+    const pos = this.getPosition();
+    if (!pos) { return 0; }
+    return this.getPosition() / (this.player?.currentLength() ?? 0);
   }
 
   getQueue() {
     const h = this._history;
-    const tracks = this.player.getTracks();
+    const tracks = this.player?.getTracks() ?? [];
     return tracks.map((url) => {
       const { track, state } = h[url];
       return { track, state };
