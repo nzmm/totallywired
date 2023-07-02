@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   IVirtualListItem,
   NumericRange,
@@ -8,6 +8,7 @@ import {
   VirtualListProps,
   getHeight,
   getVisible,
+  getItemAtY,
   FocalItem,
   NO_FOCUS
 } from "./VirtualList.library";
@@ -15,18 +16,12 @@ import {
 import "./VirtualList.scss";
 
 const VirtualListItem = ({
-  index,
   top,
   height,
-  onFocus,
   children
 }: VirtualListItemProps) => {
   return (
-    <li
-      tabIndex={0}
-      style={{ top, height }}
-      onFocus={(e) => onFocus(e, index, top)}
-    >
+    <li tabIndex={0} style={{ top, height }}>
       {children}
     </li>
   );
@@ -39,7 +34,9 @@ const VirtualList = <T extends IVirtualListItem>({
   items,
   renderer: ItemRenderer,
   xOverflow = "auto",
-  yOverflow = "auto"
+  yOverflow = "auto",
+  onDoubleClick,
+  onClick
 }: VirtualListProps<T>) => {
   const vlist = useRef<HTMLDivElement>(null);
   const scrollTop = useRef<number>(0);
@@ -117,10 +114,17 @@ const VirtualList = <T extends IVirtualListItem>({
     };
   }, [items]);
 
-  const onFocus = useCallback((e: React.FocusEvent, i: number, y: number) => {
-    if (e.target.nodeName === 'LI') {
-      focalItem.current = { i, y };
+  const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+    if (!vlist.current || e.target.nodeName !== 'LI') {
+      return;
     }
+
+    const { y } = e.target.getBoundingClientRect();
+    const item = getItemAtY(vlist.current, visible, y);    
+    if (item) {
+      focalItem.current = { i: item.i, y: item.y };
+    }
+
     /*
       const [imin, imax] = indexRange.current;
 
@@ -130,24 +134,51 @@ const VirtualList = <T extends IVirtualListItem>({
         vlist.current.scrollBy(0, -items[imin].height);
       }
       */
-  }, []);
+  };
 
-  const onBlur = useCallback((e: React.FocusEvent) => {
-    if (e.target.nodeName === 'LI') {
+  const handleBlur = (e: React.FocusEvent) => {
+    if (e.target.nodeName === "LI") {
       focalItem.current = NO_FOCUS;
     }
-  }, []);
+  };
+
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (!onClick || !vlist.current) {
+      return;
+    }
+
+    const item = getItemAtY(vlist.current, visible, e.clientY);    
+    if (item) {
+      onClick(e, item);
+    }
+  };
+
+  const handleDoubleClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (!onDoubleClick || !vlist.current) {
+      return;
+    }
+
+    const item = getItemAtY(vlist.current, visible, e.clientY);    
+    if (item) {
+      onDoubleClick(e, item);
+    }
+  };
 
   return (
-    <div className={`vlist x-${xOverflow} y-${yOverflow}`} ref={vlist} onBlur={onBlur}>
+    <div
+      className={`vlist x-${xOverflow} y-${yOverflow}`}
+      ref={vlist}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onClick={handleClick}
+      onDoubleClick={handleDoubleClick}
+    >
       <ol style={{ height }}>
         {visible.map((v) => (
           <VirtualListItem
             key={v.i}
-            index={v.i}
             top={v.y}
             height={v.data.height}
-            onFocus={onFocus}
           >
             <ItemRenderer {...v.data} />
           </VirtualListItem>
@@ -158,4 +189,4 @@ const VirtualList = <T extends IVirtualListItem>({
 };
 
 export { VirtualList };
-export type { ListItemRenderer, VirtualListProps, VirtualListItemProps };
+export type { ListItemRenderer, VirtualListProps, VirtualListItemProps, VisibleItem };

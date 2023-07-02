@@ -10,5 +10,6 @@ export type { SplitterProps } from "./src/components/Splitter/Splitter";
 export type {
   VirtualListProps,
   VirtualListItemProps,
-  ListItemRenderer
+  ListItemRenderer,
+  VisibleItem
 } from "./src/components/VirtualList/VirtualList";

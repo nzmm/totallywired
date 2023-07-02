@@ -12,10 +12,11 @@ export enum TrackState {
   Loaded = 1 << 3,
   Playing = 1 << 4,
   Paused = 1 << 5,
-  Stopped = 1 << 6,
-  Finished = 1 << 7,
-  Unloaded = 1 << 8,
-  Error = 1 << 9,
+  Skipped = 1 << 6,
+  Stopped = 1 << 7,
+  Finished = 1 << 8,
+  Unloaded = 1 << 9,
+  Error = 1 << 10,
 }
 
 export type PlaybackState = {
@@ -35,7 +36,7 @@ export class AudioPlayer {
    * https://github.com/regosen/Gapless-5
    *
    */
-  player?: Gapless5; 
+  player?: Gapless5;
 
   private _history: History = {};
   private _handlers: Handlers = {};
@@ -43,9 +44,11 @@ export class AudioPlayer {
   private _currentUrl: string = "";
 
   init() {
-    if (this.player) { return; }
+    if (this.player) {
+      return;
+    }
 
-    const p = this.player = new Gapless5({ loadLimit: 5, exclusive: true });
+    const p = (this.player = new Gapless5({ loadLimit: 5, exclusive: true }));
     p.onloadstart = this._handleLoadStart.bind(this);
     p.onplayrequest = this._handlePlayRequest.bind(this);
 
@@ -54,6 +57,8 @@ export class AudioPlayer {
     p.onplay = this._handlePlay.bind(this);
     p.onpause = this._handlePause.bind(this);
     p.onstop = this._handleStop.bind(this);
+    p.onprev = this._handlePrev.bind(this);
+    p.onnext = this._handleNext.bind(this);
     p.onfinishedtrack = this._handleFinishedTrack.bind(this);
   }
 
@@ -120,11 +125,35 @@ export class AudioPlayer {
 
   private _handleStop(url: string) {
     const h = this._history[url];
+    h.tf = Date.now();
     h.state &= ~TrackState.PlaybackRequested;
     h.state &= ~TrackState.Playing;
     h.state &= ~TrackState.Paused;
     h.state |= TrackState.Stopped;
     this._emitStateChange("stop", url, h);
+  }
+
+  private _handlePrev(fromUrl: string, toUrl: string) {
+    console.log('prev')
+    const h = this._history[fromUrl];
+    h.tf = Date.now();
+    h.state &= ~TrackState.PlaybackRequested;
+    h.state &= ~TrackState.Playing;
+    h.state &= ~TrackState.Paused;
+    h.state |= TrackState.Skipped;
+    this._emitStateChange("skip", fromUrl, h);
+    this._currentUrl = toUrl;
+  }
+
+  private _handleNext(fromUrl: string, toUrl: string) {
+    const h = this._history[fromUrl];
+    h.tf = Date.now();
+    h.state &= ~TrackState.PlaybackRequested;
+    h.state &= ~TrackState.Playing;
+    h.state &= ~TrackState.Paused;
+    h.state |= TrackState.Skipped;
+    this._emitStateChange("skip", fromUrl, h);
+    this._currentUrl = toUrl;
   }
 
   private _handleFinishedTrack(url: string) {
@@ -138,7 +167,7 @@ export class AudioPlayer {
     this._emitStateChange("trackfinished", url, h);
   }
 
-  private async _add(track: Track) {
+  private async _getPlaybackItem(track: Track) {
     this.init();
 
     if (!track?.id) {
@@ -146,7 +175,6 @@ export class AudioPlayer {
     }
 
     let url = await getTrackUrl(track.id);
-
     const ta = Date.now();
     url = `${url}#${ta}`;
 
@@ -161,10 +189,7 @@ export class AudioPlayer {
     }
 
     this._history[url] = h;
-    this.player!.addTrack(url);
-    this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h));
-
-    return { ok: true, url };
+    return { ok: true, url, h };
   }
 
   addEventHandler(
@@ -192,11 +217,14 @@ export class AudioPlayer {
   }
 
   async addTrack(track: Track) {
-    const { ok, url } = await this._add(track);
+    const { ok, h, url } = await this._getPlaybackItem(track);
 
     if (!ok) {
       return;
     }
+
+    this.player!.addTrack(url);
+    this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h!));
 
     const { state } = this.getCurrentState();
 
@@ -216,18 +244,24 @@ export class AudioPlayer {
   }
 
   async playNow(track: Track) {
-    const { ok, url } = await this._add(track);
+    const { ok, h, url } = await this._getPlaybackItem(track);
 
     if (!ok) {
       return;
     }
 
-    if (!this._currentUrl) {
+    if (!this._currentUrl) { 
+      this.player!.addTrack(url);
+      this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h!));
       this.player!.play();
       return;
     }
 
-    this.player!.gotoTrack(url);
+    const currentIndex = this.player!.findTrack(this._currentUrl);
+    this.player!.insertTrack(currentIndex + 1, url);
+    this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h!));
+
+    this.player!.next();
     this.player!.play();
   }
 
@@ -257,7 +291,9 @@ export class AudioPlayer {
 
   getProgress() {
     const pos = this.getPosition();
-    if (!pos) { return 0; }
+    if (!pos) {
+      return 0;
+    }
     return this.getPosition() / (this.player?.currentLength() ?? 0);
   }
 

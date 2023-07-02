@@ -1,8 +1,6 @@
 import { Suspense, useEffect, useState } from "react";
 import { Await, useParams, useSearchParams } from "react-router-dom";
 import { getTrackByArtist, getTracks, getTracksByAlbum } from "../lib/webapi";
-import { usePlayer } from "../providers/AudioProvider";
-import { Track } from "../lib/types";
 import { getValidSearchParams } from "../lib/utils";
 import TrackList, { TrackItemProps } from "../components/TrackList";
 
@@ -19,33 +17,22 @@ const loader = (
 };
 
 export default function Tracks() {
-  const [searchParams] = useSearchParams();
   const params = useParams();
-  const player = usePlayer();
+  const [searchParams] = useSearchParams();
   const [promise, setPromise] = useState<Promise<TrackItemProps[]> | null>(
     null
   );
 
   useEffect(() => {
     const req = loader(params, searchParams).then((data) => {
-      const onAction = (_: React.MouseEvent, action: string, track: Track) => {
-        switch (action) {
-          case "play": {
-            player.addTrack(track);
-            break;
-          }
-        }
-      };
-
       return data.map<TrackItemProps>((x) => ({
         ...x,
-        height: 42,
-        onAction,
+        height: 42
       }));
     });
 
     setPromise(req);
-  }, [player, params, searchParams]);
+  }, [params, searchParams]);
 
   return (
     <Suspense>

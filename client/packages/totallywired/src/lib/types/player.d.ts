@@ -1,6 +1,6 @@
 declare module "@regosen/gapless-5" {
   export class Gapless5 {
-    constructor(opts: { loadLimit: number; exclusive: boolean; });
+    constructor(opts: { loadLimit: number; exclusive: boolean });
 
     // Parameterized Functions
 
@@ -8,11 +8,17 @@ declare module "@regosen/gapless-5" {
 
     gotoTrack(indexOrUrl: number | string): void;
 
+    removeTrack(indexOrUrl: number | string): void;
+
+    insertTrack(index: number, url: string): void;
+
     // Accessors
 
     getTracks(): string[];
 
     getIndex(): number;
+
+    findTrack(url: string): number;
 
     getPosition(): number;
 

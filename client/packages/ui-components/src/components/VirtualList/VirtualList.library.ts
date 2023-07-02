@@ -15,7 +15,7 @@ type VisibleItem<T extends IVirtualListItem = IVirtualListItem> = {
 
 type ListItemRenderer<T extends IVirtualListItem> = (
   props: PropsWithChildren & T
-) => React.ReactElement<T>;
+) => React.ReactNode;
 
 type VirtualListProps<T extends IVirtualListItem> = {
   /**
@@ -37,13 +37,21 @@ type VirtualListProps<T extends IVirtualListItem> = {
    * The y-overflow behaviour.
    */
   yOverflow?: "auto" | "scroll" | "hidden";
+
+  /**
+   * Option click handler
+   */
+  onClick?: (e: React.MouseEvent<HTMLElement>, item: VisibleItem<T>) => void;
+
+  /**
+   * Option double-click handler
+   */
+  onDoubleClick?: (e: React.MouseEvent<HTMLElement>, item: VisibleItem<T>) => void;
 };
 
 type VirtualListItemProps = PropsWithChildren & {
-  index: number;
   top: number;
   height: number;
-  onFocus: (e: React.FocusEvent, i: number, y: number) => void;
 };
 
 type VisibleResult<T extends IVirtualListItem> = [
@@ -55,7 +63,7 @@ type VisibleResult<T extends IVirtualListItem> = [
 
 type NumericRange = [number, number];
 
-type FocalItem = { i: number; y: number; }
+type FocalItem = { i: number; y: number };
 
 const SKIP_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
 const EMPTY_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], true];
@@ -63,6 +71,16 @@ const NO_FOCUS: FocalItem = { i: -1, y: -1 };
 
 const getHeight = (data: IVirtualListItem[]) =>
   data.reduce((acc, cur) => acc + cur.height, 0);
+
+const getItemAtY = <T extends IVirtualListItem>(
+  vlist: HTMLDivElement,
+  visible: VisibleItem<T>[],
+  y: number
+) => {
+  const { y: vy } = vlist.getBoundingClientRect();
+  const cy = vlist.scrollTop + y - vy;
+  return visible.find((x) => x.y <= cy && x.y + x.data.height > cy);
+};
 
 const getResponse = <T extends IVirtualListItem>(
   v: VisibleItem<T>[]
@@ -208,7 +226,15 @@ const getVisible = (
         scrollDelta === 0
       )
     : // downward scrolling (up arrow clicked)
-      getVisibleDownward(items, imax, pmin, pmax, topOffset, topExtent, focalItem);
+      getVisibleDownward(
+        items,
+        imax,
+        pmin,
+        pmax,
+        topOffset,
+        topExtent,
+        focalItem
+      );
 };
 
 /**
@@ -222,7 +248,7 @@ const getVisibleRanges = (v: VisibleItem[]): [NumericRange, NumericRange] => {
   return [indexRange, pixelRange];
 };
 
-export { getHeight, getVisible, NO_FOCUS };
+export { getHeight, getItemAtY, getVisible, NO_FOCUS };
 export type {
   NumericRange,
   VirtualListProps,
