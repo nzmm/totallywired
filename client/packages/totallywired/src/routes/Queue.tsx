@@ -1,45 +1,91 @@
-import { VirtualList } from "@totallywired/ui-components";
-import { useQueue } from "../providers/AudioProvider";
-import { PlaybackState, TrackState } from "../lib/player";
+import { useRef } from "react";
+import {
+  ListItemProps,
+  VirtualList,
+  VisibleItem,
+} from "@totallywired/ui-components";
+import { usePlayer, useQueue } from "../providers/AudioProvider";
+import { QueuedTrack, TRACK_STATE_ARRAY, TrackState } from "../lib/player";
 
-type QueueItemProps = PlaybackState & {};
+type QueueItemProps = ListItemProps<QueuedTrack>;
+
+const NOOP = () => null;
 
 const stateClassNames = (state: TrackState) => {
   const classNames: string[] = [];
+
   if (state & TrackState.Finished) {
     classNames.push("finished");
   } else if (state & TrackState.Playing) {
     classNames.push("playing");
   } else if (state & TrackState.Paused) {
     classNames.push("paused");
-  } else if (state & TrackState.Stopped) {
-    classNames.push("stopped");
-  }
-  if (state & TrackState.Loaded) {
-    classNames.push("loaded");
-  } else if (state & TrackState.Unloaded) {
-    classNames.push("unloaded");
   }
   return classNames.join(" ");
 };
 
-function QueueItem({ track, state }: QueueItemProps) {
+const stateInfo = (state: TrackState) => {
+  const tips: string[] = [];
+  for (const ts of TRACK_STATE_ARRAY) {
+    if (ts & state) {
+      tips.push(`${TrackState[ts]} ✅`);
+    }
+  }
+  return tips.join("\n");
+};
+
+function QueueItem({ track, state, index, top, height }: QueueItemProps) {
   return (
-    <div className={stateClassNames(state)}>
-      <span>{track.name}</span>
-      <span>{track.releaseName}</span>
-      <span>{track.artistName}</span>
-      <span>{state}</span>
-    </div>
+    <li
+      tabIndex={0}
+      className={stateClassNames(state)}
+      style={{ top, height }}
+      draggable={(state & TrackState.Queued) > 0}
+    >
+      <span className="col lgutter">
+        <em>{index + 1}.</em>
+      </span>
+      <span className="col name">{track.name}</span>
+      <span className="col album">{track.releaseName}</span>
+      <span className="col artist">{track.artistName}</span>
+      <span className="col rgutter" title={stateInfo(state)}>
+        {state}
+      </span>
+    </li>
   );
 }
 
 export default function Queue() {
   const queue = useQueue();
+  const player = usePlayer();
+  const dragMovingIndex = useRef<number>(0);
+
+  const handlDragStart = (e: React.DragEvent, item: VisibleItem) => {
+    e.stopPropagation();
+    dragMovingIndex.current = item.i;
+  };
+
+  const handleDragOver = (e: React.DragEvent, item: VisibleItem) => {
+    e.stopPropagation();
+
+    if (item.i === dragMovingIndex.current) {
+      return;
+    }
+    // if (item.data.state & (TrackState.Playing | TrackState.PlaybackRequested | TrackState.Finished | TrackState.Skipped)) {
+    //   return;
+    // }
+
+    player.swap(dragMovingIndex.current, item.i);
+    dragMovingIndex.current = item.i;
+  };
+
   return (
     <VirtualList
-      items={queue.map((q) => ({ ...q, height: 42 }))}
+      items={queue.map((q) => ({ ...q, height: 42, key: q.id }))}
       renderer={QueueItem}
+      onDragStart={handlDragStart}
+      onDragOver={handleDragOver}
+      onDrop={NOOP}
     />
   );
 }

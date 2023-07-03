@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { AudioPlayer, PlaybackState } from "../lib/player";
+import { AudioPlayer, QueuedTrack } from "../lib/player";
 
 const Player = new AudioPlayer();
 const PlayerContext = createContext(Player);
-const QueueContext = createContext<PlaybackState[]>([]);
+const QueueContext = createContext<QueuedTrack[]>([]);
 
 export const usePlayer = () => {
   return useContext(PlayerContext);
@@ -14,7 +14,7 @@ export const useQueue = () => {
 };
 
 export function AudioProvider({ children }: React.PropsWithChildren) {
-  const [queue, setQueue] = useState<PlaybackState[]>([]);
+  const [queue, setQueue] = useState<QueuedTrack[]>([]);
 
   useEffect(() => {
     const updateHandler = () => {

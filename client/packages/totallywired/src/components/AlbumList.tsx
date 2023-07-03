@@ -1,36 +1,39 @@
 import { Link, useAsyncValue } from "react-router-dom";
 import { Album } from "../lib/types";
-import { VirtualList } from "@totallywired/ui-components";
+import {
+  IVirtualListItem,
+  ListItemProps,
+  VirtualList,
+} from "@totallywired/ui-components";
 
-export type AlbumItemProps = Album & {
-  height: number;
-};
+export type AlbumItemProps = ListItemProps<Album>;
+export type AlbumDataProps = IVirtualListItem & Album;
 
-function AlbumItem(album: AlbumItemProps) {
+function AlbumItem({ top, height, ...album }: AlbumItemProps) {
   return (
-    <>
-      <button className="row lgutter" title="Play all now">
+    <li tabIndex={0} style={{ top, height }}>
+      <button className="col lgutter" title="Play all now">
         &nbsp;
       </button>
       <Link
-        className="row name"
+        className="col name"
         to={`/lib/albums/${album.id}/tracks`}
       >{`${album.name}`}</Link>
-      <Link className="row year" to={`/lib/years/${album.year}/albums`}>{`${
+      <Link className="col year" to={`/lib/years/${album.year}/albums`}>{`${
         album.year ?? "–"
       }`}</Link>
-      <Link className="row artist" to={`/lib/artists/${album.artistId}/albums`}>
+      <Link className="col artist" to={`/lib/artists/${album.artistId}/albums`}>
         {`${album.artistName}`}
       </Link>
-    </>
+    </li>
   );
 }
 
 export default function AlbumList() {
-  const tracks = useAsyncValue() as AlbumItemProps[];
+  const albums = useAsyncValue() as AlbumDataProps[];
 
-  return tracks?.length ?? 0 ? (
-    <VirtualList items={tracks} renderer={AlbumItem} />
+  return albums?.length ?? 0 ? (
+    <VirtualList items={albums} renderer={AlbumItem} />
   ) : (
     <section>
       <p>No albums</p>

@@ -35,6 +35,9 @@ const Splitter = ({
       if (dragOwner) {
         return;
       }
+      if (e.target !== handle.current) {
+        return;
+      }
       if (!e.dataTransfer || !splitter.current) {
         return;
       }
@@ -60,7 +63,6 @@ const Splitter = ({
       setPosition(pos);
       setDragging("");
       dragOwner = null;
-      console.log("drag over");
     };
 
     const handleDragOver = (e: DragEvent) => {

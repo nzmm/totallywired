@@ -1,30 +1,33 @@
 import { Link, useAsyncValue } from "react-router-dom";
-import { VirtualList } from "@totallywired/ui-components";
-import { Album } from "../lib/types";
+import {
+  IVirtualListItem,
+  ListItemProps,
+  VirtualList,
+} from "@totallywired/ui-components";
+import { Artist } from "../lib/types";
 
-export type ArtistItemProps = Album & {
-  height: number;
-};
+export type ArtistItemProps = ListItemProps<Artist>;
+export type ArtistDataProps = IVirtualListItem & Artist;
 
-function ArtistItem(album: ArtistItemProps) {
+function ArtistItem({ top, height, ...artist }: ArtistItemProps) {
   return (
     <>
-      <button className="row lgutter" title="Play all now">
+      <button className="col lgutter" title="Play all now">
         &nbsp;
       </button>
       <Link
-        className="row name"
-        to={`/lib/artists/${album.id}/albums`}
-      >{`${album.name}`}</Link>
+        className="col name"
+        to={`/lib/artists/${artist.id}/albums`}
+      >{`${artist.name}`}</Link>
     </>
   );
 }
 
 export default function ArtistList() {
-  const tracks = useAsyncValue() as ArtistItemProps[];
+  const artists = useAsyncValue() as ArtistDataProps[];
 
-  return tracks?.length ?? 0 ? (
-    <VirtualList items={tracks} renderer={ArtistItem} />
+  return artists?.length ?? 0 ? (
+    <VirtualList items={artists} renderer={ArtistItem} />
   ) : (
     <section>
       <p>No albums</p>

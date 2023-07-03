@@ -5,6 +5,11 @@ export type User = {
   isAuthenticated: boolean;
 };
 
+export type Artist = {
+  id: string;
+  name: string;
+};
+
 export type Album = {
   id: string;
   name: string;

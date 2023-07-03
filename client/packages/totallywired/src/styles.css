@@ -62,6 +62,18 @@ aside {
  */
 .vlist {
   > ol {
+    > li[draggable="true"] {
+      transition: top 0.15s ease 0s;
+    }
+
+    > li.playing {
+      font-weight: bold;
+    }
+    > li.finished,
+    > li.skipped {
+      color: gray;
+    }
+
     > li {
       display: flex;
       flex-direction: row;
@@ -71,12 +83,13 @@ aside {
       user-select: none;
       gap: 12px;
 
-      .row {
+      .col {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
       }
-      .row.lgutter {
+      .col.lgutter {
+        text-align: center;
         padding: 1px;
         padding-left: 10px;
         position: relative;
@@ -85,26 +98,26 @@ aside {
         border: 0;
         background-color: transparent;
       }
-      .row.lgutter:hover {
+      .col.lgutter:hover {
         cursor: pointer;
       }
-      .row.name {
+      .col.name {
         inline-size: 30%;
       }
-      .row.album {
+      .col.album {
         inline-size: 25%;
       }
-      .row.artist {
+      .col.artist {
         inline-size: 25%;
       }
-      .row.year {
+      .col.year {
         inline-size: 5rem;
         text-align: center;
       }
-      .row.liked {
+      .col.liked {
         flex-shrink: 0;
       }
-      .row.duration {
+      .col.duration {
         inline-size: 4rem;
         text-align: center;
         padding-right: 10px;
@@ -114,11 +127,11 @@ aside {
     > li:hover {
       background-color: rgb(255, 240, 235);
 
-      > .row.lgutter {
+      > .col.lgutter {
         color: transparent;
       }
 
-      > .row.lgutter::before {
+      > .col.lgutter::before {
         content: "";
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="coral" stroke-width="1" stroke="red" d="M1 1 L25 12 L1 23Z" /></svg>');
         left: 5px;
@@ -137,8 +150,8 @@ aside {
       border-top: 1px solid red;
       border-bottom: 1px solid red;
 
-      > .row.lgutter::before,
-      > .row.lgutter:hover::before {
+      > .col.lgutter::before,
+      > .col.lgutter:hover::before {
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
       }
     }
@@ -146,8 +159,8 @@ aside {
     > li:active {
       background-color: red;
 
-      > .row.lgutter::before,
-      > .row.lgutter:hover::before {
+      > .col.lgutter::before,
+      > .col.lgutter:hover::before {
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
       }
     }

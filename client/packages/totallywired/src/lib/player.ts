@@ -1,4 +1,3 @@
-import { Gapless5 } from "@regosen/gapless-5";
 import { getTrackUrl } from "./webapi";
 import { Track } from "../lib/types";
 
@@ -7,195 +6,358 @@ type PlayerEvent = "tracks-changed" | "state-change" | "current-state-change";
 export enum TrackState {
   Unknown = 0,
   Queued = 1 << 0,
-  PlaybackRequested = 1 << 1,
-  Loading = 1 << 2,
-  Loaded = 1 << 3,
-  Playing = 1 << 4,
-  Paused = 1 << 5,
-  Skipped = 1 << 6,
-  Stopped = 1 << 7,
-  Finished = 1 << 8,
-  Unloaded = 1 << 9,
-  Error = 1 << 10,
+  Loading = 1 << 1,
+  Loaded = 1 << 2,
+  Playing = 1 << 3,
+  Paused = 1 << 4,
+  Finished = 1 << 5,
+  Error = 1 << 6,
 }
 
-export type PlaybackState = {
+export type QueuedTrack = {
   track: Track;
   state: TrackState;
-  ta?: number;
-  ts?: number;
-  tf?: number;
+  src: string;
+  id: number;
+  ta: Date;
+  i: number;
 };
 
-type History = Record<string, PlaybackState>;
-type Handlers = Record<string, ((url: string, state: PlaybackState) => void)[]>;
+type Queue = number[];
+type History = Record<number, QueuedTrack>;
+type Handlers = Record<string, ((state: QueuedTrack) => void)[]>;
+
+export const TRACK_STATE_ARRAY = [
+  TrackState.Unknown,
+  TrackState.Queued,
+  TrackState.Loading,
+  TrackState.Loaded,
+  TrackState.Playing,
+  TrackState.Paused,
+  TrackState.Finished,
+  TrackState.Error,
+];
 
 export class AudioPlayer {
-  /*
-   *
-   * https://github.com/regosen/Gapless-5
-   *
-   */
-  player?: Gapless5;
+  player0!: HTMLAudioElement;
+  player1!: HTMLAudioElement;
 
+  private _queue: Queue = [];
   private _history: History = {};
   private _handlers: Handlers = {};
 
-  private _currentUrl: string = "";
+  private _timeout = -1;
+  private _currentId: number = 0;
 
   init() {
-    if (this.player) {
+    if (this.player0 && this.player1) {
       return;
     }
 
-    const p = (this.player = new Gapless5({ loadLimit: 5, exclusive: true }));
-    p.onloadstart = this._handleLoadStart.bind(this);
-    p.onplayrequest = this._handlePlayRequest.bind(this);
+    this.player0 = new Audio();
+    this.player1 = new Audio();
 
-    p.onload = this._handleLoad.bind(this);
-    p.onunload = this._handleUnload.bind(this);
-    p.onplay = this._handlePlay.bind(this);
-    p.onpause = this._handlePause.bind(this);
-    p.onstop = this._handleStop.bind(this);
-    p.onprev = this._handlePrev.bind(this);
-    p.onnext = this._handleNext.bind(this);
-    p.onfinishedtrack = this._handleFinishedTrack.bind(this);
+    this.player0.preload = "auto";
+    this.player1.preload = "auto";
+
+    this.player0.onloadstart = this._handleLoadStart.bind(this);
+    this.player1.onloadstart = this._handleLoadStart.bind(this);
+
+    this.player0.oncanplay = this._handleCanPlay.bind(this);
+    this.player1.oncanplay = this._handleCanPlay.bind(this);
+
+    this.player0.onplay = this._handlePlay.bind(this);
+    this.player1.onplay = this._handlePlay.bind(this);
+
+    this.player0.onplaying = this._handlePlaying.bind(this);
+    this.player1.onplaying = this._handlePlaying.bind(this);
+
+    this.player0.onpause = this._handlePause.bind(this);
+    this.player1.onpause = this._handlePause.bind(this);
+
+    this.player0.onended = this._handleEnded.bind(this);
+    this.player1.onended = this._handleEnded.bind(this);
   }
 
-  private _emitStateChange(_: string, url: string, h: PlaybackState) {
-    this._handlers["state-change"]?.forEach((fn) => fn(url, h));
-    if (this._currentUrl === url) {
-      this._handlers["current-state-change"]?.forEach((fn) => fn(url, h));
+  private _playerFromEvent(e: Event) {
+    return e.target as HTMLAudioElement;
+  }
+
+  private _setupPreload(player: HTMLAudioElement) {
+    clearTimeout(this._timeout);
+
+    const remaining = player.duration - player.currentTime;
+    const preloadDelayMs = Math.max(remaining / 2, remaining - 10) * 1000;
+
+    console.log({ preloadDelayMs });
+
+    this._timeout = window.setTimeout(() => {
+      const qt = this._history[parseInt(player.id)];
+      const nextId = this._queue[qt.i + 1];
+
+      if (!nextId) {
+        return;
+      }
+
+      const { track } = this._history[nextId];
+      console.log(`${track.name}: preloading...`);
+
+      const altPlayer = this._getNextPlayer();
+      altPlayer.id = nextId.toString();
+      altPlayer.src = this._history[nextId].src;
+    }, preloadDelayMs);
+  }
+
+  private _emitStateChange(_: string, qt: QueuedTrack) {
+    this._handlers["state-change"]?.forEach((fn) => fn(qt));
+    if (this._currentId === qt.id) {
+      this._handlers["current-state-change"]?.forEach((fn) => fn(qt));
     }
   }
 
-  private _handleLoadStart(url: string) {
-    const h = this._history[url];
-    h.state &= ~TrackState.Unloaded;
-    h.state |= TrackState.Loading;
-    this._emitStateChange("loadstart", url, h);
+  private _handlePlay(e: Event) {
+    const player = this._playerFromEvent(e);
+    this._currentId = parseInt(player.id);
+
+    const qt = this._history[this._currentId];
+    qt.state &= ~TrackState.Queued;
+    qt.state &= ~TrackState.Paused;
+    qt.state |= TrackState.Playing;
+    this._emitStateChange("play", qt);
   }
 
-  private _handleLoad(url: string) {
-    const h = this._history[url];
-    h.state &= ~TrackState.Unloaded;
-    h.state &= ~TrackState.Loading;
-    h.state |= TrackState.Loaded;
-    this._emitStateChange("load", url, h);
+  private _handlePlaying(e: Event) {
+    const player = this._playerFromEvent(e);
+    this._setupPreload(player);
   }
 
-  private _handleUnload(url: string) {
-    const h = this._history[url];
-    h.state &= ~TrackState.Loading;
-    h.state &= ~TrackState.Loaded;
-    h.state |= TrackState.Unloaded;
-    this._emitStateChange("unload", url, h);
+  private _handlePause(e: Event) {
+    clearTimeout(this._timeout);
+
+    const player = this._playerFromEvent(e);
+    if (!player.src) {
+      return;
+    }
+
+    const qt = this._history[parseInt(player.id)];
+    qt.state &= ~TrackState.Playing;
+    qt.state |= TrackState.Paused;
+    this._emitStateChange("pause", qt);
   }
 
-  private _handlePlayRequest(url: string) {
-    this._currentUrl = url;
-    const h = this._history[url];
-    h.state &= ~TrackState.Queued;
-    h.state &= ~TrackState.Stopped;
-    h.state &= ~TrackState.Paused;
-    h.state &= ~TrackState.Playing;
-    h.state |= TrackState.PlaybackRequested;
-    this._emitStateChange("playrequested", url, h);
+  private async _handleEnded(e: Event) {
+    const player = this._playerFromEvent(e);
+    this._playNext(player);
   }
 
-  private _handlePlay(url: string) {
-    this._currentUrl = url;
-    const h = this._history[url];
-    h.ts = Date.now();
-    h.state &= ~TrackState.PlaybackRequested;
-    h.state &= ~TrackState.Queued;
-    h.state &= ~TrackState.Paused;
-    h.state &= ~TrackState.Stopped;
-    h.state |= TrackState.Playing;
-    this._emitStateChange("play", url, h);
+  private _handleLoadStart(e: Event) {
+    const player = this._playerFromEvent(e);
+    const qt = this._history[parseInt(player.id)];
+    qt.state |= TrackState.Loading;
+    this._emitStateChange("loadstart", qt);
   }
 
-  private _handlePause(url: string) {
-    const h = this._history[url];
-    h.state &= ~TrackState.PlaybackRequested;
-    h.state &= ~TrackState.Playing;
-    h.state |= TrackState.Paused;
-    this._emitStateChange("pause", url, h);
+  private _handleCanPlay(e: Event) {
+    const player = this._playerFromEvent(e);
+    const qt = this._history[parseInt(player.id)];
+    qt.state &= ~TrackState.Loading;
+    qt.state |= TrackState.Loaded;
+    this._emitStateChange("canplay", qt);
   }
 
-  private _handleStop(url: string) {
-    const h = this._history[url];
-    h.tf = Date.now();
-    h.state &= ~TrackState.PlaybackRequested;
-    h.state &= ~TrackState.Playing;
-    h.state &= ~TrackState.Paused;
-    h.state |= TrackState.Stopped;
-    this._emitStateChange("stop", url, h);
+  // private _handlePrev(fromUrl: string, toUrl: string) {
+  //   const h = this._history[fromUrl];
+  //   h.tf = Date.now();
+  //   h.state &= ~TrackState.PlaybackRequested;
+  //   h.state &= ~TrackState.Playing;
+  //   h.state &= ~TrackState.Paused;
+  //   h.state |= TrackState.Skipped;
+  //   this._emitStateChange("skip", fromUrl, h);
+  //   this._currentUrl = toUrl;
+  // }
+
+  // private _handleNext(fromUrl: string, toUrl: string) {
+  //   const h = this._history[fromUrl];
+  //   h.state = TrackState.Finished;
+  //   this._emitStateChange("next", fromUrl, h);
+  //   this._currentUrl = toUrl;
+  // }
+
+  private async _getUrl(track: Track, ts: number) {
+    let url = await getTrackUrl(track.id);
+    return `${url}#${ts}`;
   }
 
-  private _handlePrev(fromUrl: string, toUrl: string) {
-    console.log('prev')
-    const h = this._history[fromUrl];
-    h.tf = Date.now();
-    h.state &= ~TrackState.PlaybackRequested;
-    h.state &= ~TrackState.Playing;
-    h.state &= ~TrackState.Paused;
-    h.state |= TrackState.Skipped;
-    this._emitStateChange("skip", fromUrl, h);
-    this._currentUrl = toUrl;
+  private _getPlayer() {
+    return this._currentId.toString() === this.player0.id
+      ? this.player0
+      : this.player1;
   }
 
-  private _handleNext(fromUrl: string, toUrl: string) {
-    const h = this._history[fromUrl];
-    h.tf = Date.now();
-    h.state &= ~TrackState.PlaybackRequested;
-    h.state &= ~TrackState.Playing;
-    h.state &= ~TrackState.Paused;
-    h.state |= TrackState.Skipped;
-    this._emitStateChange("skip", fromUrl, h);
-    this._currentUrl = toUrl;
+  private _getNextPlayer() {
+    return this._currentId.toString() === this.player0.id
+      ? this.player1
+      : this.player0;
   }
 
-  private _handleFinishedTrack(url: string) {
-    const h = this._history[url];
-    h.tf = Date.now();
-    h.state &= ~TrackState.PlaybackRequested;
-    h.state &= ~TrackState.Playing;
-    h.state &= ~TrackState.Paused;
-    h.state &= ~TrackState.Stopped;
-    h.state |= TrackState.Finished;
-    this._emitStateChange("trackfinished", url, h);
+  private async _play(player: HTMLAudioElement, id: number) {
+    this._currentId = id;
+
+    const { src } = this._history[id];
+    const idStr = id.toString();
+
+    if (player.id !== idStr) {
+      player.id = idStr;
+    }
+    if (player.src !== src) {
+      player.src = src;
+    }
+
+    await player.play();
   }
 
-  private async _getPlaybackItem(track: Track) {
+  private async _playNext(currentPlayer: HTMLAudioElement) {
+    const qt = this.getCurrentState();
+
+    if (qt.i >= 0) {
+      currentPlayer.pause();
+      currentPlayer.removeAttribute("src");
+
+      qt.state = TrackState.Finished;
+      this._emitStateChange("ended", qt);
+    }
+
+    const nextId = this._queue[qt.i + 1];
+    if (!nextId) {
+      // finished all
+      return;
+    }
+
+    const nextPlayer = this._getNextPlayer();
+    await this._play(nextPlayer, nextId);
+  }
+
+  async addTrack(track: Track) {
     this.init();
 
-    if (!track?.id) {
-      return { ok: false, url: "" };
-    }
+    const i = this._queue.length;
+    const ta = new Date();
+    const id = ta.getTime();
+    const src = await this._getUrl(track, id);
 
-    let url = await getTrackUrl(track.id);
-    const ta = Date.now();
-    url = `${url}#${ta}`;
+    this._queue.push(id);
 
-    const h = {
-      track,
-      ta,
+    const qt = (this._history[id] = {
       state: TrackState.Queued,
-    };
+      track,
+      src,
+      id,
+      ta,
+      i,
+    });
 
-    if (!this._currentUrl) {
-      this._currentUrl = url;
+    this._handlers["tracks-changed"]?.forEach((fn) => fn(qt));
+
+    if (i === 0) {
+      const player = this._getPlayer();
+      await this._play(player, id);
     }
 
-    this._history[url] = h;
-    return { ok: true, url, h };
+    return src;
   }
 
-  addEventHandler(
-    event: PlayerEvent,
-    handler: (url: string, state: PlaybackState) => void
-  ) {
+  async playNow(track: Track) {
+    this.init();
+
+    const { i } = this.getCurrentState();
+    const ta = new Date();
+    const id = ta.getTime();
+    const src = await this._getUrl(track, id);
+
+    this._queue.splice(i + 1, 0, id);
+
+    const qt = (this._history[id] = {
+      state: TrackState.Queued,
+      track,
+      src,
+      ta,
+      id,
+      i: i + 1,
+    });
+
+    this._handlers["tracks-changed"]?.forEach((fn) => fn(qt));
+
+    const player = this._getPlayer();
+    await this._playNext(player);
+
+    return src;
+  }
+
+  async playPause() {
+    const player = this._getPlayer();
+    if (!player) {
+      console.warn("Player not initialised");
+      return;
+    }
+
+    const { state } = this.getCurrentState();
+
+    if (state & TrackState.Unknown) {
+      return;
+    }
+    if (state & TrackState.Playing) {
+      player.pause();
+    } else {
+      await player.play();
+    }
+  }
+
+  async prev() {
+    const player = this._getPlayer();
+    if (!player) {
+      console.warn("Player not initialised");
+      return;
+    }
+
+    //await this._playPrev(player);
+  }
+
+  async next() {
+    const player = this._getPlayer();
+    if (!player) {
+      console.warn("Player not initialised");
+      return;
+    }
+
+    await this._playNext(player);
+  }
+
+  swap(fromIndex: number, toIndex: number) {
+    // if (!this.player) {
+    //   return;
+    // }
+    // this._handlers["tracks-changed"]?.forEach((fn) =>
+    //   fn(url, this._history[url])
+    // );
+  }
+
+  getCurrentState(): QueuedTrack {
+    return (
+      this._history[this._currentId] ?? { i: -1, state: TrackState.Unknown }
+    );
+  }
+
+  getProgress() {
+    const player = this._getPlayer();
+    return player.currentTime / player.duration;
+  }
+
+  getQueue() {
+    const history = this._history;
+    return this._queue.map((src) => history[src]);
+  }
+
+  addEventHandler(event: PlayerEvent, handler: (qt: QueuedTrack) => void) {
     const handlers = this._handlers[event];
     if (!handlers?.length) {
       this._handlers[event] = [handler];
@@ -204,105 +366,12 @@ export class AudioPlayer {
     }
   }
 
-  removeEventHandler(
-    event: PlayerEvent,
-    handler: (url: string, state: PlaybackState) => void
-  ) {
+  removeEventHandler(event: PlayerEvent, handler: (qt: QueuedTrack) => void) {
     const handlers = this._handlers[event];
     if (!handlers?.length) {
       return;
     } else {
       this._handlers[event] = handlers.filter((h) => h !== handler);
     }
-  }
-
-  async addTrack(track: Track) {
-    const { ok, h, url } = await this._getPlaybackItem(track);
-
-    if (!ok) {
-      return;
-    }
-
-    this.player!.addTrack(url);
-    this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h!));
-
-    const { state } = this.getCurrentState();
-
-    if (
-      (state &
-        (TrackState.PlaybackRequested |
-          TrackState.Playing |
-          TrackState.Paused)) ===
-      0
-    ) {
-      if (this._currentUrl !== url) {
-        this._currentUrl = url;
-        this.player!.gotoTrack(url);
-      }
-      this.player!.play();
-    }
-  }
-
-  async playNow(track: Track) {
-    const { ok, h, url } = await this._getPlaybackItem(track);
-
-    if (!ok) {
-      return;
-    }
-
-    if (!this._currentUrl) { 
-      this.player!.addTrack(url);
-      this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h!));
-      this.player!.play();
-      return;
-    }
-
-    const currentIndex = this.player!.findTrack(this._currentUrl);
-    this.player!.insertTrack(currentIndex + 1, url);
-    this._handlers["tracks-changed"]?.forEach((fn) => fn(url, h!));
-
-    this.player!.next();
-    this.player!.play();
-  }
-
-  playPause() {
-    this.init();
-    this.player!.playpause();
-  }
-
-  prev() {
-    this.init();
-    this.player!.prev();
-  }
-
-  next() {
-    this.init();
-    this.player!.next();
-    this.player!.play();
-  }
-
-  getCurrentState() {
-    return this._history[this._currentUrl];
-  }
-
-  getPosition() {
-    return this.player?.getPosition() ?? 0;
-  }
-
-  getProgress() {
-    const pos = this.getPosition();
-    if (!pos) {
-      return 0;
-    }
-    return this.getPosition() / (this.player?.currentLength() ?? 0);
-  }
-
-  getQueue() {
-    const h = this._history;
-    const tracks = this.player?.getTracks() ?? [];
-    return tracks.map((url) => {
-      const { track, state } = h[url];
-      return { track, state };
-    });
   }
 }

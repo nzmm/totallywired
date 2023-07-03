@@ -3,29 +3,18 @@ import {
   IVirtualListItem,
   NumericRange,
   ListItemRenderer,
+  ListItemProps,
   VisibleItem,
-  VirtualListItemProps,
   VirtualListProps,
   getHeight,
   getVisible,
   getItemAtY,
   FocalItem,
-  NO_FOCUS
+  NO_FOCUS,
+  getDragItemAtY
 } from "./VirtualList.library";
 
 import "./VirtualList.scss";
-
-const VirtualListItem = ({
-  top,
-  height,
-  children
-}: VirtualListItemProps) => {
-  return (
-    <li tabIndex={0} style={{ top, height }}>
-      {children}
-    </li>
-  );
-};
 
 /**
  * A list component which renders only the visible items.
@@ -35,8 +24,12 @@ const VirtualList = <T extends IVirtualListItem>({
   renderer: ItemRenderer,
   xOverflow = "auto",
   yOverflow = "auto",
+  onClick,
   onDoubleClick,
-  onClick
+  onDragStart,
+  onDragOver,
+  onDragEnd,
+  onDrop
 }: VirtualListProps<T>) => {
   const vlist = useRef<HTMLDivElement>(null);
   const scrollTop = useRef<number>(0);
@@ -115,12 +108,12 @@ const VirtualList = <T extends IVirtualListItem>({
   }, [items]);
 
   const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
-    if (!vlist.current || e.target.nodeName !== 'LI') {
+    if (!vlist.current || e.target.nodeName !== "LI") {
       return;
     }
 
     const { y } = e.target.getBoundingClientRect();
-    const item = getItemAtY(vlist.current, visible, y);    
+    const item = getItemAtY(vlist.current, visible, y);
     if (item) {
       focalItem.current = { i: item.i, y: item.y };
     }
@@ -142,27 +135,79 @@ const VirtualList = <T extends IVirtualListItem>({
     }
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (!onClick || !vlist.current) {
-      return;
-    }
+  const handleClick = onClick
+    ? (e: React.MouseEvent<HTMLElement>) => {
+        if (!vlist.current) {
+          return;
+        }
 
-    const item = getItemAtY(vlist.current, visible, e.clientY);    
-    if (item) {
-      onClick(e, item);
-    }
-  };
+        const item = getItemAtY(vlist.current, visible, e.clientY);
+        if (item) {
+          onClick(e, item);
+        }
+      }
+    : undefined;
 
-  const handleDoubleClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (!onDoubleClick || !vlist.current) {
-      return;
-    }
+  const handleDoubleClick = onDoubleClick
+    ? (e: React.MouseEvent<HTMLElement>) => {
+        if (!vlist.current) {
+          return;
+        }
 
-    const item = getItemAtY(vlist.current, visible, e.clientY);    
-    if (item) {
-      onDoubleClick(e, item);
-    }
-  };
+        const item = getItemAtY(vlist.current, visible, e.clientY);
+        if (item) {
+          onDoubleClick(e, item);
+        }
+      }
+    : undefined;
+
+  const handleDragStart = onDragStart
+    ? (e: React.DragEvent<HTMLElement>) => {
+        if (!vlist.current) {
+          return;
+        }
+        const item = getItemAtY(vlist.current, visible, e.clientY);
+        if (item) {
+          onDragStart(e, item, vlist);
+        }
+      }
+    : undefined;
+
+  const handleDragOver = onDragOver
+    ? (e: React.DragEvent<HTMLElement>) => {
+        if (!vlist.current) {
+          return;
+        }
+        const item = getDragItemAtY(vlist.current, visible, e.clientY);
+        if (item) {
+          onDragOver(e, item, vlist);
+        }
+      }
+    : undefined;
+
+  const handleDragEnd = onDragEnd
+    ? (e: React.DragEvent<HTMLElement>) => {
+        if (!vlist.current) {
+          return;
+        }
+        const item = getDragItemAtY(vlist.current, visible, e.clientY);
+        if (item) {
+          onDragEnd(e, item, vlist);
+        }
+      }
+    : undefined;
+
+  const handleDrop = onDrop
+    ? (e: React.DragEvent<HTMLElement>) => {
+        if (!vlist.current) {
+          return;
+        }
+        const item = getDragItemAtY(vlist.current, visible, e.clientY);
+        if (item) {
+          onDrop(e, item, vlist);
+        }
+      }
+    : undefined;
 
   return (
     <div
@@ -172,16 +217,20 @@ const VirtualList = <T extends IVirtualListItem>({
       onBlur={handleBlur}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
+      onDragStart={handleDragStart}
+      onDragOver={handleDragOver}
+      onDragEnd={handleDragEnd}
+      onDrop={handleDrop}
     >
       <ol style={{ height }}>
         {visible.map((v) => (
-          <VirtualListItem
-            key={v.i}
+          <ItemRenderer
+            {...v.data}
+            index={v.i}
             top={v.y}
             height={v.data.height}
-          >
-            <ItemRenderer {...v.data} />
-          </VirtualListItem>
+            key={v.data.key ?? v.i}
+          />
         ))}
       </ol>
     </div>
@@ -189,4 +238,10 @@ const VirtualList = <T extends IVirtualListItem>({
 };
 
 export { VirtualList };
-export type { ListItemRenderer, VirtualListProps, VirtualListItemProps, VisibleItem };
+export type {
+  ListItemRenderer,
+  ListItemProps,
+  VirtualListProps,
+  VisibleItem,
+  IVirtualListItem
+};

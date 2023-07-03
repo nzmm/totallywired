@@ -3,7 +3,7 @@ import { useSearchParams, useParams, Await } from "react-router-dom";
 import { usePlayer } from "../providers/AudioProvider";
 import { getValidSearchParams } from "../lib/utils";
 import { getAlbums, getAlbumsByArtist } from "../lib/webapi";
-import AlbumList, { AlbumItemProps } from "../components/AlbumList";
+import AlbumList, { AlbumDataProps } from "../components/AlbumList";
 
 const loader = (
   { artistId }: { artistId?: string },
@@ -19,13 +19,13 @@ export default function Albums() {
   const [searchParams] = useSearchParams();
   const params = useParams();
   const player = usePlayer();
-  const [promise, setPromise] = useState<Promise<AlbumItemProps[]> | null>(
+  const [promise, setPromise] = useState<Promise<AlbumDataProps[]> | null>(
     null
   );
 
   useEffect(() => {
     const req = loader(params, searchParams).then((data) => {
-      return data.map<AlbumItemProps>((x) => ({
+      return data.map((x) => ({
         ...x,
         height: 42,
       }));

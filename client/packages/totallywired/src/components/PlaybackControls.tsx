@@ -36,17 +36,18 @@ export default function PlaybackControls({
         <button
           className="round lg"
           onClick={() => player.playPause()}
-          disabled={(currentState & TrackState.PlaybackRequested) > 0}
+          disabled={(currentState & TrackState.Loading) > 0}
         >
           {(currentState & TrackState.Playing) > 0 ? (
             <>Pause</>
           ) : (currentState & TrackState.Paused) > 0 ? (
             <>Play</>
-          ) : (currentState & TrackState.PlaybackRequested) > 0 ? (
+          ) : (currentState & TrackState.Loading) > 0 ? (
             <>Loading</>
           ) : (
             <>?</>
           )}
+          <br />
           {currentState}
         </button>
         <button className="round md" onClick={() => player.next()}>

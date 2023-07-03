@@ -5,6 +5,11 @@ interface IVirtualListItem {
    * The height of the list item
    */
   height: number;
+
+  /**
+   * Optional key, otherwise index is used
+   */
+  key?: string | number;
 }
 
 type VisibleItem<T extends IVirtualListItem = IVirtualListItem> = {
@@ -13,9 +18,9 @@ type VisibleItem<T extends IVirtualListItem = IVirtualListItem> = {
   data: T;
 };
 
-type ListItemRenderer<T extends IVirtualListItem> = (
-  props: PropsWithChildren & T
-) => React.ReactNode;
+type ListItemProps<T> = T & { index: number; top: number; height: number };
+
+type ListItemRenderer<T> = (props: ListItemProps<T>) => React.ReactNode;
 
 type VirtualListProps<T extends IVirtualListItem> = {
   /**
@@ -46,12 +51,31 @@ type VirtualListProps<T extends IVirtualListItem> = {
   /**
    * Option double-click handler
    */
-  onDoubleClick?: (e: React.MouseEvent<HTMLElement>, item: VisibleItem<T>) => void;
-};
+  onDoubleClick?: (
+    e: React.MouseEvent<HTMLElement>,
+    item: VisibleItem<T>
+  ) => void;
 
-type VirtualListItemProps = PropsWithChildren & {
-  top: number;
-  height: number;
+  onDragStart?: (
+    e: React.DragEvent<HTMLElement>,
+    item: VisibleItem<T>,
+    vlist: React.RefObject<HTMLDivElement>
+  ) => void;
+  onDragOver?: (
+    e: React.DragEvent<HTMLElement>,
+    item: VisibleItem<T>,
+    vlist: React.RefObject<HTMLDivElement>
+  ) => void;
+  onDragEnd?: (
+    e: React.DragEvent<HTMLElement>,
+    item: VisibleItem<T>,
+    vlist: React.RefObject<HTMLDivElement>
+  ) => void;
+  onDrop?: (
+    e: React.DragEvent<HTMLElement>,
+    item: VisibleItem<T>,
+    vlist: React.RefObject<HTMLDivElement>
+  ) => void;
 };
 
 type VisibleResult<T extends IVirtualListItem> = [
@@ -80,6 +104,28 @@ const getItemAtY = <T extends IVirtualListItem>(
   const { y: vy } = vlist.getBoundingClientRect();
   const cy = vlist.scrollTop + y - vy;
   return visible.find((x) => x.y <= cy && x.y + x.data.height > cy);
+};
+
+const getDragItemAtY = <T extends IVirtualListItem>(
+  vlist: HTMLDivElement,
+  visible: VisibleItem<T>[],
+  y: number
+) => {
+  const { y: vy } = vlist.getBoundingClientRect();
+  const cy = vlist.scrollTop + y - vy;
+
+  for (let i = 0; i < visible.length; i++) {
+    const item = visible[i];
+    const h = item.data.height;
+
+    if (cy >= item.y && cy <= item.y + h / 2) {
+      return item;
+    }
+    if (cy > item.y + h && cy <= item.y + h) {
+      return visible[i + 1] ?? item;
+    }
+  }
+  return null;
 };
 
 const getResponse = <T extends IVirtualListItem>(
@@ -248,12 +294,12 @@ const getVisibleRanges = (v: VisibleItem[]): [NumericRange, NumericRange] => {
   return [indexRange, pixelRange];
 };
 
-export { getHeight, getItemAtY, getVisible, NO_FOCUS };
+export { getHeight, getItemAtY, getDragItemAtY, getVisible, NO_FOCUS };
 export type {
   NumericRange,
   VirtualListProps,
-  VirtualListItemProps,
   ListItemRenderer,
+  ListItemProps,
   IVirtualListItem,
   VisibleItem,
   FocalItem

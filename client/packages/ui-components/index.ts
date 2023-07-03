@@ -9,7 +9,8 @@ export type { TooltipProps } from "./src/components/Tooltip/Tooltip";
 export type { SplitterProps } from "./src/components/Splitter/Splitter";
 export type {
   VirtualListProps,
-  VirtualListItemProps,
   ListItemRenderer,
+  ListItemProps,
+  IVirtualListItem,
   VisibleItem
 } from "./src/components/VirtualList/VirtualList";
