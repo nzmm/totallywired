@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../lib/player";
+import { getTracks } from "../lib/webapi";
 import Progressbar from "./Progressbar";
 
 type PlaybackControlsProps = {
@@ -27,6 +28,17 @@ export default function PlaybackControls({
     return () => clearInterval(i);
   }, [currentState]);
 
+  const handlePlayPause = async () => {
+    if (player.getQueueLength()) {
+      player.playPause();
+    } else {
+      // todo
+      const searchParams = new URLSearchParams({ q: "mint chicks" });
+      const data = await getTracks(searchParams);
+      player.addTracks(data, true);
+    }
+  };
+
   return (
     <div className="playback-ctrl panel d-flex col">
       <div className="actions d-flex row">
@@ -35,7 +47,7 @@ export default function PlaybackControls({
         </button>
         <button
           className="round lg"
-          onClick={() => player.playPause()}
+          onClick={handlePlayPause}
           disabled={(currentState & TrackState.Loading) > 0}
         >
           {(currentState & TrackState.Playing) > 0 ? (

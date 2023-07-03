@@ -34,16 +34,16 @@ const stateInfo = (state: TrackState) => {
   return tips.join("\n");
 };
 
-function QueueItem({ track, state, index, top, height }: QueueItemProps) {
+function QueueItem({ track, state, i, top, height }: QueueItemProps) {
   return (
     <li
       tabIndex={0}
-      className={stateClassNames(state)}
       style={{ top, height }}
+      className={stateClassNames(state)}
       draggable={(state & TrackState.Queued) > 0}
     >
       <span className="col lgutter">
-        <em>{index + 1}.</em>
+        <em>{i + 1}.</em>
       </span>
       <span className="col name">{track.name}</span>
       <span className="col album">{track.releaseName}</span>
