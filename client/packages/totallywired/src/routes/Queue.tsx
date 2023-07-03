@@ -53,6 +53,7 @@ function QueueItem({ track, state, i, top, height }: QueueItemProps) {
       <span className="col name">{track.name}</span>
       <span className="col album">{track.releaseName}</span>
       <span className="col artist">{track.artistName}</span>
+      <span className="col duration">{track.displayLength}</span>
       <span className="col rgutter" title={stateInfo(state)}>
         {state}
       </span>
