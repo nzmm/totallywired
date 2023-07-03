@@ -33,7 +33,7 @@ export default function Footer() {
 
       <PlaybackControls player={player} currentState={currentState} />
 
-      <OutputControls />
+      <OutputControls player={player} />
     </footer>
   );
 }

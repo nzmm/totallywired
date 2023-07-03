@@ -33,3 +33,13 @@ export const shuffle = <T>(array: T[]) => {
 
   return array;
 };
+
+export const debounce = (func: (...args: any[]) => void, timeout = 300) => {
+  let timer: number;
+  return (...args: any[]) => {
+    clearTimeout(timer);
+    timer = window.setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
+  };
+};

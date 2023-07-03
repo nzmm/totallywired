@@ -71,11 +71,8 @@ export default function Queue() {
     if (item.i === dragMovingIndex.current) {
       return;
     }
-    // if (item.data.state & (TrackState.Playing | TrackState.PlaybackRequested | TrackState.Finished | TrackState.Skipped)) {
-    //   return;
-    // }
 
-    player.swap(dragMovingIndex.current, item.i);
+    player.moveTo(dragMovingIndex.current, item.i);
     dragMovingIndex.current = item.i;
   };
 

@@ -66,11 +66,11 @@ aside {
       transition: top 0.15s ease 0s;
     }
 
-    > li.playing {
+    > li.playing,
+    > li.paused {
       font-weight: bold;
     }
-    > li.finished,
-    > li.skipped {
+    > li.finished {
       color: gray;
     }
 

@@ -35,7 +35,7 @@ export default function PlaybackControls({
       // todo
       const searchParams = new URLSearchParams({ q: "mint chicks" });
       const data = await getTracks(searchParams);
-      player.addTracks(data, true);
+      player.addTracks(data.slice(0, 20), true);
     }
   };
 
@@ -57,7 +57,7 @@ export default function PlaybackControls({
           ) : (currentState & TrackState.Loading) > 0 ? (
             <>Loading</>
           ) : (
-            <>?</>
+            <>Play</>
           )}
           <br />
           {currentState}
