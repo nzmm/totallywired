@@ -229,17 +229,17 @@ export class AudioPlayer {
   }
 
   private async _playPrev(currentPlayer: HTMLAudioElement) {
-    const qt = this.getCurrentTrack();
+    const item = this.getCurrentTrack();
 
-    if (qt.i >= 1) {
+    if (item.i >= 1) {
       currentPlayer.pause();
       currentPlayer.removeAttribute("src");
 
-      qt.state = TrackState.Queued;
-      this._emitStateChange("prev", qt);
+      item.state = TrackState.Queued;
+      this._emitStateChange("prev", item);
     }
 
-    const prevId = this._playlist.getId(qt.i - 1);
+    const prevId = this._playlist.getId(item.i - 1);
     if (!prevId) {
       // no more history
       return;
@@ -481,7 +481,7 @@ export class AudioPlayer {
   /**
    * Add an event handler for the specified event
    */
-  addEventHandler(event: PlayerEvent, handler: (qt: PlayerTrack) => void) {
+  addEventHandler(event: PlayerEvent, handler: (item: PlayerTrack) => void) {
     const handlers = this._handlers[event];
     handlers.push(handler);
   }
@@ -489,7 +489,7 @@ export class AudioPlayer {
   /**
    * Remove an event handler for the specified event
    */
-  removeEventHandler(event: PlayerEvent, handler: (qt: PlayerTrack) => void) {
+  removeEventHandler(event: PlayerEvent, handler: (item: PlayerTrack) => void) {
     const handlers = this._handlers[event];
     this._handlers[event] = handlers.filter((h) => h !== handler);
   }
