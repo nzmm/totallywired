@@ -5,9 +5,14 @@ import {
   VisibleItem,
 } from "@totallywired/ui-components";
 import { usePlayer, useQueue } from "../providers/AudioProvider";
-import { QueuedTrack, TRACK_STATE_ARRAY, TrackState } from "../lib/player";
+import {
+  PlayerTrack,
+  PlaylistItem,
+  TRACK_STATE_ARRAY,
+  TrackState,
+} from "../lib/player";
 
-type QueueItemProps = ListItemProps<QueuedTrack>;
+type QueueItemProps = ListItemProps<PlaylistItem<PlayerTrack>>;
 
 const NOOP = () => null;
 

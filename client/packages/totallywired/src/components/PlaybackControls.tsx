@@ -29,7 +29,7 @@ export default function PlaybackControls({
   }, [currentState]);
 
   const handlePlayPause = async () => {
-    if (player.getQueueLength()) {
+    if (player.getPlaylistCount()) {
       player.playPause();
     } else {
       // todo

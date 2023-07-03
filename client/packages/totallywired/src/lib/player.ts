@@ -1,6 +1,7 @@
 import { debounce, shuffle as shuffleTracks } from "./utils";
 import { getTrackUrl } from "./webapi";
 import { Track } from "../lib/types";
+import { Playlist, PlaylistItem } from "./playlist";
 
 type PlayerEvent =
   | "tracks-changed"
@@ -19,18 +20,13 @@ export enum TrackState {
   Error = 1 << 6,
 }
 
-export type QueuedTrack = {
+export type PlayerTrack = {
   track: Track;
   state: TrackState;
   src?: string;
-  id: string;
-  ta: Date;
-  i: number;
 };
 
-type Queue = string[];
-type History = Record<string, QueuedTrack>;
-type Handlers = Record<PlayerEvent, ((...tracks: QueuedTrack[]) => void)[]>;
+type Handlers = Record<PlayerEvent, ((...tracks: PlayerTrack[]) => void)[]>;
 
 export const TRACK_STATE_ARRAY = [
   TrackState.Unknown,
@@ -56,8 +52,7 @@ export class AudioPlayer {
     "volume-change": [],
   };
 
-  private _queue: Queue = [];
-  private _history: History = {};
+  private _playlist = new Playlist<PlayerTrack>();
 
   private _timeout = -1;
   private _currentId: string = "";
@@ -102,18 +97,8 @@ export class AudioPlayer {
   private _handlePreload(player: HTMLAudioElement) {
     clearTimeout(this._timeout);
 
-    const qt = this._history[player.id];
-    if (!qt) {
-      return;
-    }
-
-    const nextId = this._queue[qt.i + 1];
-    if (!nextId) {
-      return;
-    }
-
-    const { src } = this._history[nextId];
-    if (src) {
+    const nextItem = this._playlist.getNextById(player.id);
+    if (!nextItem || !nextItem.src) {
       return;
     }
 
@@ -121,15 +106,13 @@ export class AudioPlayer {
     const preloadDelayMs =
       Math.min(remaining / 2, PRELOAD_DELAY_SECONDS) * 1000;
 
-    console.log({ preloadDelayMs });
-
     this._timeout = window.setTimeout(async () => {
-      let { src, track } = this._history[nextId];
-      console.log(`${track.name}: preloading...`);
+      let { track, src } = nextItem;
+      console.log(`${nextItem.track.name}: preloading...`);
 
       const altPlayer = this._getNextPlayer();
-      src = src ?? (await this._getUrl(track, nextId));
-      altPlayer.id = nextId;
+      src = src ?? (await this._getUrl(track, nextItem.id));
+      altPlayer.id = nextItem.id;
       altPlayer.src = src;
     }, preloadDelayMs);
   }
@@ -138,10 +121,10 @@ export class AudioPlayer {
     this._handlePreload.bind(this)
   );
 
-  private _emitStateChange(_: string, qt: QueuedTrack) {
-    this._handlers["state-change"].forEach((fn) => fn(qt));
-    if (this._currentId === qt.id) {
-      this._handlers["current-state-change"].forEach((fn) => fn(qt));
+  private _emitStateChange(_: string, item: PlaylistItem<PlayerTrack>) {
+    this._handlers["state-change"].forEach((fn) => fn(item));
+    if (this._currentId === item.id) {
+      this._handlers["current-state-change"].forEach((fn) => fn(item));
     }
   }
 
@@ -149,12 +132,12 @@ export class AudioPlayer {
     const player = this._playerFromEvent(e);
     this._currentId = player.id;
 
-    const qt = this._history[this._currentId];
-    qt.state &= ~TrackState.Queued;
-    qt.state &= ~TrackState.Paused;
-    qt.state &= ~TrackState.Finished;
-    qt.state |= TrackState.Playing;
-    this._emitStateChange("play", qt);
+    const item = this._playlist.getById(player.id);
+    item.state &= ~TrackState.Queued;
+    item.state &= ~TrackState.Paused;
+    item.state &= ~TrackState.Finished;
+    item.state |= TrackState.Playing;
+    this._emitStateChange("play", item);
   }
 
   private _handlePlaying(e: Event) {
@@ -170,10 +153,10 @@ export class AudioPlayer {
       return;
     }
 
-    const qt = this._history[player.id];
-    qt.state &= ~TrackState.Playing;
-    qt.state |= TrackState.Paused;
-    this._emitStateChange("pause", qt);
+    const item = this._playlist.getById(player.id);
+    item.state &= ~TrackState.Playing;
+    item.state |= TrackState.Paused;
+    this._emitStateChange("pause", item);
   }
 
   private async _handleEnded(e: Event) {
@@ -183,17 +166,17 @@ export class AudioPlayer {
 
   private _handleLoadStart(e: Event) {
     const player = this._playerFromEvent(e);
-    const qt = this._history[player.id];
-    qt.state |= TrackState.Loading;
-    this._emitStateChange("loadstart", qt);
+    const item = this._playlist.getById(player.id);
+    item.state |= TrackState.Loading;
+    this._emitStateChange("loadstart", item);
   }
 
   private _handleCanPlay(e: Event) {
     const player = this._playerFromEvent(e);
-    const qt = this._history[player.id];
-    qt.state &= ~TrackState.Loading;
-    qt.state |= TrackState.Loaded;
-    this._emitStateChange("canplay", qt);
+    const item = this._playlist.getById(player.id);
+    item.state &= ~TrackState.Loading;
+    item.state |= TrackState.Loaded;
+    this._emitStateChange("canplay", item);
   }
 
   private async _getUrl(track: Track, id: string) {
@@ -211,7 +194,7 @@ export class AudioPlayer {
 
   private async _play(player: HTMLAudioElement, id: string) {
     this._currentId = id;
-    let { src, track } = this._history[id];
+    let { src, track } = this._playlist.getById(id);
     src = src ?? (await this._getUrl(track, id));
 
     if (player.id !== id) {
@@ -226,19 +209,19 @@ export class AudioPlayer {
   }
 
   private async _playNext(currentPlayer: HTMLAudioElement) {
-    const qt = this.getCurrentTrack();
+    const item = this.getCurrentTrack();
 
-    if (qt.i >= 0) {
+    if (item.i >= 0) {
       currentPlayer.pause();
       currentPlayer.removeAttribute("src");
 
-      qt.state = TrackState.Finished;
-      qt.src = undefined;
+      item.state = TrackState.Finished;
+      item.src = undefined;
 
-      this._emitStateChange("ended", qt);
+      this._emitStateChange("ended", item);
     }
 
-    const nextId = this._queue[qt.i + 1];
+    const nextId = this._playlist.getId(item.i + 1);
     if (!nextId) {
       // finished all
       return;
@@ -259,7 +242,7 @@ export class AudioPlayer {
       this._emitStateChange("prev", qt);
     }
 
-    const prevId = this._queue[qt.i - 1];
+    const prevId = this._playlist.getId(qt.i - 1);
     if (!prevId) {
       // no more history
       return;
@@ -276,25 +259,16 @@ export class AudioPlayer {
   async addTrack(track: Track) {
     this._init();
 
-    const i = this._queue.length;
-    const ta = new Date();
-    const id = `${ta.getTime()}-${i}`;
-
-    this._queue.push(id);
-
-    const qt = (this._history[id] = {
+    const item = this._playlist.addItem({
       state: TrackState.Queued,
       track,
-      id,
-      ta,
-      i,
     });
 
-    this._handlers["tracks-changed"].forEach((fn) => fn(qt));
+    this._handlers["tracks-changed"].forEach((fn) => fn(item));
 
-    if (i === 0) {
+    if (item.i === 0) {
       const player = this._getPlayer();
-      await this._play(player, id);
+      await this._play(player, item.id);
     }
   }
 
@@ -312,25 +286,16 @@ export class AudioPlayer {
 
     const tracksToAdd = !shuffle ? tracks : shuffleTracks([...tracks]);
 
-    const l = this.getQueueLength();
-    const added: QueuedTrack[] = [];
+    const l = this.getPlaylistCount();
+    const added: PlaylistItem<PlayerTrack>[] = [];
 
     for (const track of tracksToAdd) {
-      const i = this.getQueueLength();
-      const ta = new Date();
-      const id = `${ta.getTime()}-${i}`;
-
-      this._queue.push(id);
-
-      const qt = (this._history[id] = {
+      const item = this._playlist.addItem({
         state: TrackState.Queued,
         track,
-        id,
-        ta,
-        i,
       });
 
-      added.push(qt);
+      added.push(item);
     }
 
     this._handlers["tracks-changed"].forEach((fn) => fn(...added));
@@ -353,18 +318,13 @@ export class AudioPlayer {
     const id = `${ta.getTime()}-${i}`;
     const src = await this._getUrl(track, id);
 
-    this._queue.splice(i + 1, 0, id);
-
-    const qt = (this._history[id] = {
+    const item = this._playlist.insertItem(i + 1, {
       state: TrackState.Queued,
       track,
       src,
-      ta,
-      id,
-      i: i + 1,
     });
 
-    this._handlers["tracks-changed"].forEach((fn) => fn(qt));
+    this._handlers["tracks-changed"].forEach((fn) => fn(item));
 
     const player = this._getPlayer();
     await this._playNext(player);
@@ -419,14 +379,9 @@ export class AudioPlayer {
       return;
     }
 
-    const queue = this._queue;
-    const history = this._history;
-
-    const fromId = queue[fromIndex];
-    const toId = queue[toIndex];
-
-    const from = history[fromId];
-    const to = history[toId];
+    const playlist = this._playlist;
+    const from = playlist.getByIndex(fromIndex);
+    const to = playlist.getByIndex(toIndex);
 
     if ((from.state & TrackState.Queued) === 0) {
       return;
@@ -435,26 +390,7 @@ export class AudioPlayer {
       return;
     }
 
-    if (fromIndex < toIndex) {
-      const moving = queue.splice(fromIndex + 1, toIndex - fromIndex);
-      queue.splice(fromIndex, 0, ...moving);
-      for (const id of moving) {
-        const qt = history[id];
-        qt.i -= 1;
-      }
-
-      from.i = toIndex;
-    } else {
-      const moving = queue.splice(toIndex, fromIndex - toIndex);
-      queue.splice(toIndex + 1, 0, ...moving);
-
-      for (const id of moving) {
-        const qt = history[id];
-        qt.i += 1;
-      }
-
-      from.i = toIndex;
-    }
+    playlist.moveTo(fromIndex, toIndex);
 
     const { i } = this.getCurrentTrack();
     const isNext = fromIndex === i + 1 || toIndex === i + 1;
@@ -478,9 +414,12 @@ export class AudioPlayer {
   /**
    * Returns the current `QueueTrack`
    */
-  getCurrentTrack(): QueuedTrack {
+  getCurrentTrack(): PlaylistItem<PlayerTrack> {
     return (
-      this._history[this._currentId] ?? { i: -1, state: TrackState.Unknown }
+      this._playlist.getById(this._currentId) ?? {
+        i: -1,
+        state: TrackState.Unknown,
+      }
     );
   }
 
@@ -493,18 +432,17 @@ export class AudioPlayer {
   }
 
   /**
-   * Returns all `QueueTrack` items in their current order
+   * Returns all playlist items in their current order
    */
-  getQueue() {
-    const history = this._history;
-    return this._queue.map((src) => history[src]);
+  getPlaylistItems() {
+    return this._playlist.getItems();
   }
 
   /**
-   * Returns the queue length
+   * Returns the playlist length
    */
-  getQueueLength() {
-    return this._queue.length;
+  getPlaylistCount() {
+    return this._playlist.count();
   }
 
   /**
@@ -546,7 +484,7 @@ export class AudioPlayer {
   /**
    * Add an event handler for the specified event
    */
-  addEventHandler(event: PlayerEvent, handler: (qt: QueuedTrack) => void) {
+  addEventHandler(event: PlayerEvent, handler: (qt: PlayerTrack) => void) {
     const handlers = this._handlers[event];
     handlers.push(handler);
   }
@@ -554,8 +492,10 @@ export class AudioPlayer {
   /**
    * Remove an event handler for the specified event
    */
-  removeEventHandler(event: PlayerEvent, handler: (qt: QueuedTrack) => void) {
+  removeEventHandler(event: PlayerEvent, handler: (qt: PlayerTrack) => void) {
     const handlers = this._handlers[event];
     this._handlers[event] = handlers.filter((h) => h !== handler);
   }
 }
+
+export type { PlaylistItem };

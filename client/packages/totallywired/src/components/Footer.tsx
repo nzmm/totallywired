@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { QueuedTrack, TrackState } from "../lib/player";
+import { PlayerTrack, TrackState } from "../lib/player";
 import { usePlayer } from "../providers/AudioProvider";
 import NowPlaying from "./NowPlaying";
 import OutputControls from "./OutputControls";
@@ -16,7 +16,7 @@ export default function Footer() {
   );
 
   useEffect(() => {
-    const stateChangeHandler = ({ state, track }: QueuedTrack) => {
+    const stateChangeHandler = ({ state, track }: PlayerTrack) => {
       setCurrentState(state);
       setCurrentTrack(track);
     };
