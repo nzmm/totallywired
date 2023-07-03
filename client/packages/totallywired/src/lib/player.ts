@@ -41,9 +41,15 @@ export const TRACK_STATE_ARRAY = [
 
 const PRELOAD_DELAY_SECONDS = 10;
 
+const PLAYER = (e: Event) => e.target as HTMLAudioElement;
+
 export class AudioPlayer {
-  player0!: HTMLAudioElement;
-  player1!: HTMLAudioElement;
+  private _player0!: HTMLAudioElement;
+  private _player1!: HTMLAudioElement;
+
+  private _playlist = new Playlist<PlayerTrack>();
+  private _currentId: string = "";
+  private _timeout = -1;
 
   private _handlers: Handlers = {
     "state-change": [],
@@ -52,46 +58,37 @@ export class AudioPlayer {
     "volume-change": [],
   };
 
-  private _playlist = new Playlist<PlayerTrack>();
-
-  private _timeout = -1;
-  private _currentId: string = "";
-
   private _init() {
     // Audio element initialisation is delayed until there has been interaction with the page
     // https://developer.chrome.com/blog/autoplay/#webaudio
 
-    if (this.player0 && this.player1) {
+    if (this._player0 && this._player1) {
       return;
     }
 
-    this.player0 = new Audio();
-    this.player1 = new Audio();
+    this._player0 = new Audio();
+    this._player1 = new Audio();
 
-    this.player0.preload = "auto";
-    this.player1.preload = "auto";
+    this._player0.preload = "auto";
+    this._player1.preload = "auto";
 
-    this.player0.onloadstart = this._handleLoadStart.bind(this);
-    this.player1.onloadstart = this._handleLoadStart.bind(this);
+    this._player0.onloadstart = this._handleLoadStart.bind(this);
+    this._player1.onloadstart = this._handleLoadStart.bind(this);
 
-    this.player0.oncanplay = this._handleCanPlay.bind(this);
-    this.player1.oncanplay = this._handleCanPlay.bind(this);
+    this._player0.oncanplay = this._handleCanPlay.bind(this);
+    this._player1.oncanplay = this._handleCanPlay.bind(this);
 
-    this.player0.onplay = this._handlePlay.bind(this);
-    this.player1.onplay = this._handlePlay.bind(this);
+    this._player0.onplay = this._handlePlay.bind(this);
+    this._player1.onplay = this._handlePlay.bind(this);
 
-    this.player0.onplaying = this._handlePlaying.bind(this);
-    this.player1.onplaying = this._handlePlaying.bind(this);
+    this._player0.onplaying = this._handlePlaying.bind(this);
+    this._player1.onplaying = this._handlePlaying.bind(this);
 
-    this.player0.onpause = this._handlePause.bind(this);
-    this.player1.onpause = this._handlePause.bind(this);
+    this._player0.onpause = this._handlePause.bind(this);
+    this._player1.onpause = this._handlePause.bind(this);
 
-    this.player0.onended = this._handleEnded.bind(this);
-    this.player1.onended = this._handleEnded.bind(this);
-  }
-
-  private _playerFromEvent(e: Event) {
-    return e.target as HTMLAudioElement;
+    this._player0.onended = this._handleEnded.bind(this);
+    this._player1.onended = this._handleEnded.bind(this);
   }
 
   private _handlePreload(player: HTMLAudioElement) {
@@ -110,10 +107,10 @@ export class AudioPlayer {
       let { track, src } = nextItem;
       console.log(`${nextItem.track.name}: preloading...`);
 
-      const altPlayer = this._getNextPlayer();
+      const nextPlayer = this._getNextPlayer();
       src = src ?? (await this._getUrl(track, nextItem.id));
-      altPlayer.id = nextItem.id;
-      altPlayer.src = src;
+      nextPlayer.id = nextItem.id;
+      nextPlayer.src = src;
     }, preloadDelayMs);
   }
 
@@ -129,7 +126,7 @@ export class AudioPlayer {
   }
 
   private _handlePlay(e: Event) {
-    const player = this._playerFromEvent(e);
+    const player = PLAYER(e);
     this._currentId = player.id;
 
     const item = this._playlist.getById(player.id);
@@ -141,14 +138,14 @@ export class AudioPlayer {
   }
 
   private _handlePlaying(e: Event) {
-    const player = this._playerFromEvent(e);
+    const player = PLAYER(e);
     this._setupPreload(player);
   }
 
   private _handlePause(e: Event) {
     clearTimeout(this._timeout);
 
-    const player = this._playerFromEvent(e);
+    const player = PLAYER(e);
     if (!player.src) {
       return;
     }
@@ -160,19 +157,19 @@ export class AudioPlayer {
   }
 
   private async _handleEnded(e: Event) {
-    const player = this._playerFromEvent(e);
+    const player = PLAYER(e);
     this._playNext(player);
   }
 
   private _handleLoadStart(e: Event) {
-    const player = this._playerFromEvent(e);
+    const player = PLAYER(e);
     const item = this._playlist.getById(player.id);
     item.state |= TrackState.Loading;
     this._emitStateChange("loadstart", item);
   }
 
   private _handleCanPlay(e: Event) {
-    const player = this._playerFromEvent(e);
+    const player = PLAYER(e);
     const item = this._playlist.getById(player.id);
     item.state &= ~TrackState.Loading;
     item.state |= TrackState.Loaded;
@@ -185,11 +182,11 @@ export class AudioPlayer {
   }
 
   private _getPlayer() {
-    return this._currentId === this.player0.id ? this.player0 : this.player1;
+    return this._currentId === this._player0.id ? this._player0 : this._player1;
   }
 
   private _getNextPlayer() {
-    return this._currentId === this.player0.id ? this.player1 : this.player0;
+    return this._currentId === this._player0.id ? this._player1 : this._player0;
   }
 
   private async _play(player: HTMLAudioElement, id: string) {
@@ -450,7 +447,7 @@ export class AudioPlayer {
    */
   getVolume() {
     this._init();
-    return this.player0.muted ? 0 : this.player0.volume;
+    return this._player0.muted ? 0 : this._player0.volume;
   }
 
   /**
@@ -458,7 +455,7 @@ export class AudioPlayer {
    */
   isMuted() {
     this._init();
-    return this.player0.muted;
+    return this._player0.muted;
   }
 
   /**
@@ -466,8 +463,8 @@ export class AudioPlayer {
    */
   mute() {
     this._init();
-    this.player0.muted = true;
-    this.player1.muted = true;
+    this._player0.muted = true;
+    this._player1.muted = true;
     this._handlers["volume-change"].forEach((fn) => fn());
   }
 
@@ -476,8 +473,8 @@ export class AudioPlayer {
    */
   unmute() {
     this._init();
-    this.player0.muted = false;
-    this.player1.muted = false;
+    this._player0.muted = false;
+    this._player1.muted = false;
     this._handlers["volume-change"].forEach((fn) => fn());
   }
 
