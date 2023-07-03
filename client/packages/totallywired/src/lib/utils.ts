@@ -15,7 +15,7 @@ export const getValidSearchParams = (searchParams?: URLSearchParams) => {
 };
 
 /**
- * Suffles the supplied array in place
+ * Shuffles the supplied array in place
  */
 export const shuffle = <T>(array: T[]) => {
   let currentIndex = array.length,
