@@ -10,8 +10,7 @@ import {
   getVisible,
   getItemAtY,
   FocalItem,
-  NO_FOCUS,
-  getDragItemAtY
+  NO_FOCUS
 } from "./VirtualList.library";
 
 import "./VirtualList.scss";
@@ -168,7 +167,7 @@ const VirtualList = <T extends IVirtualListItem>({
         }
         const item = getItemAtY(vlist.current, visible, e.clientY);
         if (item) {
-          onDragStart(e, item, vlist);
+          onDragStart(e, item);
         }
       }
     : undefined;
@@ -178,9 +177,9 @@ const VirtualList = <T extends IVirtualListItem>({
         if (!vlist.current) {
           return;
         }
-        const item = getDragItemAtY(vlist.current, visible, e.clientY);
+        const item = getItemAtY(vlist.current, visible, e.clientY);
         if (item) {
-          onDragOver(e, item, vlist);
+          onDragOver(e, item);
         }
       }
     : undefined;
@@ -190,9 +189,9 @@ const VirtualList = <T extends IVirtualListItem>({
         if (!vlist.current) {
           return;
         }
-        const item = getDragItemAtY(vlist.current, visible, e.clientY);
+        const item = getItemAtY(vlist.current, visible, e.clientY);
         if (item) {
-          onDragEnd(e, item, vlist);
+          onDragEnd(e, item);
         }
       }
     : undefined;
@@ -202,9 +201,9 @@ const VirtualList = <T extends IVirtualListItem>({
         if (!vlist.current) {
           return;
         }
-        const item = getDragItemAtY(vlist.current, visible, e.clientY);
+        const item = getItemAtY(vlist.current, visible, e.clientY);
         if (item) {
-          onDrop(e, item, vlist);
+          onDrop(e, item);
         }
       }
     : undefined;

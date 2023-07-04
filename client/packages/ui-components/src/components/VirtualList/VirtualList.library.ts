@@ -1,143 +1,23 @@
-import { PropsWithChildren } from "react";
-
-interface IVirtualListItem {
-  /**
-   * The height of the list item
-   */
-  height: number;
-
-  /**
-   * Optional key, otherwise index is used
-   */
-  key?: string | number;
-}
-
-type VisibleItem<T extends IVirtualListItem = IVirtualListItem> = {
-  i: number;
-  y: number;
-  data: T;
-};
-
-type ListItemProps<T> = T & { index: number; top: number; height: number };
-
-type ListItemRenderer<T> = (props: ListItemProps<T>) => React.ReactNode;
-
-type VirtualListProps<T extends IVirtualListItem> = {
-  /**
-   * The list items to be rendered.
-   */
-  items: T[];
-
-  /**
-   * A component to render each list item.
-   */
-  renderer: ListItemRenderer<T>;
-
-  /**
-   * The x-overflow behaviour.
-   */
-  xOverflow?: "auto" | "scroll" | "hidden";
-
-  /**
-   * The y-overflow behaviour.
-   */
-  yOverflow?: "auto" | "scroll" | "hidden";
-
-  /**
-   * Option click handler
-   */
-  onClick?: (e: React.MouseEvent<HTMLElement>, item: VisibleItem<T>) => void;
-
-  /**
-   * Option double-click handler
-   */
-  onDoubleClick?: (
-    e: React.MouseEvent<HTMLElement>,
-    item: VisibleItem<T>
-  ) => void;
-
-  onDragStart?: (
-    e: React.DragEvent<HTMLElement>,
-    item: VisibleItem<T>,
-    vlist: React.RefObject<HTMLDivElement>
-  ) => void;
-  onDragOver?: (
-    e: React.DragEvent<HTMLElement>,
-    item: VisibleItem<T>,
-    vlist: React.RefObject<HTMLDivElement>
-  ) => void;
-  onDragEnd?: (
-    e: React.DragEvent<HTMLElement>,
-    item: VisibleItem<T>,
-    vlist: React.RefObject<HTMLDivElement>
-  ) => void;
-  onDrop?: (
-    e: React.DragEvent<HTMLElement>,
-    item: VisibleItem<T>,
-    vlist: React.RefObject<HTMLDivElement>
-  ) => void;
-};
-
-type VisibleResult<T extends IVirtualListItem> = [
-  VisibleItem<T>[],
+import {
+  isUpwardUpdateRequired,
+  getResponse,
+  getHeight,
+  getItemAtY,
+  isDownwardUpdateRequired
+} from "./VirtualList.helpers";
+import {
+  VisibleResult,
+  FocalItem,
   NumericRange,
-  NumericRange,
-  boolean
-];
-
-type NumericRange = [number, number];
-
-type FocalItem = { i: number; y: number };
+  IVirtualListItem,
+  VisibleItem,
+  VirtualListProps,
+  ListItemRenderer,
+  ListItemProps
+} from "./VirtualList.types";
 
 const SKIP_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
-const EMPTY_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], true];
 const NO_FOCUS: FocalItem = { i: -1, y: -1 };
-
-const getHeight = (data: IVirtualListItem[]) =>
-  data.reduce((acc, cur) => acc + cur.height, 0);
-
-const getItemAtY = <T extends IVirtualListItem>(
-  vlist: HTMLDivElement,
-  visible: VisibleItem<T>[],
-  y: number
-) => {
-  const { y: vy } = vlist.getBoundingClientRect();
-  const cy = vlist.scrollTop + y - vy;
-  return visible.find((x) => x.y <= cy && x.y + x.data.height > cy);
-};
-
-const getDragItemAtY = <T extends IVirtualListItem>(
-  vlist: HTMLDivElement,
-  visible: VisibleItem<T>[],
-  y: number
-) => {
-  const { y: vy } = vlist.getBoundingClientRect();
-  const cy = vlist.scrollTop + y - vy;
-
-  for (let i = 0; i < visible.length; i++) {
-    const item = visible[i];
-    const h = item.data.height;
-
-    if (cy >= item.y && cy <= item.y + h / 2) {
-      return item;
-    }
-    if (cy > item.y + h && cy <= item.y + h) {
-      return visible[i + 1] ?? item;
-    }
-  }
-  return null;
-};
-
-const getResponse = <T extends IVirtualListItem>(
-  v: VisibleItem<T>[]
-): VisibleResult<T> => {
-  if (!v.length) {
-    return EMPTY_UPDATE;
-  }
-
-  const [ir, pr] = getVisibleRanges(v);
-  return [v, ir, pr, true];
-};
 
 const getVisibleUpward = <T extends IVirtualListItem>(
   items: T[],
@@ -149,12 +29,17 @@ const getVisibleUpward = <T extends IVirtualListItem>(
   focalItem: FocalItem,
   force = false
 ): VisibleResult<T> => {
-  const updateRequired =
-    force ||
-    (items[imin] &&
-      (pmin + items[imin].height < topOffset || pmax <= topExtent));
-
-  if (!updateRequired) {
+  if (
+    !isUpwardUpdateRequired(
+      items,
+      imin,
+      pmin,
+      pmax,
+      topOffset,
+      topExtent,
+      force
+    )
+  ) {
     return SKIP_UPDATE;
   }
 
@@ -201,10 +86,9 @@ const getVisibleDownward = <T extends IVirtualListItem>(
   topExtent: number,
   focalItem: FocalItem
 ): VisibleResult<T> => {
-  const updateRequired =
-    items[imax] && (topOffset <= pmin || topExtent < pmax - items[imax].height);
-
-  if (!updateRequired) {
+  if (
+    !isDownwardUpdateRequired(items, imax, pmin, pmax, topOffset, topExtent)
+  ) {
     return SKIP_UPDATE;
   }
 
@@ -283,18 +167,7 @@ const getVisible = (
       );
 };
 
-/**
- * Returns the `indexRange` and the `pixelRange`
- */
-const getVisibleRanges = (v: VisibleItem[]): [NumericRange, NumericRange] => {
-  const min = v[0];
-  const max = v[v.length - 1];
-  const indexRange: NumericRange = [min.i, max.i];
-  const pixelRange: NumericRange = [min.y, max.y + max.data.height];
-  return [indexRange, pixelRange];
-};
-
-export { getHeight, getItemAtY, getDragItemAtY, getVisible, NO_FOCUS };
+export { getHeight, getItemAtY, getVisible, NO_FOCUS };
 export type {
   NumericRange,
   VirtualListProps,
