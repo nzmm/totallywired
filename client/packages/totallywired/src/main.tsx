@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 
 import { AudioProvider } from "./providers/AudioProvider";
-import { UserProvider } from "./providers/GenericProviders";
+import { UserProvider } from "./providers/UserProvider";
 
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
 import "./styles.css";

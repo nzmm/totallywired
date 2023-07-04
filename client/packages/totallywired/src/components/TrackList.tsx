@@ -36,7 +36,7 @@ function TrackItem({ index, top, height, ...track }: TrackItemProps) {
 
 export default function TrackList() {
   const player = usePlayer();
-  const tracks = useAsyncValue() as TrackDataProps[];
+  const tracks = useAsyncValue() as Track[];
 
   const handleClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -59,7 +59,7 @@ export default function TrackList() {
 
   return tracks?.length ?? 0 ? (
     <VirtualList
-      items={tracks}
+      items={tracks.map((t) => ({ ...t, height: 42 }))}
       renderer={TrackItem}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}

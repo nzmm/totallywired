@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useUser } from "../providers/GenericProviders";
+import { useUser } from "../providers/UserProvider";
 import MeMenu from "./MeMenu";
 import SearchInput from "./SearchInput";
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../lib/player";
 import { getTracks } from "../lib/webapi";
 import Progressbar from "./Progressbar";
+import { useTracks } from "../providers/TracksProvider";
 
 type PlaybackControlsProps = {
   player: AudioPlayer;
@@ -12,6 +13,7 @@ export default function PlaybackControls({
   player,
   currentState,
 }: PlaybackControlsProps) {
+  const tracks = useTracks();
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -32,9 +34,7 @@ export default function PlaybackControls({
     if (player.getPlaylistCount()) {
       player.playPause();
     } else {
-      // todo
-      const searchParams = new URLSearchParams({ q: "mint chicks" });
-      const data = await getTracks(searchParams);
+      const data = await tracks;
       player.addTracks(data.slice(0, 20), true);
     }
   };

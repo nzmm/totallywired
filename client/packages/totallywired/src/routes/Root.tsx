@@ -1,19 +1,20 @@
 import { Suspense, useMemo } from "react";
 import { Await, Outlet } from "react-router-dom";
-import { userStore } from "../providers/GenericProviders";
 import { whoami } from "../lib/webapi";
+import { userDispatch } from "../providers/UserProvider";
 import Loading from "../components/Loading";
+import { set } from "../lib/reducer";
 
 export default function Root() {
-  const store = userStore();
+  const dispatch = userDispatch();
 
   const promise = useMemo(async () => {
     const user = await whoami();
     if (user.ok && user.data) {
-      store.set(user.data);
+      dispatch(set(user.data));
     }
     return user;
-  }, [store]);
+  }, [dispatch]);
 
   return (
     <Suspense fallback={<Loading />}>
