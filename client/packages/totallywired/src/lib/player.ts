@@ -177,7 +177,7 @@ export class AudioPlayer {
   }
 
   private async _getUrl(track: Track, id: string) {
-    let url = await getTrackUrl(track.id);
+    let { data: url } = await getTrackUrl(track.id);
     return `${url}#${id}`;
   }
 
