@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { useSearchParams, useParams, Await } from "react-router-dom";
 import { usePlayer } from "../providers/AudioProvider";
 import { getValidSearchParams } from "../lib/utils";
@@ -19,19 +19,16 @@ export default function Albums() {
   const [searchParams] = useSearchParams();
   const params = useParams();
   const player = usePlayer();
-  const [promise, setPromise] = useState<Promise<AlbumDataProps[]> | null>(
-    null
-  );
 
-  useEffect(() => {
-    const req = loader(params, searchParams).then((data) => {
-      return data.map((x) => ({
+  const promise = useMemo<Promise<AlbumDataProps[]>>(async () => {
+    const { data } = await loader(params, searchParams);
+
+    return (
+      data?.map((x) => ({
         ...x,
         height: 42,
-      }));
-    });
-
-    setPromise(req);
+      })) ?? []
+    );
   }, [player, params, searchParams]);
 
   return (

@@ -11,15 +11,15 @@ export type ArtistDataProps = IVirtualListItem & Artist;
 
 function ArtistItem({ top, height, ...artist }: ArtistItemProps) {
   return (
-    <>
-      <button className="col lgutter" title="Play all now">
+    <li tabIndex={0} style={{ top, height }}>
+      <button className="col lgutter">
         &nbsp;
       </button>
       <Link
         className="col name"
         to={`/lib/artists/${artist.id}/albums`}
       >{`${artist.name}`}</Link>
-    </>
+    </li>
   );
 }
 

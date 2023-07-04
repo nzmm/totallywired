@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useMemo } from "react";
 import { Await, useParams, useSearchParams } from "react-router-dom";
 import { getTrackByArtist, getTracks, getTracksByAlbum } from "../lib/webapi";
 import { getValidSearchParams } from "../lib/utils";
@@ -19,19 +19,10 @@ const loader = (
 export default function Tracks() {
   const params = useParams();
   const [searchParams] = useSearchParams();
-  const [promise, setPromise] = useState<Promise<TrackDataProps[]> | null>(
-    null
-  );
 
-  useEffect(() => {
-    const req = loader(params, searchParams).then((data) => {
-      return data.map((x) => ({
-        ...x,
-        height: 42,
-      }));
-    });
-
-    setPromise(req);
+  const promise = useMemo(async () => {
+    const { data } = await loader(params, searchParams);
+    return data?.map<TrackDataProps>((t) => ({ ...t, height: 42 })) ?? [];
   }, [params, searchParams]);
 
   return (

@@ -3,10 +3,12 @@ import { Popover } from "@totallywired/ui-components";
 import { User } from "../lib/types";
 
 export default function MeMenu({ user }: { user: User }) {
+  console.log(user);
+
   const subject = useRef<HTMLButtonElement>(null);
   const [show, setShow] = useState(false);
 
-  return user?.isAuthenticated ? (
+  return user ? (
     <div className="me-menu">
       <span>{user.name}</span>
       <button

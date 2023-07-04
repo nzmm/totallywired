@@ -1,5 +1,5 @@
 import { sendQuery, sendCommand } from "./requests";
-import { Album, ProviderCollection, Track, User } from "./types";
+import { Album, Artist, ProviderCollection, Track, User } from "./types";
 
 const API = "/api/v1";
 
@@ -44,7 +44,7 @@ export function getAlbumsByArtist(
 }
 
 export function getArtists(searchParams?: URLSearchParams) {
-  return sendQuery<Album[]>(`${API}/artists`, searchParams);
+  return sendQuery<Artist[]>(`${API}/artists`, searchParams);
 }
 
 export function getProviders() {

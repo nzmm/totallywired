@@ -1,3 +1,5 @@
+export type Res<T> = { ok: boolean; status: number; data?: T };
+
 function extractAntiforgeryToken(res: Response) {
   return res.ok
     ? document?.cookie
@@ -21,25 +23,34 @@ function isJsonContent(res: Response) {
 export async function sendQuery<T>(
   url: string,
   searchParams?: URLSearchParams
-): Promise<T> {
+): Promise<Res<T>> {
   const res = await fetch(`${searchParams ? `${url}?${searchParams}` : url}`);
-  return isJsonContent(res) ? await res.json() : await res.text();
+  const { ok, status } = res;
+
+  if (!ok) {
+    return { ok, status };
+  }
+
+  const data = isJsonContent(res) ? await res.json() : await res.text();
+  return { ok, status, data };
 }
 
 export async function sendCommand<T = never>(
   url: string,
-  data?: any
-): Promise<T> {
+  payload?: any
+): Promise<Res<T>> {
   const token = await getAntiforgeryToken();
 
   const res = await fetch(url, {
     method: "POST",
-    body: JSON.stringify(data),
+    body: JSON.stringify(payload),
     headers: {
       "Content-Type": "application/json",
       "X-XSRF-TOKEN": token,
     },
   });
 
-  return await res.json();
+  const { ok, status } = res;
+  const data = await res.json();
+  return { ok, status, data };
 }
