@@ -3,8 +3,6 @@ import { Popover } from "@totallywired/ui-components";
 import { User } from "../lib/types";
 
 export default function MeMenu({ user }: { user: User }) {
-  console.log(user);
-
   const subject = useRef<HTMLButtonElement>(null);
   const [show, setShow] = useState(false);
 

@@ -3,11 +3,16 @@ import {
   useContext,
   useEffect,
   useReducer,
-  useRef
+  useRef,
 } from "react";
 import { Track } from "../lib/types";
 import { commonReducer, createDispatchContext, set } from "../lib/reducer";
-import { Params, useLocation, useParams, useSearchParams } from "react-router-dom";
+import {
+  Params,
+  useLocation,
+  useParams,
+  useSearchParams,
+} from "react-router-dom";
 import { getTracksByAlbum, getTrackByArtist, getTracks } from "../lib/webapi";
 import { getValidSearchParams } from "../lib/utils";
 

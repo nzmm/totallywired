@@ -1,9 +1,10 @@
 import { Suspense, useMemo } from "react";
 import { Await, Outlet } from "react-router-dom";
 import { whoami } from "../lib/webapi";
-import { userDispatch } from "../providers/UserProvider";
-import Loading from "../components/Loading";
 import { set } from "../lib/reducer";
+import { userDispatch } from "../providers/UserProvider";
+import { AudioProvider } from "../providers/AudioProvider";
+import Loading from "../components/Loading";
 
 export default function Root() {
   const dispatch = userDispatch();
@@ -23,7 +24,11 @@ export default function Root() {
         children={(res) => {
           switch (res.status) {
             case 200: {
-              return <Outlet />;
+              return (
+                <AudioProvider>
+                  <Outlet />
+                </AudioProvider>
+              );
             }
             case 401: {
               return (

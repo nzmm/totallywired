@@ -2,8 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
-
-import { AudioProvider } from "./providers/AudioProvider";
 import { UserProvider } from "./providers/UserProvider";
 
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
@@ -69,10 +67,8 @@ export const AppRouter = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <AudioProvider>
-      <UserProvider>
-        <RouterProvider router={AppRouter} />
-      </UserProvider>
-    </AudioProvider>
+    <UserProvider>
+      <RouterProvider router={AppRouter} />
+    </UserProvider>
   </React.StrictMode>
 );

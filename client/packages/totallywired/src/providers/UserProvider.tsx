@@ -4,6 +4,7 @@ import { commonReducer, createDispatchContext } from "../lib/reducer";
 
 const DataContext = createContext<User | null>(null);
 const DispatchContext = createDispatchContext<User | null>();
+const Reducer = commonReducer<User | null>();
 
 export const useUser = () => {
   return useContext(DataContext);
@@ -13,10 +14,8 @@ export const userDispatch = () => {
   return useContext(DispatchContext);
 };
 
-const reducer = commonReducer<User | null>();
-
 export function UserProvider({ children }: React.PropsWithChildren) {
-  const [user, dispatch] = useReducer(reducer, null);
+  const [user, dispatch] = useReducer(Reducer, null);
   return (
     <DispatchContext.Provider value={dispatch}>
       <DataContext.Provider value={user}>{children}</DataContext.Provider>

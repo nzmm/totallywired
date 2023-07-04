@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../lib/player";
-import { getTracks } from "../lib/webapi";
-import Progressbar from "./Progressbar";
 import { useTracks } from "../providers/TracksProvider";
+import Progressbar from "./Progressbar";
 
 type PlaybackControlsProps = {
   player: AudioPlayer;

@@ -33,7 +33,7 @@ const stateInfo = (state: TrackState) => {
   const tips: string[] = [];
   for (const ts of TRACK_STATE_ARRAY) {
     if (ts & state) {
-      tips.push(`${TrackState[ts]} ✅`);
+      tips.push(`${TrackState[ts]} ✔️`);
     }
   }
   return tips.join("\n");

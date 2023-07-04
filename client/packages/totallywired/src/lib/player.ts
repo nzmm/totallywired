@@ -370,7 +370,7 @@ export class AudioPlayer {
   }
 
   /**
-   * Moves the `fromIndex` to the `toIndex` position.
+   * Moves the item at `fromIndex` to the `toIndex` position.
    * Only tracks waiting to be played can be repositioned.
    */
   moveTo(fromIndex: number, toIndex: number) {

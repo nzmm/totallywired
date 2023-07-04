@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from "react";
 import { Await } from "react-router-dom";
-import TrackList from "../components/TrackList";
 import { useTracks } from "../providers/TracksProvider";
+import TrackList from "../components/TrackList";
 
 export default function Tracks() {
   const promise = useTracks();

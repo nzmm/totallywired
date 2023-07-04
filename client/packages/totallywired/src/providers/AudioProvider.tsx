@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { AudioPlayer, PlayerTrack, PlaylistItem } from "../lib/player";
 
+const INIT_QUEUE: PlaylistItem<PlayerTrack>[] = [];
+
 const Player = new AudioPlayer();
 const PlayerContext = createContext(Player);
 const QueueContext = createContext<PlaylistItem<PlayerTrack>[]>([]);
@@ -14,12 +16,12 @@ export const useQueue = () => {
 };
 
 export function AudioProvider({ children }: React.PropsWithChildren) {
-  const [queue, setQueue] = useState<PlaylistItem<PlayerTrack>[]>([]);
+  const [queue, setQueue] = useState<PlaylistItem<PlayerTrack>[]>(INIT_QUEUE);
 
   useEffect(() => {
     const updateHandler = () => {
-      const q = Player.getPlaylistItems();
-      setQueue(q);
+      const items = Player.getPlaylistItems();
+      setQueue(items);
     };
 
     Player.addEventHandler("tracks-changed", updateHandler);

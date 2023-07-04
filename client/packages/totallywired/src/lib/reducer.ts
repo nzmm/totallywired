@@ -4,10 +4,8 @@ type SetAction<T> = { type: "ACTION_SET"; apply: T };
 type UpdateAction<T> = { type: "ACTION_UPDATE"; apply: (existing: T) => T };
 
 type GenericActions<T> = UpdateAction<T> | SetAction<T>;
-
 type GenericReducer<T> = Reducer<T, GenericActions<T>>;
-
-export type GenericDispatch<T> = React.Dispatch<GenericActions<T>>;
+type GenericDispatch<T> = React.Dispatch<GenericActions<T>>;
 
 const INIT_DISPATCH = (_: any) => undefined;
 
