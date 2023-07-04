@@ -19,8 +19,23 @@ public static class AuthenticationExtensions
     {
         var authenticationBuilder = builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
         
-        authenticationBuilder.AddCookie();
-        authenticationBuilder.AddCookie(AuthenticatonSchemes.ExternalScheme);
+        authenticationBuilder.AddCookie(o =>
+        {
+            o.Events.OnRedirectToLogin = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            };
+        });
+
+        authenticationBuilder.AddCookie(AuthenticatonSchemes.ExternalScheme, o =>
+        {
+            o.Events.OnRedirectToLogin = context =>
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            };
+        });
 
         // These are the list of external providers available to the application.
         // Many more are available from https://github.com/aspnet-contrib/AspNet.Security.OAuth.Providers

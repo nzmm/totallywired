@@ -13,7 +13,7 @@ public static class UserRoutes
                 var userId = user.FindFirstValue("tw_userid") ?? string.Empty;
                 var username = user.FindFirstValue("tw_username") ?? string.Empty;
                 var name = user.FindFirstValue(ClaimTypes.Name) ?? string.Empty;
-                return Results.Ok(new { userId, username, name, isAuthenticated = !string.IsNullOrEmpty(userId) });
-            });
+                return Results.Ok(new { userId, username, name });
+            }).RequireAuthorization();
     }
 }

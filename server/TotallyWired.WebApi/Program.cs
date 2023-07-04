@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.HttpOverrides;
 using TotallyWired;
 using TotallyWired.WebApi.Routes;
 using TotallyWired.WebApi.Authentication;
@@ -9,7 +10,6 @@ var config = builder.Configuration;
 // Add services to the container.
 builder.AddAuthentication();
 builder.Services.AddAuthorization();
-//builder.Services.AddHttpForwarder();
 builder.Services.AddAntiforgery(opts => opts.HeaderName = "X-XSRF-Token");
 
 builder.Services.AddSingleton(new HttpClient(new SocketsHttpHandler
@@ -24,9 +24,15 @@ builder.Services.AddSingleton(msOauthConfig);
 builder.Services.AddCoreServices(config);
 builder.Services.AddCurrentUser();
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.All;
+});
+
 // Configure the HTTP request pipeline.
 var app = builder.Build();
 
+app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
