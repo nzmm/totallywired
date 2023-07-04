@@ -95,7 +95,7 @@ export class AudioPlayer {
     clearTimeout(this._timeout);
 
     const nextItem = this._playlist.getNextById(player.id);
-    if (!nextItem || !nextItem.src) {
+    if (!nextItem) {
       return;
     }
 
@@ -105,12 +105,14 @@ export class AudioPlayer {
 
     this._timeout = window.setTimeout(async () => {
       let { track, src } = nextItem;
+
       console.log(`${nextItem.track.name}: preloading...`);
 
       const nextPlayer = this._getNextPlayer();
       src = src ?? (await this._getUrl(track, nextItem.id));
       nextPlayer.id = nextItem.id;
       nextPlayer.src = src;
+      nextItem.src = src;
     }, preloadDelayMs);
   }
 
