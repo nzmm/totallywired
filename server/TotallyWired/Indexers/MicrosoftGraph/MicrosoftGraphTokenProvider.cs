@@ -3,19 +3,17 @@ using System.Security.Authentication;
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Common;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
 
-namespace TotallyWired.ContentProviders.MicrosoftGraph;
+namespace TotallyWired.Indexers.MicrosoftGraph;
 
 public class MicrosoftGraphTokenProvider : ITokenProvider
 {
     private readonly ICurrentUser _user;
     private readonly HttpClient _httpClient;
-    private readonly UtcProvider _utcProvider;
     private readonly TotallyWiredDbContext _context;
     private readonly MicrosoftGraphOAuthConfiguration _config;
     private readonly MicrosoftGraphOAuthUriHelper _uriHelper;
@@ -23,14 +21,12 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
     public MicrosoftGraphTokenProvider(
         ICurrentUser user,
         HttpClient httpClient,
-        UtcProvider utcProvider,
         TotallyWiredDbContext dbContext,
         MicrosoftGraphOAuthConfiguration config,
         MicrosoftGraphOAuthUriHelper uriHelper)
     {
         _user = user;
         _httpClient = httpClient;
-        _utcProvider = utcProvider;
         _context = dbContext;
         _config = config;
         _uriHelper = uriHelper;
@@ -38,15 +34,22 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
 
     private IQueryable<Source> GetSource()
     {
+        var userId = _user.UserId();
         return _context.Sources
-            .Where(x => x.UserId == _user.UserId && x.Type == SourceType.MicrosoftGraph);
+            .Where(x => x.UserId == userId && x.Type == SourceType.MicrosoftGraph);
     }
     
     private async Task<Source> StoreTokensAsync(TokenResultModel tokens)
     {
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            throw new NullReferenceException(nameof(userId));
+        }
+
         var source = await GetSource().FirstOrDefaultAsync() ?? new Source
         {
-            UserId = _user.UserId,
+            UserId = userId.Value,
             Type = SourceType.MicrosoftGraph
         };
 

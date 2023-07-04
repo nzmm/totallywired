@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
 
@@ -11,7 +10,7 @@ public class ReleaseListHandler : IRequestHandler<IEnumerable<ReleaseListModel>>
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
     
-    public ReleaseListHandler(TotallyWiredDbContext context, ICurrentUser user)
+    public ReleaseListHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;
@@ -19,8 +18,14 @@ public class ReleaseListHandler : IRequestHandler<IEnumerable<ReleaseListModel>>
 
     public async Task<IEnumerable<ReleaseListModel>> HandleAsync(CancellationToken cancellationToken)
     {
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            return Enumerable.Empty<ReleaseListModel>();
+        }
+
         var releases = await _context.Releases
-            .Where(t => t.UserId == _user.UserId)
+            .Where(t => t.UserId == userId)
             .Select(r => new ReleaseListModel
             {
                 Id = r.Id,

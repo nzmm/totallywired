@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
+using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
 
@@ -14,21 +13,27 @@ public class TrackFileInfoQuery
 
 public class ReleaseFilenameHandler : IRequestHandler<TrackFileInfoQuery, TrackFileInfoModel>
 {
-    private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
+    private readonly TotallyWiredDbContext _context;
     private readonly MicrosoftGraphClientProvider _clientProvider;
 
-    public ReleaseFilenameHandler(TotallyWiredDbContext context, ICurrentUser user, MicrosoftGraphClientProvider clientProvider)
+    public ReleaseFilenameHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphClientProvider clientProvider)
     {
-        _context = context;
         _user = user;
+        _context = context;
         _clientProvider = clientProvider;
     }
 
     public async Task<TrackFileInfoModel> HandleAsync(TrackFileInfoQuery request, CancellationToken cancellationToken)
     {
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            return new TrackFileInfoModel();
+        }
+
         var track = await _context.Tracks
-            .Where(r => r.Id == request.TrackId && r.UserId == _user.UserId)
+            .Where(r => r.Id == request.TrackId && r.UserId == userId)
             .Select(r => new
             {
                 r.ResourceId,

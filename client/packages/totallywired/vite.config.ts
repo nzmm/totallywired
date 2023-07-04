@@ -9,4 +9,8 @@ export default defineConfig({
     port: 5000,
     https: true,
   },
+  preview: {
+    port: 5000,
+    https: true,
+  },
 });

@@ -1,26 +1,19 @@
 import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
-import { useUser, userStore } from "../providers/GenericProviders";
+import { userStore } from "../providers/GenericProviders";
 import { whoami } from "../lib/webapi";
 import Loading from "../components/Loading";
 
 export default function Root() {
-  const user = useUser();
-  const dispatch = userStore();
-  const [loading, setLoading] = useState(!user.isAuthenticated);
+  const store = userStore();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user.isAuthenticated || !dispatch) {
-      return;
-    }
-
-    const t0 = Date.now();
-
     whoami().then((data) => {
-      dispatch.set(data);
-      setTimeout(() => setLoading(false), 1000 - (Date.now() - t0));
+      store.set(data);
+      setLoading(false);  
     });
-  }, [user, dispatch]);
+  }, [store]);
 
   return loading ? <Loading /> : <Outlet />;
 }

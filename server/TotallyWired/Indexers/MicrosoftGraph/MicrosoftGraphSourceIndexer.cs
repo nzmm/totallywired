@@ -4,9 +4,10 @@ using TotallyWired.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Extensions;
+using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
 
-namespace TotallyWired.ContentProviders.MicrosoftGraph;
+namespace TotallyWired.Indexers.MicrosoftGraph;
 
 public class MicrosoftGraphSourceIndexer : ISourceIndexer
 {

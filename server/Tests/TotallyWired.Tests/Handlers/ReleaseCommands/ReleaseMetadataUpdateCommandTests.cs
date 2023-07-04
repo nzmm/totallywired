@@ -22,8 +22,8 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         base.Setup();
 
         _subject = new ReleaseMetadataUpdateHandler(
-            MockDbContext.Object,
-            MockCurrentUser.Object);
+            MockCurrentUser.Object,
+            MockDbContext.Object);
     }
 
     [Test]

@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
@@ -18,7 +17,7 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
     
-    public TrackReactionHandler(TotallyWiredDbContext context, ICurrentUser user)
+    public TrackReactionHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;
@@ -26,9 +25,15 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
 
     public async Task<(bool, ReactionType)> HandleAsync(TrackReactionCommand request, CancellationToken cancellationToken)
     {
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            return (false, ReactionType.None);
+        }
+
         var track = await _context.Tracks
             .Include(x => x.Reactions)
-            .Where(x => x.Id == request.TrackId && x.UserId == _user.UserId)
+            .Where(x => x.Id == request.TrackId && x.UserId == userId)
             .Select(x => new { x.Id, x.SourceId, x.Reactions })
             .FirstOrDefaultAsync(cancellationToken);
 
@@ -47,7 +52,7 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
                 reaction = new TrackReaction
                 {
                     Id = Guid.NewGuid(),
-                    UserId = _user.UserId,
+                    UserId = userId.Value,
                     TrackId = track.Id,
                     Reaction = request.Reaction
                 };

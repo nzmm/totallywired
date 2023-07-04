@@ -1,4 +1,4 @@
-namespace TotallyWired.ContentProviders.MicrosoftGraph;
+namespace TotallyWired.Indexers.MicrosoftGraph;
 
 public class MicrosoftGraphOAuthConfiguration
 {

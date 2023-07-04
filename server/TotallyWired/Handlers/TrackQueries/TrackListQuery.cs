@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Infrastructure.EntityFramework.Extensions;
@@ -21,15 +20,20 @@ public class TrackListHandler : IRequestHandler<TrackListSearchParams, IEnumerab
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
     
-    public TrackListHandler(TotallyWiredDbContext context, ICurrentUser user)
+    public TrackListHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
-        _context = context;
         _user = user;
+        _context = context;
     }
 
     private async Task<IEnumerable<TrackListModel>> GetQueryAsync(TrackListSearchParams @params, CancellationToken cancellationToken)
     {
-        var userId = _user.UserId;
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            return Enumerable.Empty<TrackListModel>();
+        }
+
         var releaseId = @params.ReleaseId;
         var artistId = @params.ArtistId;
         var liked = @params.Liked;

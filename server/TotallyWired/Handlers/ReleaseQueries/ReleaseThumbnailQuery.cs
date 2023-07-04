@@ -1,25 +1,24 @@
 using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
-using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
+using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
 public class ReleaseThumbnailHandler : IRequestHandler<Guid, string>
 {
-    private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
+    private readonly TotallyWiredDbContext _context;
     private readonly MicrosoftGraphTokenProvider _tokenProvider;
 
     private const string DefaultAlbumArt = "/default-art.svg";
 
-    public ReleaseThumbnailHandler(TotallyWiredDbContext context, ICurrentUser user, MicrosoftGraphTokenProvider tokenProvider)
+    public ReleaseThumbnailHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphTokenProvider tokenProvider)
     {
-        _context = context;
         _user = user;
+        _context = context;
         _tokenProvider = tokenProvider;
     }
 
@@ -39,8 +38,14 @@ public class ReleaseThumbnailHandler : IRequestHandler<Guid, string>
 
     public async Task<string> HandleAsync(Guid releaseId, CancellationToken cancellationToken)
     {
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            return string.Empty;
+        }
+
         var resource = await _context.Releases
-            .Where(r => r.Id == releaseId && r.UserId == _user.UserId)
+            .Where(r => r.Id == releaseId && r.UserId == userId)
             .Select(r => new
                 { r.ResourceId, r.ThumbnailUrl, Tracks = r.Tracks.Select(t => new { t.ResourceId, t.SourceId }) })
             .FirstOrDefaultAsync(cancellationToken);

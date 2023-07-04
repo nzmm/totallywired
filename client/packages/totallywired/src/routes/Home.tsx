@@ -20,7 +20,7 @@ export default function Home() {
             </>
           ) : (
             <p>
-              <a href="/accounts/sign-in">Login</a>
+              <a href="/accounts/login/Microsoft">Login</a>
             </p>
           )}
         </section>

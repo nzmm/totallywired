@@ -1,4 +1,4 @@
-using TotallyWired.Domain.Contracts;
+using System.Security.Claims;
 
 namespace TotallyWired.WebApi.Routes;
 
@@ -8,6 +8,12 @@ public static class UserRoutes
     {
         // IMPORTANT: This endpoint should not require authentication
         app.MapGet("/api/v1/whoami",
-            (ICurrentUser user) => Results.Ok(new { user.UserId, user.Name, user.Username, user.IsAuthenticated }));
+            (ClaimsPrincipal user) =>
+            {
+                var userId = user.FindFirstValue("tw_userid") ?? string.Empty;
+                var username = user.FindFirstValue("tw_username") ?? string.Empty;
+                var name = user.FindFirstValue(ClaimTypes.Name) ?? string.Empty;
+                return Results.Ok(new { userId, username, name, isAuthenticated = !string.IsNullOrEmpty(userId) });
+            });
     }
 }

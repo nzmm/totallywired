@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using MockQueryable.Moq;
 using Moq;
 using NUnit.Framework;
-using TotallyWired.Domain.Contracts;
+using TotallyWired.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Infrastructure.EntityFramework;
 
@@ -74,7 +74,7 @@ public abstract class BaseTestFixture
             .Returns(MockDbFacade.Object);
 
         MockCurrentUser
-            .Setup(x => x.UserId)
-            .Returns(CurrentUser.Id);
+            .Setup(x => x.UserId())
+            .Returns(Guid.NewGuid());
     }
 }

@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Authentication;
+using TotallyWired.Infrastructure.EntityFramework;
+using TotallyWired.WebApi.Authentication;
 using WebApplication = Microsoft.AspNetCore.Builder.WebApplication;
 
 namespace TotallyWired.WebApi.Routes;
@@ -8,17 +9,24 @@ public static class AuthRoutes
 {
     public static void MapAuthRoutes(this WebApplication app)
     {
-        app.MapGet("/accounts/sign-out", context => context.SignOutAsync());
-        app.MapGet("/accounts/sign-in",() => Results.Redirect("/lib/tracks")).RequireAuthorization();
+        var group = app.MapGroup("/accounts");
+        
+        group.MapGet("/signout", context => context.SignOutAsync());
+        
+        group.MapGet("/login/{provider}",(string provider) => Results.Challenge(
+            properties: new() { RedirectUri = $"/accounts/signin/{provider}" },
+            authenticationSchemes: new[] { provider }));
 
-        app.MapGet("/antiforgery/token", (IAntiforgery antiforgeryService, HttpContext context) =>
+        group.MapGet("signin/{provider}", async (HttpContext context, TotallyWiredDbContext db, string provider) =>
         {
-            var tokens = antiforgeryService.GetAndStoreTokens(context);
+            var success = await context.AuthenticateUserAsync(db, provider);
+            if (success)
+            {
+                return Results.Redirect("/");
+            }
 
-            context.Response.Cookies.Append(
-                "XSRF-TOKEN", tokens.RequestToken!, new CookieOptions { HttpOnly = false });
-
-            return Results.Ok();
-        }).RequireAuthorization();
+            await context.SignOutAsync(provider);
+            return Results.Unauthorized();
+        });
     }
 }

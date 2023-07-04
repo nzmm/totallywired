@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
+using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.TrackQueries;
@@ -10,21 +9,27 @@ public class TrackDownloadUrlHandler : IRequestHandler<Guid, string>
 {
     private const string DownloadUrlAttribute = "@microsoft.graph.downloadUrl";
     
-    private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
+    private readonly TotallyWiredDbContext _context;
     private readonly MicrosoftGraphClientProvider _clientProvider;
     
-    public TrackDownloadUrlHandler(TotallyWiredDbContext context, ICurrentUser user, MicrosoftGraphClientProvider clientProvider)
+    public TrackDownloadUrlHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphClientProvider clientProvider)
     {
-        _context = context;
         _user = user;
+        _context = context;
         _clientProvider = clientProvider;
     }
     
     public async Task<string> HandleAsync(Guid trackId, CancellationToken cancellationToken)
     {
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            return string.Empty;
+        }
+
         var resource = await _context.Tracks
-            .Where(t => t.Id == trackId && t.UserId == _user.UserId)
+            .Where(t => t.Id == trackId && t.UserId == userId)
             .Select(t => new { t.ResourceId, t.SourceId })
             .FirstOrDefaultAsync(cancellationToken);
 

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Contracts;
 
-namespace TotallyWired.ContentProviders.MicrosoftGraph;
+namespace TotallyWired.Indexers.MicrosoftGraph;
 
 public class MicrosoftGraphOAuthUriHelper : IOAuthUrlHelper
 {
@@ -13,7 +13,7 @@ public class MicrosoftGraphOAuthUriHelper : IOAuthUrlHelper
         _config = config;
     }
 
-    public string GetAuthorizeUri(ICurrentUser user)
+    public string GetAuthorizeUri()
     {
         var @params = new Dictionary<string, string>
         {

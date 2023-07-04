@@ -6,22 +6,26 @@ import { TabList } from "@totallywired/ui-components";
 type ProviderMetadata = {
   name: string;
   enabled: boolean;
+  sourceType: number;
 };
 
-const PROVIDER_METADATA: Record<number, ProviderMetadata> = {
-  [1]: {
+const PROVIDERS: ProviderMetadata[] = [
+  {
     name: "Microsoft OneDrive",
     enabled: true,
+    sourceType: 1
   },
-  [2]: {
+  {
     name: "Google Drive",
     enabled: false,
+    sourceType: 2
   },
-  [3]: {
+  {
     name: "Dropbox",
     enabled: false,
+    sourceType: 3
   },
-};
+];
 
 export default function Providers() {
   const [collections, setCollections] = useState<
@@ -30,15 +34,14 @@ export default function Providers() {
 
   useEffect(() => {
     getProviders().then((data) => {
-      const collData = data.map((c) => {
-        const meta = PROVIDER_METADATA[c.sourceType];
+      const colls = PROVIDERS.map(meta => {
+        const providers = data.find(x => x.sourceType === meta.sourceType) ?? { providers: [] };
         return {
-          ...c,
           ...meta,
-        };
+          ...providers
+        }
       });
-
-      setCollections(collData);
+      setCollections(colls);
     });
   }, []);
 
@@ -61,7 +64,7 @@ export default function Providers() {
           {collections.map((c) => {
             return (
               <div key={c.sourceType} className="provider tabpanel-content">
-                <a href="/begin-auth-msgraph">
+                <a href="/providers/begin-auth/msgraph">
                   Add a {c.name} provider&hellip;
                 </a>
                 <hr />

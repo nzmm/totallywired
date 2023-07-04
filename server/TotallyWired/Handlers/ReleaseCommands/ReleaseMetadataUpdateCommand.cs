@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Extensions;
 using TotallyWired.Infrastructure.EntityFramework;
@@ -16,16 +15,17 @@ public class ReleaseMetadataUpdateCommand
 
 public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdateCommand, ReleaseMetadataUpdateResult>
 {
-    private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
+    private readonly TotallyWiredDbContext _context;
     
-    public ReleaseMetadataUpdateHandler(TotallyWiredDbContext context, ICurrentUser user)
+    public ReleaseMetadataUpdateHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
-        _context = context;
         _user = user;
+        _context = context;
     }
 
     private async Task<Artist> GetArtistToUpdateAsync(
+        Guid userId,
         string artistMusicBrainzId, 
         Release release,
         CancellationToken cancellationToken)
@@ -36,19 +36,20 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
         }
 
         var artist = await _context.Artists.FirstOrDefaultAsync(
-            x => x.UserId == _user.UserId && x.MusicBrainzId == artistMusicBrainzId, cancellationToken);
+            x => x.UserId == userId && x.MusicBrainzId == artistMusicBrainzId, cancellationToken);
 
         return artist ?? release.Artist;
     }
     
     private async Task<Release?> GetReleaseToUpdateAsync(
+        Guid userId,
         string releaseMusicbrainzId, 
         Guid releaseId, 
         CancellationToken cancellationToken)
     {
         var release = await _context.Releases
             .Include(x => x.Artist)
-            .FirstOrDefaultAsync(x => x.UserId == _user.UserId && x.MusicBrainzId == releaseMusicbrainzId,
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.MusicBrainzId == releaseMusicbrainzId,
                 cancellationToken);
 
         if (release != null)
@@ -58,7 +59,7 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
 
         release = await _context.Releases
             .Include(x => x.Artist)
-            .FirstOrDefaultAsync(x => x.UserId == _user.UserId && x.Id == releaseId,
+            .FirstOrDefaultAsync(x => x.UserId == userId && x.Id == releaseId,
                 cancellationToken);
 
         if (release is null || string.IsNullOrEmpty(release.MusicBrainzId))
@@ -95,16 +96,16 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
         return release;
     }
 
-    private async Task<(int, int)> CleanupOrphanedArtistsAndReleases(CancellationToken cancellationToken)
+    private async Task<(int, int)> CleanupOrphanedArtistsAndReleases(Guid userId, CancellationToken cancellationToken)
     {
         var releasesToClean = _context.Releases
-            .Where(x => x.UserId == _user.UserId && !x.Tracks.Any());
+            .Where(x => x.UserId == userId && !x.Tracks.Any());
 
         _context.Releases.RemoveRange(releasesToClean);
         var releasesRemoved = await _context.SaveChangesAsync(cancellationToken);
 
         var artistsToClean = _context.Artists
-            .Where(x => x.UserId == _user.UserId && !x.Tracks.Any());
+            .Where(x => x.UserId == userId && !x.Tracks.Any());
 
         _context.Artists.RemoveRange(artistsToClean);
         var artistsRemoved = await _context.SaveChangesAsync(cancellationToken);
@@ -117,8 +118,14 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
         CancellationToken cancellationToken)
     {
         var result = new ReleaseMetadataUpdateResult();
-        var metadataChanges = request.Metadata;
 
+        var userId = _user.UserId();
+        if (userId is null)
+        {
+            return result;
+        }
+
+        var metadataChanges = request.Metadata;
         if (request.ReleaseId == Guid.Empty || string.IsNullOrEmpty(metadataChanges.ArtistMbid) ||
             string.IsNullOrEmpty(metadataChanges.ReleaseMbid))
         {
@@ -130,6 +137,7 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
             await using var transaction = await _context.Database.BeginTransactionAsync(cancellationToken);
 
             var releaseToUpdate = await GetReleaseToUpdateAsync(
+                userId.Value,
                 metadataChanges.ReleaseMbid,
                 request.ReleaseId,
                 cancellationToken);
@@ -140,6 +148,7 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
             }
 
             var artistToUpdate = await GetArtistToUpdateAsync(
+                userId.Value,
                 metadataChanges.ArtistMbid,
                 releaseToUpdate,
                 cancellationToken);
@@ -163,7 +172,7 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
 
             var tracksToUpdate = trackIds.Any()
                 ? await _context.Tracks
-                    .Where(x => x.UserId == _user.UserId && x.ReleaseId == request.ReleaseId && trackIds.Contains(x.Id))
+                    .Where(x => x.UserId == userId && x.ReleaseId == request.ReleaseId && trackIds.Contains(x.Id))
                     .ToArrayAsync(cancellationToken)
                 : Array.Empty<Track>();
 
@@ -197,7 +206,9 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            var (artistsRemoved, releasesRemoved) = await CleanupOrphanedArtistsAndReleases(cancellationToken);
+            var (artistsRemoved, releasesRemoved) = await CleanupOrphanedArtistsAndReleases(
+                userId.Value, cancellationToken);
+
             await transaction.CommitAsync(cancellationToken);
             
             Console.WriteLine($"releasesCleaned: {releasesRemoved} artistsCleaned: {artistsRemoved}");
