@@ -49,12 +49,14 @@ const VirtualList = <T extends IVirtualListItem>({
         return;
       }
 
+      const top = vlist.current.scrollTop;
+
       const [vis, ir, pr, update] = getVisible(
         items,
         indexRange.current,
         pixelRange.current,
-        vlist.current.scrollTop,
-        vlist.current.scrollTop - scrollTop.current,
+        top,
+        top - scrollTop.current,
         vlist.current.clientHeight,
         focalItem.current
       );
@@ -65,7 +67,7 @@ const VirtualList = <T extends IVirtualListItem>({
         setVisible(vis);
       }
 
-      scrollTop.current = vlist.current.scrollTop;
+      scrollTop.current = top;
     };
 
     const handleResize = () => {

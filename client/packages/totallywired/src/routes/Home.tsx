@@ -8,7 +8,7 @@ export default function Home() {
     <>
       <main>
         <section className="welcome">
-          <p>Hey {user.name},</p>
+          <p>Hey {user?.name},</p>
           <p>
             Visit your <Link to="/lib/tracks">library</Link>&hellip;
           </p>

@@ -1,9 +1,9 @@
 import {
   isUpwardUpdateRequired,
+  isDownwardUpdateRequired,
   getResponse,
   getHeight,
-  getItemAtY,
-  isDownwardUpdateRequired
+  getItemAtY
 } from "./VirtualList.helpers";
 import {
   VisibleResult,
