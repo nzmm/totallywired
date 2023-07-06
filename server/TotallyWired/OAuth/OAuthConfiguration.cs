@@ -1,6 +1,6 @@
-namespace TotallyWired.Indexers.MicrosoftGraph;
+namespace TotallyWired.OAuth;
 
-public class MicrosoftGraphOAuthConfiguration
+public class OAuthConfiguration
 {
     public string Authority { get; set; } = default!;
     public string ClientId { get; set; } = default!;

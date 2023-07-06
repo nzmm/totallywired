@@ -10,6 +10,7 @@ using TotallyWired.Handlers.SourceQueries;
 using TotallyWired.Handlers.TrackQueries;
 using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
+using TotallyWired.OAuth;
 
 namespace TotallyWired;
 
@@ -27,13 +28,13 @@ public static class ConfigureServices
             opts.UseNpgsql(connectionString);
             //opts.EnableSensitiveDataLogging();
         });
-        
+
         // indexing
-        services.AddScoped<MicrosoftGraphOAuthUriHelper>();
+        services.AddScoped<OAuthUriHelper>();
         services.AddScoped<MicrosoftGraphTokenProvider>();
         services.AddScoped<MicrosoftGraphClientProvider>();
         services.AddTransient<ISourceIndexer, MicrosoftGraphSourceIndexer>();
-
+        
         // tracks
         services.AddScoped<TrackListHandler>();
         services.AddScoped<TrackDownloadUrlHandler>();
@@ -48,5 +49,13 @@ public static class ConfigureServices
         // providers
         services.AddScoped<SourceListHandler>();
         services.AddScoped<SourceSyncHandler>();
+    }
+
+    public static void PrepareDatabase(this IServiceProvider services)
+    {
+        using var scope = services.CreateScope();
+        
+        var db = scope.ServiceProvider.GetRequiredService<TotallyWiredDbContext>();
+        db.Database.Migrate();
     }
 }

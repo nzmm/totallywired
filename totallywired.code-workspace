@@ -4,10 +4,10 @@
 			"path": "client"
 		},
 		{
-			"path": "docker"
+			"path": "server"
 		},
 		{
-			"path": "server"
+			"path": "compose"
 		}
 	],
 	"settings": {

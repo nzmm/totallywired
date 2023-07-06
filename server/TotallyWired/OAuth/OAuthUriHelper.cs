@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.WebUtilities;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Contracts;
+using TotallyWired.Indexers.MicrosoftGraph;
 
-namespace TotallyWired.Indexers.MicrosoftGraph;
+namespace TotallyWired.OAuth;
 
-public class MicrosoftGraphOAuthUriHelper : IOAuthUrlHelper
+public class OAuthUriHelper : IOAuthUrlHelper
 {
-    private readonly MicrosoftGraphOAuthConfiguration _config;
+    private readonly MicrosoftGraphIndexerOptions _config;
     
-    public MicrosoftGraphOAuthUriHelper(MicrosoftGraphOAuthConfiguration config)
+    public OAuthUriHelper(MicrosoftGraphIndexerOptions config)
     {
         _config = config;
     }

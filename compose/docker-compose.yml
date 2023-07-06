@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+
+  web:
+    build: ..
+    ports:
+      - 5001:80 
+      - 5002:443
+    env_file:
+      - .env
+    networks:
+      - dev
+
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: totallywired
+      POSTGRES_PASSWORD: strongpassword!
+    ports:
+      - 9999:5432 
+    networks:
+      - dev
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    networks:
+      - dev
+
+networks:
+  dev:
+    driver: bridge

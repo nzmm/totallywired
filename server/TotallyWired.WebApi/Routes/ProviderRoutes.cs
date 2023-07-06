@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
+using TotallyWired.OAuth;
 using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
@@ -15,7 +16,7 @@ public static class ProviderRoutes
             .RequireAuthorization()
             .ValidateAntiforgery();
         
-        oauth.MapGet("/begin-auth/msgraph", (MicrosoftGraphOAuthUriHelper helper) =>
+        oauth.MapGet("/begin-auth/msgraph", (OAuthUriHelper helper) =>
         {
             var authorizeUri = helper.GetAuthorizeUri();
             return Results.Redirect(authorizeUri);
@@ -29,7 +30,7 @@ public static class ProviderRoutes
             }
             
             await tokenProvider.RetrieveAndStoreTokensAsync(code);
-            return Results.Ok();
+            return Results.Redirect("/lib/providers");
         });
 
         var group = app

@@ -5,7 +5,7 @@ namespace TotallyWired.Infrastructure.EntityFramework.Extensions;
 
 internal static class MigrationBuilderExtensions
 {
-    private const string PostgreSqlNamespace = "DbMigrator.EntityFramework.PostgreSQL";
+    private const string PostgreSqlNamespace = "TotallyWired.Infrastructure.EntityFramework.PostgreSQL";
     
     internal static void ScriptMigration(this MigrationBuilder migrationBuilder, string ns, string fn)
     {

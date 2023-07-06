@@ -13,31 +13,30 @@
         <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.1" />
         <PackageReference Include="Microsoft.Graph" Version="4.49.0" />
     </ItemGroup>
-
+    
     <ItemGroup>
-      <Compile Remove="wwwroot\dist\**" />
+        <Content Remove="wwwroot\avatars\**" />
+        <Compile Remove="wwwroot\dist\**" />
     </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="wwwroot\dist\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="wwwroot\dist\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Remove="wwwroot\dist\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <_ContentIncludedByDefault Remove="wwwroot\dist\totallywired.bundle.css" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\totallywired.bundle.js" />
-      <_ContentIncludedByDefault Remove="wwwroot\dist\totallywired.bundle.js.map" />
-    </ItemGroup>
-
+    
     <ItemGroup>
       <ProjectReference Include="..\TotallyWired\TotallyWired.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="wwwroot\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="wwwroot\avatars\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="wwwroot\avatars\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\avatars\e53b95c0-ef4e-477b-8dd5-ac0af2e68e67.jpg" />
     </ItemGroup>
 
 </Project>

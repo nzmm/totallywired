@@ -7,6 +7,7 @@ using TotallyWired.Domain.Entities;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
+using TotallyWired.OAuth;
 
 namespace TotallyWired.Indexers.MicrosoftGraph;
 
@@ -15,15 +16,15 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
     private readonly ICurrentUser _user;
     private readonly HttpClient _httpClient;
     private readonly TotallyWiredDbContext _context;
-    private readonly MicrosoftGraphOAuthConfiguration _config;
-    private readonly MicrosoftGraphOAuthUriHelper _uriHelper;
-
+    private readonly OAuthUriHelper _uriHelper;
+    private readonly MicrosoftGraphIndexerOptions _config;
+    
     public MicrosoftGraphTokenProvider(
         ICurrentUser user,
         HttpClient httpClient,
         TotallyWiredDbContext dbContext,
-        MicrosoftGraphOAuthConfiguration config,
-        MicrosoftGraphOAuthUriHelper uriHelper)
+        MicrosoftGraphIndexerOptions config,
+        OAuthUriHelper uriHelper)
     {
         _user = user;
         _httpClient = httpClient;
@@ -76,6 +77,11 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
 
     public async Task<Source> RetrieveAndStoreTokensAsync(string authorizationCode)
     {
+        if (string.IsNullOrEmpty(authorizationCode))
+        {
+            throw new ArgumentException("authorizationCode result is invalid");
+        }
+        
         var content = new FormUrlEncodedContent(new []
         {
             new KeyValuePair<string, string>("client_id", _config.ClientId),

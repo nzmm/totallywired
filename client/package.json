@@ -5,8 +5,8 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npx lerna run dev --parallel --scope=@totallywired/react --scope=@totallywired/ui-components",
-    "build": "npx lerna run build",
+    "dev": "npx lerna run dev --parallel",
+    "build": "npx lerna run build --scope=@totallywired/react",
     "prettier": "npx lerna run prettier"
   },
   "devDependencies": {

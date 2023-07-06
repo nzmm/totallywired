@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using TotallyWired;
+using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.WebApi.Routes;
 using TotallyWired.WebApi.Authentication;
-using TotallyWired.Indexers.MicrosoftGraph;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
+
+var proxyEnabled = config.GetValue<bool>("EnableProxy");
 
 // Add services to the container.
 builder.AddAuthentication();
@@ -17,22 +19,24 @@ builder.Services.AddSingleton(new HttpClient(new SocketsHttpHandler
     PooledConnectionLifetime = TimeSpan.FromMinutes(2)
 }));
 
-// todo
-var msOauthConfig = new MicrosoftGraphOAuthConfiguration();
-config.GetSection("ContentProviders:Microsoft").Bind(msOauthConfig);
-builder.Services.AddSingleton(msOauthConfig);
+var msIndexerOpts = new MicrosoftGraphIndexerOptions();
+config.GetSection("ContentProviders:Microsoft").Bind(msIndexerOpts);
+
+builder.Services.AddSingleton(msIndexerOpts);
 builder.Services.AddCoreServices(config);
 builder.Services.AddCurrentUser();
-
-builder.Services.Configure<ForwardedHeadersOptions>(options =>
-{
-    options.ForwardedHeaders = ForwardedHeaders.All;
-});
 
 // Configure the HTTP request pipeline.
 var app = builder.Build();
 
-app.UseForwardedHeaders();
+if (proxyEnabled)
+{
+    app.UseForwardedHeaders(new ForwardedHeadersOptions
+    {
+        ForwardedHeaders = ForwardedHeaders.All
+    });
+}
+
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -47,5 +51,7 @@ app.MapProviderRoutes();
 app.MapArtistRoutes();
 app.MapReleaseRoutes();
 app.MapTrackRoutes();
+app.MapFallbackToFile("index.html");
 
+app.Services.PrepareDatabase();
 app.Run();

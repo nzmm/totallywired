@@ -23,11 +23,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_artists.0.sql" />
-      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_releases.0.sql" />
-      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_tracks.0.sql" />
-      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\update_modified_column.0.sql" />
-      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Triggers\auto_update_modtime.0.sql" />
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_artists.0.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_releases.0.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_tracks.0.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\update_modified_column.0.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Triggers\auto_update_modtime.0.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>
