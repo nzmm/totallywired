@@ -125,9 +125,9 @@ export class AudioPlayer {
   }
 
   private _emitStateChange(_: string, item: PlaylistItem<PlayerTrack>) {
-    this._emit('state-change', item);
+    this._emit("state-change", item);
     if (this._currentId === item.id) {
-      this._emit('current-state-change', item);
+      this._emit("current-state-change", item);
     }
   }
 
@@ -277,7 +277,7 @@ export class AudioPlayer {
       track,
     });
 
-    this._emit('tracks-changed');
+    this._emit("tracks-changed");
 
     if (!this._currentId) {
       const player = this._getPlayer();
@@ -309,7 +309,7 @@ export class AudioPlayer {
       added.push(item);
     }
 
-    this._emit('tracks-changed');
+    this._emit("tracks-changed");
 
     if (!this._currentId) {
       const player = this._getPlayer();
@@ -335,7 +335,7 @@ export class AudioPlayer {
       src,
     });
 
-    this._emit('tracks-changed');
+    this._emit("tracks-changed");
 
     const player = this._getPlayer();
     await this._playNext(player);
@@ -368,17 +368,17 @@ export class AudioPlayer {
     if (!currentId) {
       return;
     }
-  
+
     const player = this._getPlayer();
     player.pause();
 
     const item = this._playlist.getById(currentId);
     item.state = TrackState.Finished;
-    this._currentId = '';
-    player.removeAttribute('src');
+    this._currentId = "";
+    player.removeAttribute("src");
     clearTimeout(this._timeout);
 
-    this._emitStateChange('stop', item);
+    this._emitStateChange("stop", item);
   }
 
   /**
@@ -440,7 +440,7 @@ export class AudioPlayer {
       this._setupPreload(player);
     }
 
-    this._emit('tracks-changed');
+    this._emit("tracks-changed");
   }
 
   /**
@@ -461,7 +461,7 @@ export class AudioPlayer {
     const nRemoved = this._playlist.removeRange(fromIndex, toIndex);
 
     if (nRemoved) {
-      this._emit('tracks-changed');
+      this._emit("tracks-changed");
     }
 
     return nRemoved;
@@ -524,7 +524,7 @@ export class AudioPlayer {
     this._init();
     this._player0.muted = true;
     this._player1.muted = true;
-    this._emit('volume-change');
+    this._emit("volume-change");
   }
 
   /**
@@ -534,7 +534,7 @@ export class AudioPlayer {
     this._init();
     this._player0.muted = false;
     this._player1.muted = false;
-    this._emit('volume-change');
+    this._emit("volume-change");
   }
 
   /**
