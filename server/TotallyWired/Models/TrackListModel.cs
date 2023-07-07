@@ -10,5 +10,6 @@ public class TrackListModel
     public string Name { get; set; } = default!;
     public string ArtistName { get; set; } = default!;
     public string ReleaseName { get; set; } = default!;
+    public long Length { get; set; } = default!;
     public string DisplayLength { get; set; } = default!;
 }

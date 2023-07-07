@@ -15,7 +15,7 @@ export const getValidSearchParams = (searchParams?: URLSearchParams) => {
 };
 
 /**
- * Shuffles the supplied array in place
+ * Shuffles the supplied array in-place
  */
 export const shuffle = <T>(array: T[]) => {
   let currentIndex = array.length,
@@ -43,3 +43,12 @@ export const debounce = (func: (...args: any[]) => void, timeout = 300) => {
     }, timeout);
   };
 };
+
+export const duration = (ms: number) => {
+  const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((ms / (1000 * 60)) % 60);
+  const s = Math.floor((ms / 1000) % 60);
+  return h >=1 
+    ? `${h}h ${m}m ${s}s`
+    : `${m}m ${s}s`;
+}

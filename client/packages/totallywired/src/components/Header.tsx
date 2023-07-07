@@ -8,7 +8,7 @@ export default function Header() {
   return (
     <header className="d-flex row">
       <h1>
-        <Link to="/">Totallywired</Link>
+        <Link to="/">TotallyWired</Link>
       </h1>
 
       {user ? (
