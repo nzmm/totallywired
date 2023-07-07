@@ -44,10 +44,6 @@ export const debounce = (func: (...args: any[]) => void, timeout = 300) => {
   };
 };
 
-const ps = (n: number) => {
-  return `${n}`.padStart(2, '0');
-}
-
 export const duration = (ms: number) => {
   const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
   const m = Math.floor((ms / (1000 * 60)) % 60);
