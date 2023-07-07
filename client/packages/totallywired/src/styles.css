@@ -209,6 +209,8 @@ footer {
         width: 70px;
         height: 70px;
         object-fit: contain;
+        border-radius: 2.5px;
+        overflow: hidden;
       }
     }
 
