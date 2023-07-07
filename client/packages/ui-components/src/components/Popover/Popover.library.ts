@@ -83,7 +83,9 @@ const CLEAN_STRING_REGEX = /[\r\n]+|^\s+|\s+$|(\s)\s+/gm;
 /**
  * Removes extraneous whitespace and newlines from a string.
  */
-const compress = (s: string) => s.replace(CLEAN_STRING_REGEX, "$1");
+const compress = (s: string) => {
+  return s.length > 2000 ? s : s.replace(CLEAN_STRING_REGEX, "$1");
+}
 
 const getPositionStyle = (
   el: HTMLElement,
