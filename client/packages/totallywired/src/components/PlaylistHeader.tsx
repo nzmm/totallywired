@@ -1,14 +1,15 @@
 import { useMemo } from "react";
 import { PlaylistItem } from "../lib/playlist";
-import { PlayerTrack, TrackState } from "../lib/player";
+import { AudioPlayer, PlayerTrack, TrackState } from "../lib/player";
 import { duration } from "../lib/utils";
 import './PlaylistHeader.css';
 
 type PlaylistHeaderProps = {
+  player: AudioPlayer;
   queue: PlaylistItem<PlayerTrack>[];
 }
 
-export default function PlaylistHeader({ queue }: PlaylistHeaderProps) {
+export default function PlaylistHeader({ player, queue }: PlaylistHeaderProps) {
 
   const [d, l] = useMemo(() => {
     const [ms, l] = queue.reduce(([ms, l], cur) => {
@@ -24,7 +25,7 @@ export default function PlaylistHeader({ queue }: PlaylistHeaderProps) {
   return (
     <div className="playlist-header">
       Remaining tracks: {l} &middot; {d}
-      <button disabled={!l}>Clear Playlist</button>
+      <button onClick={() => player.removeAll()} disabled={!l}>Clear Playlist</button>
     </div>
   )
 }

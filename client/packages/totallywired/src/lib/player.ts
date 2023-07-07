@@ -120,10 +120,14 @@ export class AudioPlayer {
     this._handlePreload.bind(this)
   );
 
+  private _emit(event: PlayerEvent, ...items: PlaylistItem<PlayerTrack>[]) {
+    this._handlers[event].forEach((fn) => fn(...items));
+  }
+
   private _emitStateChange(_: string, item: PlaylistItem<PlayerTrack>) {
-    this._handlers["state-change"].forEach((fn) => fn(item));
+    this._emit('state-change', item);
     if (this._currentId === item.id) {
-      this._handlers["current-state-change"].forEach((fn) => fn(item));
+      this._emit('current-state-change', item);
     }
   }
 
@@ -132,6 +136,10 @@ export class AudioPlayer {
     this._currentId = player.id;
 
     const item = this._playlist.getById(player.id);
+    if (!item) {
+      return;
+    }
+
     item.state &= ~TrackState.Queued;
     item.state &= ~TrackState.Paused;
     item.state &= ~TrackState.Finished;
@@ -153,6 +161,10 @@ export class AudioPlayer {
     }
 
     const item = this._playlist.getById(player.id);
+    if (!item) {
+      return;
+    }
+
     item.state &= ~TrackState.Playing;
     item.state |= TrackState.Paused;
     this._emitStateChange("pause", item);
@@ -223,6 +235,8 @@ export class AudioPlayer {
     const nextId = this._playlist.getId(item.i + 1);
     if (!nextId) {
       // finished all
+      // todo: handle looping
+      this.stop();
       return;
     }
 
@@ -263,9 +277,9 @@ export class AudioPlayer {
       track,
     });
 
-    this._handlers["tracks-changed"].forEach((fn) => fn(item));
+    this._emit('tracks-changed');
 
-    if (item.i === 0) {
+    if (!this._currentId) {
       const player = this._getPlayer();
       await this._play(player, item.id);
     }
@@ -284,8 +298,6 @@ export class AudioPlayer {
     }
 
     const tracksToAdd = !shuffle ? tracks : shuffleTracks([...tracks]);
-
-    const l = this.getPlaylistCount();
     const added: PlaylistItem<PlayerTrack>[] = [];
 
     for (const track of tracksToAdd) {
@@ -297,9 +309,9 @@ export class AudioPlayer {
       added.push(item);
     }
 
-    this._handlers["tracks-changed"].forEach((fn) => fn(...added));
+    this._emit('tracks-changed');
 
-    if (l === 0) {
+    if (!this._currentId) {
       const player = this._getPlayer();
       const { id } = added[0];
       await this._play(player, id);
@@ -317,13 +329,13 @@ export class AudioPlayer {
     const id = `${ta.getTime()}-${i}`;
     const src = await this._getUrl(track, id);
 
-    const item = this._playlist.insertItem(i + 1, {
+    this._playlist.insertItem(i + 1, {
       state: TrackState.Queued,
       track,
       src,
     });
 
-    this._handlers["tracks-changed"].forEach((fn) => fn(item));
+    this._emit('tracks-changed');
 
     const player = this._getPlayer();
     await this._playNext(player);
@@ -346,6 +358,27 @@ export class AudioPlayer {
     } else {
       await player.play();
     }
+  }
+
+  /**
+   * Stops playback
+   */
+  stop() {
+    const currentId = this._currentId;
+    if (!currentId) {
+      return;
+    }
+  
+    const player = this._getPlayer();
+    player.pause();
+
+    const item = this._playlist.getById(currentId);
+    item.state = TrackState.Finished;
+    this._currentId = '';
+    player.removeAttribute('src');
+    clearTimeout(this._timeout);
+
+    this._emitStateChange('stop', item);
   }
 
   /**
@@ -407,7 +440,31 @@ export class AudioPlayer {
       this._setupPreload(player);
     }
 
-    this._handlers["tracks-changed"].forEach((fn) => fn());
+    this._emit('tracks-changed');
+  }
+
+  /**
+   * Removes all queued items from the playlist (including the current play track)
+   */
+  removeAll() {
+    const currentId = this._currentId;
+    if (!currentId) {
+      return 0;
+    }
+
+    this.stop();
+    const current = this._playlist.getById(currentId);
+    const fromIndex = current.i + 1;
+    const toIndex = this._playlist.getItemCount();
+    console.log(current, toIndex);
+
+    const nRemoved = this._playlist.removeRange(fromIndex, toIndex);
+
+    if (nRemoved) {
+      this._emit('tracks-changed');
+    }
+
+    return nRemoved;
   }
 
   /**
@@ -467,7 +524,7 @@ export class AudioPlayer {
     this._init();
     this._player0.muted = true;
     this._player1.muted = true;
-    this._handlers["volume-change"].forEach((fn) => fn());
+    this._emit('volume-change');
   }
 
   /**
@@ -477,7 +534,7 @@ export class AudioPlayer {
     this._init();
     this._player0.muted = false;
     this._player1.muted = false;
-    this._handlers["volume-change"].forEach((fn) => fn());
+    this._emit('volume-change');
   }
 
   /**

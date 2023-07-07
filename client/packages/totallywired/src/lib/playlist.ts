@@ -55,6 +55,10 @@ export class Playlist<V> {
     return this._sequence[index];
   }
 
+  getIndex(id: string) {
+    return this._store[id].i;
+  }
+
   moveTo(fromIndex: number, toIndex: number) {
     if (fromIndex === toIndex) {
       return;
@@ -87,8 +91,24 @@ export class Playlist<V> {
     from.i = toIndex;
   }
 
+  removeRange(fromIndex: number, toIndex: number) {
+    if (fromIndex >= toIndex) {
+      return 0;
+    }
+
+    const removed = this._sequence.splice(fromIndex, toIndex - fromIndex);
+    for (const id of removed) {
+      delete this._store[id];
+    }
+    return removed.length;
+  }
+
   getItems() {
     const store = this._store;
     return this._sequence.map((id) => store[id]);
+  }
+
+  getItemCount() {
+    return this._sequence.length;
   }
 }

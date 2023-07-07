@@ -7,7 +7,7 @@ export default function Queue() {
   const player = usePlayer();
   return (
   <>
-    <PlaylistHeader queue={queue} />
+    <PlaylistHeader player={player} queue={queue} />
     <Playlist player={player} items={queue} />
   </>)
 }
