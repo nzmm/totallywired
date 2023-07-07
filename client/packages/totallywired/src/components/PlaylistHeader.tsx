@@ -24,7 +24,7 @@ export default function PlaylistHeader({ queue }: PlaylistHeaderProps) {
   return (
     <div className="playlist-header">
       Remaining tracks: {l} &middot; {d}
-      <button>Clear Playlist</button>
+      <button disabled={!l}>Clear Playlist</button>
     </div>
   )
 }

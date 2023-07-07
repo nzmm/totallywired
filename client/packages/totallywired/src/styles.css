@@ -303,22 +303,6 @@ footer {
   }
 }
 
-/* Component: SearchInput.tsx */
-.search-input {
-  position: relative;
-
-  > input {
-    width: 280px;
-    padding: 6px 12px;
-  }
-
-  > button {
-    position: absolute;
-    height: 100%;
-    width: 30px;
-  }
-}
-
 /*
  * UTILITIES
 */

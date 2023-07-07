@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
 import { debounce } from "../lib/utils";
+import './SearchInput.css';
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement> & {
   currentTarget: { value: string };
@@ -29,7 +30,9 @@ export default function SearchInput() {
   }, []);
 
   const onClear = () => {
-    setSearchParams({});
+    const q = ''
+    setQuery(q);
+    updateSearchParamsDebounced(q, setSearchParams);
   };
 
   return (
