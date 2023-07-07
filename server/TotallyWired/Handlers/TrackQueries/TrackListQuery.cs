@@ -76,6 +76,7 @@ public class TrackListHandler : IRequestHandler<TrackListSearchParams, IEnumerab
                 ArtistName = t.Artist.Name,
                 ReleaseName = t.ReleaseName,
                 Number = t.Number,
+                Length = t.Length,
                 DisplayLength = t.DisplayLength,
                 Liked = t.Reactions.Any(r => r.Reaction == ReactionType.Liked)
             }).ToArrayAsync(cancellationToken);

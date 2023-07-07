@@ -17,6 +17,8 @@ body,
 
 main {
   height: 100%;
+  display: flex;
+  flex-direction: column;
   background-color: #f7f7f7;
 
   > section {
@@ -74,12 +76,19 @@ aside {
       color: gray;
     }
 
+    > li:last-child {
+      border-bottom: 1px solid #e4e4e4;
+    }
+
+    > li:not(:first-child) {
+      border-top: 1px solid #f0f0f0;
+    }
+
     > li {
       display: flex;
       flex-direction: row;
       align-items: center;
       background-color: white;
-      border-top: 1px solid #e4e4e4;
       user-select: none;
       gap: 12px;
 
@@ -193,7 +202,8 @@ footer {
       height: 70px;
       border-radius: 3px;
       background-color: #e4e4e4;
-      border: 1px solid gray;
+      border: 1px solid #000;
+      padding: 1px;
 
       > img {
         width: 70px;

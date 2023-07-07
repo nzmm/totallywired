@@ -1,0 +1,9 @@
+.playlist-header {
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+  border-bottom: 1px solid #e4e4e4;
+}
