@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
 import { debounce } from "../lib/utils";
-import "./SearchInput.css";
+import "./styles/SearchInput.css";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement> & {
   currentTarget: { value: string };

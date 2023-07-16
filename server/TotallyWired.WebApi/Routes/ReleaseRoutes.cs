@@ -19,6 +19,12 @@ public static class ReleaseRoutes
             return Results.Ok(releases);
         });
         
+        group.MapGet("/{releaseId:guid}", async (ReleaseHandler handler, Guid releaseId, CancellationToken cancellationToken) =>
+        {
+            var release = await handler.HandleAsync(releaseId, cancellationToken);
+            return release is null ? Results.BadRequest() : Results.Ok(release);
+        });
+        
         group.MapGet("/{releaseId:guid}/tracks", async (TrackListHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
         {
             var tracks = await handler.HandleAsync(@params, cancellationToken);

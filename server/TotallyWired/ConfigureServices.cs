@@ -40,6 +40,7 @@ public static class ConfigureServices
         services.AddScoped<TrackDownloadUrlHandler>();
 
         // releases
+        services.AddScoped<ReleaseHandler>();
         services.AddScoped<ReleaseListHandler>();
         services.AddScoped<ReleaseThumbnailHandler>();
         

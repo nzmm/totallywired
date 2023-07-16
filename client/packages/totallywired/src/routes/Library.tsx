@@ -4,25 +4,28 @@ import { TracksProvider } from "../providers/TracksProvider";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Sidebar from "../components/Sidebar";
+import { AlbumProvider } from "../providers/AlbumProvider";
 
 export default function Library() {
   return (
     <TracksProvider>
-      <Header />
+      <AlbumProvider>
+        <Header />
 
-      <Splitter
-        orientation="horizontal"
-        initialPosition="200px"
-        minSize="200px"
-      >
-        <Sidebar />
+        <Splitter
+          orientation="horizontal"
+          initialPosition="200px"
+          minSize="200px"
+        >
+          <Sidebar />
 
-        <main>
-          <Outlet />
-        </main>
-      </Splitter>
+          <main>
+            <Outlet />
+          </main>
+        </Splitter>
 
-      <Footer />
+        <Footer />
+      </AlbumProvider>
     </TracksProvider>
   );
 }

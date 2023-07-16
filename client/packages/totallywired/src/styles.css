@@ -68,23 +68,23 @@ aside {
       transition: top 0.15s ease 0s;
     }
 
-    > li.playing,
-    > li.paused {
+    > li[tabindex="0"].playing,
+    > li[tabindex="0"].paused {
       font-weight: bold;
     }
-    > li.finished {
+    > li[tabindex="0"].finished {
       color: gray;
     }
 
-    > li:last-child {
+    > li[tabindex="0"]:last-child {
       border-bottom: 1px solid #e4e4e4;
     }
 
-    > li:not(:first-child) {
+    > li[tabindex="0"]:not(:first-child) {
       border-top: 1px solid #f0f0f0;
     }
 
-    > li {
+    > li[tabindex="0"] {
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -133,7 +133,7 @@ aside {
       }
     }
 
-    > li:hover {
+    > li[tabindex="0"]:hover {
       background-color: rgb(255, 240, 235);
 
       > .col.lgutter {
@@ -154,7 +154,7 @@ aside {
       }
     }
 
-    > li:focus {
+    > li[tabindex="0"]:focus {
       background-color: rgb(255, 145, 167);
       border-top: 1px solid red;
       border-bottom: 1px solid red;
@@ -165,7 +165,7 @@ aside {
       }
     }
 
-    > li:active {
+    > li[tabindex="0"]:active {
       background-color: red;
 
       > .col.lgutter::before,

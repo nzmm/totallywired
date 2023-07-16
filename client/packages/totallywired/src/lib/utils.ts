@@ -15,23 +15,22 @@ export const getValidSearchParams = (searchParams?: URLSearchParams) => {
 };
 
 /**
- * Shuffles the supplied array in-place
+ * Creates a shuffled array from the source array.
+ * If a `limit` value is supplied, the the result array length will not exceed the `limit` value.
  */
-export const shuffle = <T>(array: T[]) => {
-  let currentIndex = array.length,
-    randomIndex;
+export const shuffle = <T>(source: T[], limit?: number) => {
+  limit = Math.min(source.length, limit ?? source.length);
 
-  while (currentIndex != 0) {
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex--;
+  const indices = Array.from({ length: source.length }, (_, i) => i);
+  const result: T[] = [];
 
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex],
-      array[currentIndex],
-    ];
+  while (result.length < limit) {
+    const seed = Math.round(Math.random() * indices.length);
+    const [randomIndex] = indices.splice(seed, 1);
+    result.push(source[randomIndex]);
   }
 
-  return array;
+  return result;
 };
 
 export const debounce = (func: (...args: any[]) => void, timeout = 300) => {

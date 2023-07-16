@@ -1,6 +1,6 @@
-import { debounce, shuffle as shuffleTracks } from "./utils";
 import { getTrackUrl } from "./webapi";
 import { Track } from "../lib/types";
+import { debounce } from "./utils";
 import { Playlist, PlaylistItem } from "./playlist";
 
 type PlayerEvent =
@@ -236,6 +236,7 @@ export class AudioPlayer {
     if (!nextId) {
       // finished all
       // todo: handle looping
+      console.log("finished");
       this.stop();
       return;
     }
@@ -290,17 +291,16 @@ export class AudioPlayer {
    * Playback of the first supplied item will begin if the queue was previously empty.
    * @param shuffle Optional flag to shuffle the supplied tracks
    */
-  async addTracks(tracks: Track[], shuffle = false) {
+  async addTracks(tracks: Track[]) {
     this._init();
 
     if (!tracks.length) {
       return;
     }
 
-    const tracksToAdd = !shuffle ? tracks : shuffleTracks([...tracks]);
     const added: PlaylistItem<PlayerTrack>[] = [];
 
-    for (const track of tracksToAdd) {
+    for (const track of tracks) {
       const item = this._playlist.addItem({
         state: TrackState.Queued,
         track,
@@ -370,11 +370,11 @@ export class AudioPlayer {
     }
 
     const player = this._getPlayer();
+    this._currentId = "";
     player.pause();
 
     const item = this._playlist.getById(currentId);
     item.state = TrackState.Finished;
-    this._currentId = "";
     player.removeAttribute("src");
     clearTimeout(this._timeout);
 
@@ -444,7 +444,8 @@ export class AudioPlayer {
   }
 
   /**
-   * Removes all queued items from the playlist (including the current play track)
+   * Removes all queued items from the playlist.
+   * If there is a current playing track, playback will be stopped and the current track marked as `Finished`.
    */
   removeAll() {
     const currentId = this._currentId;

@@ -18,6 +18,8 @@ export type Album = {
   year: number;
 };
 
+export type AlbumDetails = Album & {};
+
 export type Track = {
   id: string;
   name: string;

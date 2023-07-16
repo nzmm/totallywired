@@ -36,6 +36,10 @@ export function getAlbums(searchParams?: URLSearchParams) {
   return sendQuery<Album[]>(`${API}/releases`, searchParams);
 }
 
+export function getAlbum(releaseId: string) {
+  return sendQuery<Album>(`${API}/releases/${releaseId}`);
+}
+
 export function getAlbumsByArtist(
   artistId: string,
   searchParams?: URLSearchParams

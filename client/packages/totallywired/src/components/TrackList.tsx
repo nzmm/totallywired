@@ -1,38 +1,14 @@
-import { Link, useAsyncValue } from "react-router-dom";
+import { useAsyncValue } from "react-router-dom";
 import {
   IVirtualListItem,
-  ListItemProps,
   VirtualList,
   VisibleItem,
 } from "@totallywired/ui-components";
 import { usePlayer } from "../providers/AudioProvider";
 import { Track } from "../lib/types";
+import TrackItem from "./TrackListItem";
 
-export type TrackItemProps = ListItemProps<Track>;
 export type TrackDataProps = IVirtualListItem & Track;
-
-function TrackItem({ index, top, height, ...track }: TrackItemProps) {
-  return (
-    <li tabIndex={0} key={index} style={{ top, height }}>
-      <button className="col lgutter" title="Play now" data-action="add">
-        {`${track.number}.`}
-      </button>
-      <span className="col name">{`${track.name}`}</span>
-      <span className="col album">
-        <Link to={`/lib/albums/${track.releaseId}/tracks`}>
-          {`${track.releaseName}`}
-        </Link>
-      </span>
-      <span className="col artist">
-        <Link to={`/lib/artists/${track.artistId}/tracks`}>
-          {`${track.artistName}`}
-        </Link>
-      </span>
-      <a className="col liked" href="#">{`${track.liked}`}</a>
-      <span className="duration">{`${track.displayLength}`}</span>
-    </li>
-  );
-}
 
 export default function TrackList() {
   const player = usePlayer();

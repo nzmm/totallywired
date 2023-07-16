@@ -7,7 +7,4 @@ public class ReleaseListModel
     public int? Year { get; init; }
     public string Name { get; init; } = default!;
     public string ArtistName { get; init; } = default!;
-    public string RecordLabel { get; init; } = default!;
-    public string Country { get; init; } = default!;
-    public string CoverArtUrl { get; init; } = default!;
 }

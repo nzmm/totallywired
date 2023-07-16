@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { PlaylistItem } from "../lib/playlist";
 import { AudioPlayer, PlayerTrack, TrackState } from "../lib/player";
 import { duration } from "../lib/utils";
-import "./PlaylistHeader.css";
+import "./styles/PlaylistHeader.css";
 
 type PlaylistHeaderProps = {
   player: AudioPlayer;
@@ -26,7 +26,7 @@ export default function PlaylistHeader({ player, queue }: PlaylistHeaderProps) {
 
   return (
     <div className="playlist-header">
-      Remaining tracks: {l} &middot; {d}
+      {l} tracks, {d}
       <button onClick={() => player.removeAll()} disabled={!l}>
         Clear Playlist
       </button>

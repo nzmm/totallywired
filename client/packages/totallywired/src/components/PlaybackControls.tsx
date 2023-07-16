@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../lib/player";
 import { useTracks } from "../providers/TracksProvider";
 import Progressbar from "./Progressbar";
+import { shuffle } from "../lib/utils";
 
 type PlaybackControlsProps = {
   player: AudioPlayer;
@@ -34,7 +35,8 @@ export default function PlaybackControls({
       player.playPause();
     } else {
       const data = await tracks;
-      player.addTracks(data.slice(0, 20), true);
+      const shuffledTracks = shuffle(data, 25);
+      player.addTracks(shuffledTracks);
     }
   };
 

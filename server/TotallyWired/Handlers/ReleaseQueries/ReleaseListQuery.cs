@@ -32,10 +32,7 @@ public class ReleaseListHandler : IRequestHandler<IEnumerable<ReleaseListModel>>
                 ArtistId = r.ArtistId,
                 Year = r.Year,
                 Name = r.Name,
-                ArtistName = r.Artist.Name,
-                RecordLabel = r.RecordLabel,
-                Country = r.Country,
-                CoverArtUrl = r.ThumbnailUrl
+                ArtistName = r.Artist.Name
             })
             .OrderBy(x => x.ArtistName)
             .ThenBy(x => x.Year)
