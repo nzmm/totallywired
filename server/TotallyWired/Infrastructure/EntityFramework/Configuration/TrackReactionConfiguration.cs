@@ -12,9 +12,7 @@ public class TrackReactionConfiguration : IEntityTypeConfiguration<TrackReaction
 
         builder.HasIndex(x => x.TrackId);
 
-        builder
-            .Property(x => x.Created)
-            .HasDefaultValueSql("now()");
+        builder.Property(x => x.Created).HasDefaultValueSql("now()");
 
         builder
             .HasOne(x => x.User)

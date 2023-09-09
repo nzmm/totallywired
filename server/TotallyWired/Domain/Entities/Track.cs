@@ -10,7 +10,7 @@ public class Track : IUserSpecific, ISourceSpecific
     public Guid Id { get; set; }
     public DateTime Created { get; set; }
     public DateTime? Modified { get; set; }
-    
+
     public Guid UserId { get; set; }
     public Guid SourceId { get; set; }
     public Guid ArtistId { get; set; }

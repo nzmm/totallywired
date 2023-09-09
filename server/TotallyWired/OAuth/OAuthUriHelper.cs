@@ -7,7 +7,7 @@ namespace TotallyWired.OAuth;
 public class OAuthUriHelper : IOAuthUrlHelper
 {
     private readonly MicrosoftGraphIndexerOptions _config;
-    
+
     public OAuthUriHelper(MicrosoftGraphIndexerOptions config)
     {
         _config = config;

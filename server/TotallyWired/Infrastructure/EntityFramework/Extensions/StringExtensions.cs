@@ -9,10 +9,15 @@ public static class StringExtensions
     /// <returns></returns>
     public static string TsQuery(this string? s)
     {
-        return s is null ? string.Empty : string
-            .Join(" & ", s.Trim().Split(" ")
-            .Where(x => !string.IsNullOrEmpty(x))
-            .Select(t => $"{t}:*")
-            .TakeLast(10));
+        return s is null
+            ? string.Empty
+            : string.Join(
+                " & ",
+                s.Trim()
+                    .Split(" ")
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .Select(t => $"{t}:*")
+                    .TakeLast(10)
+            );
     }
 }

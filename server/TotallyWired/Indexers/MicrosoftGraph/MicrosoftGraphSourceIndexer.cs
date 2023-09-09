@@ -15,25 +15,28 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
 
     public MicrosoftGraphSourceIndexer(
         TotallyWiredDbContext context,
-        MicrosoftGraphClientProvider clientProvider)
+        MicrosoftGraphClientProvider clientProvider
+    )
     {
         _context = context;
         _clientProvider = clientProvider;
     }
 
-    private static Task<IDriveItemDeltaCollectionPage> GetMusicPaged(GraphServiceClient graphClient, string delta)
+    private static Task<IDriveItemDeltaCollectionPage> GetMusicPaged(
+        GraphServiceClient graphClient,
+        string delta
+    )
     {
         if (string.IsNullOrEmpty(delta))
         {
-            return graphClient.Me.Drive
-                .Special["music"]
+            return graphClient.Me.Drive.Special["music"]
                 .Delta()
                 .Request()
                 .Select("id,name,audio,parentReference")
                 .GetAsync();
         }
-    
-        var deltaCollection = new DriveItemDeltaCollectionPage(); 
+
+        var deltaCollection = new DriveItemDeltaCollectionPage();
         deltaCollection.InitializeNextPageRequest(graphClient, delta);
         return deltaCollection.NextPageRequest.GetAsync();
     }
@@ -42,13 +45,15 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
         TotallyWiredDbContext context,
         BaseItem driveItem,
         Audio audio,
-        Source source)
+        Source source
+    )
     {
         var fallbackName = audio.Artist.NotNull(driveItem.ParentReference.Name);
         var artistName = audio.AlbumArtist.NotNull(fallbackName);
 
-        var artist = await context.Artists
-            .FirstOrDefaultAsync(x => x.UserId == source.UserId && x.Name == artistName);
+        var artist = await context.Artists.FirstOrDefaultAsync(
+            x => x.UserId == source.UserId && x.Name == artistName
+        );
 
         if (artist is null)
         {
@@ -61,13 +66,13 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
                 Description = string.Empty,
                 ThumbnailUrl = string.Empty
             };
-            
+
             await context.AddAsync(created);
             await context.SaveChangesAsync();
-            
+
             return (created, true);
         }
-        
+
         artist.Name = artistName;
         return (artist, false);
     }
@@ -77,15 +82,16 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
         BaseItem driveItem,
         Audio audio,
         Source source,
-        Guid artistId)
+        Guid artistId
+    )
     {
         var parentId = driveItem.ParentReference.Id;
         var releaseName = audio.Album.NotNull(driveItem.ParentReference.Name);
 
-        var release =
-            await context.Releases.FirstOrDefaultAsync(x =>
-                x.UserId == source.UserId && x.ArtistId == artistId && x.ResourceId == parentId);
-        
+        var release = await context.Releases.FirstOrDefaultAsync(
+            x => x.UserId == source.UserId && x.ArtistId == artistId && x.ResourceId == parentId
+        );
+
         if (release is null)
         {
             var created = new Release
@@ -99,10 +105,10 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
                 Year = audio.Year,
                 ThumbnailUrl = string.Empty
             };
-            
+
             await context.AddAsync(created);
             await context.SaveChangesAsync();
-            
+
             return (created, true);
         }
 
@@ -110,22 +116,30 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
         release.Year = audio.Year;
         return (release, false);
     }
-    
+
     private static async Task<(Track, bool)> CreateOrUpdateTrackAsync(
         TotallyWiredDbContext context,
         BaseItem driveItem,
         Audio audio,
-        Source source)
+        Source source
+    )
     {
         var (artist, _) = await CreateOrUpdateArtistAsync(context, driveItem, audio, source);
-        var (release, _) = await CreateOrUpdateReleaseAsync(context, driveItem, audio, source, artist.Id);
-     
-        var track = await context.Tracks
-            .FirstOrDefaultAsync(x => x.SourceId == source.Id && x.ResourceId == driveItem.Id);
+        var (release, _) = await CreateOrUpdateReleaseAsync(
+            context,
+            driveItem,
+            audio,
+            source,
+            artist.Id
+        );
+
+        var track = await context.Tracks.FirstOrDefaultAsync(
+            x => x.SourceId == source.Id && x.ResourceId == driveItem.Id
+        );
 
         var durationMs = audio.Duration ?? 0;
         var displayLength = TimeSpan.FromMilliseconds(durationMs).DisplayDuration();
-        
+
         if (track is null)
         {
             var created = new Track
@@ -152,7 +166,7 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
                 Length = durationMs,
                 DisplayLength = displayLength
             };
-                    
+
             await context.AddAsync(created);
             return (created, true);
         }
@@ -174,18 +188,19 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
 
         return (track, false);
     }
-    
+
     private static async Task<int> ProcessDeltaCollectionAsync(
         TotallyWiredDbContext context,
         IDriveItemDeltaCollectionPage page,
-        Source source)
+        Source source
+    )
     {
         var trackCount = 0;
 
         foreach (var item in page)
         {
             // todo: handle deletions
-            
+
             var audio = item?.Audio;
             if (audio is null)
             {
@@ -193,7 +208,7 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
             }
 
             var (track, _) = await CreateOrUpdateTrackAsync(context, item!, audio, source);
-            
+
             Console.WriteLine($"[Indexed] {track.Artist} ({track.Year}) - {track.Name}");
             trackCount += 1;
         }
@@ -201,7 +216,7 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
         await context.SaveChangesAsync();
         return trackCount;
     }
-    
+
     public async Task<(bool, string)> IndexAsync(Source source)
     {
         if (source.Type != SourceType.MicrosoftGraph)
@@ -212,7 +227,10 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
         var graphClient = await _clientProvider.GetClientAsync(source.Id);
         if (graphClient is null)
         {
-            return (false, "Graph client not available. This could mean there is an issue with the access token.");
+            return (
+                false,
+                "Graph client not available. This could mean there is an issue with the access token."
+            );
         }
 
         var page = await GetMusicPaged(graphClient, source.Delta);
@@ -223,17 +241,19 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
         while (page.NextPageRequest != null)
         {
             page = await page.NextPageRequest.GetAsync();
-            Console.WriteLine($"Page retrieved with length {page.Count}. Current update count is {updateCount}.");
+            Console.WriteLine(
+                $"Page retrieved with length {page.Count}. Current update count is {updateCount}."
+            );
             updateCount += await ProcessDeltaCollectionAsync(_context, page, source);
         }
-        
+
         if (page.AdditionalData.TryGetValue("@odata.deltaLink", out var deltaLink))
         {
             var delta = deltaLink?.ToString() ?? string.Empty;
             source.Delta = delta;
             await _context.SaveChangesAsync();
         }
-        
+
         return (true, $"Finished sync. {updateCount} tracks updated.");
     }
 }

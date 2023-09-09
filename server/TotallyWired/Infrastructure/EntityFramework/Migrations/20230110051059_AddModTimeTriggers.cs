@@ -11,28 +11,19 @@ namespace TotallyWired.Infrastructure.EntityFramework.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.ScriptMigration(
-                $"Functions",
-                "update_modified_column.0.sql");
-            
-            migrationBuilder.ScriptMigration(
-                $"Triggers",
-                "auto_update_modtime.0.sql");
+            migrationBuilder.ScriptMigration($"Functions", "update_modified_column.0.sql");
+
+            migrationBuilder.ScriptMigration($"Triggers", "auto_update_modtime.0.sql");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTriggers("auto_update_modtime", new []
-            {
-                "Artists",
-                "Releases",
-                "Sources",
-                "TrackReactions",
-                "Tracks",
-                "Users"
-            });
-            
+            migrationBuilder.DropTriggers(
+                "auto_update_modtime",
+                new[] { "Artists", "Releases", "Sources", "TrackReactions", "Tracks", "Users" }
+            );
+
             migrationBuilder.DropProcedure("update_modified_column");
         }
     }

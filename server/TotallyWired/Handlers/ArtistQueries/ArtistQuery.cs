@@ -9,7 +9,7 @@ public class ArtistQueryHandler : IRequestHandler<Guid, ArtistModel?>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
-    
+
     public ArtistQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
@@ -26,12 +26,15 @@ public class ArtistQueryHandler : IRequestHandler<Guid, ArtistModel?>
 
         var artist = await _context.Artists
             .Where(a => a.Id == artistId && a.UserId == userId)
-            .Select(a => new ArtistModel
-            {
-                Id = a.Id,
-                Name = a.Name,
-                CoverArtUrl = a.ThumbnailUrl
-            })
+            .Select(
+                a =>
+                    new ArtistModel
+                    {
+                        Id = a.Id,
+                        Name = a.Name,
+                        CoverArtUrl = a.ThumbnailUrl
+                    }
+            )
             .FirstOrDefaultAsync(cancellationToken);
 
         return artist;

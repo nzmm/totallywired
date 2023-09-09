@@ -23,10 +23,10 @@ public class TotallyWiredDbContextFactory : IDesignTimeDbContextFactory<TotallyW
         }
 
         Console.WriteLine($"Migration design time connection string: '{connectionString}'");
-        
+
         var optionsBuilder = new DbContextOptionsBuilder<TotallyWiredDbContext>();
         optionsBuilder.UseNpgsql(connectionString);
-        
+
         return new TotallyWiredDbContext(optionsBuilder.Options);
     }
 }

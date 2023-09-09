@@ -22,7 +22,8 @@ public static class ConfigureServices
         services.AddSingleton<UtcProvider>();
 
         // data
-        var connectionString = config.GetConnectionString("Postgres") ?? throw new ArgumentNullException();
+        var connectionString =
+            config.GetConnectionString("Postgres") ?? throw new ArgumentNullException();
         services.AddDbContext<TotallyWiredDbContext>(opts =>
         {
             opts.UseNpgsql(connectionString);
@@ -34,7 +35,7 @@ public static class ConfigureServices
         services.AddScoped<MicrosoftGraphTokenProvider>();
         services.AddScoped<MicrosoftGraphClientProvider>();
         services.AddTransient<ISourceIndexer, MicrosoftGraphSourceIndexer>();
-        
+
         // tracks
         services.AddScoped<TrackListQueryHandler>();
         services.AddScoped<TrackDownloadUrlQueryHandler>();
@@ -43,11 +44,11 @@ public static class ConfigureServices
         services.AddScoped<ReleaseQueryHandler>();
         services.AddScoped<ReleaseListQueryHandler>();
         services.AddScoped<ReleaseThumbnailQueryHandler>();
-        
+
         // artists
         services.AddScoped<ArtistQueryHandler>();
         services.AddScoped<ArtistListQueryHandler>();
-        
+
         // providers
         services.AddScoped<SourceListQueryHandler>();
         services.AddScoped<SourceSyncCommandHandler>();
@@ -56,7 +57,7 @@ public static class ConfigureServices
     public static void PrepareDatabase(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
-        
+
         var db = scope.ServiceProvider.GetRequiredService<TotallyWiredDbContext>();
         db.Database.Migrate();
     }

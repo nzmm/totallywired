@@ -17,4 +17,3 @@ public class SourceTypeListModel
 
     public IEnumerable<SourceListModel> Providers { get; set; } = Array.Empty<SourceListModel>();
 }
-

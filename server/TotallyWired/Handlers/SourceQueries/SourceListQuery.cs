@@ -10,14 +10,16 @@ public class SourceListQueryHandler : IRequestHandler<IEnumerable<SourceTypeList
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
-    
+
     public SourceListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;
     }
 
-    public async Task<IEnumerable<SourceTypeListModel>> HandleAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<SourceTypeListModel>> HandleAsync(
+        CancellationToken cancellationToken
+    )
     {
         var userId = _user.UserId();
         if (userId is null)
@@ -27,14 +29,17 @@ public class SourceListQueryHandler : IRequestHandler<IEnumerable<SourceTypeList
 
         var sources = await _context.Sources
             .Where(x => x.UserId == userId)
-            .Select(x => new SourceListModel
-            {
-                SourceId = x.Id,
-                SourceType = x.Type,
-                CreatedOn = x.Created,
-                ModifiedOn = x.Modified,
-                TrackCount = x.Tracks.Count()
-            })
+            .Select(
+                x =>
+                    new SourceListModel
+                    {
+                        SourceId = x.Id,
+                        SourceType = x.Type,
+                        CreatedOn = x.Created,
+                        ModifiedOn = x.Modified,
+                        TrackCount = x.Tracks.Count()
+                    }
+            )
             .GroupBy(x => x.SourceType, x => x)
             .ToDictionaryAsync(x => x.Key, x => x.ToArray(), cancellationToken);
 

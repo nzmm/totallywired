@@ -8,18 +8,22 @@ namespace TotallyWired.Handlers.TrackQueries;
 public class TrackDownloadUrlQueryHandler : IRequestHandler<Guid, string>
 {
     private const string DownloadUrlAttribute = "@microsoft.graph.downloadUrl";
-    
+
     private readonly ICurrentUser _user;
     private readonly TotallyWiredDbContext _context;
     private readonly MicrosoftGraphClientProvider _clientProvider;
-    
-    public TrackDownloadUrlQueryHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphClientProvider clientProvider)
+
+    public TrackDownloadUrlQueryHandler(
+        ICurrentUser user,
+        TotallyWiredDbContext context,
+        MicrosoftGraphClientProvider clientProvider
+    )
     {
         _user = user;
         _context = context;
         _clientProvider = clientProvider;
     }
-    
+
     public async Task<string> HandleAsync(Guid trackId, CancellationToken cancellationToken)
     {
         var userId = _user.UserId();
@@ -44,13 +48,15 @@ public class TrackDownloadUrlQueryHandler : IRequestHandler<Guid, string>
             return string.Empty;
         }
 
-        var item = await graphClient.Me.Drive
-            .Items[resource.ResourceId]
+        var item = await graphClient.Me.Drive.Items[resource.ResourceId]
             .Request()
             .Select(DownloadUrlAttribute)
             .GetAsync(cancellationToken);
 
-        if (item.AdditionalData.TryGetValue(DownloadUrlAttribute, out var downloadUrl) && downloadUrl != null)
+        if (
+            item.AdditionalData.TryGetValue(DownloadUrlAttribute, out var downloadUrl)
+            && downloadUrl != null
+        )
         {
             return downloadUrl.ToString() ?? string.Empty;
         }

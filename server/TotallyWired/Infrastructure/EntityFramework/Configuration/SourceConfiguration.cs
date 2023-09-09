@@ -10,13 +10,9 @@ public class SourceConfiguration : IEntityTypeConfiguration<Source>
     {
         builder.HasKey(x => new { x.Id, x.UserId });
 
-        builder
-            .Property(x => x.Created)
-            .HasDefaultValueSql("now()");
-        
-        builder
-            .Property(x => x.Type)
-            .IsRequired();
+        builder.Property(x => x.Created).HasDefaultValueSql("now()");
+
+        builder.Property(x => x.Type).IsRequired();
 
         builder
             .HasOne(x => x.User)

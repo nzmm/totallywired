@@ -11,17 +11,11 @@ namespace TotallyWired.Infrastructure.EntityFramework.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.ScriptMigration(
-                $"Functions",
-                "search_tracks.0.sql");
-            
-            migrationBuilder.ScriptMigration(
-                $"Functions",
-                "search_releases.0.sql");
-            
-            migrationBuilder.ScriptMigration(
-                $"Functions",
-                "search_artists.0.sql");
+            migrationBuilder.ScriptMigration($"Functions", "search_tracks.0.sql");
+
+            migrationBuilder.ScriptMigration($"Functions", "search_releases.0.sql");
+
+            migrationBuilder.ScriptMigration($"Functions", "search_artists.0.sql");
         }
 
         /// <inheritdoc />

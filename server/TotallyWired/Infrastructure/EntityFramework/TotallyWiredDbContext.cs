@@ -12,9 +12,8 @@ public class TotallyWiredDbContext : DbContext
     public virtual DbSet<Track> Tracks { get; set; } = default!;
     public virtual DbSet<TrackReaction> TrackReactions { get; set; } = default!;
 
-    public TotallyWiredDbContext(DbContextOptions<TotallyWiredDbContext> options) : base(options)
-    {
-    }
+    public TotallyWiredDbContext(DbContextOptions<TotallyWiredDbContext> options)
+        : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

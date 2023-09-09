@@ -14,10 +14,9 @@ builder.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddAntiforgery(opts => opts.HeaderName = "X-XSRF-Token");
 
-builder.Services.AddSingleton(new HttpClient(new SocketsHttpHandler
-{
-    PooledConnectionLifetime = TimeSpan.FromMinutes(2)
-}));
+builder.Services.AddSingleton(
+    new HttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(2) })
+);
 
 var msIndexerOpts = new MicrosoftGraphIndexerOptions();
 config.GetSection("ContentProviders:Microsoft").Bind(msIndexerOpts);
@@ -31,10 +30,9 @@ var app = builder.Build();
 
 if (proxyEnabled)
 {
-    app.UseForwardedHeaders(new ForwardedHeadersOptions
-    {
-        ForwardedHeaders = ForwardedHeaders.All
-    });
+    app.UseForwardedHeaders(
+        new ForwardedHeadersOptions { ForwardedHeaders = ForwardedHeaders.All }
+    );
 }
 
 app.UseHttpsRedirection();

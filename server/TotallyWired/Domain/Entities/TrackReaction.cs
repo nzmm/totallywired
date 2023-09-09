@@ -11,7 +11,7 @@ public class TrackReaction : IUserSpecific
     public Guid UserId { get; set; }
     public Guid TrackId { get; set; }
     public ReactionType Reaction { get; set; }
-    
+
     public virtual User User { get; set; } = default!;
     public virtual Track Track { get; set; } = default!;
 }

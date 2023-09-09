@@ -9,14 +9,16 @@ public class ReleaseListQueryHandler : IRequestHandler<IEnumerable<ReleaseListMo
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
-    
+
     public ReleaseListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;
     }
 
-    public async Task<IEnumerable<ReleaseListModel>> HandleAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ReleaseListModel>> HandleAsync(
+        CancellationToken cancellationToken
+    )
     {
         var userId = _user.UserId();
         if (userId is null)
@@ -26,14 +28,17 @@ public class ReleaseListQueryHandler : IRequestHandler<IEnumerable<ReleaseListMo
 
         var releases = await _context.Releases
             .Where(t => t.UserId == userId)
-            .Select(r => new ReleaseListModel
-            {
-                Id = r.Id,
-                ArtistId = r.ArtistId,
-                Year = r.Year,
-                Name = r.Name,
-                ArtistName = r.Artist.Name
-            })
+            .Select(
+                r =>
+                    new ReleaseListModel
+                    {
+                        Id = r.Id,
+                        ArtistId = r.ArtistId,
+                        Year = r.Year,
+                        Name = r.Name,
+                        ArtistName = r.Artist.Name
+                    }
+            )
             .OrderBy(x => x.ArtistName)
             .ThenBy(x => x.Year)
             .ThenBy(x => x.Name)

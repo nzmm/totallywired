@@ -6,7 +6,7 @@ namespace TotallyWired.Indexers.MicrosoftGraph;
 public class MicrosoftGraphClientProvider
 {
     private readonly MicrosoftGraphTokenProvider _tokenProvider;
-    
+
     public MicrosoftGraphClientProvider(MicrosoftGraphTokenProvider tokenProvider)
     {
         _tokenProvider = tokenProvider;
@@ -20,13 +20,15 @@ public class MicrosoftGraphClientProvider
         {
             return null;
         }
-        
+
         return new GraphServiceClient((IAuthenticationProvider)null!)
         {
             AuthenticationProvider = new DelegateAuthenticationProvider(request =>
             {
-                request.Headers.Authorization =
-                    new AuthenticationHeaderValue("Bearer", accessToken);
+                request.Headers.Authorization = new AuthenticationHeaderValue(
+                    "Bearer",
+                    accessToken
+                );
 
                 return Task.CompletedTask;
             })

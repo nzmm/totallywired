@@ -13,26 +13,33 @@ public class SourceSyncCommandHandler : IRequestHandler<Guid, (bool, string)>
     public SourceSyncCommandHandler(
         ICurrentUser user,
         TotallyWiredDbContext context,
-        IEnumerable<ISourceIndexer> indexers)
+        IEnumerable<ISourceIndexer> indexers
+    )
     {
         _user = user;
         _context = context;
         _indexers = indexers;
     }
 
-    public async Task<(bool, string)> HandleAsync(Guid sourceId, CancellationToken cancellationToken)
+    public async Task<(bool, string)> HandleAsync(
+        Guid sourceId,
+        CancellationToken cancellationToken
+    )
     {
         var userId = _user.UserId();
-        
+
         var source = await _context.Sources
             .Include(x => x.User)
-            .FirstOrDefaultAsync(x => x.Id == sourceId && x.UserId == userId, cancellationToken: cancellationToken);
-        
+            .FirstOrDefaultAsync(
+                x => x.Id == sourceId && x.UserId == userId,
+                cancellationToken: cancellationToken
+            );
+
         if (source is null)
         {
             return (false, $"Source '{sourceId}' does not exist");
         }
-        
+
         foreach (var synchroniser in _indexers)
         {
             var (success, message) = await synchroniser.IndexAsync(source);
@@ -41,7 +48,7 @@ public class SourceSyncCommandHandler : IRequestHandler<Guid, (bool, string)>
                 return (success, message);
             }
         }
-        
+
         return (false, $"No handlers configured for source '{source.Id}'");
     }
 }

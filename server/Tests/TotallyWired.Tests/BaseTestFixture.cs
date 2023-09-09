@@ -15,18 +15,19 @@ namespace TotallyWired.Tests;
 
 public abstract class BaseTestFixture
 {
-    protected static readonly User CurrentUser = new()
-    {
-        Id = Guid.NewGuid(),
-        Name = "Current User",
-        UserName = "cu",
-        IdentityId = Guid.NewGuid().ToString()
-    };
+    protected static readonly User CurrentUser =
+        new()
+        {
+            Id = Guid.NewGuid(),
+            Name = "Current User",
+            UserName = "cu",
+            IdentityId = Guid.NewGuid().ToString()
+        };
 
     protected Mock<TotallyWiredDbContext> MockDbContext = default!;
     protected Mock<DatabaseFacade> MockDbFacade = default!;
     protected Mock<ICurrentUser> MockCurrentUser = default!;
-    
+
     /// <remark>
     /// https://github.com/romantitov/MockQueryable is used for mocking EntityFramework DbSets
     /// </remark>
@@ -39,7 +40,7 @@ public abstract class BaseTestFixture
         MockDbContext = mockContext;
         MockDbFacade = new Mock<DatabaseFacade>(mockContext.Object);
         MockCurrentUser = new Mock<ICurrentUser>();
-        
+
         MockDbFacade
             .Setup(x => x.BeginTransactionAsync(It.IsAny<CancellationToken>()))
             .ReturnsAsync(Mock.Of<IDbContextTransaction>());
@@ -47,12 +48,11 @@ public abstract class BaseTestFixture
         MockDbContext
             .Setup(x => x.Artists)
             .Returns(Enumerable.Empty<Artist>().AsQueryable().BuildMockDbSet().Object);
-        
+
         MockDbContext
             .Setup(x => x.Releases)
             .Returns(Enumerable.Empty<Release>().AsQueryable().BuildMockDbSet().Object);
-        
-        
+
         MockDbContext
             .Setup(x => x.Tracks)
             .Returns(Enumerable.Empty<Track>().AsQueryable().BuildMockDbSet().Object);
@@ -68,13 +68,9 @@ public abstract class BaseTestFixture
         MockDbContext
             .Setup(x => x.Sources)
             .Returns(Enumerable.Empty<Source>().AsQueryable().BuildMockDbSet().Object);
-        
-        MockDbContext
-            .Setup(x => x.Database)
-            .Returns(MockDbFacade.Object);
 
-        MockCurrentUser
-            .Setup(x => x.UserId())
-            .Returns(Guid.NewGuid());
+        MockDbContext.Setup(x => x.Database).Returns(MockDbFacade.Object);
+
+        MockCurrentUser.Setup(x => x.UserId()).Returns(Guid.NewGuid());
     }
 }

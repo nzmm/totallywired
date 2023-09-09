@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace TotallyWired.WebApi.Authentication;
+
 public class AuthenticationProviders
 {
     private readonly IAuthenticationSchemeProvider _schemeProvider;
@@ -26,8 +27,10 @@ public class AuthenticationProviders
         foreach (var s in schemes)
         {
             // We're assuming all schemes that aren't cookies are social
-            if (s.Name == CookieAuthenticationDefaults.AuthenticationScheme ||
-                s.Name == AuthenticatonSchemes.ExternalScheme)
+            if (
+                s.Name == CookieAuthenticationDefaults.AuthenticationScheme
+                || s.Name == AuthenticatonSchemes.ExternalScheme
+            )
             {
                 continue;
             }

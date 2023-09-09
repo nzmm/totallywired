@@ -5,9 +5,14 @@ namespace TotallyWired.Infrastructure.EntityFramework.Extensions;
 
 internal static class MigrationBuilderExtensions
 {
-    private const string PostgreSqlNamespace = "TotallyWired.Infrastructure.EntityFramework.PostgreSQL";
-    
-    internal static void ScriptMigration(this MigrationBuilder migrationBuilder, string ns, string fn)
+    private const string PostgreSqlNamespace =
+        "TotallyWired.Infrastructure.EntityFramework.PostgreSQL";
+
+    internal static void ScriptMigration(
+        this MigrationBuilder migrationBuilder,
+        string ns,
+        string fn
+    )
     {
         if (string.IsNullOrEmpty(ns))
         {
@@ -18,13 +23,13 @@ internal static class MigrationBuilderExtensions
         {
             throw new ArgumentException("A script filename must be provided", nameof(fn));
         }
-        
+
         var assembly = Assembly.GetExecutingAssembly();
         var resourceName = string.Join(".", PostgreSqlNamespace, ns, fn);
 
         Console.WriteLine("\n *** \n");
         Console.WriteLine($"Attempting migration with '{resourceName}'... \n");
-        
+
         var validResources = assembly.GetManifestResourceNames();
         if (!validResources.Contains(resourceName))
         {
@@ -34,16 +39,19 @@ internal static class MigrationBuilderExtensions
         using var stream = assembly.GetManifestResourceStream(resourceName);
         if (stream is null)
         {
-            throw new FileLoadException("Failed to load manifest resource stream from assembly", resourceName);
+            throw new FileLoadException(
+                "Failed to load manifest resource stream from assembly",
+                resourceName
+            );
         }
 
         using var reader = new StreamReader(stream);
-        
+
         var script = reader.ReadToEnd();
 
         Console.WriteLine(script);
         Console.WriteLine("\n***\n");
-        
+
         migrationBuilder.Sql(script);
     }
 
@@ -53,15 +61,22 @@ internal static class MigrationBuilderExtensions
         {
             throw new ArgumentException("A procedure name must be provided", nameof(procedureName));
         }
-        
+
         migrationBuilder.Sql($"DROP PROCEDURE IF EXISTS {procedureName};");
     }
 
-    internal static void DropTriggers(this MigrationBuilder migrationBuilder, string triggerName, string[] tableNames)
+    internal static void DropTriggers(
+        this MigrationBuilder migrationBuilder,
+        string triggerName,
+        string[] tableNames
+    )
     {
         if (!tableNames.Any() || tableNames.Any(string.IsNullOrEmpty))
         {
-            throw new ArgumentException("At least one table name must be provided", nameof(tableNames));
+            throw new ArgumentException(
+                "At least one table name must be provided",
+                nameof(tableNames)
+            );
         }
         if (string.IsNullOrEmpty(triggerName))
         {
@@ -70,7 +85,7 @@ internal static class MigrationBuilderExtensions
 
         foreach (var tableName in tableNames)
         {
-            migrationBuilder.Sql($"DROP TRIGGER IF EXISTS {triggerName} ON {tableName};");   
+            migrationBuilder.Sql($"DROP TRIGGER IF EXISTS {triggerName} ON {tableName};");
         }
     }
 }

@@ -18,13 +18,14 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
     private readonly TotallyWiredDbContext _context;
     private readonly OAuthUriHelper _uriHelper;
     private readonly MicrosoftGraphIndexerOptions _config;
-    
+
     public MicrosoftGraphTokenProvider(
         ICurrentUser user,
         HttpClient httpClient,
         TotallyWiredDbContext dbContext,
         MicrosoftGraphIndexerOptions config,
-        OAuthUriHelper uriHelper)
+        OAuthUriHelper uriHelper
+    )
     {
         _user = user;
         _httpClient = httpClient;
@@ -36,10 +37,11 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
     private IQueryable<Source> GetSource()
     {
         var userId = _user.UserId();
-        return _context.Sources
-            .Where(x => x.UserId == userId && x.Type == SourceType.MicrosoftGraph);
+        return _context.Sources.Where(
+            x => x.UserId == userId && x.Type == SourceType.MicrosoftGraph
+        );
     }
-    
+
     private async Task<Source> StoreTokensAsync(TokenResultModel tokens)
     {
         var userId = _user.UserId();
@@ -48,15 +50,13 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
             throw new NullReferenceException(nameof(userId));
         }
 
-        var source = await GetSource().FirstOrDefaultAsync() ?? new Source
-        {
-            UserId = userId.Value,
-            Type = SourceType.MicrosoftGraph
-        };
+        var source =
+            await GetSource().FirstOrDefaultAsync()
+            ?? new Source { UserId = userId.Value, Type = SourceType.MicrosoftGraph };
 
         var created = source.Id == Guid.Empty;
         var expiry = UtcProvider.UtcNow.AddSeconds(tokens.ext_expires_in * .9);
-        
+
         source.RefreshToken = tokens.refresh_token;
         source.AccessToken = tokens.access_token;
         source.ExpiresAt = expiry;
@@ -81,17 +81,19 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         {
             throw new ArgumentException("authorizationCode result is invalid");
         }
-        
-        var content = new FormUrlEncodedContent(new []
-        {
-            new KeyValuePair<string, string>("client_id", _config.ClientId),
-            new KeyValuePair<string, string>("client_secret", _config.ClientSecret),
-            new KeyValuePair<string, string>("redirect_uri", _config.RedirectUri),
-            new KeyValuePair<string, string>("scope", _config.Scope),
-            new KeyValuePair<string, string>("code", authorizationCode),
-            new KeyValuePair<string, string>("grant_type", "authorization_code")
-        });
-            
+
+        var content = new FormUrlEncodedContent(
+            new[]
+            {
+                new KeyValuePair<string, string>("client_id", _config.ClientId),
+                new KeyValuePair<string, string>("client_secret", _config.ClientSecret),
+                new KeyValuePair<string, string>("redirect_uri", _config.RedirectUri),
+                new KeyValuePair<string, string>("scope", _config.Scope),
+                new KeyValuePair<string, string>("code", authorizationCode),
+                new KeyValuePair<string, string>("grant_type", "authorization_code")
+            }
+        );
+
         var tokenUrl = _uriHelper.GetTokenUri();
         var response = await _httpClient.PostAsync(tokenUrl, content);
         var tokenResult = await response.Content.ReadFromJsonAsync<TokenResultModel>();
@@ -103,18 +105,20 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
 
         return await StoreTokensAsync(tokenResult);
     }
-    
+
     public async Task<Source> RefreshAndStoreTokensAsync(string refreshToken)
     {
-        var content = new FormUrlEncodedContent(new []
-        {
-            new KeyValuePair<string, string>("client_id", _config.ClientId),
-            new KeyValuePair<string, string>("client_secret", _config.ClientSecret),
-            new KeyValuePair<string, string>("scope", _config.Scope),
-            new KeyValuePair<string, string>("refresh_token", refreshToken),
-            new KeyValuePair<string, string>("grant_type", "refresh_token")
-        });
-            
+        var content = new FormUrlEncodedContent(
+            new[]
+            {
+                new KeyValuePair<string, string>("client_id", _config.ClientId),
+                new KeyValuePair<string, string>("client_secret", _config.ClientSecret),
+                new KeyValuePair<string, string>("scope", _config.Scope),
+                new KeyValuePair<string, string>("refresh_token", refreshToken),
+                new KeyValuePair<string, string>("grant_type", "refresh_token")
+            }
+        );
+
         var tokenUrl = _uriHelper.GetTokenUri();
         var response = await _httpClient.PostAsync(tokenUrl, content);
         var tokenResult = await response.Content.ReadFromJsonAsync<TokenResultModel>();
@@ -123,7 +127,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         {
             throw new InvalidCredentialException("token result is invalid");
         }
-        
+
         return await StoreTokensAsync(tokenResult);
     }
 
@@ -143,9 +147,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
             return (cachedTokens.AccessToken, cachedTokens.ExpiresAt);
         }
 
-        var refreshToken = await GetSource()
-            .Select(x => x.RefreshToken)
-            .FirstOrDefaultAsync();
+        var refreshToken = await GetSource().Select(x => x.RefreshToken).FirstOrDefaultAsync();
 
         if (string.IsNullOrEmpty(refreshToken))
         {

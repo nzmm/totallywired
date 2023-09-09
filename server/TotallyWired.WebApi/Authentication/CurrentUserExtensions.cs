@@ -9,7 +9,7 @@ public static class CurrentUserExtensions
         var service = services.GetRequiredService<CurrentUserService>();
         return service.CurrentUser;
     }
-    
+
     public static void AddCurrentUser(this IServiceCollection services)
     {
         services.AddScoped<CurrentUserService>();

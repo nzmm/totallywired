@@ -1,4 +1,3 @@
-
 using TotallyWired.Domain.Enums;
 
 namespace TotallyWired.Models;

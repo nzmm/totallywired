@@ -15,18 +15,22 @@ public class TrackListSearchParams
     public bool? Liked { get; set; }
 }
 
-public class TrackListQueryHandler : IRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
+public class TrackListQueryHandler
+    : IRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
-    
+
     public TrackListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _user = user;
         _context = context;
     }
 
-    private async Task<IEnumerable<TrackListModel>> GetQueryAsync(TrackListSearchParams @params, CancellationToken cancellationToken)
+    private async Task<IEnumerable<TrackListModel>> GetQueryAsync(
+        TrackListSearchParams @params,
+        CancellationToken cancellationToken
+    )
     {
         var userId = _user.UserId();
         if (userId is null)
@@ -40,11 +44,13 @@ public class TrackListQueryHandler : IRequestHandler<TrackListSearchParams, IEnu
 
         var tsQuery = @params.Q.TsQuery();
         var hasQuery = tsQuery.Length >= 3;
-        
+
         var query = hasQuery
-            ? _context.Tracks.FromSqlInterpolated($"SELECT * FROM search_tracks({userId}, {tsQuery})")
+            ? _context.Tracks.FromSqlInterpolated(
+                $"SELECT * FROM search_tracks({userId}, {tsQuery})"
+            )
             : _context.Tracks.Where(t => t.UserId == userId);
-        
+
         if (releaseId.HasValue)
         {
             query = query.Where(t => releaseId == t.ReleaseId);
@@ -55,7 +61,9 @@ public class TrackListQueryHandler : IRequestHandler<TrackListSearchParams, IEnu
         }
         if (liked ?? false)
         {
-            query = query.Where(t => t.Reactions.Any(r => r.UserId == userId && r.Reaction == ReactionType.Liked));
+            query = query.Where(
+                t => t.Reactions.Any(r => r.UserId == userId && r.Reaction == ReactionType.Liked)
+            );
         }
         if (!hasQuery)
         {
@@ -67,22 +75,29 @@ public class TrackListQueryHandler : IRequestHandler<TrackListSearchParams, IEnu
         }
 
         return await query
-            .Select(t => new TrackListModel
-            {
-                Id = t.Id,
-                ArtistId = t.ArtistId,
-                ReleaseId = t.ReleaseId,
-                Name = t.Name,
-                ArtistName = t.Artist.Name,
-                ReleaseName = t.ReleaseName,
-                Number = t.Number,
-                Length = t.Length,
-                DisplayLength = t.DisplayLength,
-                Liked = t.Reactions.Any(r => r.Reaction == ReactionType.Liked)
-            }).ToArrayAsync(cancellationToken);
+            .Select(
+                t =>
+                    new TrackListModel
+                    {
+                        Id = t.Id,
+                        ArtistId = t.ArtistId,
+                        ReleaseId = t.ReleaseId,
+                        Name = t.Name,
+                        ArtistName = t.Artist.Name,
+                        ReleaseName = t.ReleaseName,
+                        Number = t.Number,
+                        Length = t.Length,
+                        DisplayLength = t.DisplayLength,
+                        Liked = t.Reactions.Any(r => r.Reaction == ReactionType.Liked)
+                    }
+            )
+            .ToArrayAsync(cancellationToken);
     }
-    
-    public Task<IEnumerable<TrackListModel>> HandleAsync(TrackListSearchParams searchParams, CancellationToken cancellationToken)
+
+    public Task<IEnumerable<TrackListModel>> HandleAsync(
+        TrackListSearchParams searchParams,
+        CancellationToken cancellationToken
+    )
     {
         return GetQueryAsync(searchParams, cancellationToken);
     }
