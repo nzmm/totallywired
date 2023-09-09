@@ -1,8 +1,5 @@
 import { Link } from "react-router-dom";
-import {
-  ListItemProps,
-  VirtualList,
-} from "@totallywired/ui-components";
+import { ListItemProps, VirtualList } from "@totallywired/ui-components";
 import { Artist } from "../lib/types";
 
 function ArtistItem({ top, height, ...artist }: ListItemProps<Artist>) {
@@ -19,7 +16,10 @@ function ArtistItem({ top, height, ...artist }: ListItemProps<Artist>) {
 
 export default function ArtistList({ artists }: { artists: Artist[] }) {
   return artists.length ? (
-    <VirtualList items={artists.map(a => ({ ...a, height: 42 }))} renderer={ArtistItem} />
+    <VirtualList
+      items={artists.map((a) => ({ ...a, height: 42 }))}
+      renderer={ArtistItem}
+    />
   ) : (
     <section>
       <p>No albums</p>

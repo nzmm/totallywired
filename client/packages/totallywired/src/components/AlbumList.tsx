@@ -1,9 +1,6 @@
 import { Link } from "react-router-dom";
 import { Album } from "../lib/types";
-import {
-  ListItemProps,
-  VirtualList,
-} from "@totallywired/ui-components";
+import { ListItemProps, VirtualList } from "@totallywired/ui-components";
 
 function AlbumItem({ top, height, ...album }: ListItemProps<Album>) {
   return (
@@ -27,7 +24,10 @@ function AlbumItem({ top, height, ...album }: ListItemProps<Album>) {
 
 export default function AlbumList({ albums }: { albums: Album[] }) {
   return albums.length ? (
-    <VirtualList items={albums.map(a => ({ ...a, height: 42 }))} renderer={AlbumItem} />
+    <VirtualList
+      items={albums.map((a) => ({ ...a, height: 42 }))}
+      renderer={AlbumItem}
+    />
   ) : (
     <section>
       <p>No albums</p>

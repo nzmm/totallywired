@@ -1,8 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useReducer,
-} from "react";
+import { createContext, useContext, useReducer } from "react";
 import { Track } from "../lib/types";
 import { commonReducer, createDispatchContext } from "../lib/reducer";
 

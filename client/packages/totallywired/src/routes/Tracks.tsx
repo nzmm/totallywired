@@ -1,5 +1,10 @@
 import { Suspense, useEffect } from "react";
-import { Await, LoaderFunctionArgs, useAsyncValue, useLoaderData } from "react-router-dom";
+import {
+  Await,
+  LoaderFunctionArgs,
+  useAsyncValue,
+  useLoaderData,
+} from "react-router-dom";
 import { getTracks } from "../lib/webapi";
 import { Res, requestSearchParams } from "../lib/requests";
 import { Track } from "../lib/types";
@@ -18,9 +23,9 @@ function TrackListView() {
 
   useEffect(() => {
     dispatch(set(tracks));
-  }, [dispatch, tracks])
+  }, [dispatch, tracks]);
 
-  return <TrackList tracks={tracks} />
+  return <TrackList tracks={tracks} />;
 }
 
 export default function Tracks() {

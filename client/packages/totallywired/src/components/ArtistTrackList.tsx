@@ -7,7 +7,15 @@ import HeaderTrackList, {
 } from "../components/HeaderTrackList";
 import CoverArt from "../components/CoverArt";
 
-function ArtistHeader({ artist, top, height }: { artist: ArtistDetail; top: number; height: number; }) {
+function ArtistHeader({
+  artist,
+  top,
+  height,
+}: {
+  artist: ArtistDetail;
+  top: number;
+  height: number;
+}) {
   return (
     <li className="list-header" style={{ top, height }}>
       {/* todo: support artists */}
@@ -15,9 +23,7 @@ function ArtistHeader({ artist, top, height }: { artist: ArtistDetail; top: numb
 
       <div className="album-info">
         <h2>{artist.name}</h2>
-        <div>
-          3 albums &middot; 32 tracks, 2h 10m
-        </div>
+        <div>3 albums &middot; 32 tracks, 2h 10m</div>
         <div>Record label &middot; NZ</div>
         <div className="actions">
           <button>Play all</button>
@@ -42,8 +48,13 @@ function ArtistTrackItem({
   );
 }
 
-export function ArtistTrackList({ artist, tracks }: { artist: ArtistDetail; tracks: Track[]; }) {
-
+export function ArtistTrackList({
+  artist,
+  tracks,
+}: {
+  artist: ArtistDetail;
+  tracks: Track[];
+}) {
   const items = useMemo(() => {
     const header = {
       height: 172,

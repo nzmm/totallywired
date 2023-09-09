@@ -37,7 +37,7 @@ export const AppRouter = createBrowserRouter([
           {
             path: "albums",
             element: <Albums />,
-            loader: albumsLoader
+            loader: albumsLoader,
           },
           {
             path: "albums/:releaseId/tracks",
@@ -47,12 +47,12 @@ export const AppRouter = createBrowserRouter([
           {
             path: "artists",
             element: <Artists />,
-            loader: artistsLoader
+            loader: artistsLoader,
           },
           {
             path: "artists/:artistId/tracks",
             element: <ArtistTracks />,
-            loader: artistTracksLoader
+            loader: artistTracksLoader,
           },
           {
             path: "queue",
