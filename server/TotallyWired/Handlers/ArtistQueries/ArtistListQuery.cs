@@ -11,12 +11,12 @@ public class ArtistListSearchParams
     public string? Q { get; set; }
 }
 
-public class ArtistListHandler : IRequestHandler<ArtistListSearchParams, IEnumerable<ArtistListModel>>
+public class ArtistListQueryHandler : IRequestHandler<ArtistListSearchParams, IEnumerable<ArtistListModel>>
 {
     private readonly ICurrentUser _user;
     private readonly TotallyWiredDbContext _context;
     
-    public ArtistListHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public ArtistListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _user = user;
         _context = context;

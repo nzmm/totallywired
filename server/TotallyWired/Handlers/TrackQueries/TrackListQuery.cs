@@ -15,12 +15,12 @@ public class TrackListSearchParams
     public bool? Liked { get; set; }
 }
 
-public class TrackListHandler : IRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
+public class TrackListQueryHandler : IRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
     
-    public TrackListHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public TrackListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _user = user;
         _context = context;

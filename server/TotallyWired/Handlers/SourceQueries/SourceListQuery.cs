@@ -6,12 +6,12 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.SourceQueries;
 
-public class SourceListHandler : IRequestHandler<IEnumerable<SourceTypeListModel>>
+public class SourceListQueryHandler : IRequestHandler<IEnumerable<SourceTypeListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
     
-    public SourceListHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public SourceListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;

@@ -5,12 +5,12 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseListHandler : IRequestHandler<IEnumerable<ReleaseListModel>>
+public class ReleaseListQueryHandler : IRequestHandler<IEnumerable<ReleaseListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
     
-    public ReleaseListHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public ReleaseListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;

@@ -12,13 +12,13 @@ public static class TrackRoutes
             .RequireAuthorization()
             .ValidateAntiforgery();
 
-        group.MapGet("", async (TrackListHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
+        group.MapGet("", async (TrackListQueryHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
         {
             var tracks = await handler.HandleAsync(@params, cancellationToken);
             return Results.Ok(tracks);
         });
 
-        group.MapGet("/{trackId:guid}/downloadUrl", async (TrackDownloadUrlHandler handler, Guid trackId, CancellationToken cancellationToken) =>
+        group.MapGet("/{trackId:guid}/downloadUrl", async (TrackDownloadUrlQueryHandler handler, Guid trackId, CancellationToken cancellationToken) =>
         {
             var downloadUrl = await handler.HandleAsync(trackId, cancellationToken);
             return Results.Ok(downloadUrl);

@@ -4,13 +4,13 @@ using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.SourceCommands;
 
-public class SourceSyncHandler : IRequestHandler<Guid, (bool, string)>
+public class SourceSyncCommandHandler : IRequestHandler<Guid, (bool, string)>
 {
     private readonly ICurrentUser _user;
     private readonly TotallyWiredDbContext _context;
     private readonly IEnumerable<ISourceIndexer> _indexers;
 
-    public SourceSyncHandler(
+    public SourceSyncCommandHandler(
         ICurrentUser user,
         TotallyWiredDbContext context,
         IEnumerable<ISourceIndexer> indexers)

@@ -7,7 +7,7 @@ using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseThumbnailHandler : IRequestHandler<Guid, string>
+public class ReleaseThumbnailQueryHandler : IRequestHandler<Guid, string>
 {
     private readonly ICurrentUser _user;
     private readonly TotallyWiredDbContext _context;
@@ -15,7 +15,7 @@ public class ReleaseThumbnailHandler : IRequestHandler<Guid, string>
 
     private const string DefaultAlbumArt = "/default-art.svg";
 
-    public ReleaseThumbnailHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphTokenProvider tokenProvider)
+    public ReleaseThumbnailQueryHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphTokenProvider tokenProvider)
     {
         _user = user;
         _context = context;

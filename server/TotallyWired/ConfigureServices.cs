@@ -36,20 +36,21 @@ public static class ConfigureServices
         services.AddTransient<ISourceIndexer, MicrosoftGraphSourceIndexer>();
         
         // tracks
-        services.AddScoped<TrackListHandler>();
-        services.AddScoped<TrackDownloadUrlHandler>();
+        services.AddScoped<TrackListQueryHandler>();
+        services.AddScoped<TrackDownloadUrlQueryHandler>();
 
         // releases
-        services.AddScoped<ReleaseHandler>();
-        services.AddScoped<ReleaseListHandler>();
-        services.AddScoped<ReleaseThumbnailHandler>();
+        services.AddScoped<ReleaseQueryHandler>();
+        services.AddScoped<ReleaseListQueryHandler>();
+        services.AddScoped<ReleaseThumbnailQueryHandler>();
         
         // artists
-        services.AddScoped<ArtistListHandler>();
+        services.AddScoped<ArtistQueryHandler>();
+        services.AddScoped<ArtistListQueryHandler>();
         
         // providers
-        services.AddScoped<SourceListHandler>();
-        services.AddScoped<SourceSyncHandler>();
+        services.AddScoped<SourceListQueryHandler>();
+        services.AddScoped<SourceSyncCommandHandler>();
     }
 
     public static void PrepareDatabase(this IServiceProvider services)

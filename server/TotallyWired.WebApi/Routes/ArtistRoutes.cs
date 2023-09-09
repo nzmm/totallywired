@@ -13,13 +13,19 @@ public static class ArtistRoutes
             .RequireAuthorization()
             .ValidateAntiforgery();
         
-        group.MapGet("", async (ArtistListHandler handler, [AsParameters] ArtistListSearchParams @params, CancellationToken cancellationToken) =>
+        group.MapGet("", async (ArtistListQueryHandler handler, [AsParameters] ArtistListSearchParams @params, CancellationToken cancellationToken) =>
         {
             var artists = await handler.HandleAsync(@params, cancellationToken);
             return Results.Ok(artists);
         });
         
-        group.MapGet("/{artistId:guid}/tracks", async (TrackListHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
+        group.MapGet("/{artistId:guid}", async (ArtistQueryHandler handler, Guid artistId, CancellationToken cancellationToken) =>
+        {
+            var artist = await handler.HandleAsync(artistId, cancellationToken);
+            return artist is null ? Results.BadRequest() : Results.Ok(artist);
+        });
+        
+        group.MapGet("/{artistId:guid}/tracks", async (TrackListQueryHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
         {
             var tracks = await handler.HandleAsync(@params, cancellationToken);
             return Results.Ok(tracks);

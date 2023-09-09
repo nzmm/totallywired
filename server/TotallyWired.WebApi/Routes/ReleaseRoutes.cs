@@ -13,19 +13,19 @@ public static class ReleaseRoutes
             .RequireAuthorization()
             .ValidateAntiforgery();
 
-        group.MapGet("", async (ReleaseListHandler handler, CancellationToken cancellationToken) =>
+        group.MapGet("", async (ReleaseListQueryHandler handler, CancellationToken cancellationToken) =>
         {
             var releases = await handler.HandleAsync(cancellationToken);
             return Results.Ok(releases);
         });
         
-        group.MapGet("/{releaseId:guid}", async (ReleaseHandler handler, Guid releaseId, CancellationToken cancellationToken) =>
+        group.MapGet("/{releaseId:guid}", async (ReleaseQueryHandler handler, Guid releaseId, CancellationToken cancellationToken) =>
         {
             var release = await handler.HandleAsync(releaseId, cancellationToken);
             return release is null ? Results.BadRequest() : Results.Ok(release);
         });
         
-        group.MapGet("/{releaseId:guid}/tracks", async (TrackListHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
+        group.MapGet("/{releaseId:guid}/tracks", async (TrackListQueryHandler handler, [AsParameters] TrackListSearchParams @params, CancellationToken cancellationToken) =>
         {
             var tracks = await handler.HandleAsync(@params, cancellationToken);
             return Results.Ok(tracks);
@@ -48,7 +48,7 @@ public static class ReleaseRoutes
             return result.Success ? Results.Ok(result.Release!.Id) : Results.BadRequest();
         }); */
 
-        group.MapGet("/{releaseId:guid}/art", async (ReleaseThumbnailHandler handler, Guid releaseId, CancellationToken cancellationToken) =>
+        group.MapGet("/{releaseId:guid}/art", async (ReleaseThumbnailQueryHandler handler, Guid releaseId, CancellationToken cancellationToken) =>
         {
             var thumbnailUrl = await handler.HandleAsync(releaseId, cancellationToken);
 

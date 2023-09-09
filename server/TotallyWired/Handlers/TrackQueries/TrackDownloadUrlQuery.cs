@@ -5,7 +5,7 @@ using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackDownloadUrlHandler : IRequestHandler<Guid, string>
+public class TrackDownloadUrlQueryHandler : IRequestHandler<Guid, string>
 {
     private const string DownloadUrlAttribute = "@microsoft.graph.downloadUrl";
     
@@ -13,7 +13,7 @@ public class TrackDownloadUrlHandler : IRequestHandler<Guid, string>
     private readonly TotallyWiredDbContext _context;
     private readonly MicrosoftGraphClientProvider _clientProvider;
     
-    public TrackDownloadUrlHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphClientProvider clientProvider)
+    public TrackDownloadUrlQueryHandler(ICurrentUser user, TotallyWiredDbContext context, MicrosoftGraphClientProvider clientProvider)
     {
         _user = user;
         _context = context;

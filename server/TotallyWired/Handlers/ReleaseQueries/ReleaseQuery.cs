@@ -5,12 +5,12 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseHandler : IRequestHandler<Guid, ReleaseModel?>
+public class ReleaseQueryHandler : IRequestHandler<Guid, ReleaseModel?>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
     
-    public ReleaseHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public ReleaseQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;

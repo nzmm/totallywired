@@ -38,13 +38,13 @@ public static class ProviderRoutes
             .RequireAuthorization()
             .ValidateAntiforgery();
         
-        group.MapGet("", async (SourceListHandler handler, CancellationToken cancellationToken) =>
+        group.MapGet("", async (SourceListQueryHandler handler, CancellationToken cancellationToken) =>
         {
             var sources = await handler.HandleAsync(cancellationToken);
             return Results.Ok(sources);
         });
 
-        group.MapPost("/{sourceId:guid}/sync", async (SourceSyncHandler handler, Guid sourceId, CancellationToken cancellationToken) =>
+        group.MapPost("/{sourceId:guid}/sync", async (SourceSyncCommandHandler handler, Guid sourceId, CancellationToken cancellationToken) =>
         {
             var (success, message) = await handler.HandleAsync(sourceId, cancellationToken);
             return Results.Ok(new { success, message });

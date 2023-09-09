@@ -14,14 +14,14 @@ namespace TotallyWired.Tests.Handlers.ReleaseCommands;
 
 public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
 {
-    private ReleaseMetadataUpdateHandler _subject = default!;
+    private ReleaseMetadataCommandHandler _subject = default!;
 
     [SetUp]
     protected override void Setup()
     {
         base.Setup();
 
-        _subject = new ReleaseMetadataUpdateHandler(
+        _subject = new ReleaseMetadataCommandHandler(
             MockCurrentUser.Object,
             MockDbContext.Object);
     }
@@ -30,7 +30,7 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
     public async ValueTask ReleaseId_Empty_Should_Return_SuccessFalse()
     {
         // Arrange
-        var command = new ReleaseMetadataUpdateCommand
+        var command = new ReleaseMetadataCommand
         {
             ReleaseId = Guid.Empty,
             Metadata = new ReleaseMetadataModel()
@@ -53,7 +53,7 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         // Arrange
         var releaseId = Guid.NewGuid();
         
-        var command = new ReleaseMetadataUpdateCommand
+        var command = new ReleaseMetadataCommand
         {
             ReleaseId = releaseId,
             Metadata = new ReleaseMetadataModel
@@ -81,7 +81,7 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         // Arrange
         var releaseId = Guid.NewGuid();
         
-        var command = new ReleaseMetadataUpdateCommand
+        var command = new ReleaseMetadataCommand
         {
             ReleaseId = releaseId,
             Metadata = new ReleaseMetadataModel
@@ -109,7 +109,7 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         // Arrange
         var releaseId = Guid.NewGuid();
         
-        var command = new ReleaseMetadataUpdateCommand
+        var command = new ReleaseMetadataCommand
         {
             ReleaseId = releaseId,
             Metadata = new ReleaseMetadataModel
@@ -151,7 +151,7 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
             Artist = artist
         };
         
-        var command = new ReleaseMetadataUpdateCommand
+        var command = new ReleaseMetadataCommand
         {
             ReleaseId = release.Id,
             Metadata = new ReleaseMetadataModel
@@ -203,7 +203,7 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
             Artist = artist
         };
         
-        var command = new ReleaseMetadataUpdateCommand
+        var command = new ReleaseMetadataCommand
         {
             ReleaseId = release.Id,
             Metadata = new ReleaseMetadataModel
@@ -255,7 +255,7 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
             Artist = artist
         };
         
-        var command = new ReleaseMetadataUpdateCommand
+        var command = new ReleaseMetadataCommand
         {
             ReleaseId = release.Id,
             Metadata = new ReleaseMetadataModel

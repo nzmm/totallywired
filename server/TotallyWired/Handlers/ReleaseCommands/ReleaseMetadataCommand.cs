@@ -7,18 +7,18 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseCommands;
 
-public class ReleaseMetadataUpdateCommand
+public class ReleaseMetadataCommand
 {
     public Guid ReleaseId { get; init; }
     public ReleaseMetadataModel Metadata { get; init; } = default!;
 }
 
-public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdateCommand, ReleaseMetadataUpdateResult>
+public class ReleaseMetadataCommandHandler : IRequestHandler<ReleaseMetadataCommand, ReleaseMetadataUpdateResult>
 {
     private readonly ICurrentUser _user;
     private readonly TotallyWiredDbContext _context;
     
-    public ReleaseMetadataUpdateHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public ReleaseMetadataCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _user = user;
         _context = context;
@@ -114,7 +114,7 @@ public class ReleaseMetadataUpdateHandler : IRequestHandler<ReleaseMetadataUpdat
     }
 
     public async Task<ReleaseMetadataUpdateResult> HandleAsync(
-        ReleaseMetadataUpdateCommand request,
+        ReleaseMetadataCommand request,
         CancellationToken cancellationToken)
     {
         var result = new ReleaseMetadataUpdateResult();
