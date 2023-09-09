@@ -1,5 +1,4 @@
-import { IVirtualListItem, VisibleItem } from "./VirtualList.library";
-import { NumericRange, VisibleResult } from "./VirtualList.types";
+import { IVirtualListItem, NumericRange, VisibleItem, VisibleResult } from "./VirtualList.types";
 
 const EMPTY_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], true];
 

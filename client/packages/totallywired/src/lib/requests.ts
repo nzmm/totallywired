@@ -1,5 +1,9 @@
 export type Res<T> = { ok: boolean; status: number; data?: T };
 
+export const requestSearchParams = (request: Request) => {
+  return new URL(request.url).searchParams;
+}
+
 function extractAntiforgeryToken(res: Response) {
   return res.ok
     ? document?.cookie
@@ -24,7 +28,8 @@ export async function sendQuery<T>(
   url: string,
   searchParams?: URLSearchParams
 ): Promise<Res<T>> {
-  const res = await fetch(`${searchParams ? `${url}?${searchParams}` : url}`);
+  const includeSearchParams = searchParams?.size ?? 0 > 0;
+  const res = await fetch(`${includeSearchParams ? `${url}?${searchParams}` : url}`);
   const { ok, status } = res;
 
   if (!ok) {

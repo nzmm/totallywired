@@ -1,15 +1,11 @@
-import { Link, useAsyncValue } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Album } from "../lib/types";
 import {
-  IVirtualListItem,
   ListItemProps,
   VirtualList,
 } from "@totallywired/ui-components";
 
-export type AlbumItemProps = ListItemProps<Album>;
-export type AlbumDataProps = IVirtualListItem & Album;
-
-function AlbumItem({ top, height, ...album }: AlbumItemProps) {
+function AlbumItem({ top, height, ...album }: ListItemProps<Album>) {
   return (
     <li tabIndex={0} style={{ top, height }}>
       <button className="col lgutter" title="Play all now">
@@ -29,11 +25,9 @@ function AlbumItem({ top, height, ...album }: AlbumItemProps) {
   );
 }
 
-export default function AlbumList() {
-  const albums = useAsyncValue() as AlbumDataProps[];
-
-  return albums?.length ?? 0 ? (
-    <VirtualList items={albums} renderer={AlbumItem} />
+export default function AlbumList({ albums }: { albums: Album[] }) {
+  return albums.length ? (
+    <VirtualList items={albums.map(a => ({ ...a, height: 42 }))} renderer={AlbumItem} />
   ) : (
     <section>
       <p>No albums</p>

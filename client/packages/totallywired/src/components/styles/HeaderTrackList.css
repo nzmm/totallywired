@@ -3,13 +3,11 @@ li.list-header {
   flex-direction: row;
   align-items: center;
   line-height: 1.65;
+  background-color: #fff;
   gap: 15px;
 
   .cover-art {
-    aspect-ratio: 1;
-    width: 112px;
-    background-color: #fff;
-    border: 1px solid #000;
+    width: 128px;
     margin-left: 15px;
     box-shadow: 0px 2px 10px -3px rgba(0, 0, 0, 0.1),
       0px 4px 15px -3px rgba(0, 0, 0, 0.12);

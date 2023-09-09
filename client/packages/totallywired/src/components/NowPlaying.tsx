@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Track } from "../lib/types";
+import CoverArt from "./CoverArt";
 
 type NowPlayingProps = {
   currentTrack?: Track;
@@ -8,14 +9,7 @@ type NowPlayingProps = {
 export default function NowPlaying({ currentTrack }: NowPlayingProps) {
   return (
     <div className="now-playing panel">
-      <div className="cover-art">
-        {currentTrack?.releaseId ? (
-          <img
-            src={`/api/v1/releases/${currentTrack.releaseId}/art`}
-            alt="The current album cover art"
-          />
-        ) : null}
-      </div>
+      <CoverArt releaseId={currentTrack?.releaseId} />
 
       {currentTrack ? (
         <div className="track d-flex col">

@@ -10,6 +10,10 @@ export type Artist = {
   name: string;
 };
 
+export type ArtistDetail = Artist & {
+  
+}
+
 export type Album = {
   id: string;
   name: string;
@@ -18,7 +22,11 @@ export type Album = {
   year: number;
 };
 
-export type AlbumDetails = Album & {};
+export type AlbumDetail = Album & {
+  recordLabel: string;
+  coverArt: string;
+  country: string;
+};
 
 export type Track = {
   id: string;

@@ -1,4 +1,3 @@
-import { useAsyncValue } from "react-router-dom";
 import {
   IVirtualListItem,
   VirtualList,
@@ -10,9 +9,8 @@ import TrackItem from "./TrackListItem";
 
 export type TrackDataProps = IVirtualListItem & Track;
 
-export default function TrackList() {
+export default function TrackList({ tracks }: { tracks: Track[] }) {
   const player = usePlayer();
-  const tracks = useAsyncValue() as Track[];
 
   const handleClick = (
     e: React.MouseEvent<HTMLElement>,
@@ -33,7 +31,7 @@ export default function TrackList() {
     player.playNow(item.data);
   };
 
-  return tracks?.length ?? 0 ? (
+  return tracks.length ? (
     <VirtualList
       items={tracks.map((t) => ({ ...t, height: 42 }))}
       renderer={TrackItem}

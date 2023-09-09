@@ -1,0 +1,3 @@
+.me-menu .DropdownMenuItem:hover > a {
+  color: var(--violet-1);
+}

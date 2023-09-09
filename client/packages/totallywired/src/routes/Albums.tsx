@@ -1,40 +1,26 @@
-import { Suspense, useMemo } from "react";
-import { useSearchParams, useParams, Await } from "react-router-dom";
-import { usePlayer } from "../providers/AudioProvider";
-import { getValidSearchParams } from "../lib/utils";
-import { getAlbums, getAlbumsByArtist } from "../lib/webapi";
-import AlbumList, { AlbumDataProps } from "../components/AlbumList";
+import { Suspense } from "react";
+import { Await, LoaderFunctionArgs, useAsyncValue, useLoaderData } from "react-router-dom";
+import { getAlbums } from "../lib/webapi";
+import { Album } from "../lib/types";
+import { Res, requestSearchParams } from "../lib/requests";
+import AlbumList from "../components/AlbumList";
 
-const loader = (
-  { artistId }: { artistId?: string },
-  searchParams?: URLSearchParams
-) => {
-  const validSearchParams = getValidSearchParams(searchParams);
-  return artistId
-    ? getAlbumsByArtist(artistId, validSearchParams)
-    : getAlbums(validSearchParams);
-};
+export function albumsLoader({ request }: LoaderFunctionArgs) {
+  const searchParams = requestSearchParams(request);
+  return getAlbums(searchParams);
+} 
+
+function AlbumsView() {
+  const { data: albums = [] } = useAsyncValue() as Res<Album[]>;
+  return <AlbumList albums={albums} />
+}
 
 export default function Albums() {
-  const [searchParams] = useSearchParams();
-  const params = useParams();
-  const player = usePlayer();
-
-  const promise = useMemo<Promise<AlbumDataProps[]>>(async () => {
-    const { data } = await loader(params, searchParams);
-
-    return (
-      data?.map((x) => ({
-        ...x,
-        height: 42,
-      })) ?? []
-    );
-  }, [player, params, searchParams]);
-
+  const data = useLoaderData();
   return (
     <Suspense>
-      <Await resolve={promise}>
-        <AlbumList />
+      <Await resolve={data}>
+        <AlbumsView />
       </Await>
     </Suspense>
   );

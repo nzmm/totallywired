@@ -1,5 +1,13 @@
+import { Params } from "react-router-dom";
 import { sendQuery, sendCommand } from "./requests";
-import { Album, Artist, ProviderCollection, Track, User } from "./types";
+import {
+  Album,
+  AlbumDetail,
+  Artist,
+  ProviderCollection,
+  Track,
+  User,
+} from "./types";
 
 const API = "/api/v1";
 
@@ -37,7 +45,7 @@ export function getAlbums(searchParams?: URLSearchParams) {
 }
 
 export function getAlbum(releaseId: string) {
-  return sendQuery<Album>(`${API}/releases/${releaseId}`);
+  return sendQuery<AlbumDetail>(`${API}/releases/${releaseId}`);
 }
 
 export function getAlbumsByArtist(
@@ -49,6 +57,10 @@ export function getAlbumsByArtist(
 
 export function getArtists(searchParams?: URLSearchParams) {
   return sendQuery<Artist[]>(`${API}/artists`, searchParams);
+}
+
+export function getArtist(artistId: string) {
+  return sendQuery<Artist>(`${API}/artists/${artistId}`);
 }
 
 export function getProviders() {

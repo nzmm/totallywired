@@ -1,34 +1,26 @@
-import { Suspense, useMemo } from "react";
-import { useSearchParams, Await } from "react-router-dom";
-import { usePlayer } from "../providers/AudioProvider";
-import { getValidSearchParams } from "../lib/utils";
+import { Suspense } from "react";
+import { Await, LoaderFunctionArgs, useAsyncValue, useLoaderData } from "react-router-dom";
 import { getArtists } from "../lib/webapi";
-import ArtistList, { ArtistDataProps } from "../components/ArtistList";
+import { Res, requestSearchParams } from "../lib/requests";
+import { Artist } from "../lib/types";
+import ArtistList from "../components/ArtistList";
 
-const loader = (searchParams?: URLSearchParams) => {
-  const validSearchParams = getValidSearchParams(searchParams);
-  return getArtists(validSearchParams);
+export function artistsLoader({ request }: LoaderFunctionArgs) {
+  const searchParams = requestSearchParams(request);
+  return getArtists(searchParams);
 };
 
+function ArtistsView() {
+  const { data: artists = [] } = useAsyncValue() as Res<Artist[]>;
+  return <ArtistList artists={artists} />;
+}
+
 export default function Artists() {
-  const [searchParams] = useSearchParams();
-  const player = usePlayer();
-
-  const promise = useMemo<Promise<ArtistDataProps[]>>(async () => {
-    const { data } = await loader(searchParams);
-
-    return (
-      data?.map((x) => ({
-        ...x,
-        height: 42,
-      })) ?? []
-    );
-  }, [player, searchParams]);
-
+  const data = useLoaderData();
   return (
     <Suspense>
-      <Await resolve={promise}>
-        <ArtistList />
+      <Await resolve={data}>
+        <ArtistsView />
       </Await>
     </Suspense>
   );

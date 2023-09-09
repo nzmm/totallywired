@@ -197,23 +197,6 @@ footer {
    * Component: NowPlaying.tsx
    */
   > .now-playing {
-    > .cover-art {
-      width: 70px;
-      height: 70px;
-      border-radius: 3px;
-      background-color: #e4e4e4;
-      border: 1px solid #000;
-      padding: 1px;
-
-      > img {
-        width: 70px;
-        height: 70px;
-        object-fit: contain;
-        border-radius: 2.5px;
-        overflow: hidden;
-      }
-    }
-
     > .track {
       gap: 5px;
       justify-content: center;
