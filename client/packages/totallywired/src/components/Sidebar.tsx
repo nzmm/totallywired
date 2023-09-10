@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
+import { useQueue } from "../providers/AudioProvider";
 
 export default function Sidebar() {
+  const queue = useQueue();
   return (
     <aside>
       <nav>
@@ -16,7 +18,7 @@ export default function Sidebar() {
           </li>
           <hr />
           <li>
-            <Link to="/lib/queue">Queue</Link>
+            <Link to="/lib/queue">Queue ({queue.length})</Link>
           </li>
           <li>
             <Link to="/lib/liked">Liked</Link>

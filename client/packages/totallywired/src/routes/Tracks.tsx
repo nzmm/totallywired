@@ -18,8 +18,8 @@ export function tracksLoader({ request }: LoaderFunctionArgs) {
 }
 
 function TrackListView() {
-  const { data: tracks = [] } = useAsyncValue() as Res<Track[]>;
   const dispatch = tracksDisptach();
+  const { data: tracks = [] } = useAsyncValue() as Res<Track[]>;
 
   useEffect(() => {
     dispatch(set(tracks));

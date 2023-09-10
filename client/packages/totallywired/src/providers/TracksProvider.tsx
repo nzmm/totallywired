@@ -1,6 +1,6 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { Track } from "../lib/types";
-import { commonReducer, createDispatchContext } from "../lib/reducer";
+import { commonReducer, createDispatchContext, set } from "../lib/reducer";
 
 type Tracks = Track[];
 
@@ -16,7 +16,16 @@ export const tracksDisptach = () => {
   return useContext(DispatchContext);
 };
 
-export function TracksProvider({ children }: React.PropsWithChildren) {
+export const syncTracks = (tracks: Tracks) => {
+  const dispatch = tracksDisptach();
+
+  useEffect(() => {
+    const action = set(tracks);
+    dispatch(action);
+  }, [dispatch, tracks]);
+};
+
+export default function TracksProvider({ children }: React.PropsWithChildren) {
   const [promise, dispatch] = useReducer(Reducer, []);
   return (
     <DispatchContext.Provider value={dispatch}>

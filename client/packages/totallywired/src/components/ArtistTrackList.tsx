@@ -1,11 +1,35 @@
 import { useMemo } from "react";
 import { ArtistDetail, Track } from "../lib/types";
+import { syncTracks, useTracks } from "../providers/TracksProvider";
+import { usePlayer } from "../providers/AudioProvider";
+import { duration } from "../lib/utils";
 import TrackItem from "../components/TrackListItem";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
 } from "../components/HeaderTrackList";
 import CoverArt from "../components/CoverArt";
+
+const useArtistHeaderInfo = (tracks: Track[]) => {
+  return useMemo(() => {
+    const { releases, lengthMs } = tracks.reduce<{
+      releases: Set<string>;
+      lengthMs: number;
+    }>(
+      (acc, track) => {
+        acc.lengthMs += track.length;
+        acc.releases.add(track.releaseId);
+        return acc;
+      },
+      { releases: new Set(), lengthMs: 0 }
+    );
+
+    const releaseCount = releases.size;
+    const durationHms = duration(lengthMs);
+
+    return { releaseCount, durationHms };
+  }, [tracks]);
+};
 
 function ArtistHeader({
   artist,
@@ -16,6 +40,9 @@ function ArtistHeader({
   top: number;
   height: number;
 }) {
+  const player = usePlayer();
+  const tracks = useTracks();
+  const { releaseCount, durationHms } = useArtistHeaderInfo(tracks);
   return (
     <li className="list-header" style={{ top, height }}>
       {/* todo: support artists */}
@@ -23,10 +50,19 @@ function ArtistHeader({
 
       <div className="album-info">
         <h2>{artist.name}</h2>
-        <div>3 albums &middot; 32 tracks, 2h 10m</div>
+        <div>
+          {releaseCount} album{releaseCount === 1 ? "" : "s"} &middot;{" "}
+          {tracks.length} tracks, {durationHms}
+        </div>
         <div>Record label &middot; NZ</div>
         <div className="actions">
-          <button>Play all</button>
+          <button
+            onClick={() => {
+              player.addTracks(tracks);
+            }}
+          >
+            Play all
+          </button>
           {/* <button>Edit</button> */}
         </div>
       </div>
@@ -55,6 +91,8 @@ export function ArtistTrackList({
   artist: ArtistDetail;
   tracks: Track[];
 }) {
+  syncTracks(tracks);
+
   const items = useMemo(() => {
     const header = {
       height: 172,

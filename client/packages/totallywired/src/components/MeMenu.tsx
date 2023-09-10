@@ -6,10 +6,10 @@ import "./styles/MeMenu.css";
 export default function MeMenu({ user }: { user: User }) {
   return user ? (
     <div className="me-menu">
-      <span>{user.name}</span>
+      <label htmlFor="current-user-btn">{user.name}</label>
       <DropdownMenu.Root>
         <DropdownMenu.Trigger asChild>
-          <button className="avatar round md">
+          <button id="current-user-btn" className="avatar round md">
             <img
               src={`/avatars/${user.userId}.jpg`}
               alt="The current users avatar"

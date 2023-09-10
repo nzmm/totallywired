@@ -15,7 +15,7 @@ function AlbumItem({ top, height, ...album }: ListItemProps<Album>) {
       <Link className="col year" to={`/lib/years/${album.year}/albums`}>{`${
         album.year ?? "–"
       }`}</Link>
-      <Link className="col artist" to={`/lib/artists/${album.artistId}/albums`}>
+      <Link className="col artist" to={`/lib/artists/${album.artistId}/tracks`}>
         {`${album.artistName}`}
       </Link>
     </li>
