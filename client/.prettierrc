@@ -1,5 +1,5 @@
 { 
-    "importOrder": ["^components/(.*)$", "^[./]"],
+    "importOrder": ["^(.*)/lib/(.*)$", "^(.*)/providers/(.*)$", "^(.*)/routes/(.*)$", "^(.*)/components/(.*)$", "^[./]"],
     "importOrderSeparation": false, 
     "importOrderSortSpecifiers": true 
 }

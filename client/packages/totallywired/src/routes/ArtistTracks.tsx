@@ -5,10 +5,10 @@ import {
   useAsyncValue,
   useLoaderData,
 } from "react-router-dom";
-import { ArtistTrackList } from "../components/ArtistTrackList";
 import { Res, requestSearchParams } from "../lib/requests";
 import { ArtistDetail, Track } from "../lib/types";
 import { getArtist, getTrackByArtist } from "../lib/webapi";
+import { ArtistTrackList } from "../components/ArtistTrackList";
 
 export function artistTracksLoader({ request, params }: LoaderFunctionArgs) {
   const artistId = params["artistId"];

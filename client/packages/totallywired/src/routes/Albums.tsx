@@ -5,10 +5,10 @@ import {
   useAsyncValue,
   useLoaderData,
 } from "react-router-dom";
-import AlbumList from "../components/AlbumList";
 import { Res, requestSearchParams } from "../lib/requests";
 import { Album } from "../lib/types";
 import { getAlbums } from "../lib/webapi";
+import AlbumList from "../components/AlbumList";
 
 export function albumsLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);

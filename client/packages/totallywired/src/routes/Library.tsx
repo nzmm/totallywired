@@ -1,9 +1,9 @@
 import { Splitter } from "@totallywired/ui-components";
 import { Outlet } from "react-router-dom";
+import TracksProvider from "../providers/TracksProvider";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import TracksProvider from "../providers/TracksProvider";
 
 export default function Library() {
   return (

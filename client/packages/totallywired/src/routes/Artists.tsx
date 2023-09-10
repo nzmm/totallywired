@@ -5,10 +5,10 @@ import {
   useAsyncValue,
   useLoaderData,
 } from "react-router-dom";
-import ArtistList from "../components/ArtistList";
 import { Res, requestSearchParams } from "../lib/requests";
 import { Artist } from "../lib/types";
 import { getArtists } from "../lib/webapi";
+import ArtistList from "../components/ArtistList";
 
 export function artistsLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
