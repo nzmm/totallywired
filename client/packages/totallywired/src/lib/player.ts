@@ -1,7 +1,7 @@
-import { getTrackUrl } from "./webapi";
 import { Track } from "../lib/types";
-import { debounce } from "./utils";
 import { Playlist, PlaylistItem } from "./playlist";
+import { debounce } from "./utils";
+import { getTrackUrl } from "./webapi";
 
 type PlayerEvent =
   | "tracks-changed"

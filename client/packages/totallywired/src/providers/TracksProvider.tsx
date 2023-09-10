@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { Track } from "../lib/types";
 import { commonReducer, createDispatchContext, set } from "../lib/reducer";
+import { Track } from "../lib/types";
 
 type Tracks = Track[];
 

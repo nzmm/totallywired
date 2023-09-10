@@ -1,18 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
-  IVirtualListItem,
-  NumericRange,
-  ListItemRenderer,
-  ListItemProps,
-  VisibleItem,
-  VirtualListProps,
-  getHeight,
-  getVisible,
-  getItemAtY,
   FocalItem,
-  NO_FOCUS
+  IVirtualListItem,
+  ListItemProps,
+  ListItemRenderer,
+  NO_FOCUS,
+  NumericRange,
+  VirtualListProps,
+  VisibleItem,
+  getHeight,
+  getItemAtY,
+  getVisible,
 } from "./VirtualList.library";
-
 import "./VirtualList.scss";
 
 /**
@@ -28,7 +27,7 @@ const VirtualList = <T extends IVirtualListItem>({
   onDragStart,
   onDragOver,
   onDragEnd,
-  onDrop
+  onDrop,
 }: VirtualListProps<T>) => {
   const vlist = useRef<HTMLDivElement>(null);
   const scrollTop = useRef<number>(0);
@@ -244,5 +243,5 @@ export type {
   ListItemProps,
   VirtualListProps,
   VisibleItem,
-  IVirtualListItem
+  IVirtualListItem,
 };

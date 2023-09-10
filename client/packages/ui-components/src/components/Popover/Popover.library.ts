@@ -2,7 +2,7 @@ import React, {
   CSSProperties,
   ForwardedRef,
   MutableRefObject,
-  useMemo
+  useMemo,
 } from "react";
 
 type PathResult = [string, CSSProperties];
@@ -100,17 +100,17 @@ const getPositionStyle = (
     default:
       return {
         left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
-        top: el.offsetTop - height + offset - gap
+        top: el.offsetTop - height + offset - gap,
       };
     case "south":
       return {
         left: el.offsetLeft + (offset + el.offsetWidth - width) / 2,
-        top: el.offsetTop + el.offsetHeight - offset + gap
+        top: el.offsetTop + el.offsetHeight - offset + gap,
       };
     case "southwest":
       return {
         left: el.offsetLeft + offset + el.offsetWidth - width,
-        top: el.offsetTop + el.offsetHeight - offset + gap
+        top: el.offsetTop + el.offsetHeight - offset + gap,
       };
   }
 };
@@ -153,8 +153,8 @@ const getPath = (
             marginBottom: ah + m + x,
             marginTop: m + x,
             marginLeft: m + x,
-            marginRight: m + x
-          }
+            marginRight: m + x,
+          },
         ];
       case "south":
       case "southwest":
@@ -176,8 +176,8 @@ const getPath = (
             marginTop: ah + m + x,
             marginBottom: m + x,
             marginLeft: m + x,
-            marginRight: m + x
-          }
+            marginRight: m + x,
+          },
         ];
     }
   }, [orientation, m, x, y, w, h, br, aw, ah, po]);

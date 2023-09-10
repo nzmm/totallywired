@@ -1,5 +1,4 @@
 import React, { PropsWithChildren, ReactNode, useState } from "react";
-
 import "./TabList.scss";
 
 type TabListProps = PropsWithChildren & {

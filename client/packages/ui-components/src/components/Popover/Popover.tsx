@@ -1,12 +1,10 @@
 import React, { forwardRef, useLayoutEffect, useRef, useState } from "react";
-
 import {
   PopoverProps,
-  refs,
   getPath,
-  getPositionStyle
+  getPositionStyle,
+  refs,
 } from "./Popover.library";
-
 import "./Popover.scss";
 
 const Popover = forwardRef<HTMLElement, PopoverProps>(
@@ -23,7 +21,7 @@ const Popover = forwardRef<HTMLElement, PopoverProps>(
       id,
       subject,
       children,
-      className
+      className,
     },
     ref
   ) => {

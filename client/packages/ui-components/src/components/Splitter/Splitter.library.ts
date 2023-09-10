@@ -34,7 +34,7 @@ const SUPPORTED_KEYS = new Set([
   "ArrowRight",
   "Home",
   "End",
-  "Enter"
+  "Enter",
 ]);
 
 const getPosition = (

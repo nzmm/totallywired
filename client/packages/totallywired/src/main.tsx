@@ -1,10 +1,9 @@
+import "@totallywired/ui-components/dist/cjs/totallywired.css";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { createBrowserRouter } from "react-router-dom";
 import { UserProvider } from "./providers/UserProvider";
-
-import "@totallywired/ui-components/dist/cjs/totallywired.css";
 import { AppRouter } from "./router";
 import "./styles.css";
 

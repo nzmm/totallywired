@@ -1,14 +1,13 @@
 import React, { useEffect, useId, useRef, useState } from "react";
 import {
   CSSDimension,
+  SUPPORTED_KEYS,
+  SplitterProps,
   getPosition,
   getStyles,
   shiftX,
   shiftY,
-  SplitterProps,
-  SUPPORTED_KEYS
 } from "./Splitter.library";
-
 import "./Splitter.scss";
 
 let dragOwner: string | null = null;
@@ -17,7 +16,7 @@ const Splitter = ({
   orientation,
   children,
   minSize = "20%",
-  initialPosition = "50%"
+  initialPosition = "50%",
 }: SplitterProps) => {
   const id = useId();
   const splitter = useRef<HTMLDivElement>(null);

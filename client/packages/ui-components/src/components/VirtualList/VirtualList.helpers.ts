@@ -2,7 +2,7 @@ import {
   IVirtualListItem,
   NumericRange,
   VisibleItem,
-  VisibleResult
+  VisibleResult,
 } from "./VirtualList.types";
 
 const EMPTY_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], true];

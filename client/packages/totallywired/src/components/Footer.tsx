@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { PlayerTrack, TrackState } from "../lib/player";
+import { Track } from "../lib/types";
 import { usePlayer } from "../providers/AudioProvider";
 import NowPlaying from "./NowPlaying";
 import OutputControls from "./OutputControls";
 import PlaybackControls from "./PlaybackControls";
-import { Track } from "../lib/types";
 
 export default function Footer() {
   const player = usePlayer();

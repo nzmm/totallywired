@@ -12,5 +12,5 @@ export type {
   ListItemRenderer,
   ListItemProps,
   IVirtualListItem,
-  VisibleItem
+  VisibleItem,
 } from "./src/components/VirtualList/VirtualList";

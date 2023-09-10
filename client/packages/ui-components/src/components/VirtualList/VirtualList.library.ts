@@ -1,19 +1,19 @@
 import {
-  isUpwardUpdateRequired,
-  isDownwardUpdateRequired,
-  getResponse,
   getHeight,
-  getItemAtY
+  getItemAtY,
+  getResponse,
+  isDownwardUpdateRequired,
+  isUpwardUpdateRequired,
 } from "./VirtualList.helpers";
 import {
-  VisibleResult,
   FocalItem,
-  NumericRange,
   IVirtualListItem,
-  VisibleItem,
-  VirtualListProps,
+  ListItemProps,
   ListItemRenderer,
-  ListItemProps
+  NumericRange,
+  VirtualListProps,
+  VisibleItem,
+  VisibleResult,
 } from "./VirtualList.types";
 
 const SKIP_UPDATE: VisibleResult<any> = [[], [0, 0], [0, 0], false];
@@ -175,5 +175,5 @@ export type {
   ListItemProps,
   IVirtualListItem,
   VisibleItem,
-  FocalItem
+  FocalItem,
 };

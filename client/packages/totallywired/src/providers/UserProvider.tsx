@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
-import { User } from "../lib/types";
 import { commonReducer, createDispatchContext } from "../lib/reducer";
+import { User } from "../lib/types";
 
 const DataContext = createContext<User | null>(null);
 const DispatchContext = createDispatchContext<User | null>();

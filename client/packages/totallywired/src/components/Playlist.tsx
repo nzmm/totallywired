@@ -1,15 +1,15 @@
-import { useRef } from "react";
 import {
   ListItemProps,
   VirtualList,
   VisibleItem,
 } from "@totallywired/ui-components";
+import { useRef } from "react";
 import {
-  TRACK_STATE_ARRAY,
+  AudioPlayer,
   PlaylistItem as Item,
   PlayerTrack,
+  TRACK_STATE_ARRAY,
   TrackState,
-  AudioPlayer,
 } from "../lib/player";
 
 type PlaylistItemProps = ListItemProps<Item<PlayerTrack>>;

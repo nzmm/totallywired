@@ -1,6 +1,6 @@
-import { usePlayer, useQueue } from "../providers/AudioProvider";
 import Playlist from "../components/Playlist";
 import PlaylistHeader from "../components/PlaylistHeader";
+import { usePlayer, useQueue } from "../providers/AudioProvider";
 
 export default function Queue() {
   const queue = useQueue();

@@ -5,10 +5,10 @@ import {
   useAsyncValue,
   useLoaderData,
 } from "react-router-dom";
+import AlbumTracksList from "../components/AlbumTrackList";
 import { Res, requestSearchParams } from "../lib/requests";
 import { AlbumDetail, Track } from "../lib/types";
 import { getAlbum, getTracksByAlbum } from "../lib/webapi";
-import AlbumTracksList from "../components/AlbumTrackList";
 
 export function albumTracksLoader({ request, params }: LoaderFunctionArgs) {
   const releaseId = params["releaseId"];

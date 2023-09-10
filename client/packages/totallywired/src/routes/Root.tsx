@@ -1,10 +1,10 @@
 import { Suspense, useMemo } from "react";
 import { Await, Outlet } from "react-router-dom";
-import { whoami } from "../lib/webapi";
-import { set } from "../lib/reducer";
-import { userDispatch } from "../providers/UserProvider";
-import { AudioProvider } from "../providers/AudioProvider";
 import Loading from "../components/Loading";
+import { set } from "../lib/reducer";
+import { whoami } from "../lib/webapi";
+import { AudioProvider } from "../providers/AudioProvider";
+import { userDispatch } from "../providers/UserProvider";
 
 export default function Root() {
   const dispatch = userDispatch();

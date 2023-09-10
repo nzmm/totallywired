@@ -1,11 +1,10 @@
-import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript";
-
 import dts from "rollup-plugin-dts";
-import scss from "rollup-plugin-scss";
-import peerDepsExternal from "rollup-plugin-peer-deps-external";
 import { terser } from "rollup-plugin-minification";
+import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import scss from "rollup-plugin-scss";
 
 const packageJson = require("./package.json");
 
@@ -16,13 +15,13 @@ export default [
       {
         file: packageJson.main,
         format: "cjs",
-        sourcemap: true
+        sourcemap: true,
       },
       {
         file: packageJson.module,
         format: "esm",
-        sourcemap: true
-      }
+        sourcemap: true,
+      },
     ],
     plugins: [
       peerDepsExternal(),
@@ -30,14 +29,14 @@ export default [
       commonjs(),
       scss({ fileName: "totallywired.css" }),
       typescript({ tsconfig: "./tsconfig.json" }),
-      terser()
+      terser(),
     ],
-    external: ["react", "react-dom"]
+    external: ["react", "react-dom"],
   },
   {
     input: "index.ts",
     output: [{ file: "dist/types.d.ts", format: "es" }],
     plugins: [dts.default()],
-    external: [/\.(css|scss)$/u]
-  }
+    external: [/\.(css|scss)$/u],
+  },
 ];

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import { PlaylistItem } from "../lib/playlist";
 import { AudioPlayer, PlayerTrack, TrackState } from "../lib/player";
+import { PlaylistItem } from "../lib/playlist";
 import { duration } from "../lib/utils";
 import "./styles/PlaylistHeader.css";
 

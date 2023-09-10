@@ -3,8 +3,8 @@ import {
   VirtualList,
   VisibleItem,
 } from "@totallywired/ui-components";
-import { usePlayer } from "../providers/AudioProvider";
 import { Track } from "../lib/types";
+import { usePlayer } from "../providers/AudioProvider";
 import TrackItem from "./TrackListItem";
 
 export type TrackDataProps = IVirtualListItem & Track;

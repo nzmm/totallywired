@@ -1,19 +1,17 @@
-import { createBrowserRouter } from "react-router-dom";
-
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
-import "./styles.css";
-
+import { createBrowserRouter } from "react-router-dom";
+import AlbumTracks, { albumTracksLoader } from "./routes/AlbumTracks";
+import Albums, { albumsLoader } from "./routes/Albums";
+import ArtistTracks, { artistTracksLoader } from "./routes/ArtistTracks";
+import Artists, { artistsLoader } from "./routes/Artists";
 import ErrorPage from "./routes/Error";
-import Root from "./routes/Root";
 import Home from "./routes/Home";
 import Library from "./routes/Library";
-import Tracks, { tracksLoader } from "./routes/Tracks";
-import Albums, { albumsLoader } from "./routes/Albums";
-import Artists, { artistsLoader } from "./routes/Artists";
-import AlbumTracks, { albumTracksLoader } from "./routes/AlbumTracks";
-import ArtistTracks, { artistTracksLoader } from "./routes/ArtistTracks";
-import Queue from "./routes/Queue";
 import Providers from "./routes/Providers";
+import Queue from "./routes/Queue";
+import Root from "./routes/Root";
+import Tracks, { tracksLoader } from "./routes/Tracks";
+import "./styles.css";
 
 export const AppRouter = createBrowserRouter([
   {

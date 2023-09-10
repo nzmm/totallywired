@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { TooltipProps, Popover, isOver } from "./Tooltip.library";
+import { Popover, TooltipProps, isOver } from "./Tooltip.library";
 
 const Tooltip = ({ id, text, children, as = "span" }: TooltipProps) => {
   const popover = useRef<HTMLDivElement>(null);

@@ -1,5 +1,5 @@
 import { Params } from "react-router-dom";
-import { sendQuery, sendCommand } from "./requests";
+import { sendCommand, sendQuery } from "./requests";
 import {
   Album,
   AlbumDetail,
