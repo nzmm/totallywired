@@ -16,12 +16,11 @@ export const tracksDisptach = () => {
   return useContext(DispatchContext);
 };
 
-export const syncTracks = (tracks: Tracks) => {
+export const cacheTracks = (tracks: Tracks) => {
   const dispatch = tracksDisptach();
 
   useEffect(() => {
-    const action = set(tracks);
-    dispatch(action);
+    dispatch(set(tracks));
   }, [dispatch, tracks]);
 };
 

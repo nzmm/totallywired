@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { ArtistDetail, Track } from "../lib/types";
 import { duration } from "../lib/utils";
 import { usePlayer } from "../providers/AudioProvider";
-import { syncTracks, useTracks } from "../providers/TracksProvider";
+import { cacheTracks, useTracks } from "../providers/TracksProvider";
 import CoverArt from "../components/CoverArt";
 import HeaderTrackList, {
   HeaderTrackDataProps,
@@ -91,7 +91,7 @@ export function ArtistTrackList({
   artist: ArtistDetail;
   tracks: Track[];
 }) {
-  syncTracks(tracks);
+  cacheTracks(tracks);
 
   const items = useMemo(() => {
     const header = {
