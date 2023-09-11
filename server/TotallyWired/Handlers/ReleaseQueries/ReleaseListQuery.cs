@@ -1,11 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
+using TotallyWired.Infrastructure.EntityFramework.Extensions;
 using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseListQueryHandler : IRequestHandler<IEnumerable<ReleaseListModel>>
+public class ReleaseListSearchParams
+{
+    public string? Q { get; set; }
+    public int? Year { get; set; }
+}
+
+public class ReleaseListQueryHandler
+    : IRequestHandler<ReleaseListSearchParams, IEnumerable<ReleaseListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
@@ -17,17 +25,27 @@ public class ReleaseListQueryHandler : IRequestHandler<IEnumerable<ReleaseListMo
     }
 
     public async Task<IEnumerable<ReleaseListModel>> HandleAsync(
+        ReleaseListSearchParams @params,
         CancellationToken cancellationToken
     )
     {
         var userId = _user.UserId();
-        if (userId is null)
+        var year = @params.Year;
+        var tsQuery = @params.Q.TsQuery();
+        var hasQuery = tsQuery.Length >= 3;
+
+        var query = hasQuery
+            ? _context.Releases.FromSqlInterpolated(
+                $"SELECT * FROM search_releases({userId}, {tsQuery})"
+            )
+            : _context.Releases.Where(t => t.UserId == userId);
+
+        if (@params.Year.HasValue)
         {
-            return Enumerable.Empty<ReleaseListModel>();
+            query = query.Where(r => r.Year == year);
         }
 
-        var releases = await _context.Releases
-            .Where(t => t.UserId == userId)
+        var releases = await query
             .Select(
                 r =>
                     new ReleaseListModel

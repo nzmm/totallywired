@@ -27,10 +27,6 @@ public class TrackDownloadUrlQueryHandler : IRequestHandler<Guid, string>
     public async Task<string> HandleAsync(Guid trackId, CancellationToken cancellationToken)
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return string.Empty;
-        }
 
         var resource = await _context.Tracks
             .Where(t => t.Id == trackId && t.UserId == userId)

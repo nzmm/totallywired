@@ -34,10 +34,6 @@ public class ReleaseFilenameHandler : IRequestHandler<TrackFileInfoQuery, TrackF
     )
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return new TrackFileInfoModel();
-        }
 
         var track = await _context.Tracks
             .Where(r => r.Id == request.TrackId && r.UserId == userId)

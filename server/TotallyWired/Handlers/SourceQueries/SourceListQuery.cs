@@ -22,10 +22,6 @@ public class SourceListQueryHandler : IRequestHandler<IEnumerable<SourceTypeList
     )
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return Enumerable.Empty<SourceTypeListModel>();
-        }
 
         var sources = await _context.Sources
             .Where(x => x.UserId == userId)

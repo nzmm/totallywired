@@ -1,4 +1,3 @@
-import { Params } from "react-router-dom";
 import { sendCommand, sendQuery } from "./requests";
 import {
   Album,
@@ -48,7 +47,7 @@ export function getAlbum(releaseId: string) {
   return sendQuery<AlbumDetail>(`${API}/releases/${releaseId}`);
 }
 
-export function getAlbumsByArtist(
+export function getTracksByArtist(
   artistId: string,
   searchParams?: URLSearchParams
 ) {

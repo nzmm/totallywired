@@ -33,10 +33,6 @@ public class TrackListQueryHandler
     )
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return Enumerable.Empty<TrackListModel>();
-        }
 
         var releaseId = @params.ReleaseId;
         var artistId = @params.ArtistId;

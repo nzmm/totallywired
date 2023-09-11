@@ -29,11 +29,6 @@ public class ArtistListQueryHandler
     )
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return Enumerable.Empty<ArtistListModel>();
-        }
-
         var q = request.Q?.Trim() ?? string.Empty;
 
         var query =

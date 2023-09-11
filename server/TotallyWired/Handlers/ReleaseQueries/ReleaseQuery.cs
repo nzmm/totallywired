@@ -22,10 +22,6 @@ public class ReleaseQueryHandler : IRequestHandler<Guid, ReleaseModel?>
     )
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return null;
-        }
 
         var release = await _context.Releases
             .Where(r => r.Id == releaseId && r.UserId == userId)

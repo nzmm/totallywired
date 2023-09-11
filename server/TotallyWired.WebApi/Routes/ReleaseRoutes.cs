@@ -12,9 +12,13 @@ public static class ReleaseRoutes
 
         group.MapGet(
             "",
-            async (ReleaseListQueryHandler handler, CancellationToken cancellationToken) =>
+            async (
+                ReleaseListQueryHandler handler,
+                [AsParameters] ReleaseListSearchParams @params,
+                CancellationToken cancellationToken
+            ) =>
             {
-                var releases = await handler.HandleAsync(cancellationToken);
+                var releases = await handler.HandleAsync(@params, cancellationToken);
                 return Results.Ok(releases);
             }
         );

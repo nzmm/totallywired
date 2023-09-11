@@ -19,10 +19,6 @@ public class ArtistQueryHandler : IRequestHandler<Guid, ArtistModel?>
     public async Task<ArtistModel?> HandleAsync(Guid artistId, CancellationToken cancellationToken)
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return null;
-        }
 
         var artist = await _context.Artists
             .Where(a => a.Id == artistId && a.UserId == userId)

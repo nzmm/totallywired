@@ -13,8 +13,8 @@ internal class CurrentUser : ICurrentUser
         _principal = principal;
     }
 
-    public Guid? UserId()
+    public Guid UserId()
     {
-        return _principal?.UserId();
+        return _principal?.UserId() ?? Guid.Empty;
     }
 }

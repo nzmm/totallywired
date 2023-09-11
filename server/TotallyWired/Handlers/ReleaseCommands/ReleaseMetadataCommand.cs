@@ -128,10 +128,6 @@ public class ReleaseMetadataCommandHandler
         var result = new ReleaseMetadataUpdateResult();
 
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return result;
-        }
 
         var metadataChanges = request.Metadata;
         if (
@@ -150,7 +146,7 @@ public class ReleaseMetadataCommandHandler
             );
 
             var releaseToUpdate = await GetReleaseToUpdateAsync(
-                userId.Value,
+                userId,
                 metadataChanges.ReleaseMbid,
                 request.ReleaseId,
                 cancellationToken
@@ -162,7 +158,7 @@ public class ReleaseMetadataCommandHandler
             }
 
             var artistToUpdate = await GetArtistToUpdateAsync(
-                userId.Value,
+                userId,
                 metadataChanges.ArtistMbid,
                 releaseToUpdate,
                 cancellationToken
@@ -228,7 +224,7 @@ public class ReleaseMetadataCommandHandler
             await _context.SaveChangesAsync(cancellationToken);
 
             var (artistsRemoved, releasesRemoved) = await CleanupOrphanedArtistsAndReleases(
-                userId.Value,
+                userId,
                 cancellationToken
             );
 

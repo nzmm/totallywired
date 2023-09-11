@@ -29,10 +29,6 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
     )
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return (false, ReactionType.None);
-        }
 
         var track = await _context.Tracks
             .Include(x => x.Reactions)
@@ -63,7 +59,7 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
                 reaction = new TrackReaction
                 {
                     Id = Guid.NewGuid(),
-                    UserId = userId.Value,
+                    UserId = userId,
                     TrackId = track.Id,
                     Reaction = request.Reaction
                 };

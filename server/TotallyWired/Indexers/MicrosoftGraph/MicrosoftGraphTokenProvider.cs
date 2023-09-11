@@ -45,14 +45,14 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
     private async Task<Source> StoreTokensAsync(TokenResultModel tokens)
     {
         var userId = _user.UserId();
-        if (userId is null)
+        if (userId == default)
         {
-            throw new NullReferenceException(nameof(userId));
+            throw new ArgumentException(nameof(userId));
         }
 
         var source =
             await GetSource().FirstOrDefaultAsync()
-            ?? new Source { UserId = userId.Value, Type = SourceType.MicrosoftGraph };
+            ?? new Source { UserId = userId, Type = SourceType.MicrosoftGraph };
 
         var created = source.Id == Guid.Empty;
         var expiry = UtcProvider.UtcNow.AddSeconds(tokens.ext_expires_in * .9);

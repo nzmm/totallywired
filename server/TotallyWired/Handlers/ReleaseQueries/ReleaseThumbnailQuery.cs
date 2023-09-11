@@ -45,10 +45,6 @@ public class ReleaseThumbnailQueryHandler : IRequestHandler<Guid, string>
     public async Task<string> HandleAsync(Guid releaseId, CancellationToken cancellationToken)
     {
         var userId = _user.UserId();
-        if (userId is null)
-        {
-            return string.Empty;
-        }
 
         var resource = await _context.Releases
             .Where(r => r.Id == releaseId && r.UserId == userId)
