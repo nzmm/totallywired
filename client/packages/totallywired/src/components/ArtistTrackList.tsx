@@ -54,7 +54,6 @@ function ArtistHeader({
           {releaseCount} album{releaseCount === 1 ? "" : "s"} &middot;{" "}
           {tracks.length} tracks, {durationHms}
         </div>
-        <div>Record label &middot; NZ</div>
         <div className="actions">
           <button
             onClick={() => {

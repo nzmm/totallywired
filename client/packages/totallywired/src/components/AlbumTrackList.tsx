@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Link } from "react-router-dom";
 import { AlbumDetail, Track } from "../lib/types";
 import { duration } from "../lib/utils";
 import { usePlayer } from "../providers/AudioProvider";
@@ -18,7 +19,6 @@ const useAlbumHeaderInfo = (tracks: Track[]) => {
     }>(
       (acc, track) => {
         acc.lengthMs += track.length;
-        acc.releases.add(track.releaseId);
         return acc;
       },
       { releases: new Set(), lengthMs: 0 }
@@ -42,7 +42,7 @@ function AlbumHeader({
 }) {
   const player = usePlayer();
   const tracks = useTracks();
-  const { releaseCount, durationHms } = useAlbumHeaderInfo(tracks);
+  const { durationHms } = useAlbumHeaderInfo(tracks);
   return (
     <li className="list-header" style={{ top, height }}>
       <CoverArt releaseId={album.id} />
@@ -50,14 +50,16 @@ function AlbumHeader({
       <div className="album-info">
         <h2>{album.name}</h2>
         <div>
-          {album.artistName} &middot; {album.year} &middot; {releaseCount}{" "}
-          tracks, {durationHms}
+          <Link to={`/lib/artists/${album.artistId}/tracks`}>{album.artistName}</Link>{" "}
+          &middot;{" "}
+          <Link to={`/lib/albums?year=${album.year}`}>{album.year}</Link>
         </div>
-        <div>Record label &middot; NZ</div>
+        <div>
+          {tracks.length} tracks, {durationHms}
+        </div>
         <div className="actions">
           <button
             onClick={() => {
-              console.log(tracks);
               player.addTracks(tracks);
             }}
           >
