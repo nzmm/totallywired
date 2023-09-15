@@ -1,0 +1,13 @@
+aside {
+  padding: 8px;
+
+  > nav > menu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    > li + li {
+      margin-top: 8px;
+    }
+  }
+}

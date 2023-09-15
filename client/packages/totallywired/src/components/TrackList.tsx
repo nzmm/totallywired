@@ -6,6 +6,7 @@ import {
 import { Track } from "../lib/types";
 import { usePlayer } from "../providers/AudioProvider";
 import TrackItem from "./TrackListItem";
+import "./styles/TrackList.css";
 
 export type TrackDataProps = IVirtualListItem & Track;
 

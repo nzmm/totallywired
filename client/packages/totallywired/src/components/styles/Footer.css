@@ -1,0 +1,64 @@
+footer {
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  min-height: 80px;
+  border-top: 1px solid gray;
+
+  > .panel {
+    width: 33%;
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+  }
+
+  /*
+   * Component: NowPlaying.tsx
+   */
+  > .now-playing {
+    > .track {
+      gap: 5px;
+      justify-content: center;
+
+      > .name {
+        font-weight: bold;
+      }
+    }
+  }
+
+  /*
+   * Component: PlaybackControls.tsx
+   */
+  > .playback-ctrl {
+    width: 33%;
+    justify-content: center;
+
+    > .actions {
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    > .progressbar {
+      height: 7px;
+      width: 100%;
+      background-color: gray;
+      border: 1px solid black;
+      border-radius: 4px;
+      overflow: hidden;
+
+      > .progress {
+        height: 100%;
+        background-color: coral;
+      }
+    }
+  }
+
+  /*
+   * Component: OutputControls.tsx
+   */
+  > .output-ctrl {
+    width: 33%;
+    justify-content: end;
+  }
+}

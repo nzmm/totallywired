@@ -5,6 +5,7 @@ import { usePlayer } from "../providers/AudioProvider";
 import NowPlaying from "./NowPlaying";
 import OutputControls from "./OutputControls";
 import PlaybackControls from "./PlaybackControls";
+import "./styles/Footer.css";
 
 export default function Footer() {
   const player = usePlayer();
