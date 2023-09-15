@@ -30,12 +30,11 @@ export default function PlaybackControls({
     return () => clearInterval(i);
   }, [currentState]);
 
-  const handlePlayPause = async () => {
+  const handlePlayPause = () => {
     if (player.getPlaylistCount()) {
       player.playPause();
     } else {
-      const data = await tracks;
-      const shuffledTracks = shuffle(data, 25);
+      const shuffledTracks = shuffle(tracks, 25);
       player.addTracks(shuffledTracks);
     }
   };
@@ -68,7 +67,7 @@ export default function PlaybackControls({
         </button>
       </div>
 
-      <Progressbar progress={progress} />
+      <Progressbar progress={progress} label="Playback progress" />
     </div>
   );
 }

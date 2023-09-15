@@ -166,7 +166,7 @@ const Splitter = ({
           role="separator"
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-valuenow={position as number}
+          aria-valuenow={100} // todo
           ref={handle}
         />
       </div>

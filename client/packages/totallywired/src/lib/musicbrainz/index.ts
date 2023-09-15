@@ -1,4 +1,4 @@
-import { sendQuery } from "../requests";
+import { Res, sendQuery } from "../requests";
 import { CAResponse, MBReleaseQueryResponse, MBReleaseResponse } from "./types";
 
 const DEFAULT_COVERART_URL = "/default-art.svg";
@@ -45,13 +45,17 @@ export const getRelease = (
  * Queries for any front coverart marching the release id. Returns a url if coverart exists.
  * If no art exists or any error is encountered then `DEFAULT_COVERART_URL` is returned.
  */
-export const getCoverArtUrl = (
+export const getCoverArtUrl = async (
   releaseId: string,
   size: 250 | 500 | 1200 = 250
 ) => {
-  return getArt(`/release/${releaseId}/front-${size}`)
-    .then((r) =>
-      r.ok ? r.data?.url ?? DEFAULT_COVERART_URL : DEFAULT_COVERART_URL
-    )
-    .catch(() => DEFAULT_COVERART_URL);
+  let r: Res<CAResponse>;
+
+  try {
+    r = await getArt(`/release/${releaseId}/front-${size}`);
+  } catch {
+    return DEFAULT_COVERART_URL;
+  }
+
+  return r.ok ? r.data?.url ?? DEFAULT_COVERART_URL : DEFAULT_COVERART_URL;
 };
