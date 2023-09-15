@@ -9,5 +9,15 @@ aside {
     > li + li {
       margin-top: 8px;
     }
+
+    > li > .jube {
+      float: right;
+      color: black;
+      font-size: small;
+      background-color: whitesmoke;
+      border: 1px solid gray;
+      border-radius: 9px;
+      padding: 0 8px;
+    }
   }
 }

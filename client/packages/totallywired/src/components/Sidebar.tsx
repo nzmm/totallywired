@@ -19,10 +19,12 @@ export default function Sidebar() {
           </li>
           <hr />
           <li>
-            <Link to="/lib/queue">Queue ({queue.length})</Link>
+            <Link to="/lib/queue">Queue</Link>
+            <span className="jube">{queue.length}</span>
           </li>
           <li>
             <Link to="/lib/liked">Liked</Link>
+            <span className="jube">{0}</span>
           </li>
           <hr />
           <li>
