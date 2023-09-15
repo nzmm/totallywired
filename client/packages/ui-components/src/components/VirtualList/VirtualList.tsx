@@ -57,7 +57,8 @@ const VirtualList = <T extends IVirtualListItem>({
         top,
         top - scrollTop.current,
         vlist.current.clientHeight,
-        focalItem.current
+        focalItem.current,
+        500 // pixels
       );
 
       if (update) {
