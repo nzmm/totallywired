@@ -1,7 +1,15 @@
-import { getArt, getMbz } from "./api";
-import { MBReleaseQueryResponse, MBReleaseResponse } from "./types";
+import { sendQuery } from "../requests";
+import { CAResponse, MBReleaseQueryResponse, MBReleaseResponse } from "./types";
 
 const DEFAULT_COVERART_URL = "/default-art.svg";
+
+function getMbz<T>(request: string, params: URLSearchParams) {
+  return sendQuery<T>(`https://musicbrainz.org/ws/2/${request}`, params);
+}
+
+function getArt(request: string) {
+  return sendQuery<CAResponse>(`https://coverartarchive.org/${request}`);
+}
 
 /**
  * Performs a MusicBrainz `release` query using artist and release names. Returns the top 25 results.
