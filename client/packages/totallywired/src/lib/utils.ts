@@ -1,5 +1,3 @@
-import { Track } from "./types";
-
 export const getValidSearchParams = (searchParams?: URLSearchParams) => {
   if (!searchParams) {
     return;
