@@ -8,7 +8,7 @@ import {
 import { set } from "../lib/reducer";
 import { Res, requestSearchParams } from "../lib/requests";
 import { Track } from "../lib/types";
-import { getTracks } from "../lib/webapi";
+import { getTracks } from "../lib/api";
 import { tracksDisptach } from "../providers/TracksProvider";
 import TrackList from "../components/TrackList";
 

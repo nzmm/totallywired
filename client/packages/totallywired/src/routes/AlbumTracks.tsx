@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Res, requestSearchParams } from "../lib/requests";
 import { AlbumDetail, Track } from "../lib/types";
-import { getAlbum, getTracksByAlbum } from "../lib/webapi";
+import { getAlbum, getTracksByAlbum } from "../lib/api";
 import AlbumTracksList from "../components/AlbumTrackList";
 
 export function albumTracksLoader({ request, params }: LoaderFunctionArgs) {

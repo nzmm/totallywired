@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { Res, requestSearchParams } from "../lib/requests";
 import { Artist } from "../lib/types";
-import { getArtists } from "../lib/webapi";
+import { getArtists } from "../lib/api";
 import ArtistList from "../components/ArtistList";
 
 export function artistsLoader({ request }: LoaderFunctionArgs) {
