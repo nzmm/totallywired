@@ -48,5 +48,18 @@ public static class ArtistRoutes
                 return Results.Ok(tracks);
             }
         );
+
+        group.MapGet(
+            "/{artistId:guid}/art",
+            async (
+                ArtistThumbnailQueryHandler handler,
+                Guid artistId,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var thumbnailUrl = await handler.HandleAsync(artistId, cancellationToken);
+                return Results.Redirect(thumbnailUrl);
+            }
+        );
     }
 }

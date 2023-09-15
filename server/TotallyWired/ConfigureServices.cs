@@ -48,6 +48,7 @@ public static class ConfigureServices
         // artists
         services.AddScoped<ArtistQueryHandler>();
         services.AddScoped<ArtistListQueryHandler>();
+        services.AddScoped<ArtistThumbnailQueryHandler>();
 
         // providers
         services.AddScoped<SourceListQueryHandler>();
