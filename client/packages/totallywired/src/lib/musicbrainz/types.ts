@@ -1,4 +1,3 @@
-
 /**
  * MusicBrainz release
  */
@@ -7,35 +6,35 @@ export type MBReleaseQueryItem = {
   score: number;
   status: string;
   title: string;
-  ['artist-credit']: {
+  ["artist-credit"]: {
     name: string;
     artist: {
       id: string;
       name: string;
-      ['sort-name']: string;
-    }[]
-  },
-  ['release-group']: {
-    ['primary-type']: string;
-  },
+      ["sort-name"]: string;
+    }[];
+  };
+  ["release-group"]: {
+    ["primary-type"]: string;
+  };
   date: number;
   country: string;
   barcode: string;
   asin: string;
-  ['label-info']: {
-    ['catalog-number']: string;
+  ["label-info"]: {
+    ["catalog-number"]: string;
     label: {
       id: string;
       name: string;
-    }
-  },
-  ['track-count']: number;
+    };
+  };
+  ["track-count"]: number;
   media: {
     format: string;
-    ['disc-count']: number;
-    ['track-count']: number;
-  }
-}
+    ["disc-count"]: number;
+    ["track-count"]: number;
+  };
+};
 
 /**
  * MusicBrainz release query response
@@ -44,14 +43,14 @@ export type MBReleaseQueryResponse = {
   created: string;
   count: number;
   offset: number;
-  releases: MBReleaseQueryItem[]
+  releases: MBReleaseQueryItem[];
 };
 
 /**
  * MusicBrainz media
  */
 export type MBMedia = {
-  ['track-count']: number;
+  ["track-count"]: number;
   position: number;
   format: string;
   tracks: {
@@ -60,12 +59,12 @@ export type MBMedia = {
     length: number;
     title: string;
     number: string;
-    ['artist-credit']: {
+    ["artist-credit"]: {
       id: string;
       name: string;
     }[];
   }[];
-}
+};
 
 /**
  * MusicBrainz release details
@@ -78,20 +77,22 @@ export type MBReleaseResponse = {
   country: string;
   asin: string;
   barcode: string;
-  ['artist-credit']: [{
-    name: string;
-    artist: {
-      id: string;
+  ["artist-credit"]: [
+    {
       name: string;
+      artist: {
+        id: string;
+        name: string;
+      };
     }
-  }],
+  ];
   media: MBMedia[];
-  ['label-info']: {
-    ['catalog-number']: string;
+  ["label-info"]: {
+    ["catalog-number"]: string;
     label: {
       name: string;
       id: string;
-    }
+    };
   }[];
 };
 
@@ -100,10 +101,8 @@ export type MBReleaseResponse = {
  */
 export type CAResponse = {
   url: string;
-}
+};
 
 export interface MetadataSearchResult extends MBReleaseQueryItem {
   coverArtUrl?: string;
 }
-
-

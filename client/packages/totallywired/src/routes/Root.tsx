@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from "react";
 import { Await, Outlet } from "react-router-dom";
-import { set } from "../lib/reducer";
 import { whoami } from "../lib/api";
+import { set } from "../lib/reducer";
 import { AudioProvider } from "../providers/AudioProvider";
 import { userDispatch } from "../providers/UserProvider";
 import Loading from "../components/Loading";

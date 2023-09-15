@@ -5,10 +5,10 @@ import {
   useAsyncValue,
   useLoaderData,
 } from "react-router-dom";
+import { getTracks } from "../lib/api";
 import { set } from "../lib/reducer";
 import { Res, requestSearchParams } from "../lib/requests";
 import { Track } from "../lib/types";
-import { getTracks } from "../lib/api";
 import { tracksDisptach } from "../providers/TracksProvider";
 import TrackList from "../components/TrackList";
 
