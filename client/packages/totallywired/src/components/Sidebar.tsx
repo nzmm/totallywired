@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { useQueue } from "../providers/AudioProvider";
+import { useAwaitingQueue } from "../providers/AudioProvider";
 import "./styles/Sidebar.css";
 
 export default function Sidebar() {
-  const queue = useQueue();
+  const queue = useAwaitingQueue();
   return (
     <aside>
       <nav>

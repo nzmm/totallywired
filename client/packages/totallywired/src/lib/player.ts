@@ -20,6 +20,8 @@ export enum TrackState {
   Error = 1 << 6,
 }
 
+export const IS_QUEUED = TrackState.Queued | TrackState.Playing | TrackState.Paused;
+
 export type PlayerTrack = {
   track: Track;
   state: TrackState;
