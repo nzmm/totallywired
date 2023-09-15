@@ -4,7 +4,7 @@ import ReleaseArt from "./ReleaseArt";
 
 type NowPlayingProps = {
   currentTrack?: Track;
-  currentArtist?: Artist
+  currentArtist?: Artist;
 };
 
 export default function NowPlaying({ currentTrack }: NowPlayingProps) {

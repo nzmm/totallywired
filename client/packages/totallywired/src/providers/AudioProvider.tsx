@@ -1,5 +1,10 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { AudioPlayer, PlayerTrack, PlaylistItem, IS_QUEUED } from "../lib/player";
+import {
+  AudioPlayer,
+  IS_QUEUED,
+  PlayerTrack,
+  PlaylistItem,
+} from "../lib/player";
 
 const INIT_QUEUE: PlaylistItem<PlayerTrack>[] = [];
 
@@ -16,7 +21,7 @@ export const useQueue = () => {
 };
 
 export const useAwaitingQueue = () => {
-  return useContext(QueueContext).filter(qi => qi.state & IS_QUEUED);
+  return useContext(QueueContext).filter((qi) => qi.state & IS_QUEUED);
 };
 
 export function AudioProvider({ children }: React.PropsWithChildren) {

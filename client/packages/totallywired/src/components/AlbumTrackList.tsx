@@ -4,12 +4,12 @@ import { AlbumDetail, Track } from "../lib/types";
 import { duration } from "../lib/utils";
 import { usePlayer } from "../providers/AudioProvider";
 import { cacheTracks, useTracks } from "../providers/TracksProvider";
-import ReleaseArt from "./ReleaseArt";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
 } from "../components/HeaderTrackList";
 import TrackItem from "../components/TrackListItem";
+import ReleaseArt from "./ReleaseArt";
 
 const useAlbumHeaderInfo = (tracks: Track[]) => {
   return useMemo(() => {
