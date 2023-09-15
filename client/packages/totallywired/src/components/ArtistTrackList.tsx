@@ -3,12 +3,12 @@ import { ArtistDetail, Track } from "../lib/types";
 import { duration } from "../lib/utils";
 import { usePlayer } from "../providers/AudioProvider";
 import { cacheTracks, useTracks } from "../providers/TracksProvider";
-import CoverArt from "../components/CoverArt";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
 } from "../components/HeaderTrackList";
 import TrackItem from "../components/TrackListItem";
+import ArtistArt from "./ArtistArt";
 
 const useArtistHeaderInfo = (tracks: Track[]) => {
   return useMemo(() => {
@@ -46,7 +46,7 @@ function ArtistHeader({
   return (
     <li className="list-header" style={{ top, height }}>
       {/* todo: support artists */}
-      <CoverArt releaseId={artist.id} />
+      <ArtistArt artistId={artist.id} />
 
       <div className="album-info">
         <h2>{artist.name}</h2>

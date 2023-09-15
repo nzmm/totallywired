@@ -1,12 +1,12 @@
-import "./styles/CoverArt.css";
+import "./styles/ReleaseArt.css";
 
-type CoverArtProps = {
+type ReleaseArtProps = {
   releaseId?: string;
 };
 
-export default function CoverArt({ releaseId }: CoverArtProps) {
+export default function ReleaseArt({ releaseId }: ReleaseArtProps) {
   return (
-    <div className="cover-art">
+    <div className="release-art">
       {releaseId ? (
         <img
           src={`/api/v1/releases/${releaseId}/art`}

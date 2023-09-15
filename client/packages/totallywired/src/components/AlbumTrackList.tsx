@@ -4,7 +4,7 @@ import { AlbumDetail, Track } from "../lib/types";
 import { duration } from "../lib/utils";
 import { usePlayer } from "../providers/AudioProvider";
 import { cacheTracks, useTracks } from "../providers/TracksProvider";
-import CoverArt from "../components/CoverArt";
+import ReleaseArt from "./ReleaseArt";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
@@ -45,7 +45,7 @@ function AlbumHeader({
   const { durationHms } = useAlbumHeaderInfo(tracks);
   return (
     <li className="list-header" style={{ top, height }}>
-      <CoverArt releaseId={album.id} />
+      <ReleaseArt releaseId={album.id} />
 
       <div className="album-info">
         <h2>{album.name}</h2>

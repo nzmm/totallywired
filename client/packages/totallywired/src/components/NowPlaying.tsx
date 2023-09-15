@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
-import { Track } from "../lib/types";
-import CoverArt from "./CoverArt";
+import { Artist, Track } from "../lib/types";
+import ReleaseArt from "./ReleaseArt";
 
 type NowPlayingProps = {
   currentTrack?: Track;
+  currentArtist?: Artist
 };
 
 export default function NowPlaying({ currentTrack }: NowPlayingProps) {
   return (
     <div className="now-playing panel">
-      <CoverArt releaseId={currentTrack?.releaseId} />
+      <ReleaseArt releaseId={currentTrack?.releaseId} />
 
       {currentTrack ? (
         <div className="track d-flex col">
@@ -18,7 +19,7 @@ export default function NowPlaying({ currentTrack }: NowPlayingProps) {
             <Link to={`/lib/albums/${currentTrack.releaseId}/tracks`}>
               {currentTrack.releaseName}
             </Link>{" "}
-            &middot; <Link to={`/lib/years/2023/tracks`}>2023</Link>
+            &middot; <Link to={`/lib/albums?year=${2023}`}>2023</Link>
           </div>
           <div className="artist">
             <Link to={`/lib/artists/${currentTrack.artistId}/tracks`}>
