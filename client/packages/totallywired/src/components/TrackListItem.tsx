@@ -12,8 +12,8 @@ export default function TrackItem({
 }: TrackItemProps) {
   return (
     <li tabIndex={0} style={{ top, height }}>
-      <button className="col lgutter" title="Play now" data-action="add">
-        {track.number}.
+      <button className="col lgutter" title="Play now" data-intent="add">
+        {track.number}
       </button>
       <span className="col name">{`${track.name}`}</span>
       <span className="col album">
@@ -26,8 +26,10 @@ export default function TrackItem({
           {`${track.artistName}`}
         </Link>
       </span>
-      <a className="col liked" href="#">{`${track.liked}`}</a>
-      <span className="duration">{`${track.displayLength}`}</span>
+      <button className="col liked" data-intent="react">
+        {`${track.liked}`}
+      </button>
+      <span className="col duration rgutter">{`${track.displayLength}`}</span>
     </li>
   );
 }

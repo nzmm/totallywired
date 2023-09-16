@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { AlbumDetail, Track } from "../lib/types";
 import { duration } from "../lib/utils";
 import { usePlayer } from "../providers/AudioProvider";
-import { cacheTracks, useTracks } from "../providers/TracksProvider";
+import { useTracks } from "../providers/TracksProvider";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
@@ -95,8 +95,6 @@ export default function AlbumTracksList({
   album: AlbumDetail;
   tracks: Track[];
 }) {
-  cacheTracks(tracks);
-
   const items = useMemo(() => {
     const header = {
       height: 172,

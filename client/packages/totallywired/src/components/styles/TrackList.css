@@ -35,16 +35,18 @@
       }
       .col.lgutter {
         text-align: center;
-        padding: 1px;
-        padding-left: 10px;
         position: relative;
-        height: 24px;
-        width: 3rem;
-        border: 0;
-        background-color: transparent;
+        height: 40px;
+        width: 40px;
+        border-radius: 100%;
+        margin-left: 6px;
       }
       .col.lgutter:hover {
         cursor: pointer;
+      }
+      .col.rgutter {
+        text-align: right;
+        flex: 1;
       }
       .col.name {
         inline-size: 30%;
@@ -64,49 +66,7 @@
       }
       .col.duration {
         inline-size: 4rem;
-        text-align: center;
-        padding-right: 10px;
-      }
-    }
-
-    > li[tabindex="0"]:hover {
-      background-color: rgb(255, 240, 235);
-
-      > .col.lgutter {
-        color: transparent;
-      }
-
-      > .col.lgutter::before {
-        content: "";
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="coral" stroke-width="1" stroke="red" d="M1 1 L25 12 L1 23Z" /></svg>');
-        left: 5px;
-        width: 3rem;
-        height: 14px;
-        background-size: contain;
-        background-repeat: no-repeat;
-        background-position: center;
-        display: block;
-        position: absolute;
-      }
-    }
-
-    > li[tabindex="0"]:focus {
-      background-color: rgb(255, 145, 167);
-      border-top: 1px solid red;
-      border-bottom: 1px solid red;
-
-      > .col.lgutter::before,
-      > .col.lgutter:hover::before {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
-      }
-    }
-
-    > li[tabindex="0"]:active {
-      background-color: red;
-
-      > .col.lgutter::before,
-      > .col.lgutter:hover::before {
-        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 24"><path fill="white" d="M1 1 L25 12 L1 23Z" /></svg>');
+        padding-right: 20px;
       }
     }
   }

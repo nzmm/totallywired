@@ -4,16 +4,19 @@ import {
   AlbumDetail,
   Artist,
   ProviderCollection,
+  ReactionType,
   Track,
   User,
 } from "./types";
 
 const API = "/api/v1";
 
+/* Users */
 export function whoami() {
   return sendQuery<User>(`${API}/whoami`);
 }
 
+/* Tracks */
 export function getTracks(searchParams?: URLSearchParams) {
   return sendQuery<Track[]>(`${API}/tracks`, searchParams);
 }
@@ -39,6 +42,14 @@ export function getTrackUrl(trackId: string) {
   return sendQuery<string>(`${API}/tracks/${trackId}/downloadUrl`);
 }
 
+export function setTrackReaction(trackId: string, reaction: ReactionType) {
+  return sendCommand<ReactionType>(`${API}/tracks/${trackId}/react`, {
+    reaction,
+  });
+}
+
+/* Albums */
+
 export function getAlbums(searchParams?: URLSearchParams) {
   return sendQuery<Album[]>(`${API}/releases`, searchParams);
 }
@@ -47,12 +58,7 @@ export function getAlbum(releaseId: string) {
   return sendQuery<AlbumDetail>(`${API}/releases/${releaseId}`);
 }
 
-export function getTracksByArtist(
-  artistId: string,
-  searchParams?: URLSearchParams
-) {
-  return sendQuery<Album[]>(`${API}/artists/${artistId}/tracks`, searchParams);
-}
+/* Artists */
 
 export function getArtists(searchParams?: URLSearchParams) {
   return sendQuery<Artist[]>(`${API}/artists`, searchParams);
@@ -61,6 +67,8 @@ export function getArtists(searchParams?: URLSearchParams) {
 export function getArtist(artistId: string) {
   return sendQuery<Artist>(`${API}/artists/${artistId}`);
 }
+
+/* Content Providers */
 
 export function getProviders() {
   return sendQuery<ProviderCollection[]>(`${API}/providers`);

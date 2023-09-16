@@ -1,3 +1,8 @@
+export enum ReactionType {
+  None,
+  Liked,
+}
+
 export type User = {
   userId: string;
   username: string;

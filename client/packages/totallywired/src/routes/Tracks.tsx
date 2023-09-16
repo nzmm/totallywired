@@ -6,10 +6,8 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import { getTracks } from "../lib/api";
-import { set } from "../lib/reducer";
-import { Res, requestSearchParams } from "../lib/requests";
-import { Track } from "../lib/types";
-import { tracksDisptach } from "../providers/TracksProvider";
+import { useAsyncTracks } from "../lib/hooks/tracks";
+import { requestSearchParams } from "../lib/requests";
 import TrackList from "../components/TrackList";
 
 export function tracksLoader({ request }: LoaderFunctionArgs) {
@@ -18,13 +16,7 @@ export function tracksLoader({ request }: LoaderFunctionArgs) {
 }
 
 function TrackListView() {
-  const dispatch = tracksDisptach();
-  const { data: tracks = [] } = useAsyncValue() as Res<Track[]>;
-
-  useEffect(() => {
-    dispatch(set(tracks));
-  }, [dispatch, tracks]);
-
+  const tracks = useAsyncTracks();
   return <TrackList tracks={tracks} />;
 }
 

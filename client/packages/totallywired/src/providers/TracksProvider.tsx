@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
+import { useAsyncValue } from "react-router-dom";
 import { commonReducer, createDispatchContext, set } from "../lib/reducer";
+import { Res } from "../lib/requests";
 import { Track } from "../lib/types";
 
 type Tracks = Track[];
@@ -14,14 +16,6 @@ export const useTracks = () => {
 
 export const tracksDisptach = () => {
   return useContext(DispatchContext);
-};
-
-export const cacheTracks = (tracks: Tracks) => {
-  const dispatch = tracksDisptach();
-
-  useEffect(() => {
-    dispatch(set(tracks));
-  }, [dispatch, tracks]);
 };
 
 export default function TracksProvider({ children }: React.PropsWithChildren) {

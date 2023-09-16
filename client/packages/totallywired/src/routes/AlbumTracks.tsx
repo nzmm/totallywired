@@ -1,13 +1,8 @@
 import { Suspense } from "react";
-import {
-  Await,
-  LoaderFunctionArgs,
-  useAsyncValue,
-  useLoaderData,
-} from "react-router-dom";
+import { Await, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { getAlbum, getTracksByAlbum } from "../lib/api";
-import { Res, requestSearchParams } from "../lib/requests";
-import { AlbumDetail, Track } from "../lib/types";
+import { useAsyncAlbumTracks } from "../lib/hooks/tracks";
+import { requestSearchParams } from "../lib/requests";
 import AlbumTracksList from "../components/AlbumTrackList";
 
 export function albumTracksLoader({ request, params }: LoaderFunctionArgs) {
@@ -25,10 +20,7 @@ export function albumTracksLoader({ request, params }: LoaderFunctionArgs) {
 }
 
 function AlbumTracksView() {
-  const [{ data: album }, { data: tracks = [] }] = useAsyncValue() as [
-    Res<AlbumDetail>,
-    Res<Track[]>
-  ];
+  const [album, tracks] = useAsyncAlbumTracks();
   return <AlbumTracksList album={album!} tracks={tracks} />;
 }
 
