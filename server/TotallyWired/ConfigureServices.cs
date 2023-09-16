@@ -7,6 +7,7 @@ using TotallyWired.Handlers.ArtistQueries;
 using TotallyWired.Handlers.ReleaseQueries;
 using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
+using TotallyWired.Handlers.TrackCommands;
 using TotallyWired.Handlers.TrackQueries;
 using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
@@ -39,6 +40,7 @@ public static class ConfigureServices
         // tracks
         services.AddScoped<TrackListQueryHandler>();
         services.AddScoped<TrackDownloadUrlQueryHandler>();
+        services.AddScoped<TrackReactionCommandHandler>();
 
         // releases
         services.AddScoped<ReleaseQueryHandler>();

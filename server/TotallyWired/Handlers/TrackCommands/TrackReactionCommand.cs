@@ -12,18 +12,18 @@ public class TrackReactionCommand
     public ReactionType Reaction { get; set; }
 }
 
-public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool, ReactionType)>
+public class TrackReactionCommandHandler : IRequestHandler<TrackReactionCommand, ReactionType>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
 
-    public TrackReactionHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public TrackReactionCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;
     }
 
-    public async Task<(bool, ReactionType)> HandleAsync(
+    public async Task<ReactionType> HandleAsync(
         TrackReactionCommand request,
         CancellationToken cancellationToken
     )
@@ -46,7 +46,7 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
 
         if (track is null)
         {
-            return (false, ReactionType.None);
+            return ReactionType.None;
         }
 
         var reaction = track.Reactions.MaxBy(x => x.Created);
@@ -54,7 +54,7 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
         switch (reaction)
         {
             case null when request.Reaction == ReactionType.None:
-                return (true, ReactionType.Liked);
+                return ReactionType.Liked;
             case null:
                 reaction = new TrackReaction
                 {
@@ -72,7 +72,6 @@ public class TrackReactionHandler : IRequestHandler<TrackReactionCommand, (bool,
         }
 
         await _context.SaveChangesAsync(cancellationToken);
-
-        return (true, request.Reaction);
+        return request.Reaction;
     }
 }

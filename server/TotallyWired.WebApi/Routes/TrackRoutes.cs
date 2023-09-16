@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Mvc;
+using TotallyWired.Handlers.TrackCommands;
 using TotallyWired.Handlers.TrackQueries;
+using TotallyWired.Models;
 using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
@@ -45,17 +48,23 @@ public static class TrackRoutes
 
             return Results.Ok(fileInfo);
         });
-        
-        group.MapPost("/{trackId:guid}/like", async (TrackReactionHandler handler, Guid trackId, [FromBody] TrackLikedModel dto, CancellationToken cancellationToken) =>
-        {
-            var (_, reaction) = await handler.HandleAsync(new TrackReactionCommand
-            {
-                TrackId = trackId,
-                Reaction = dto.ReactionType
-            }, cancellationToken);
-
-            return Results.Ok(reaction);
-        });
         */
+
+        group.MapPost(
+            "/{trackId:guid}/react",
+            async (
+                TrackReactionCommandHandler handler,
+                Guid trackId,
+                [FromBody] TrackLikedModel dto,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var reaction = await handler.HandleAsync(
+                    new TrackReactionCommand { TrackId = trackId, Reaction = dto.ReactionType },
+                    cancellationToken
+                );
+                return Results.Ok(reaction);
+            }
+        );
     }
 }
