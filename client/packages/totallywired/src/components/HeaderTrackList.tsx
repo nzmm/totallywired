@@ -7,6 +7,8 @@ import {
 import { Track } from "../lib/types";
 import { usePlayer } from "../providers/AudioProvider";
 import "./styles/HeaderTrackList.css";
+import { toggleReaction } from "../lib/actions/tracks";
+import { tracksDisptach } from "../providers/TracksProvider";
 
 export type HeaderTrackDataProps<T> = IVirtualListItem & {
   track?: Track;
@@ -29,26 +31,32 @@ export default function HeaderTrackList<T>({
   items,
 }: HeaderTrackListProps<T>) {
   const player = usePlayer();
+  const dispatch = tracksDisptach();
 
-  const handleClick = (
+  const handleClick = async (
     e: React.MouseEvent<HTMLElement>,
-    item: VisibleItem<HeaderTrackDataProps<T>>
+    item: VisibleItem<HeaderTrackDataProps<T>>,
   ) => {
     if (!item.data.track) {
       return;
     }
 
     const target = e.target as HTMLElement;
-    switch (target.dataset.action) {
+    switch (target.dataset.intent) {
       case "add": {
         player.addTrack(item.data.track);
+        break;
+      }
+      case "react": {
+        await toggleReaction(dispatch, item.data.track);
+        break;
       }
     }
   };
 
   const handleDoubleClick = (
     _: React.MouseEvent<HTMLElement>,
-    item: VisibleItem<HeaderTrackDataProps<T>>
+    item: VisibleItem<HeaderTrackDataProps<T>>,
   ) => {
     if (item.data.track) {
       player.playNow(item.data.track);

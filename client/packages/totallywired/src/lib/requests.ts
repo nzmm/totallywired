@@ -26,11 +26,11 @@ function isJsonContent(res: Response) {
 
 export async function sendQuery<T>(
   url: string,
-  searchParams?: URLSearchParams
+  searchParams?: URLSearchParams,
 ): Promise<Res<T>> {
   const includeSearchParams = searchParams?.size ?? 0 > 0;
   const res = await fetch(
-    `${includeSearchParams ? `${url}?${searchParams}` : url}`
+    `${includeSearchParams ? `${url}?${searchParams}` : url}`,
   );
   const { ok, status } = res;
 
@@ -44,7 +44,7 @@ export async function sendQuery<T>(
 
 export async function sendCommand<T = never>(
   url: string,
-  payload?: any
+  payload?: any,
 ): Promise<Res<T>> {
   const token = await getAntiforgeryToken();
 

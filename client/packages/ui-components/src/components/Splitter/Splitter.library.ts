@@ -40,7 +40,7 @@ const SUPPORTED_KEYS = new Set([
 const getPosition = (
   e: DragEvent,
   orientation: Orientation,
-  splitter: HTMLDivElement
+  splitter: HTMLDivElement,
 ) => {
   return orientation === "horizontal"
     ? e.clientX - splitter.offsetLeft
@@ -50,7 +50,7 @@ const getPosition = (
 const getStyles = (
   orientation: Orientation,
   position: CSSDimension,
-  minSize: CSSDimension
+  minSize: CSSDimension,
 ) => {
   return orientation === "horizontal"
     ? [{ width: position, minWidth: minSize }, { minWidth: minSize }]

@@ -54,7 +54,7 @@ export type VirtualListProps<T extends IVirtualListItem> = {
    */
   onDoubleClick?: (
     e: React.MouseEvent<HTMLElement>,
-    item: VisibleItem<T>
+    item: VisibleItem<T>,
   ) => void;
 
   onDragStart?: (e: React.DragEvent<HTMLElement>, item: VisibleItem<T>) => void;
@@ -70,7 +70,7 @@ export type VisibleResult<T extends IVirtualListItem> = [
   VisibleItem<T>[],
   NumericRange,
   NumericRange,
-  boolean
+  boolean,
 ];
 
 export type NumericRange = [number, number];

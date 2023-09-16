@@ -26,7 +26,7 @@ export const useAsyncTracks = (): Track[] => {
 export const useAsyncAlbumTracks = (): [AlbumDetail, Track[]] => {
   const [{ data: album }, { data: trackData = [] }] = useAsyncValue() as [
     Res<AlbumDetail>,
-    Res<Track[]>
+    Res<Track[]>,
   ];
 
   const dispatch = tracksDisptach();
@@ -45,7 +45,7 @@ export const useAsyncAlbumTracks = (): [AlbumDetail, Track[]] => {
 export const useAsyncArtistTracks = (): [ArtistDetail, Track[]] => {
   const [{ data: artist }, { data: trackData = [] }] = useAsyncValue() as [
     Res<ArtistDetail>,
-    Res<Track[]>
+    Res<Track[]>,
   ];
 
   const dispatch = tracksDisptach();

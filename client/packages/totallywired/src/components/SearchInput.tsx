@@ -15,7 +15,7 @@ const updateSearchParamsDebounced = debounce(
   (q: string, setSearchParams: (next: URLSearchParamsInit) => void) => {
     setSearchParams({ q });
   },
-  500
+  500,
 );
 
 export default function SearchInput() {

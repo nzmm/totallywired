@@ -13,7 +13,7 @@ export const getHeight = (data: IVirtualListItem[]) =>
 export const getItemAtY = <T extends IVirtualListItem>(
   vlist: HTMLDivElement,
   visible: VisibleItem<T>[],
-  y: number
+  y: number,
 ) => {
   const { y: vy } = vlist.getBoundingClientRect();
   const cy = vlist.scrollTop + y - vy;
@@ -32,7 +32,7 @@ const getVisibleRanges = (v: VisibleItem[]): [NumericRange, NumericRange] => {
 };
 
 export const getResponse = <T extends IVirtualListItem>(
-  v: VisibleItem<T>[]
+  v: VisibleItem<T>[],
 ): VisibleResult<T> => {
   if (!v.length) {
     return EMPTY_UPDATE;
@@ -49,7 +49,7 @@ export const isUpwardUpdateRequired = <T extends IVirtualListItem>(
   pmax: number,
   topOffset: number,
   topExtent: number,
-  force = false
+  force = false,
 ) => {
   return (
     force ||
@@ -64,7 +64,7 @@ export const isDownwardUpdateRequired = <T extends IVirtualListItem>(
   pmin: number,
   pmax: number,
   topOffset: number,
-  topExtent: number
+  topExtent: number,
 ) => {
   return (
     items[imax] && (topOffset <= pmin || topExtent < pmax - items[imax].height)

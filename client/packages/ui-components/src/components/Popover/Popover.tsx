@@ -23,7 +23,7 @@ const Popover = forwardRef<HTMLElement, PopoverProps>(
       children,
       className,
     },
-    ref
+    ref,
   ) => {
     const popover = useRef<HTMLDivElement | null>(null);
     const [svgRect, setSvgRect] = useState<DOMRect>(new DOMRect(0, 0, 0, 0));
@@ -65,7 +65,7 @@ const Popover = forwardRef<HTMLElement, PopoverProps>(
           orientation,
           width,
           height,
-          offset
+          offset,
         );
         setPosition(position);
       };
@@ -99,7 +99,7 @@ const Popover = forwardRef<HTMLElement, PopoverProps>(
       borderRadius,
       arrowWidth,
       arrowHeight,
-      arrowOffset
+      arrowOffset,
     );
 
     return (
@@ -123,7 +123,7 @@ const Popover = forwardRef<HTMLElement, PopoverProps>(
         ) : null}
       </div>
     );
-  }
+  },
 );
 
 export { Popover };

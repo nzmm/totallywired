@@ -10,10 +10,10 @@ import "./styles/Footer.css";
 export default function Footer() {
   const player = usePlayer();
   const [currentState, setCurrentState] = useState<TrackState>(
-    TrackState.Unknown
+    TrackState.Unknown,
   );
   const [currentTrack, setCurrentTrack] = useState<Track | undefined>(
-    undefined
+    undefined,
   );
 
   useEffect(() => {

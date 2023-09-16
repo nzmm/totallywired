@@ -21,7 +21,7 @@ const useArtistHeaderInfo = (tracks: Track[]) => {
         acc.releases.add(track.releaseId);
         return acc;
       },
-      { releases: new Set(), lengthMs: 0 }
+      { releases: new Set(), lengthMs: 0 },
     );
 
     const releaseCount = releases.size;
@@ -101,7 +101,7 @@ export function ArtistTrackList({
         acc.push({ track, height: 42 });
         return acc;
       },
-      [header]
+      [header],
     );
   }, [artist, tracks]);
 

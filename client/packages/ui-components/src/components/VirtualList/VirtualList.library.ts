@@ -28,7 +28,7 @@ const getVisibleUpward = <T extends IVirtualListItem>(
   topExtent: number,
   focalItem: FocalItem,
   overScan: number,
-  force = false
+  force = false,
 ): VisibleResult<T> => {
   if (
     !isUpwardUpdateRequired(
@@ -38,7 +38,7 @@ const getVisibleUpward = <T extends IVirtualListItem>(
       pmax,
       topOffset,
       topExtent,
-      force
+      force,
     )
   ) {
     return SKIP_UPDATE;
@@ -86,7 +86,7 @@ const getVisibleDownward = <T extends IVirtualListItem>(
   topOffset: number,
   topExtent: number,
   focalItem: FocalItem,
-  overScan: number
+  overScan: number,
 ): VisibleResult<T> => {
   if (
     !isDownwardUpdateRequired(items, imax, pmin, pmax, topOffset, topExtent)
@@ -135,7 +135,7 @@ const getVisible = (
   scrollDelta: number,
   clientHeight: number,
   focalItem: FocalItem,
-  overScan: number
+  overScan: number,
 ) => {
   if (!items) {
     return SKIP_UPDATE;
@@ -157,7 +157,7 @@ const getVisible = (
         topExtent,
         focalItem,
         overScan,
-        scrollDelta === 0
+        scrollDelta === 0,
       )
     : // downward scrolling (up arrow clicked)
       getVisibleDownward(
@@ -168,7 +168,7 @@ const getVisible = (
         topOffset,
         topExtent,
         focalItem,
-        overScan
+        overScan,
       );
 };
 

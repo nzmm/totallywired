@@ -21,7 +21,7 @@ const useAlbumHeaderInfo = (tracks: Track[]) => {
         acc.lengthMs += track.length;
         return acc;
       },
-      { releases: new Set(), lengthMs: 0 }
+      { releases: new Set(), lengthMs: 0 },
     );
 
     const releaseCount = releases.size;
@@ -106,7 +106,7 @@ export default function AlbumTracksList({
         acc.push({ track, height: 42 });
         return acc;
       },
-      [header]
+      [header],
     );
   }, [album, tracks]);
 

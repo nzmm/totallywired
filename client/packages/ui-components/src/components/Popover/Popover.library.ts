@@ -93,7 +93,7 @@ const getPositionStyle = (
   width: number,
   height: number,
   offset: number,
-  gap = 0
+  gap = 0,
 ) => {
   switch (orientation) {
     case "north":
@@ -129,7 +129,7 @@ const getPath = (
   aw: number,
   ah: number,
   ao: number,
-  po = 0.5
+  po = 0.5,
 ): PathResult => {
   return useMemo(() => {
     switch (orientation) {

@@ -120,7 +120,7 @@ export class AudioPlayer {
   }
 
   private _setupPreload: (player: HTMLAudioElement) => void = debounce(
-    this._handlePreload.bind(this)
+    this._handlePreload.bind(this),
   );
 
   private _emit(event: PlayerEvent, ...items: PlaylistItem<PlayerTrack>[]) {

@@ -21,7 +21,7 @@ export const queryReleases = (artistName: string, releaseName: string) => {
       query: `artist:"${artistName}"+release:"${releaseName}"`,
       limit: "25",
       fmt: "json",
-    })
+    }),
   );
 };
 
@@ -30,14 +30,14 @@ export const queryReleases = (artistName: string, releaseName: string) => {
  */
 export const getRelease = (
   releaseId: string,
-  inc = "recordings+artist-credits+labels"
+  inc = "recordings+artist-credits+labels",
 ) => {
   return getMbz<MBReleaseResponse>(
     `/release/${releaseId}`,
     new URLSearchParams({
       inc,
       fmt: "json",
-    })
+    }),
   );
 };
 
@@ -47,7 +47,7 @@ export const getRelease = (
  */
 export const getCoverArtUrl = async (
   releaseId: string,
-  size: 250 | 500 | 1200 = 250
+  size: 250 | 500 | 1200 = 250,
 ) => {
   let r: Res<CAResponse>;
 

@@ -8,7 +8,7 @@ type TooltipProps = React.PropsWithChildren & {
 
 const isOver = (
   e: MouseEvent & { toElement?: HTMLElement },
-  popover: HTMLElement | null
+  popover: HTMLElement | null,
 ) =>
   e.type === "mouseenter" ||
   (!!e.toElement &&

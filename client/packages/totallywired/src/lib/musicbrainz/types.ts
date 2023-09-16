@@ -84,7 +84,7 @@ export type MBReleaseResponse = {
         id: string;
         name: string;
       };
-    }
+    },
   ];
   media: MBMedia[];
   ["label-info"]: {

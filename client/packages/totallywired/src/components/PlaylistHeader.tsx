@@ -18,7 +18,7 @@ export default function PlaylistHeader({ player, queue }: PlaylistHeaderProps) {
         }
         return [ms + cur.track.length, l + 1];
       },
-      [0, 0]
+      [0, 0],
     );
 
     return [duration(ms), l];

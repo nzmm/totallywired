@@ -36,7 +36,7 @@ function ProviderList() {
 
   const handleClick = async (
     e: React.MouseEvent<HTMLButtonElement>,
-    sourceId: string
+    sourceId: string,
   ) => {
     e.preventDefault();
     await syncProvider(sourceId);

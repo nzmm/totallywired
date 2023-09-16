@@ -23,17 +23,17 @@ export function getTracks(searchParams?: URLSearchParams) {
 
 export function getTracksByAlbum(
   releaseId: string,
-  searchParams?: URLSearchParams
+  searchParams?: URLSearchParams,
 ) {
   return sendQuery<Track[]>(
     `${API}/releases/${releaseId}/tracks`,
-    searchParams
+    searchParams,
   );
 }
 
 export function getTrackByArtist(
   artistId: string,
-  searchParams?: URLSearchParams
+  searchParams?: URLSearchParams,
 ) {
   return sendQuery<Track[]>(`${API}/artists/${artistId}/tracks`, searchParams);
 }

@@ -10,7 +10,8 @@ li.list-header {
   .artist-art {
     width: 128px;
     margin-left: 15px;
-    box-shadow: 0px 2px 10px -3px rgba(0, 0, 0, 0.1),
+    box-shadow:
+      0px 2px 10px -3px rgba(0, 0, 0, 0.1),
       0px 4px 15px -3px rgba(0, 0, 0, 0.12);
   }
 
