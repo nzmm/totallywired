@@ -60,7 +60,7 @@ public static class TrackRoutes
             ) =>
             {
                 var reaction = await handler.HandleAsync(
-                    new TrackReactionCommand { TrackId = trackId, Reaction = dto.ReactionType },
+                    new TrackReactionCommand { TrackId = trackId, Reaction = dto.Reaction },
                     cancellationToken
                 );
                 return Results.Ok(reaction);

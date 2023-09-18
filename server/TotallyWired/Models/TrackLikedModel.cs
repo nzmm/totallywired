@@ -4,5 +4,5 @@ namespace TotallyWired.Models;
 
 public class TrackLikedModel
 {
-    public ReactionType ReactionType { get; set; }
+    public ReactionType Reaction { get; set; }
 }

@@ -31,7 +31,7 @@ public class TrackReactionCommandHandler : IRequestHandler<TrackReactionCommand,
         var userId = _user.UserId();
 
         var track = await _context.Tracks
-            .Include(x => x.Reactions)
+            .Include(x => x.Reactions.Where(r => r.UserId == userId))
             .Where(x => x.Id == request.TrackId && x.UserId == userId)
             .Select(
                 x =>
@@ -54,7 +54,7 @@ public class TrackReactionCommandHandler : IRequestHandler<TrackReactionCommand,
         switch (reaction)
         {
             case null when request.Reaction == ReactionType.None:
-                return ReactionType.Liked;
+                return ReactionType.None;
             case null:
                 reaction = new TrackReaction
                 {
