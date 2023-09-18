@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useAwaitingQueue } from "../providers/AudioProvider";
 import "./styles/Sidebar.css";
+
+const classNamer = ({ isActive }: { isActive: boolean }) => isActive ? "active" : "";
 
 export default function Sidebar() {
   const queue = useAwaitingQueue();
@@ -9,26 +11,26 @@ export default function Sidebar() {
       <nav>
         <menu>
           <li>
-            <Link to="/lib/tracks">Tracks</Link>
+            <NavLink to="/lib/tracks" className={classNamer}>Tracks</NavLink>
           </li>
           <li>
-            <Link to="/lib/albums">Albums</Link>
+            <NavLink to="/lib/albums" className={classNamer}>Albums</NavLink>
           </li>
           <li>
-            <Link to="/lib/artists">Artists</Link>
+            <NavLink to="/lib/artists" className={classNamer}>Artists</NavLink>
           </li>
           <hr />
           <li>
-            <Link to="/lib/queue">Queue</Link>
+            <NavLink to="/lib/queue" className={classNamer}>Queue</NavLink>
             <span className="jube">{queue.length}</span>
           </li>
           <li>
-            <Link to="/lib/liked">Liked</Link>
+            <NavLink to="/lib/liked" className={classNamer}>Liked</NavLink>
             <span className="jube">{0}</span>
           </li>
           <hr />
           <li>
-            <Link to="/lib/providers">Content Providers</Link>
+            <NavLink to="/lib/providers" className={classNamer}>Content Providers</NavLink>
           </li>
         </menu>
       </nav>
