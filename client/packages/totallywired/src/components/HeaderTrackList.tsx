@@ -6,9 +6,8 @@ import {
 } from "@totallywired/ui-components";
 import { Track } from "../lib/types";
 import { usePlayer } from "../providers/AudioProvider";
+import { useToggleTrackReaction } from "../lib/hooks/tracks";
 import "./styles/HeaderTrackList.css";
-import { toggleReaction } from "../lib/actions/tracks";
-import { tracksDisptach } from "../providers/TracksProvider";
 
 export type HeaderTrackDataProps<T> = IVirtualListItem & {
   track?: Track;
@@ -31,7 +30,7 @@ export default function HeaderTrackList<T>({
   items,
 }: HeaderTrackListProps<T>) {
   const player = usePlayer();
-  const dispatch = tracksDisptach();
+  const toggleReaction = useToggleTrackReaction();
 
   const handleClick = async (
     e: React.MouseEvent<HTMLElement>,
@@ -48,7 +47,7 @@ export default function HeaderTrackList<T>({
         break;
       }
       case "react": {
-        await toggleReaction(dispatch, item.data.track);
+        await toggleReaction(item.data.track);
         break;
       }
     }

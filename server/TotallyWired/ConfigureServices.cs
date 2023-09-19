@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TotallyWired.Common;
 using TotallyWired.Contracts;
 using TotallyWired.Handlers.ArtistQueries;
+using TotallyWired.Handlers.PlaylistQueries;
 using TotallyWired.Handlers.ReleaseQueries;
 using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
@@ -51,6 +52,9 @@ public static class ConfigureServices
         services.AddScoped<ArtistQueryHandler>();
         services.AddScoped<ArtistListQueryHandler>();
         services.AddScoped<ArtistThumbnailQueryHandler>();
+
+        // playlists
+        services.AddScoped<PlaylistListQueryHandler>();
 
         // providers
         services.AddScoped<SourceListQueryHandler>();

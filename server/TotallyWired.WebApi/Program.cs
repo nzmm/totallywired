@@ -49,6 +49,7 @@ app.MapProviderRoutes();
 app.MapArtistRoutes();
 app.MapReleaseRoutes();
 app.MapTrackRoutes();
+app.MapPlaylistRoutes();
 app.MapFallbackToFile("index.html");
 
 app.Services.PrepareDatabase();

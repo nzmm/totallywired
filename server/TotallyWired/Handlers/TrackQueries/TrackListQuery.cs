@@ -12,7 +12,7 @@ public class TrackListSearchParams
     public Guid? ReleaseId { get; set; }
     public Guid? ArtistId { get; set; }
     public string? Q { get; set; }
-    public bool? Liked { get; set; }
+    public ReactionType? Reaction { get; set; }
 }
 
 public class TrackListQueryHandler
@@ -36,7 +36,7 @@ public class TrackListQueryHandler
 
         var releaseId = @params.ReleaseId;
         var artistId = @params.ArtistId;
-        var liked = @params.Liked;
+        var reaction = @params.Reaction;
 
         var tsQuery = @params.Q.TsQuery();
         var hasQuery = tsQuery.Length >= 3;
@@ -55,10 +55,10 @@ public class TrackListQueryHandler
         {
             query = query.Where(t => artistId == t.ArtistId);
         }
-        if (liked ?? false)
+        if (reaction.HasValue)
         {
             query = query.Where(
-                t => t.Reactions.Any(r => r.UserId == userId && r.Reaction == ReactionType.Liked)
+                t => t.Reactions.Any(r => r.UserId == userId && r.Reaction == reaction)
             );
         }
         if (!hasQuery)

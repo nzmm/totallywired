@@ -3,6 +3,7 @@ import {
   Album,
   AlbumDetail,
   Artist,
+  Playlist,
   ProviderCollection,
   ReactionType,
   Track,
@@ -66,6 +67,12 @@ export function getArtists(searchParams?: URLSearchParams) {
 
 export function getArtist(artistId: string) {
   return sendQuery<Artist>(`${API}/artists/${artistId}`);
+}
+
+/* Playlists */
+
+export function getPlaylists() {
+  return sendQuery<Playlist[]>(`${API}/playlists`);
 }
 
 /* Content Providers */

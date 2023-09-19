@@ -5,8 +5,7 @@ import {
 } from "@totallywired/ui-components";
 import { Track } from "../lib/types";
 import { usePlayer } from "../providers/AudioProvider";
-import { tracksDisptach } from "../providers/TracksProvider";
-import { toggleReaction } from "../lib/actions/tracks";
+import { useToggleTrackReaction } from "../lib/hooks/tracks";
 import TrackItem from "./TrackListItem";
 import "./styles/TrackList.css";
 
@@ -14,7 +13,7 @@ export type TrackDataProps = IVirtualListItem & Track;
 
 export default function TrackList({ tracks }: { tracks: Track[] }) {
   const player = usePlayer();
-  const dispatch = tracksDisptach();
+  const toggleReaction = useToggleTrackReaction();
 
   const handleClick = async (
     e: React.MouseEvent<HTMLElement>,
@@ -27,7 +26,7 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
         break;
       }
       case "react": {
-        await toggleReaction(dispatch, item.data);
+        await toggleReaction(item.data);
         break;
       }
     }

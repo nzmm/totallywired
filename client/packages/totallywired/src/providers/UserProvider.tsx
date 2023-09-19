@@ -2,23 +2,23 @@ import { createContext, useContext, useReducer } from "react";
 import { commonReducer, createDispatchContext } from "../lib/reducer";
 import { User } from "../lib/types";
 
-const DataContext = createContext<User | null>(null);
-const DispatchContext = createDispatchContext<User | null>();
+const UserContext = createContext<User | null>(null);
+const UserDispatchContext = createDispatchContext<User | null>();
 const Reducer = commonReducer<User | null>();
 
 export const useUser = () => {
-  return useContext(DataContext);
+  return useContext(UserContext);
 };
 
 export const userDispatch = () => {
-  return useContext(DispatchContext);
+  return useContext(UserDispatchContext);
 };
 
 export function UserProvider({ children }: React.PropsWithChildren) {
   const [user, dispatch] = useReducer(Reducer, null);
   return (
-    <DispatchContext.Provider value={dispatch}>
-      <DataContext.Provider value={user}>{children}</DataContext.Provider>
-    </DispatchContext.Provider>
+    <UserDispatchContext.Provider value={dispatch}>
+      <UserContext.Provider value={user}>{children}</UserContext.Provider>
+    </UserDispatchContext.Provider>
   );
 }

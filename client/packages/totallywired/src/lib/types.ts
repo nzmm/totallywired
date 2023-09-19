@@ -4,7 +4,7 @@ export enum ReactionType {
 }
 
 export type User = {
-  userId: string;
+  id: string;
   username: string;
   name: string;
   isAuthenticated: boolean;
@@ -55,4 +55,11 @@ export type Provider = {
 export type ProviderCollection = {
   sourceType: number;
   providers: Provider[];
+};
+
+export type Playlist = {
+  id: string;
+  userId: string;
+  name: string;
+  trackCount: number;
 };

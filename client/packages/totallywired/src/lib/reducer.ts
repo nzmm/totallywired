@@ -1,7 +1,11 @@
 import React, { Reducer, createContext } from "react";
 
 type SetAction<T> = { type: "ACTION_SET"; apply: T };
-type UpdateAction<T> = { type: "ACTION_UPDATE"; apply: (existing: T) => T };
+type UpdateAction<T> = {
+  type: "ACTION_UPDATE";
+  apply: (existing: T, ...args: any[]) => T;
+  args: any[];
+};
 
 type GenericActions<T> = UpdateAction<T> | SetAction<T>;
 type GenericReducer<T> = Reducer<T, GenericActions<T>>;
@@ -17,7 +21,7 @@ export function commonReducer<T>(): GenericReducer<T> {
   return (obj, action) => {
     switch (action.type) {
       case "ACTION_UPDATE": {
-        return action.apply(obj);
+        return action.apply(obj, ...action.args);
       }
       case "ACTION_SET": {
         return action.apply;
@@ -33,6 +37,9 @@ export function set<T>(apply: T): SetAction<T> {
   return { apply, type: "ACTION_SET" };
 }
 
-export function update<T>(apply: (existing: T) => T): UpdateAction<T> {
-  return { apply, type: "ACTION_UPDATE" };
+export function update<T>(
+  apply: (existing: T, ...args: any[]) => T,
+  ...args: any[]
+): UpdateAction<T> {
+  return { apply, args, type: "ACTION_UPDATE" };
 }

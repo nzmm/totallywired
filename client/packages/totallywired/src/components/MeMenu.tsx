@@ -11,7 +11,7 @@ export default function MeMenu({ user }: { user: User }) {
         <DropdownMenu.Trigger asChild>
           <button id="current-user-btn" className="avatar round md">
             <img
-              src={`/avatars/${user.userId}.jpg`}
+              src={`/avatars/${user.id}.jpg`}
               alt="The current users avatar"
             />
           </button>

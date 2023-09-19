@@ -1,7 +1,8 @@
 export type PlaylistItem<V> = V & { i: number; id: string; ta: Date };
+
 type DataStore<V> = { [k: string]: PlaylistItem<V> };
 
-export class Playlist<V> {
+export class PlaylistManager<V> {
   _sequence: string[] = [];
   _store: DataStore<V> = {};
 

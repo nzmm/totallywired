@@ -11,13 +11,13 @@ public static class UserRoutes
                 "/api/v1/whoami",
                 (ClaimsPrincipal user) =>
                 {
-                    var userId = user.FindFirstValue("tw_userid") ?? string.Empty;
+                    var id = user.FindFirstValue("tw_userid") ?? string.Empty;
                     var username = user.FindFirstValue("tw_username") ?? string.Empty;
                     var name = user.FindFirstValue(ClaimTypes.Name) ?? string.Empty;
                     return Results.Ok(
                         new
                         {
-                            userId,
+                            id,
                             username,
                             name
                         }

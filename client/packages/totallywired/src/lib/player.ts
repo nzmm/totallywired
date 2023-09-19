@@ -1,6 +1,6 @@
 import { Track } from "../lib/types";
 import { getTrackUrl } from "./api";
-import { Playlist, PlaylistItem } from "./playlist";
+import { PlaylistManager, PlaylistItem } from "./playlist";
 import { debounce } from "./utils";
 
 type PlayerEvent =
@@ -50,7 +50,7 @@ export class AudioPlayer {
   private _player0!: HTMLAudioElement;
   private _player1!: HTMLAudioElement;
 
-  private _playlist = new Playlist<PlayerTrack>();
+  private _playlist = new PlaylistManager<PlayerTrack>();
   private _currentId: string = "";
   private _timeout = -1;
 

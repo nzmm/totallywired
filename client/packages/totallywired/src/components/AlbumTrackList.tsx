@@ -10,6 +10,7 @@ import HeaderTrackList, {
 } from "../components/HeaderTrackList";
 import TrackItem from "../components/TrackListItem";
 import ReleaseArt from "./ReleaseArt";
+import "./styles/AlbumTrackList.css";
 
 const useAlbumHeaderInfo = (tracks: Track[]) => {
   return useMemo(() => {
@@ -67,7 +68,8 @@ function AlbumHeader({
           >
             Play all
           </button>
-          {/* <button>Edit</button> */}
+
+          <Link to={`/lib/albums/${album.id}/editor`}>Edit</Link>
         </div>
       </div>
     </li>
