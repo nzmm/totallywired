@@ -8,7 +8,7 @@ import {
 import { getTracks } from "../lib/api";
 import { useAsyncTracks } from "../lib/hooks/tracks";
 import { requestSearchParams } from "../lib/requests";
-import TrackList from "../components/TrackList";
+import TrackList from "../components/lists/TrackList";
 
 export function tracksLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);

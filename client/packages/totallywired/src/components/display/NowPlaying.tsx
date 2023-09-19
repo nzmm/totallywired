@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Artist, Track } from "../lib/types";
-import ReleaseArt from "./ReleaseArt";
+import { Track, Artist } from "../../lib/types";
+import { ReleaseArt } from "./Thumbnail";
 
 type NowPlayingProps = {
   currentTrack?: Track;

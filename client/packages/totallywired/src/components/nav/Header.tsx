@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { useUser } from "../providers/UserProvider";
+import { useUser } from "../../providers/UserProvider";
 import MeMenu from "./MeMenu";
-import SearchInput from "./SearchInput";
-import "./styles/Header.css";
+import SearchInput from "../inputs/SearchInput";
+import "./Header.css";
 
 export default function Header() {
   const user = useUser();

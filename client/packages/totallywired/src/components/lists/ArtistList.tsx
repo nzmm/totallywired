@@ -1,6 +1,6 @@
 import { ListItemProps, VirtualList } from "@totallywired/ui-components";
 import { Link } from "react-router-dom";
-import { Artist } from "../lib/types";
+import { Artist } from "../../lib/types";
 
 function ArtistItem({ top, height, ...artist }: ListItemProps<Artist>) {
   return (

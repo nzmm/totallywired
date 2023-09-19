@@ -4,7 +4,7 @@ import { whoami } from "../lib/api";
 import { set } from "../lib/reducer";
 import { AudioProvider } from "../providers/AudioProvider";
 import { userDispatch } from "../providers/UserProvider";
-import Loading from "../components/Loading";
+import Loading from "../components/display/Loading";
 
 export default function Root() {
   const dispatch = userDispatch();

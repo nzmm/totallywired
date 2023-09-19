@@ -4,10 +4,10 @@ import {
   VirtualList,
   VisibleItem,
 } from "@totallywired/ui-components";
-import { Track } from "../lib/types";
-import { usePlayer } from "../providers/AudioProvider";
-import { useToggleTrackReaction } from "../lib/hooks/tracks";
-import "./styles/HeaderTrackList.css";
+import { Track } from "../../lib/types";
+import { usePlayer } from "../../providers/AudioProvider";
+import { useToggleTrackReaction } from "../../lib/hooks/tracks";
+import "./HeaderTrackList.css";
 
 export type HeaderTrackDataProps<T> = IVirtualListItem & {
   track?: Track;

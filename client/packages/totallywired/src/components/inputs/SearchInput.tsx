@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
-import { debounce } from "../lib/utils";
-import "./styles/SearchInput.css";
+import { debounce } from "../../lib/utils";
+import "./SearchInput.css";
 
 type ChangeEvent = React.ChangeEvent<HTMLInputElement> & {
   currentTarget: { value: string };
@@ -36,8 +36,8 @@ export default function SearchInput() {
   };
 
   useEffect(() => {
-    setQuery(searchParams.get('q') ?? '');
-  }, [searchParams])
+    setQuery(searchParams.get("q") ?? "");
+  }, [searchParams]);
 
   return (
     <form className="search-input" onSubmit={onSubmit}>

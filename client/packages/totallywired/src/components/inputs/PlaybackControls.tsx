@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { AudioPlayer, TrackState } from "../lib/player";
-import { shuffle } from "../lib/utils";
-import { useTracks } from "../providers/TracksProvider";
+import { AudioPlayer, TrackState } from "../../lib/player";
+import { shuffle } from "../../lib/utils";
+import { useTracks } from "../../providers/TracksProvider";
 import Progressbar from "./Progressbar";
 
 type PlaybackControlsProps = {

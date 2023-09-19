@@ -1,5 +1,5 @@
 import { useId } from "react";
-import "./styles/Progressbar.css";
+import "./Progressbar.css";
 
 type ProgressbarProps = {
   label: string;

@@ -3,7 +3,7 @@ import { Await, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { getAlbum, getTracksByAlbum } from "../lib/api";
 import { useAsyncAlbumTracks } from "../lib/hooks/tracks";
 import { requestSearchParams } from "../lib/requests";
-import AlbumTracksList from "../components/AlbumTrackList";
+import AlbumTracksList from "../components/lists/AlbumTrackList";
 
 export function albumTracksLoader({ request, params }: LoaderFunctionArgs) {
   const releaseId = params["releaseId"];

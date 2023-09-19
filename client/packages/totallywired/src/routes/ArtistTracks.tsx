@@ -3,7 +3,7 @@ import { Await, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { getArtist, getTrackByArtist } from "../lib/api";
 import { useAsyncArtistTracks } from "../lib/hooks/tracks";
 import { requestSearchParams } from "../lib/requests";
-import { ArtistTrackList } from "../components/ArtistTrackList";
+import { ArtistTrackList } from "../components/lists/ArtistTrackList";
 
 export function artistTracksLoader({ request, params }: LoaderFunctionArgs) {
   const artistId = params["artistId"];

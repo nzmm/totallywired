@@ -8,7 +8,7 @@ import {
 import { getAlbums } from "../lib/api";
 import { Res, requestSearchParams } from "../lib/requests";
 import { Album } from "../lib/types";
-import AlbumList from "../components/AlbumList";
+import AlbumList from "../components/lists/AlbumList";
 
 export function albumsLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);

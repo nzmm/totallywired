@@ -5,15 +5,18 @@ import {
 } from "@totallywired/ui-components";
 import { useRef } from "react";
 import {
-  AudioPlayer,
   PlaylistItem as Item,
   PlayerTrack,
-  TRACK_STATE_ARRAY,
+  AudioPlayer,
   TrackState,
-} from "../lib/player";
+  TRACK_STATE_ARRAY,
+} from "../../lib/player";
 
 type PlaylistItemProps = ListItemProps<Item<PlayerTrack>>;
-type PlaylistProps = { player: AudioPlayer; items: Item<PlayerTrack>[] };
+type PlaylistProps = {
+  player: AudioPlayer;
+  items: Item<PlayerTrack>[];
+};
 
 const NOOP = () => null;
 

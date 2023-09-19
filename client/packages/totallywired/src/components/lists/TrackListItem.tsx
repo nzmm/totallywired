@@ -1,6 +1,6 @@
 import { ListItemProps } from "@totallywired/ui-components";
 import { Link } from "react-router-dom";
-import { Track } from "../lib/types";
+import { Track } from "../../lib/types";
 
 export type TrackItemProps = ListItemProps<Track>;
 

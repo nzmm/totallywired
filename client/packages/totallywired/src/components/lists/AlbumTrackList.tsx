@@ -1,16 +1,16 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { AlbumDetail, Track } from "../lib/types";
-import { duration } from "../lib/utils";
-import { usePlayer } from "../providers/AudioProvider";
-import { useTracks } from "../providers/TracksProvider";
+import { AlbumDetail, Track } from "../../lib/types";
+import { duration } from "../../lib/utils";
+import { usePlayer } from "../../providers/AudioProvider";
+import { useTracks } from "../../providers/TracksProvider";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
-} from "../components/HeaderTrackList";
-import TrackItem from "../components/TrackListItem";
-import ReleaseArt from "./ReleaseArt";
-import "./styles/AlbumTrackList.css";
+} from "./HeaderTrackList";
+import TrackItem from "./TrackListItem";
+import { ReleaseArt } from "../display/Thumbnail";
+import "./AlbumTrackList.css";
 
 const useAlbumHeaderInfo = (tracks: Track[]) => {
   return useMemo(() => {

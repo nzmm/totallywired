@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
-import { useAwaitingQueue } from "../providers/AudioProvider";
-import "./styles/Sidebar.css";
-import { usePlaylists } from "../providers/PlaylistProvider";
+import { useAwaitingQueue } from "../../providers/AudioProvider";
+import { usePlaylists } from "../../providers/PlaylistProvider";
+import "./Sidebar.css";
 
 const classNamer = ({ isActive }: { isActive: boolean }) =>
   isActive ? "active" : "";

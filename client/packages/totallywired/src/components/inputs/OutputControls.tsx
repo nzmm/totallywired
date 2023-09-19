@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { AudioPlayer } from "../lib/player";
+import type { AudioPlayer } from "../../lib/player";
 
 type OutputControlsProps = {
   player: AudioPlayer;

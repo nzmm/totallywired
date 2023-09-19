@@ -3,11 +3,11 @@ import {
   VirtualList,
   VisibleItem,
 } from "@totallywired/ui-components";
-import { Track } from "../lib/types";
-import { usePlayer } from "../providers/AudioProvider";
-import { useToggleTrackReaction } from "../lib/hooks/tracks";
 import TrackItem from "./TrackListItem";
-import "./styles/TrackList.css";
+import { useToggleTrackReaction } from "../../lib/hooks/tracks";
+import { Track } from "../../lib/types";
+import { usePlayer } from "../../providers/AudioProvider";
+import "./TrackList.css";
 
 export type TrackDataProps = IVirtualListItem & Track;
 

@@ -1,7 +1,6 @@
-.release-art {
+.thumbnail {
   aspect-ratio: 1;
   width: 70px;
-  border-radius: 3px;
   background-color: #fff;
   border: 1px solid #000;
   padding: 2px;
@@ -14,4 +13,12 @@
     border-radius: 2.5px;
     overflow: hidden;
   }
+}
+
+.album-art {
+  border-radius: 100%;
+}
+
+.release-art {
+  border-radius: 3px;
 }

@@ -1,7 +1,6 @@
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { User } from "../lib/types";
-import "./styles/MeMenu.css";
-import "./styles/common/Dropdown.css";
+import { User } from "../../lib/types";
+import "./MeMenu.css";
 
 export default function MeMenu({ user }: { user: User }) {
   return user ? (

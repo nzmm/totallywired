@@ -88,6 +88,9 @@ const adjustLikedTrackCount = (
   return [{ ...liked, trackCount }, ...rest];
 };
 
+/**
+ * Provides declarative access to track reaction toggling.
+ */
 export const useToggleTrackReaction = () => {
   const trDispatch = tracksDisptach();
   const plDispatch = playlistsDispatch();
