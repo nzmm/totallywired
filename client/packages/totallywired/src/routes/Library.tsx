@@ -10,7 +10,7 @@ export default function Library() {
   return (
     <TracksProvider>
       <PlaylistsProvider>
-        <Header />
+        <Header withSearch />
 
         <Splitter
           orientation="horizontal"

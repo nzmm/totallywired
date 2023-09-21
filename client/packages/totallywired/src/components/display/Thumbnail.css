@@ -1,6 +1,5 @@
 .thumbnail {
   aspect-ratio: 1;
-  width: 70px;
   background-color: #fff;
   border: 1px solid #000;
   padding: 2px;
@@ -16,9 +15,11 @@
 }
 
 .album-art {
+  width: 70px;
   border-radius: 100%;
 }
 
 .release-art {
+  width: 70px;
   border-radius: 3px;
 }

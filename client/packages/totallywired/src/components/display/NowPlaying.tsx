@@ -16,13 +16,13 @@ export default function NowPlaying({ currentTrack }: NowPlayingProps) {
         <div className="track d-flex col">
           <div className="name">{currentTrack.name}</div>
           <div className="album">
-            <Link to={`/lib/albums/${currentTrack.releaseId}/tracks`}>
+            <Link to={`/lib/albums/${currentTrack.releaseId}`}>
               {currentTrack.releaseName}
             </Link>{" "}
             &middot; <Link to={`/lib/albums?year=${2023}`}>2023</Link>
           </div>
           <div className="artist">
-            <Link to={`/lib/artists/${currentTrack.artistId}/tracks`}>
+            <Link to={`/lib/artists/${currentTrack.artistId}`}>
               {currentTrack.artistName}
             </Link>
           </div>

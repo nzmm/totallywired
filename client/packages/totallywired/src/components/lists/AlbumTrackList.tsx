@@ -51,9 +51,7 @@ function AlbumHeader({
       <div className="album-info">
         <h2>{album.name}</h2>
         <div>
-          <Link to={`/lib/artists/${album.artistId}/tracks`}>
-            {album.artistName}
-          </Link>{" "}
+          <Link to={`/lib/artists/${album.artistId}`}>{album.artistName}</Link>{" "}
           &middot;{" "}
           <Link to={`/lib/albums?year=${album.year}`}>{album.year}</Link>
         </div>

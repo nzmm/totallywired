@@ -17,12 +17,12 @@ export default function TrackItem({
       </button>
       <span className="col name">{`${track.name}`}</span>
       <span className="col album">
-        <Link to={`/lib/albums/${track.releaseId}/tracks`}>
+        <Link to={`/lib/albums/${track.releaseId}`}>
           {`${track.releaseName}`}
         </Link>
       </span>
       <span className="col artist">
-        <Link to={`/lib/artists/${track.artistId}/tracks`}>
+        <Link to={`/lib/artists/${track.artistId}`}>
           {`${track.artistName}`}
         </Link>
       </span>

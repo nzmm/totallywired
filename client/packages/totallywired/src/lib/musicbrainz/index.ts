@@ -1,5 +1,9 @@
 import { Res, sendQuery } from "../requests";
-import { CAResponse, MBReleaseQueryResponse, MBReleaseResponse } from "./types";
+import {
+  CAResponse,
+  MBReleaseSearchResponse,
+  MBReleaseResponse,
+} from "./types";
 
 const DEFAULT_COVERART_URL = "/default-art.svg";
 
@@ -14,11 +18,16 @@ function getArt(request: string) {
 /**
  * Performs a MusicBrainz `release` query using artist and release names. Returns the top 25 results.
  */
-export const queryReleases = (artistName: string, releaseName: string) => {
-  return getMbz<MBReleaseQueryResponse>(
-    "/release",
+export const searchReleases = (releaseName: string, artistName?: string) => {
+  if (!releaseName) {
+    throw new Error("releaseName is required");
+  }
+  return getMbz<MBReleaseSearchResponse>(
+    "release",
     new URLSearchParams({
-      query: `artist:"${artistName}"+release:"${releaseName}"`,
+      query: artistName
+        ? `release:"${releaseName}"+artist:"${artistName}"`
+        : `release:"${releaseName}"`,
       limit: "25",
       fmt: "json",
     }),
@@ -32,8 +41,11 @@ export const getRelease = (
   releaseId: string,
   inc = "recordings+artist-credits+labels",
 ) => {
+  if (!releaseId) {
+    throw new Error("releaseId is required");
+  }
   return getMbz<MBReleaseResponse>(
-    `/release/${releaseId}`,
+    `release/${releaseId}`,
     new URLSearchParams({
       inc,
       fmt: "json",
@@ -49,10 +61,14 @@ export const getCoverArtUrl = async (
   releaseId: string,
   size: 250 | 500 | 1200 = 250,
 ) => {
+  if (!releaseId) {
+    throw new Error("releaseId is required");
+  }
+
   let r: Res<CAResponse>;
 
   try {
-    r = await getArt(`/release/${releaseId}/front-${size}`);
+    r = await getArt(`release/${releaseId}/front-${size}`);
   } catch {
     return DEFAULT_COVERART_URL;
   }

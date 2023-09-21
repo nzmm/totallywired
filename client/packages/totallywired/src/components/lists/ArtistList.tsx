@@ -8,7 +8,7 @@ function ArtistItem({ top, height, ...artist }: ListItemProps<Artist>) {
       <button className="col lgutter">&nbsp;</button>
       <Link
         className="col name"
-        to={`/lib/artists/${artist.id}/tracks`}
+        to={`/lib/artists/${artist.id}`}
       >{`${artist.name}`}</Link>
     </li>
   );

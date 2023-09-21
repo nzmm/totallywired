@@ -1,5 +1,10 @@
 import { Suspense } from "react";
-import { Await, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
+import {
+  Await,
+  LoaderFunctionArgs,
+  Outlet,
+  useLoaderData,
+} from "react-router-dom";
 import { getAlbum, getTracksByAlbum } from "../lib/api";
 import { useAsyncAlbumTracks } from "../lib/hooks/tracks";
 import { requestSearchParams } from "../lib/requests";
@@ -28,10 +33,13 @@ export default function AlbumTracks() {
   const data = useLoaderData();
 
   return (
-    <Suspense>
-      <Await resolve={data}>
-        <AlbumTracksView />
-      </Await>
-    </Suspense>
+    <>
+      <Suspense>
+        <Await resolve={data}>
+          <AlbumTracksView />
+        </Await>
+      </Suspense>
+      <Outlet />
+    </>
   );
 }

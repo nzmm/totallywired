@@ -4,7 +4,11 @@ import MeMenu from "./MeMenu";
 import SearchInput from "../inputs/SearchInput";
 import "./Header.css";
 
-export default function Header() {
+type HeaderProps = {
+  withSearch?: boolean;
+};
+
+export default function Header({ withSearch }: HeaderProps) {
   const user = useUser();
   return (
     <header className="d-flex row">
@@ -14,7 +18,7 @@ export default function Header() {
 
       {user ? (
         <>
-          <SearchInput />
+          {withSearch ? <SearchInput /> : null}
           <MeMenu user={user} />
         </>
       ) : null}

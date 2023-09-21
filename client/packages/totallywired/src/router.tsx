@@ -12,7 +12,7 @@ import Queue from "./routes/Queue";
 import Root from "./routes/Root";
 import Tracks, { tracksLoader } from "./routes/Tracks";
 import Liked, { likedLoader } from "./routes/Liked";
-import AlbumEditor, { albumEditorLoader } from "./routes/AlbumEditor";
+import AlbumEditor, { albumEditorLoader } from "./routes/AlbumEdit";
 
 import "./styles.css";
 
@@ -41,14 +41,16 @@ export const AppRouter = createBrowserRouter([
             loader: albumsLoader,
           },
           {
-            path: "albums/:releaseId/tracks",
+            path: "albums/:releaseId",
             element: <AlbumTracks />,
             loader: albumTracksLoader,
-          },
-          {
-            path: "albums/:releaseId/editor",
-            element: <AlbumEditor />,
-            loader: albumEditorLoader,
+            children: [
+              {
+                path: "editor",
+                element: <AlbumEditor />,
+                loader: albumEditorLoader,
+              },
+            ],
           },
           {
             path: "artists",
@@ -56,7 +58,7 @@ export const AppRouter = createBrowserRouter([
             loader: artistsLoader,
           },
           {
-            path: "artists/:artistId/tracks",
+            path: "artists/:artistId",
             element: <ArtistTracks />,
             loader: artistTracksLoader,
           },

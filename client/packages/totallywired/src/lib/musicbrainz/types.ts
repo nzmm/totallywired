@@ -1,7 +1,7 @@
 /**
  * MusicBrainz release
  */
-export type MBReleaseQueryItem = {
+export type MBReleaseSearchItem = {
   id: string;
   score: number;
   status: string;
@@ -12,8 +12,8 @@ export type MBReleaseQueryItem = {
       id: string;
       name: string;
       ["sort-name"]: string;
-    }[];
-  };
+    };
+  }[];
   ["release-group"]: {
     ["primary-type"]: string;
   };
@@ -39,11 +39,11 @@ export type MBReleaseQueryItem = {
 /**
  * MusicBrainz release query response
  */
-export type MBReleaseQueryResponse = {
+export type MBReleaseSearchResponse = {
   created: string;
   count: number;
   offset: number;
-  releases: MBReleaseQueryItem[];
+  releases: MBReleaseSearchItem[];
 };
 
 /**
@@ -103,6 +103,6 @@ export type CAResponse = {
   url: string;
 };
 
-export interface MetadataSearchResult extends MBReleaseQueryItem {
+export interface MetadataSearchResult extends MBReleaseSearchItem {
   coverArtUrl?: string;
 }
