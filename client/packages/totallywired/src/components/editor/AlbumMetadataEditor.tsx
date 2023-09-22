@@ -1,14 +1,13 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Splitter } from "@totallywired/ui-components";
-import { searchReleases } from "../../lib/musicbrainz";
-import Header from "../nav/Header";
-import Loading from "../display/Loading";
-import AlbumSearchResult, { AlbumSearchResultProps } from "./AlbumSearchResult";
-import "./AlbumMetadataEditor.css";
 import { AlbumDetail } from "../../lib/types";
 import { getAlbum } from "../../lib/api";
-import { distance } from "../../lib/editor/damerau-lvenshtein";
+import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
+import Header from "../nav/Header";
+import AlbumMetadataSearch from "./AlbumMetadataSearch";
+import AlbumMetadataComparison from "./AlbumComparison";
+import "./AlbumMetadataEditor.css";
 
 type AlbumMetadataEditorProps = {
   releaseId: string;
@@ -23,36 +22,6 @@ export default function AlbumMetadataEditor({
 }: AlbumMetadataEditorProps) {
   const [release, setRelease] = useState<AlbumDetail>();
   const [releaseLoading, setReleaseLoading] = useState(false);
-  const [searchLoading, setSearchLoading] = useState(false);
-  const [searchResults, setSearchResults] = useState<AlbumSearchResultProps[]>(
-    [],
-  );
-
-  const onSearch = async (
-    e: FormEvent<HTMLFormElementWithInputs<"album" | "artist">>,
-  ) => {
-    e.preventDefault();
-    setSearchLoading(true);
-
-    const { album, artist } = e.currentTarget;
-    const res = await searchReleases(album.value, artist.value);
-    if (!res.ok) {
-      return;
-    }
-
-    const releases = (res.data?.releases ?? []).map((r) => {
-      return {
-        ...r,
-        similarity: distance(
-          `${release?.artistName} ${release?.name}`,
-          `${r["artist-credit"][0]?.name} ${r.title}`,
-        ),
-      };
-    });
-
-    setSearchResults(releases);
-    setSearchLoading(false);
-  };
 
   useEffect(() => {
     setReleaseLoading(true);
@@ -60,6 +29,10 @@ export default function AlbumMetadataEditor({
       .then((res) => setRelease(res.data))
       .finally(() => setReleaseLoading(false));
   }, []);
+
+  const onSelect = (result: MBReleaseSearchItem) => {
+    console.log(result);
+  };
 
   return (
     <Dialog.Root open>
@@ -72,42 +45,13 @@ export default function AlbumMetadataEditor({
             initialPosition="350px"
             minSize="200px"
           >
-            <section className="album-search">
-              <form onSubmit={onSearch} autoComplete="off">
-                <fieldset disabled={releaseLoading || searchLoading}>
-                  <input
-                    type="text"
-                    name="album"
-                    placeholder="Album"
-                    defaultValue={release?.name}
-                  />
-                  <input
-                    type="text"
-                    name="artist"
-                    placeholder="Artist"
-                    defaultValue={release?.artistName}
-                  />
-                  <button type="submit">Search</button>
-                </fieldset>
-              </form>
+            <AlbumMetadataSearch
+              release={release}
+              disabled={releaseLoading}
+              onSelect={onSelect}
+            />
 
-              <hr />
-
-              <div className="album-search-results">
-                {searchLoading ? (
-                  <Loading />
-                ) : (
-                  searchResults.map((sr) => (
-                    <AlbumSearchResult key={sr.id} {...sr} />
-                  ))
-                )}
-              </div>
-            </section>
-
-            <section className="album-compare">
-              <div></div>
-              <div></div>
-            </section>
+            <AlbumMetadataComparison />
           </Splitter>
 
           <div className="toolbar">
@@ -119,7 +63,7 @@ export default function AlbumMetadataEditor({
               <button className="Button green">Save changes</button>
             </Dialog.Close>
 
-            <div></div>
+            <div />
           </div>
         </Dialog.Content>
       </Dialog.Portal>

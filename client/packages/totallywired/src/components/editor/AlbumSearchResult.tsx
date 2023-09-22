@@ -1,26 +1,24 @@
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { Thumbnail } from "../display/Thumbnail";
 
 export type AlbumSearchResultProps = MBReleaseSearchItem & {
-  similarity?: number;
+  similarity: number;
+  onSelect: (result: MBReleaseSearchItem) => void;
 };
 
 const dateCountryStr = (date?: number, country?: string) => {
   return [date, country].filter((v) => !!v).join(", ");
 };
 
-export default function AlbumSearchResult({
-  title,
-  date,
-  country,
+export function AlbumSearchResult({
+  onSelect,
   similarity,
-  "track-count": trackCount = 0,
-  "artist-credit": artistCredit,
+  ...result
 }: AlbumSearchResultProps) {
-  const whenWhere = dateCountryStr(date, country);
-
+  const whenWhere = dateCountryStr(result.date, result.country);
   return (
-    <button className="search-result">
+    <button className="search-result" onClick={() => onSelect(result)}>
       <div>
         <Thumbnail
           className="search-release-art"
@@ -30,12 +28,16 @@ export default function AlbumSearchResult({
       </div>
       <div>
         <div>
-          <strong>{title}</strong>
-          <span>{similarity}</span>
+          <strong>
+            {result.title}
+            <span className="similarity">
+              {similarity <= 10 ? <CheckCircledIcon /> : null}
+            </span>
+          </strong>
         </div>
-        <div>{artistCredit.map((a) => a.name).join(", ")}</div>
+        <div>{result["artist-credit"].map((a) => a.name).join(", ")}</div>
         <div>
-          {trackCount} tracks {whenWhere ? ` · ${whenWhere}` : null}
+          {result["track-count"]} tracks {whenWhere ? ` · ${whenWhere}` : null}
         </div>
       </div>
     </button>

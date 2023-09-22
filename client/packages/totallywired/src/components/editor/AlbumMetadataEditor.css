@@ -13,7 +13,7 @@
 
     > .panel {
       &.a {
-        overflow-y: auto;
+        overflow-y: scroll;
       }
 
       > section.album-search {
@@ -50,6 +50,12 @@
 
             .search-release-art {
               width: 50px;
+            }
+
+            .similarity {
+              padding-left: 4px;
+              vertical-align: text-top;
+              color: green;
             }
           }
         }
