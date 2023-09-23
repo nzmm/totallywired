@@ -1,9 +1,10 @@
-import { useState, FormEvent } from "react";
-import { useReleaseSearch } from "../../lib/hooks/editor";
-import { AlbumSearchResult } from "./AlbumSearchResult";
+import { useState, FormEvent, useEffect } from "react";
+import { similar, useReleaseSearch } from "../../lib/hooks/editor";
+import { AlbumSearchResult } from "./SearchResult";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { Album } from "../../lib/types";
 import Loading from "../display/Loading";
+import "./AlbumSearch.css";
 
 type AlbumMetadataSearchProps = {
   disabled: boolean;
@@ -16,7 +17,8 @@ export default function AlbumMetadataSearch({
   disabled,
   onSelect,
 }: AlbumMetadataSearchProps) {
-  const [showBest, setShowBest] = useState(true);
+  const [autoRunFor, setAutoRunFor] = useState("");
+  const [bestOnly, setBestOnly] = useState(true);
 
   const [searchLoading, searchResults, performSearch] =
     useReleaseSearch(release);
@@ -28,6 +30,19 @@ export default function AlbumMetadataSearch({
     const { album, artist } = e.currentTarget;
     await performSearch(album.value, artist.value);
   };
+
+  useEffect(() => {
+    if (!release || autoRunFor === release.id) {
+      return;
+    }
+
+    setAutoRunFor(release.id);
+    performSearch(release.name, release.artistName);
+  }, [release, autoRunFor]);
+
+  const filteredResults = searchResults.filter(
+    (r) => !bestOnly || similar(r.similarity),
+  );
 
   return (
     <section className="album-search">
@@ -45,31 +60,38 @@ export default function AlbumMetadataSearch({
             placeholder="Artist"
             defaultValue={release?.artistName}
           />
-          <label>
-            <input
-              type="checkbox"
-              name="low-sim"
-              checked={showBest}
-              onChange={(e) => setShowBest(e.currentTarget.checked)}
-            />
-            Best matches only
-          </label>
 
           <button type="submit">Search</button>
+
+          <label className="checkbox">
+            <input
+              type="checkbox"
+              name="best-only"
+              checked={bestOnly}
+              onChange={(e) => setBestOnly(e.currentTarget.checked)}
+            />
+            Show just the best matches
+          </label>
         </fieldset>
       </form>
-
-      <hr />
 
       <div className="album-search-results">
         {searchLoading ? (
           <Loading />
+        ) : filteredResults.length ? (
+          filteredResults.map((sr) => (
+            <AlbumSearchResult key={sr.id} onSelect={onSelect} {...sr} />
+          ))
+        ) : searchResults.length ? (
+          <button
+            className="feedback action"
+            onClick={() => setBestOnly(false)}
+          >
+            Show {searchResults.length - filteredResults.length} omitted
+            results?
+          </button>
         ) : (
-          searchResults
-            .filter((r) => !showBest || r.similarity <= 10)
-            .map((sr) => (
-              <AlbumSearchResult key={sr.id} onSelect={onSelect} {...sr} />
-            ))
+          <div className="feedback message muted">No search results</div>
         )}
       </div>
     </section>

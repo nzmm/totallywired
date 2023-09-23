@@ -1,0 +1,45 @@
+section.album-search {
+  min-height: 100%;
+  background-color: rgb(247, 247, 247);
+
+  > form > fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-bottom: 0;
+
+    & label.checkbox {
+      display: inline-block;
+      white-space: nowrap;
+
+      > input[type="checkbox"] {
+        vertical-align: middle;
+        margin-top: 2px;
+        margin-left: 0;
+        margin-right: 0.3rem;
+      }
+    }
+  }
+
+  .album-search-results {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .feedback {
+    padding: 8px;
+
+    &.action {
+      text-decoration: underline;
+      background-color: transparent;
+      border: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    &.message {
+      display: inline-block;
+    }
+  }
+}

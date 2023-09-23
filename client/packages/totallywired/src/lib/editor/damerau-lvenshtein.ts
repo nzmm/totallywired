@@ -55,6 +55,10 @@ const damerau = (
   }
 };
 
+/**
+ * Calculates the distance between two strings using the Damerau–Levenshtein method.
+ * @seealso https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
+ */
 const distance = (s1: string, s2: string) => {
   if (s1 == null || s2 == null) {
     return -1;

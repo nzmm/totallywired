@@ -1,9 +1,10 @@
-import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
+import { SearchResult, similar } from "../../lib/hooks/editor";
 import { Thumbnail } from "../display/Thumbnail";
+import "./SearchResult.css";
 
-export type AlbumSearchResultProps = MBReleaseSearchItem & {
-  similarity: number;
+export type AlbumSearchResultProps = SearchResult & {
   onSelect: (result: MBReleaseSearchItem) => void;
 };
 
@@ -30,9 +31,14 @@ export function AlbumSearchResult({
         <div>
           <strong>
             {result.title}
-            <span className="similarity">
-              {similarity <= 10 ? <CheckCircledIcon /> : null}
-            </span>
+            {!similar(similarity) ? (
+              <span
+                className="low-similarity"
+                title="Possible low relevance search result"
+              >
+                <QuestionMarkCircledIcon />
+              </span>
+            ) : null}
           </strong>
         </div>
         <div>{result["artist-credit"].map((a) => a.name).join(", ")}</div>

@@ -12,7 +12,7 @@ export default function Header({ withSearch }: HeaderProps) {
   const user = useUser();
   return (
     <header className="d-flex row">
-      <h1>
+      <h1 className="brand" title="TotallyWired!">
         <Link to="/">TotallyWired</Link>
       </h1>
 

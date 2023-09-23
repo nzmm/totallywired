@@ -16,12 +16,12 @@ aside {
 
     > li > .jube {
       float: right;
-      color: black;
-      font-size: small;
+      color: rgb(65, 65, 65);
+      font-size: smaller;
       background-color: whitesmoke;
       border: 1px solid gray;
       border-radius: 9px;
-      padding: 0 8px;
+      padding: 1px 8px;
     }
   }
 }

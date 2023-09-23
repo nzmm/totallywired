@@ -4,9 +4,13 @@ header {
   padding: 2px 8px;
   border-bottom: 1px solid gray;
 
-  > h1 {
+  > h1.brand {
     margin: 0;
     padding: 0;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
+
+    > a {
+      text-decoration: none;
+    }
   }
 }

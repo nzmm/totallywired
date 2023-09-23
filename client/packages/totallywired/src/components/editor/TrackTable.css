@@ -1,0 +1,29 @@
+table.track-table {
+  width: 100%;
+  overflow: hidden;
+
+  > tr > td > input:read-only {
+    text-overflow: ellipsis;
+    width: 100%;
+    outline: 0;
+    border: 0;
+    border-bottom: 1px dotted rgb(230, 230, 230);
+    margin: 0;
+  }
+
+  > tr > td {
+    padding: 3px 0;
+  }
+
+  > tr > td.num {
+    width: 3rem;
+  }
+
+  > tr > td.len {
+    width: 6rem;
+
+    > input {
+      text-align: right;
+    }
+  }
+}

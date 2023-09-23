@@ -4,7 +4,17 @@ import { searchReleases } from "../musicbrainz";
 import { Album } from "../types";
 import { MBReleaseSearchItem } from "../musicbrainz/types";
 
-type SearchResult = MBReleaseSearchItem & { similarity: number };
+export type HasSimilarity = { similarity: number };
+export type SearchResult = MBReleaseSearchItem & HasSimilarity;
+
+const LOW_SIMILARITY_THRESHOLD = 10;
+
+/**
+ * Values less-than-or-equal the threshold are considered highly similar.
+ */
+export function similar(similarity: number) {
+  return similarity <= LOW_SIMILARITY_THRESHOLD;
+}
 
 export const useReleaseSearch = (
   release: Album | undefined,
@@ -38,7 +48,7 @@ export const useReleaseSearch = (
           return {
             ...r,
             similarity: distance(
-              `${release?.artistName} ${release?.name}`,
+              `${artistName} ${albumName}`,
               `${r["artist-credit"][0]?.name} ${r.title}`,
             ),
           };

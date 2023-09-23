@@ -2,9 +2,7 @@ import { LoaderFunctionArgs, useNavigate, useParams } from "react-router-dom";
 import React, { Suspense } from "react";
 import Loading from "../components/display/Loading";
 
-const LazyEditor = React.lazy(
-  () => import("../components/editor/AlbumMetadataEditor"),
-);
+const LazyEditor = React.lazy(() => import("../components/editor/AlbumEditor"));
 
 export function albumEditorLoader({}: LoaderFunctionArgs) {
   return Promise.resolve({});

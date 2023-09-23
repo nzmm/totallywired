@@ -1,0 +1,42 @@
+.album-compare {
+  display: grid;
+  min-height: 100%;
+
+  .metadata {
+    padding: 4px 20px;
+    overflow-x: hidden;
+
+    > div > h4 {
+      margin: 4px 0;
+      margin-bottom: 12px;
+      padding-left: 2px;
+      text-transform: uppercase;
+      font-size: smaller;
+    }
+
+    > .large-release-art {
+      width: 130px;
+      height: 130px;
+      margin-left: 4px;
+    }
+  }
+
+  > .current.metadata {
+    border-right: 1px solid lightgray;
+  }
+
+  /* > .proposed.metadata {
+  } */
+
+  & caption {
+    text-transform: uppercase;
+    text-align: left;
+    font-weight: bold;
+    font-size: smaller;
+    margin-top: 1.6rem;
+    margin-bottom: 8px;
+    padding-left: 2px;
+    padding-bottom: 1px;
+    border-bottom: 1px solid lightgray;
+  }
+}

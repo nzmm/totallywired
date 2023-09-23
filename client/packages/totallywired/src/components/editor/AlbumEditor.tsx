@@ -1,13 +1,13 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { useEffect, useState } from "react";
 import { Splitter } from "@totallywired/ui-components";
-import { AlbumDetail } from "../../lib/types";
-import { getAlbum } from "../../lib/api";
+import { AlbumDetail, Track } from "../../lib/types";
+import { getAlbum, getTracksByAlbum } from "../../lib/api";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import Header from "../nav/Header";
-import AlbumMetadataSearch from "./AlbumMetadataSearch";
+import AlbumMetadataSearch from "./AlbumSearch";
 import AlbumMetadataComparison from "./AlbumComparison";
-import "./AlbumMetadataEditor.css";
+import "./AlbumEditor.css";
 
 type AlbumMetadataEditorProps = {
   releaseId: string;
@@ -21,13 +21,18 @@ export default function AlbumMetadataEditor({
   onDiscard,
 }: AlbumMetadataEditorProps) {
   const [release, setRelease] = useState<AlbumDetail>();
-  const [releaseLoading, setReleaseLoading] = useState(false);
+  const [tracks, setTracks] = useState<Track[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setReleaseLoading(true);
-    getAlbum(releaseId)
-      .then((res) => setRelease(res.data))
-      .finally(() => setReleaseLoading(false));
+    setLoading(true);
+    const albumLoader = getAlbum(releaseId).then((res) => setRelease(res.data));
+
+    const tracksLoader = getTracksByAlbum(releaseId).then((res) =>
+      setTracks(res.data ?? []),
+    );
+
+    Promise.all([albumLoader, tracksLoader]).finally(() => setLoading(false));
   }, []);
 
   const onSelect = (result: MBReleaseSearchItem) => {
@@ -42,16 +47,19 @@ export default function AlbumMetadataEditor({
 
           <Splitter
             orientation="horizontal"
-            initialPosition="350px"
+            initialPosition="300px"
             minSize="200px"
           >
             <AlbumMetadataSearch
               release={release}
-              disabled={releaseLoading}
+              disabled={loading}
               onSelect={onSelect}
             />
 
-            <AlbumMetadataComparison />
+            <AlbumMetadataComparison
+              currentRelease={release}
+              currentTracks={tracks}
+            />
           </Splitter>
 
           <div className="toolbar">
@@ -62,7 +70,6 @@ export default function AlbumMetadataEditor({
             <Dialog.Close asChild onClick={onSave}>
               <button className="Button green">Save changes</button>
             </Dialog.Close>
-
             <div />
           </div>
         </Dialog.Content>

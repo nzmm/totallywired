@@ -1,0 +1,29 @@
+@import "@radix-ui/colors/orange.css";
+
+.search-result {
+  padding: 3px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  background-color: transparent;
+  border: 0;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+
+  &:hover {
+    background-color: rgb(233, 233, 233);
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+  }
+
+  .search-release-art {
+    width: 50px;
+  }
+
+  .low-similarity {
+    padding-left: 4px;
+    vertical-align: text-top;
+    color: var(--orange-10);
+  }
+}
