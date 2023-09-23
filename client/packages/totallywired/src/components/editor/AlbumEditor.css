@@ -14,7 +14,7 @@
     > .panel {
       &.a,
       &.b {
-        overflow-y: scroll;
+        overflow-y: auto;
       }
 
       > section {

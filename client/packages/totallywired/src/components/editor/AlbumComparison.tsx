@@ -32,9 +32,9 @@ export default function AlbumMetadataComparison({
             className="large-release-art"
           />
 
-          <ReleaseTable release={currentRelease} />
+          <ReleaseTable release={currentRelease} readOnly />
 
-          <TrackTable tracks={currentTracks} />
+          <TrackTable tracks={currentTracks} readOnly />
         </div>
 
         <div className="proposed metadata">

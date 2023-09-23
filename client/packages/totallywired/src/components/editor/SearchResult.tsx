@@ -1,10 +1,14 @@
-import { QuestionMarkCircledIcon } from "@radix-ui/react-icons";
+import {
+  ChevronRightIcon,
+  QuestionMarkCircledIcon,
+} from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { SearchResult, similar } from "../../lib/hooks/editor";
 import { Thumbnail } from "../display/Thumbnail";
 import "./SearchResult.css";
 
 export type AlbumSearchResultProps = SearchResult & {
+  active?: boolean;
   onSelect: (result: MBReleaseSearchItem) => void;
 };
 
@@ -13,13 +17,17 @@ const dateCountryStr = (date?: number, country?: string) => {
 };
 
 export function AlbumSearchResult({
-  onSelect,
+  active,
   similarity,
+  onSelect,
   ...result
 }: AlbumSearchResultProps) {
   const whenWhere = dateCountryStr(result.date, result.country);
   return (
-    <button className="search-result" onClick={() => onSelect(result)}>
+    <button
+      className={`search-result${active ? " active" : ""}`}
+      onClick={() => onSelect(result)}
+    >
       <div>
         <Thumbnail
           className="search-release-art"
@@ -27,24 +35,18 @@ export function AlbumSearchResult({
           alt="The release art for the album search result"
         />
       </div>
-      <div>
+
+      <div className="search-release-details">
         <div>
-          <strong>
-            {result.title}
-            {!similar(similarity) ? (
-              <span
-                className="low-similarity"
-                title="Possible low relevance search result"
-              >
-                <QuestionMarkCircledIcon />
-              </span>
-            ) : null}
-          </strong>
+          <strong>{result.title}</strong>
         </div>
         <div>{result["artist-credit"].map((a) => a.name).join(", ")}</div>
         <div>
           {result["track-count"]} tracks {whenWhere ? ` · ${whenWhere}` : null}
         </div>
+      </div>
+      <div className="chevron">
+        <ChevronRightIcon />
       </div>
     </button>
   );

@@ -1,11 +1,13 @@
 import { Album } from "../../lib/types";
+import AcceptChangeTool from "./AcceptChangeTool";
 import "./ReleaseTable.css";
 
 type ReleaseTableProps = {
   release: Album;
+  readOnly?: boolean;
 };
 
-export default function ReleaseTable({ release }: ReleaseTableProps) {
+export default function ReleaseTable({ release, readOnly }: ReleaseTableProps) {
   return (
     <table className="release-table">
       <caption>Release</caption>
@@ -13,7 +15,7 @@ export default function ReleaseTable({ release }: ReleaseTableProps) {
       <tr className="sr-only">
         <td></td>
         <th scope="col">Value</th>
-        <th scope="col">Actions</th>
+        <th scope="col">Tools</th>
       </tr>
 
       <tr>
@@ -21,9 +23,16 @@ export default function ReleaseTable({ release }: ReleaseTableProps) {
           Release name
         </th>
         <td>
-          <input type="text" value={release.name} readOnly />
+          <input
+            type="text"
+            value={release.name}
+            readOnly
+            placeholder="Release name"
+          />
         </td>
-        <td></td>
+        <td>
+          <AcceptChangeTool oldValue={release.name} readOnly={readOnly} />
+        </td>
       </tr>
       <tr>
         <th scope="row" className="sr-only">
@@ -37,7 +46,9 @@ export default function ReleaseTable({ release }: ReleaseTableProps) {
             readOnly
           />
         </td>
-        <td></td>
+        <td>
+          <AcceptChangeTool oldValue={release.artistName} readOnly={readOnly} />
+        </td>
       </tr>
       <tr>
         <th scope="row" className="sr-only">
@@ -46,7 +57,9 @@ export default function ReleaseTable({ release }: ReleaseTableProps) {
         <td>
           <input type="text" value={release.year} placeholder="Year" readOnly />
         </td>
-        <td></td>
+        <td>
+          <AcceptChangeTool oldValue={release.year} readOnly={readOnly} />
+        </td>
       </tr>
       <tr>
         <th scope="row" className="sr-only">
@@ -55,7 +68,9 @@ export default function ReleaseTable({ release }: ReleaseTableProps) {
         <td>
           <input type="text" value="" placeholder="Record label" readOnly />
         </td>
-        <td></td>
+        <td>
+          <AcceptChangeTool oldValue="" readOnly={readOnly} />
+        </td>
       </tr>
       <tr>
         <th scope="row" className="sr-only">
@@ -64,7 +79,9 @@ export default function ReleaseTable({ release }: ReleaseTableProps) {
         <td>
           <input type="text" value="" placeholder="Country" readOnly />
         </td>
-        <td></td>
+        <td>
+          <AcceptChangeTool oldValue="" readOnly={readOnly} />
+        </td>
       </tr>
     </table>
   );

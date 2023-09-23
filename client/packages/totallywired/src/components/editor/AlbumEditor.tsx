@@ -23,6 +23,7 @@ export default function AlbumMetadataEditor({
   const [release, setRelease] = useState<AlbumDetail>();
   const [tracks, setTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState(false);
+  const [selected, setSelected] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -36,7 +37,7 @@ export default function AlbumMetadataEditor({
   }, []);
 
   const onSelect = (result: MBReleaseSearchItem) => {
-    console.log(result);
+    setSelected(result.id);
   };
 
   return (
@@ -53,6 +54,7 @@ export default function AlbumMetadataEditor({
             <AlbumMetadataSearch
               release={release}
               disabled={loading}
+              selectedId={selected}
               onSelect={onSelect}
             />
 

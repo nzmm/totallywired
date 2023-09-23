@@ -7,14 +7,16 @@ import Loading from "../display/Loading";
 import "./AlbumSearch.css";
 
 type AlbumMetadataSearchProps = {
-  disabled: boolean;
   release: Album | undefined;
+  disabled: boolean;
+  selectedId: string;
   onSelect: (result: MBReleaseSearchItem) => void;
 };
 
 export default function AlbumMetadataSearch({
   release,
   disabled,
+  selectedId,
   onSelect,
 }: AlbumMetadataSearchProps) {
   const [autoRunFor, setAutoRunFor] = useState("");
@@ -80,7 +82,12 @@ export default function AlbumMetadataSearch({
           <Loading />
         ) : filteredResults.length ? (
           filteredResults.map((sr) => (
-            <AlbumSearchResult key={sr.id} onSelect={onSelect} {...sr} />
+            <AlbumSearchResult
+              key={sr.id}
+              active={sr.id === selectedId}
+              onSelect={onSelect}
+              {...sr}
+            />
           ))
         ) : searchResults.length ? (
           <button

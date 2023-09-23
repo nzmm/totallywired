@@ -3,6 +3,7 @@
 .search-result {
   padding: 3px 8px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 8px;
   text-align: left;
@@ -10,20 +11,50 @@
   border: 0;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
+  color: rgb(46, 46, 46);
 
-  &:hover {
+  &.active {
+    background-color: rgb(202, 202, 202);
+    border-top: 1px solid rgb(192, 192, 192);
+    border-bottom: 1px solid rgb(192, 192, 192);
+
+    &:hover {
+      background-color: rgb(196, 196, 196);
+      border-top: 1px solid rgb(190, 190, 190);
+      border-bottom: 1px solid rgb(190, 190, 190);
+    }
+  }
+
+  &:hover,
+  &.active {
+    > .chevron {
+      opacity: 1;
+    }
+  }
+
+  &:hover:not(.active) {
     background-color: rgb(233, 233, 233);
     border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
+    color: black;
   }
 
   .search-release-art {
     width: 50px;
   }
 
+  .search-release-details {
+    flex-grow: 1;
+  }
+
   .low-similarity {
     padding-left: 4px;
     vertical-align: text-top;
     color: var(--orange-10);
+  }
+
+  .chevron {
+    flex-shrink: 1;
+    opacity: 0;
   }
 }
