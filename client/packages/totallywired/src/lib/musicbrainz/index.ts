@@ -16,18 +16,21 @@ function getArt(request: string) {
 }
 
 /**
- * Performs a MusicBrainz `release` query using artist and release names. Returns the top 25 results.
+ * Performs a MusicBrainz `release` query using artist and/or release names. Returns the top 25 results.
  */
-export const searchReleases = (releaseName: string, artistName?: string) => {
-  if (!releaseName) {
-    throw new Error("releaseName is required");
+export const searchReleases = (releaseName: string, artistName: string) => {
+  if (!releaseName || !artistName) {
+    throw new Error("releaseName or artistName required");
   }
   return getMbz<MBReleaseSearchResponse>(
     "release",
     new URLSearchParams({
-      query: artistName
-        ? `release:"${releaseName}"+artist:"${artistName}"`
-        : `release:"${releaseName}"`,
+      query:
+        releaseName && artistName
+          ? `release:"${releaseName}" AND artist:"${artistName}"`
+          : releaseName
+          ? `release:"${releaseName}"`
+          : `artist:"${artistName}"`,
       limit: "25",
       fmt: "json",
     }),
