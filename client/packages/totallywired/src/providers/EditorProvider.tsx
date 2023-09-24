@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useReducer } from "react";
-import { commonReducer, createDispatchContext, update } from "../lib/reducer";
-import { AlbumChangeableFields, EditorContextState } from "../lib/editor/types";
+import { commonReducer, createDispatchContext } from "../lib/reducer";
+import { EditorContextState } from "../lib/editor/types";
 import { getAlbum, getTracksByAlbum } from "../lib/api";
-import { AlbumWithTracks } from "../lib/types";
+import { setCurrentRelease, setLoading } from "../lib/editor/actions";
 
 type EditorProviderProps = React.PropsWithChildren & {
   releaseId: string;
@@ -12,7 +12,6 @@ const INITIAL_STATE: EditorContextState = {
   loading: false,
   current: undefined,
   proposal: undefined,
-  selected: undefined,
   candidateTracks: [],
   artCollection: {},
 };
@@ -27,17 +26,6 @@ export const useEditor = () => {
 
 export const editorDisptach = () => {
   return useContext(EditorDispatchContext);
-};
-
-const setLoading = (loading: boolean) => {
-  return update((state: EditorContextState) => ({ ...state, loading }));
-};
-
-const setCurrentRelease = (release: AlbumWithTracks) => {
-  return update((state: EditorContextState) => ({
-    ...state,
-    current: release,
-  }));
 };
 
 export default function EditorProvider({

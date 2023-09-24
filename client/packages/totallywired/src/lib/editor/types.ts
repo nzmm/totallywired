@@ -1,4 +1,4 @@
-import { MBReleaseSearchItem, MBTrack } from "../musicbrainz/types";
+import { MBTrack } from "../musicbrainz/types";
 import { AlbumWithTracks } from "../types";
 
 export type HasSimiliarity = { similarity: number };
@@ -15,9 +15,9 @@ export type MetadataChangeRequest<T> = ChangeRequestApproval & {
 export type TrackChangeRequest = ChangeRequestApproval &
   HasSimiliarity & {
     id: string;
-    mbid: string;
     number: string;
     name: string;
+    mbid: string;
   };
 
 export type AlbumChangeableFields = {
@@ -41,7 +41,6 @@ export type EditorContextState = {
   loading: boolean;
   current?: AlbumWithTracks;
   proposal?: AlbumChangeProposal;
-  selected?: MBReleaseSearchItem;
   candidateTracks: MBTrack[];
   artCollection: Record<string, string>;
 };

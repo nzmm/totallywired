@@ -1,6 +1,8 @@
 import * as Dialog from "@radix-ui/react-dialog";
+import { useState } from "react";
 import { Splitter } from "@totallywired/ui-components";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
+import { AlbumChangeProposal } from "../../lib/editor/types";
 import { buildProposal } from "../../lib/editor/proposals";
 import { update } from "../../lib/reducer";
 import EditorProvider, {
@@ -11,11 +13,10 @@ import Header from "../nav/Header";
 import AlbumMetadataSearch from "./AlbumSearch";
 import AlbumMetadataComparison from "./AlbumComparison";
 import "./AlbumEditor.css";
-import { useState } from "react";
 
 type AlbumMetadataEditorProps = {
   releaseId: string;
-  onSave: () => void;
+  onSave: (proposal?: AlbumChangeProposal) => void;
   onDiscard: () => void;
 };
 
@@ -84,7 +85,7 @@ function AlbumMetadataEditorModal({
               <button className="Button">Discard</button>
             </Dialog.Close>
 
-            <Dialog.Close asChild onClick={onSave}>
+            <Dialog.Close asChild onClick={() => onSave(editor.proposal)}>
               <button className="Button green">Save changes</button>
             </Dialog.Close>
             <div />

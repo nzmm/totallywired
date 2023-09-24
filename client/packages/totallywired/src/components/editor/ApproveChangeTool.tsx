@@ -3,18 +3,16 @@ import { ChangeRequestApproval } from "../../lib/editor/types";
 
 type ApproveChangeToolProps = {
   name: string;
-  readOnly?: boolean;
   approval?: ChangeRequestApproval;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 export default function ApproveChangeTool({
   name,
-  readOnly,
   approval,
   onChange,
 }: ApproveChangeToolProps) {
-  if (readOnly || !approval) {
+  if (!approval) {
     return null;
   }
 

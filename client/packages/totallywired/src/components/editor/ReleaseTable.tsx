@@ -5,7 +5,7 @@ import {
   MetadataChangeRequest,
 } from "../../lib/editor/types";
 import { editorDisptach } from "../../providers/EditorProvider";
-import { updateProposal } from "../../lib/editor/actions";
+import { updateReleaseProposal } from "../../lib/editor/actions";
 import { AlbumDetail } from "../../lib/types";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./MetadataTable.css";
@@ -23,6 +23,7 @@ type ReleaseRowProps = {
   name: string;
   readOnly?: boolean;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onApprove: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 function ReleaseRow({
@@ -32,6 +33,7 @@ function ReleaseRow({
   label,
   readOnly,
   onChange,
+  onApprove,
 }: ReleaseRowProps) {
   const isReadOnly = readOnly || !newValue?.approved || !newValue.active;
   return (
@@ -55,9 +57,8 @@ function ReleaseRow({
         {readOnly ? null : (
           <ApproveChangeTool
             name={name}
-            readOnly={readOnly}
             approval={newValue}
-            onChange={onChange}
+            onChange={onApprove}
           />
         )}
       </td>
@@ -73,27 +74,19 @@ export default function ReleaseTable({
   const dispatch = editorDisptach();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { type } = e.currentTarget;
+    const { name, value } = e.currentTarget;
+    dispatch(
+      updateReleaseProposal(name as keyof AlbumChangeableFields, { value }),
+    );
+  };
 
-    switch (type) {
-      case "text": {
-        const { name, value } = e.currentTarget;
-        dispatch(
-          updateProposal(name as keyof AlbumChangeableFields, { value }),
-        );
-        break;
-      }
-      case "checkbox": {
-        const { id, checked: approved } = e.currentTarget;
-        dispatch(
-          updateProposal(id as keyof AlbumChangeableFields, { approved }),
-        );
-        break;
-      }
-      default:
-        console.warn(`Unknown action type: ${type}`);
-        break;
-    }
+  const onApprove = (e: ChangeEvent<HTMLInputElement>) => {
+    const { id, checked: approved } = e.currentTarget;
+    dispatch(
+      updateReleaseProposal(id as keyof AlbumChangeableFields, {
+        approved,
+      }),
+    );
   };
 
   return (
@@ -116,6 +109,7 @@ export default function ReleaseTable({
           newValue={proposal?.name}
           readOnly={readOnly}
           onChange={onChange}
+          onApprove={onApprove}
         />
         <ReleaseRow
           name="artistName"
@@ -124,6 +118,7 @@ export default function ReleaseTable({
           newValue={proposal?.artistName}
           readOnly={readOnly}
           onChange={onChange}
+          onApprove={onApprove}
         />
         <ReleaseRow
           name="year"
@@ -132,6 +127,7 @@ export default function ReleaseTable({
           newValue={proposal?.year}
           readOnly={readOnly}
           onChange={onChange}
+          onApprove={onApprove}
         />
         <ReleaseRow
           name="recordLabel"
@@ -140,6 +136,7 @@ export default function ReleaseTable({
           newValue={proposal?.recordLabel}
           readOnly={readOnly}
           onChange={onChange}
+          onApprove={onApprove}
         />
         <ReleaseRow
           name="country"
@@ -148,6 +145,7 @@ export default function ReleaseTable({
           newValue={proposal?.country}
           readOnly={readOnly}
           onChange={onChange}
+          onApprove={onApprove}
         />
       </tbody>
     </table>
