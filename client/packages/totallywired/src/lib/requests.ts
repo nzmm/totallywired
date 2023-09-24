@@ -29,9 +29,8 @@ export async function sendQuery<T>(
   searchParams?: URLSearchParams,
 ): Promise<Res<T>> {
   const includeSearchParams = searchParams?.size ?? 0 > 0;
-  const res = await fetch(
-    `${includeSearchParams ? `${url}?${searchParams}` : url}`,
-  );
+  const finalUrl = `${includeSearchParams ? `${url}?${searchParams}` : url}`;
+  const res = await fetch(finalUrl);
   const { ok, status } = res;
 
   if (!ok) {

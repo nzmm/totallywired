@@ -1,13 +1,17 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { useEffect, useState } from "react";
 import { Splitter } from "@totallywired/ui-components";
-import { AlbumDetail, Track } from "../../lib/types";
-import { getAlbum, getTracksByAlbum } from "../../lib/api";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
+import { buildProposal } from "../../lib/editor/proposals";
+import { update } from "../../lib/reducer";
+import EditorProvider, {
+  editorDisptach,
+  useEditor,
+} from "../../providers/EditorProvider";
 import Header from "../nav/Header";
 import AlbumMetadataSearch from "./AlbumSearch";
 import AlbumMetadataComparison from "./AlbumComparison";
 import "./AlbumEditor.css";
+import { useState } from "react";
 
 type AlbumMetadataEditorProps = {
   releaseId: string;
@@ -15,29 +19,39 @@ type AlbumMetadataEditorProps = {
   onDiscard: () => void;
 };
 
-export default function AlbumMetadataEditor({
-  releaseId,
+function AlbumMetadataEditorModal({
   onSave,
   onDiscard,
-}: AlbumMetadataEditorProps) {
-  const [release, setRelease] = useState<AlbumDetail>();
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [selected, setSelected] = useState("");
+}: Omit<AlbumMetadataEditorProps, "releaseId">) {
+  const [selectedId, setSelectedId] = useState("");
 
-  useEffect(() => {
-    setLoading(true);
-    const albumLoader = getAlbum(releaseId).then((res) => setRelease(res.data));
+  const dispatch = editorDisptach();
+  const editor = useEditor();
 
-    const tracksLoader = getTracksByAlbum(releaseId).then((res) =>
-      setTracks(res.data ?? []),
+  const { loading, current, proposal, candidateTracks } = editor;
+
+  const onSelect = async (candidate: MBReleaseSearchItem) => {
+    if (!current?.id) {
+      return;
+    }
+    if (selectedId === candidate.id) {
+      return;
+    }
+
+    setSelectedId(candidate.id);
+
+    const { proposal: newProposal, candidateTracks } = await buildProposal(
+      current,
+      candidate,
     );
 
-    Promise.all([albumLoader, tracksLoader]).finally(() => setLoading(false));
-  }, []);
-
-  const onSelect = (result: MBReleaseSearchItem) => {
-    setSelected(result.id);
+    dispatch(
+      update((state) => ({
+        ...state,
+        candidateTracks,
+        proposal: newProposal,
+      })),
+    );
   };
 
   return (
@@ -52,15 +66,16 @@ export default function AlbumMetadataEditor({
             minSize="200px"
           >
             <AlbumMetadataSearch
-              release={release}
+              release={current}
+              selectedId={selectedId}
               disabled={loading}
-              selectedId={selected}
               onSelect={onSelect}
             />
 
             <AlbumMetadataComparison
-              currentRelease={release}
-              currentTracks={tracks}
+              current={current}
+              proposal={proposal}
+              candidateTracks={candidateTracks}
             />
           </Splitter>
 
@@ -77,5 +92,17 @@ export default function AlbumMetadataEditor({
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
+  );
+}
+
+export default function AlbumMetadataEditor({
+  releaseId,
+  onSave,
+  onDiscard,
+}: AlbumMetadataEditorProps) {
+  return (
+    <EditorProvider releaseId={releaseId}>
+      <AlbumMetadataEditorModal onSave={onSave} onDiscard={onDiscard} />
+    </EditorProvider>
   );
 }

@@ -12,16 +12,17 @@ function getMbz<T>(request: string, params: URLSearchParams) {
 }
 
 function getArt(request: string) {
-  return sendQuery<CAResponse>(`https://coverartarchive.org/${request}`);
+  return sendQuery<CAResponse>(`https://coverartarchive.org/${request}/front`);
 }
 
 /**
  * Performs a MusicBrainz `release` query using artist and/or release names. Returns the top 25 results.
  */
 export const searchReleases = (releaseName: string, artistName: string) => {
-  if (!releaseName || !artistName) {
+  if (!releaseName && !artistName) {
     throw new Error("releaseName or artistName required");
   }
+
   return getMbz<MBReleaseSearchResponse>(
     "release",
     new URLSearchParams({

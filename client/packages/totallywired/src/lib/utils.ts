@@ -49,3 +49,15 @@ export const duration = (ms: number) => {
   const s = Math.floor((ms / 1000) % 60);
   return h >= 1 ? `${h}h ${m}m ${s}s` : `${m}m ${s}s`;
 };
+
+/**
+ * Attmempts to parse a date time string.
+ * @returns A Date object or null if parsing fails
+ */
+export const tryParseDate = (dateStr: string): Date | null => {
+  try {
+    return new Date(dateStr);
+  } catch {
+    return null;
+  }
+};

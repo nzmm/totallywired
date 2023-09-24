@@ -1,31 +1,10 @@
-table.track-table {
-  width: 100%;
-  overflow: hidden;
-
-  > tr > td > input[type="text"] {
-    text-overflow: ellipsis;
-    width: 100%;
-    outline: 0;
-    border: 0;
-    margin: 0;
+table.track.metadata-table {
+  & tr > td.num {
+    width: 2.5rem;
   }
 
-  > tr > td > input[type="checkbox"] {
-    float: right;
-    margin: 0;
-  }
-
-  > tr > td {
-    padding: 3px 0;
-    border-bottom: 1px dotted rgb(230, 230, 230);
-  }
-
-  > tr > td.num {
+  & tr > td.len {
     width: 3rem;
-  }
-
-  > tr > td.len {
-    width: 6rem;
 
     > input {
       text-align: right;

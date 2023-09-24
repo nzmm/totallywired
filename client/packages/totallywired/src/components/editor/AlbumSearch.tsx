@@ -1,5 +1,5 @@
 import { useState, FormEvent, useEffect } from "react";
-import { similar, useReleaseSearch } from "../../lib/hooks/editor";
+import { useReleaseSearch } from "../../lib/hooks/editor";
 import { AlbumSearchResult } from "./SearchResult";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { Album } from "../../lib/types";
@@ -8,20 +8,18 @@ import "./AlbumSearch.css";
 
 type AlbumMetadataSearchProps = {
   release: Album | undefined;
-  disabled: boolean;
   selectedId: string;
+  disabled: boolean;
   onSelect: (result: MBReleaseSearchItem) => void;
 };
 
 export default function AlbumMetadataSearch({
   release,
-  disabled,
   selectedId,
+  disabled,
   onSelect,
 }: AlbumMetadataSearchProps) {
   const [autoRunFor, setAutoRunFor] = useState("");
-  const [bestOnly, setBestOnly] = useState(true);
-
   const [searchLoading, searchResults, performSearch] =
     useReleaseSearch(release);
 
@@ -42,10 +40,6 @@ export default function AlbumMetadataSearch({
     performSearch(release.name, release.artistName);
   }, [release, autoRunFor]);
 
-  const filteredResults = searchResults.filter(
-    (r) => !bestOnly || similar(r.similarity),
-  );
-
   return (
     <section className="album-search">
       <form onSubmit={onSearch} autoComplete="off">
@@ -64,24 +58,16 @@ export default function AlbumMetadataSearch({
           />
 
           <button type="submit">Search</button>
-
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              name="best-only"
-              checked={bestOnly}
-              onChange={(e) => setBestOnly(e.currentTarget.checked)}
-            />
-            Show just the best matches
-          </label>
         </fieldset>
       </form>
 
       <div className="album-search-results">
         {searchLoading ? (
-          <Loading />
-        ) : filteredResults.length ? (
-          filteredResults.map((sr) => (
+          <div className="feedback">
+            <Loading />
+          </div>
+        ) : searchResults.length ? (
+          searchResults.map((sr) => (
             <AlbumSearchResult
               key={sr.id}
               active={sr.id === selectedId}
@@ -89,14 +75,6 @@ export default function AlbumMetadataSearch({
               {...sr}
             />
           ))
-        ) : searchResults.length ? (
-          <button
-            className="feedback action"
-            onClick={() => setBestOnly(false)}
-          >
-            Show {searchResults.length - filteredResults.length} omitted
-            results?
-          </button>
         ) : (
           <div className="feedback message muted">No search results</div>
         )}

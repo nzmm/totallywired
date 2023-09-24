@@ -17,17 +17,17 @@ export type MBReleaseSearchItem = {
   ["release-group"]: {
     ["primary-type"]: string;
   };
-  date: number;
+  date: string;
   country: string;
   barcode: string;
   asin: string;
-  ["label-info"]: {
+  ["label-info"]?: {
     ["catalog-number"]: string;
     label: {
       id: string;
       name: string;
     };
-  };
+  }[];
   ["track-count"]: number;
   media: {
     format: string;
@@ -47,23 +47,28 @@ export type MBReleaseSearchResponse = {
 };
 
 /**
+ * MusicBrainz track
+ */
+export type MBTrack = {
+  id: string;
+  position: number;
+  length: number;
+  title: string;
+  number: string;
+  ["artist-credit"]: {
+    id: string;
+    name: string;
+  }[];
+};
+
+/**
  * MusicBrainz media
  */
 export type MBMedia = {
   ["track-count"]: number;
   position: number;
   format: string;
-  tracks: {
-    id: string;
-    position: number;
-    length: number;
-    title: string;
-    number: string;
-    ["artist-credit"]: {
-      id: string;
-      name: string;
-    }[];
-  }[];
+  tracks: MBTrack[];
 };
 
 /**
@@ -94,6 +99,13 @@ export type MBReleaseResponse = {
       id: string;
     };
   }[];
+  ["cover-art-archive"]: {
+    artwork: boolean;
+    count: number;
+    front: boolean;
+    back: boolean;
+    darkened: boolean;
+  };
 };
 
 /**

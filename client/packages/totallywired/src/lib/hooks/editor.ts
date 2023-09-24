@@ -1,20 +1,9 @@
 import { useState, useCallback } from "react";
-import { distance } from "../editor/damerau-lvenshtein";
-import { searchReleases } from "../musicbrainz";
 import { Album } from "../types";
 import { MBReleaseSearchItem } from "../musicbrainz/types";
+import { searchReleases } from "../musicbrainz";
 
-export type HasSimilarity = { similarity: number };
-export type SearchResult = MBReleaseSearchItem & HasSimilarity;
-
-const LOW_SIMILARITY_THRESHOLD = 10;
-
-/**
- * Values less-than-or-equal the threshold are considered highly similar.
- */
-export function similar(similarity: number) {
-  return similarity <= LOW_SIMILARITY_THRESHOLD;
-}
+export type SearchResult = MBReleaseSearchItem;
 
 export const useReleaseSearch = (
   release: Album | undefined,
@@ -44,16 +33,7 @@ export const useReleaseSearch = (
           return;
         }
 
-        const releases = (res.data?.releases ?? []).map((r) => {
-          return {
-            ...r,
-            similarity: distance(
-              `${artistName} ${albumName}`,
-              `${r["artist-credit"][0]?.name} ${r.title}`,
-            ),
-          };
-        });
-
+        const releases = res.data?.releases ?? [];
         setResults(releases);
         setLoading(false);
       },

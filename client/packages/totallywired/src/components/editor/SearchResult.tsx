@@ -1,9 +1,6 @@
-import {
-  ChevronRightIcon,
-  QuestionMarkCircledIcon,
-} from "@radix-ui/react-icons";
+import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
-import { SearchResult, similar } from "../../lib/hooks/editor";
+import { SearchResult } from "../../lib/hooks/editor";
 import { Thumbnail } from "../display/Thumbnail";
 import "./SearchResult.css";
 

@@ -1,0 +1,31 @@
+table.metadata-table {
+  width: 100%;
+  overflow: hidden;
+
+  & tr > td > input[type="text"] {
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    width: 100%;
+    outline: 0;
+    border: 0;
+    margin: 0;
+    border-radius: 3px;
+    border: 1px solid transparent;
+
+    &:focus:not(:read-only) {
+      background-color: antiquewhite;
+      border: 1px solid rgb(255, 220, 174);
+    }
+  }
+
+  & tr > td > input[type="checkbox"] {
+    float: right;
+    margin: 0;
+  }
+
+  & tr > td {
+    border-bottom: 1px dotted rgb(230, 230, 230);
+    padding-top: 2px;
+    padding-bottom: 3px;
+  }
+}

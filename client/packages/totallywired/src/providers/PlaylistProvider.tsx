@@ -5,7 +5,9 @@ import { getPlaylists } from "../lib/api";
 
 type Playlists = Playlist[];
 
-const PlaylistsContext = createContext<Playlists>([]);
+const INITIAL_STATE: Playlist[] = [];
+
+const PlaylistsContext = createContext<Playlists>(INITIAL_STATE);
 const PlaylistsDispatchContext = createDispatchContext<Playlists>();
 const Reducer = commonReducer<Playlists>();
 
@@ -20,7 +22,7 @@ export const playlistsDispatch = () => {
 export default function PlaylistsProvider({
   children,
 }: React.PropsWithChildren) {
-  const [playlists, dispatch] = useReducer(Reducer, []);
+  const [playlists, dispatch] = useReducer(Reducer, INITIAL_STATE);
 
   useEffect(() => {
     getPlaylists().then((res) => {

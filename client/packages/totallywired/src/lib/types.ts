@@ -10,12 +10,18 @@ export type User = {
   isAuthenticated: boolean;
 };
 
-export type Artist = {
+export type Track = {
   id: string;
   name: string;
+  number: string;
+  releaseId: string;
+  releaseName: string;
+  artistId: string;
+  artistName: string;
+  length: number;
+  displayLength: string;
+  liked: boolean;
 };
-
-export type ArtistDetail = Artist & {};
 
 export type Album = {
   id: string;
@@ -29,20 +35,19 @@ export type AlbumDetail = Album & {
   recordLabel: string;
   coverArt: string;
   country: string;
+  mbid: string;
 };
 
-export type Track = {
+export type AlbumWithTracks = AlbumDetail & {
+  tracks: Track[];
+};
+
+export type Artist = {
   id: string;
   name: string;
-  number: string;
-  releaseId: string;
-  releaseName: string;
-  artistId: string;
-  artistName: string;
-  length: number;
-  displayLength: string;
-  liked: boolean;
 };
+
+export type ArtistDetail = Artist & {};
 
 export type Provider = {
   sourceId: string;

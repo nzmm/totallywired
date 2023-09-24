@@ -1,5 +1,5 @@
 import { LoaderFunctionArgs, useNavigate, useParams } from "react-router-dom";
-import React, { Suspense } from "react";
+import React, { Suspense, useCallback } from "react";
 import Loading from "../components/display/Loading";
 
 const LazyEditor = React.lazy(() => import("../components/editor/AlbumEditor"));
@@ -11,7 +11,7 @@ export function albumEditorLoader({}: LoaderFunctionArgs) {
 export default function AlbumEditor() {
   const params = useParams();
   const navigate = useNavigate();
-  const goBack = () => navigate(-1);
+  const goBack = useCallback(() => navigate(-1), []);
 
   if (!params.releaseId) {
     return null;
