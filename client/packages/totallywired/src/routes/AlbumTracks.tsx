@@ -6,7 +6,7 @@ import {
   useLoaderData,
 } from "react-router-dom";
 import { getAlbum, getTracksByAlbum } from "../lib/api";
-import { useAsyncAlbumTracks } from "../lib/hooks/tracks";
+import { useAsyncAlbumTracks } from "../lib/tracks/hooks";
 import { requestSearchParams } from "../lib/requests";
 import AlbumTracksList from "../components/lists/AlbumTrackList";
 

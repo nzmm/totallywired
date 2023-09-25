@@ -32,7 +32,6 @@ function ReleaseRow({
   onChange,
   onApprove,
 }: ReleaseRowProps) {
-  const isReadOnly = readOnly || !cr.approved || !cr.active;
   return (
     <tr>
       <th scope="row" className="sr-only">
@@ -45,7 +44,7 @@ function ReleaseRow({
           autoComplete="off"
           autoCorrect="off"
           placeholder={label}
-          readOnly={isReadOnly}
+          readOnly={readOnly}
           value={cr[version]}
           data-key={cr.key}
           onInput={onChange}

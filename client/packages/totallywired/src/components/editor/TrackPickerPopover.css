@@ -1,11 +1,33 @@
 .track-picker-content {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 1px;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 3px;
+
+  > h5 {
+    margin: 0;
+    margin-bottom: 8px;
+  }
 
   > button {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
     text-align: left;
     background-color: transparent;
-    border: 0;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    padding: 3px 4px;
+
+    &:hover {
+      background-color: rgb(245, 245, 245);
+      border: 1px solid lightgray;
+    }
+
+    > .num {
+      width: 2rem;
+    }
   }
 }

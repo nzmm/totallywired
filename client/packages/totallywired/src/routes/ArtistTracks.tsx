@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Await, LoaderFunctionArgs, useLoaderData } from "react-router-dom";
 import { getArtist, getTrackByArtist } from "../lib/api";
-import { useAsyncArtistTracks } from "../lib/hooks/tracks";
+import { useAsyncArtistTracks } from "../lib/tracks/hooks";
 import { requestSearchParams } from "../lib/requests";
 import { ArtistTrackList } from "../components/lists/ArtistTrackList";
 

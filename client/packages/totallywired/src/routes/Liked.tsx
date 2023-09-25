@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { LoaderFunctionArgs, useLoaderData, Await } from "react-router-dom";
 import { getTracks } from "../lib/api";
-import { useAsyncTracks } from "../lib/hooks/tracks";
+import { useAsyncTracks } from "../lib/tracks/hooks";
 import { requestSearchParams } from "../lib/requests";
 import { ReactionType } from "../lib/types";
 import TrackList from "../components/lists/TrackList";

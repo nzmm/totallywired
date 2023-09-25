@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
-import { SearchResult } from "../../lib/hooks/editor";
+import { SearchResult } from "../../lib/editor/hooks";
 import { Thumbnail } from "../display/Thumbnail";
 import "./SearchResult.css";
 
@@ -9,13 +9,12 @@ export type AlbumSearchResultProps = SearchResult & {
   onSelect: (result: MBReleaseSearchItem) => void;
 };
 
-const dateCountryStr = (date?: number, country?: string) => {
+const dateCountryStr = (date?: string, country?: string) => {
   return [date, country].filter((v) => !!v).join(", ");
 };
 
 export function AlbumSearchResult({
   active,
-  similarity,
   onSelect,
   ...result
 }: AlbumSearchResultProps) {

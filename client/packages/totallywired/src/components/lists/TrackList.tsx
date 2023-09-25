@@ -4,7 +4,7 @@ import {
   VisibleItem,
 } from "@totallywired/ui-components";
 import TrackItem from "./TrackListItem";
-import { useToggleTrackReaction } from "../../lib/hooks/tracks";
+import { useToggleTrackReaction } from "../../lib/tracks/hooks";
 import { Track } from "../../lib/types";
 import { usePlayer } from "../../providers/AudioProvider";
 import "./TrackList.css";

@@ -19,10 +19,12 @@ export default function TrackPickerPopover({
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent sideOffset={-3}>
         <div className="track-picker-content">
+          <h5>Tracks</h5>
           {candidateTracks.map((t) => {
             return (
-              <button key={t.id}>
-                {t.position}. {t.title}
+              <button>
+                <span className="num">{t.number}.</span>
+                <span className="name">{t.title}</span>
               </button>
             );
           })}

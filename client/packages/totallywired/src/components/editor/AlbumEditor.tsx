@@ -30,16 +30,16 @@ function AlbumMetadataEditorModal({
   const { loading, proposal, candidateTracks } = editor;
 
   const onSelect = async (candidate: MBReleaseSearchItem) => {
-    if (!proposal?.id) {
+    if (!proposal || !proposal.id) {
       return;
     }
     if (proposal.mbid === candidate.id) {
       return;
     }
 
-    const updates = await updateProposal(proposal, candidate);
+    const updated = await updateProposal(proposal, candidate);
 
-    dispatch(setProposal(updates.proposal, updates.candidateTracks));
+    dispatch(setProposal(updated.proposal, updated.candidateTracks));
   };
 
   return (

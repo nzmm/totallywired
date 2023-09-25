@@ -1,5 +1,5 @@
 import { useState, FormEvent, useEffect } from "react";
-import { useReleaseSearch } from "../../lib/hooks/editor";
+import { useReleaseSearch } from "../../lib/editor/hooks";
 import { AlbumSearchResult } from "./SearchResult";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";

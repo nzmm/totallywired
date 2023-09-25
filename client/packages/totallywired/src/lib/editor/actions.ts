@@ -8,15 +8,24 @@ import {
   TrackChangeRequest,
 } from "./types";
 
+/**
+ * Update the loading state
+ */
 export const setLoading = (loading: boolean) => {
-  return update((state: EditorContextState) => ({ ...state, loading }));
+  return update<EditorContextState>((state) => ({
+    ...state,
+    loading,
+  }));
 };
 
+/**
+ * Update the proposal state
+ */
 export const setProposal = (
   proposal: AlbumChangeProposal,
   candidateTracks: MBTrack[] = [],
 ) => {
-  return update((state: EditorContextState) => ({
+  return update<EditorContextState>((state) => ({
     ...state,
     proposal,
     candidateTracks,
@@ -40,11 +49,14 @@ const getAttrCR = (
   return cr;
 };
 
+/**
+ * Updates the approval state for a single attribute on the release proposal
+ */
 export const updateAttrApproval = (
   key: string | undefined,
   approved: boolean,
 ) => {
-  return update((state: EditorContextState) => {
+  return update<EditorContextState>((state) => {
     if (!key) {
       return state;
     }
@@ -69,11 +81,14 @@ export const updateAttrApproval = (
   });
 };
 
+/**
+ * Updates the a single attribute value on the release proposal
+ */
 export const updateAttrValue = (
   key: string | undefined,
   value: string | number,
 ) => {
-  return update((state: EditorContextState) => {
+  return update<EditorContextState>((state) => {
     if (!key) {
       return state;
     }
@@ -120,11 +135,14 @@ const getTrackAttr = (
   return attr?.key === key ? attr : null;
 };
 
+/**
+ * Updates the approval state for a single track on the release proposal
+ */
 export const updateTrackApproval = (
   trackId: string | undefined,
   approved: boolean,
 ) => {
-  return update((state: EditorContextState) => {
+  return update<EditorContextState>((state) => {
     if (!trackId || !state.proposal) {
       return state;
     }
@@ -147,12 +165,15 @@ export const updateTrackApproval = (
   });
 };
 
+/**
+ * Updates the a single track attribute on the release proposal
+ */
 export const updateTrackValue = (
   trackId: string | undefined,
   key: string | undefined,
   value: string,
 ) => {
-  return update((state: EditorContextState) => {
+  return update<EditorContextState>((state) => {
     if (!trackId || !key || !state.proposal) {
       return state;
     }
@@ -174,8 +195,8 @@ export const updateTrackValue = (
       [k]: {
         ...attr,
         newValue: value,
-        active: !!value && value !== attr.oldValue,
       },
+      active: !!value && value !== attr.oldValue,
     });
 
     return {

@@ -1,25 +1,20 @@
 import { useCallback, useEffect } from "react";
 import { useAsyncValue } from "react-router-dom";
 import { tracksDisptach, useTracks } from "../../providers/TracksProvider";
-import { set, update } from "../reducer";
+import { set } from "../reducer";
 import { Res } from "../requests";
-import {
-  AlbumDetail,
-  ArtistDetail,
-  Playlist,
-  ReactionType,
-  Track,
-} from "../types";
+import { AlbumDetail, ArtistDetail, ReactionType, Track } from "../types";
 import { playlistsDispatch } from "../../providers/PlaylistProvider";
 import { setTrackReaction } from "../api";
+import { updateLikedTrackCount, updateTrackReaction } from "./actions";
 
 /**
  * Provides declarative access to the available tracks
  */
 export const useAsyncTracks = (): Track[] => {
-  const { data = [] } = useAsyncValue() as Res<Track[]>;
   const dispatch = tracksDisptach();
   const tracks = useTracks();
+  const { data = [] } = useAsyncValue() as Res<Track[]>;
 
   useEffect(() => {
     dispatch(set(data));
@@ -66,28 +61,6 @@ export const useAsyncArtistTracks = (): [ArtistDetail, Track[]] => {
   return [artist!, tracks];
 };
 
-const trackReaction = (tracks: Track[], ...args: [string, ReactionType]) => {
-  const [trackId, reaction] = args;
-  return tracks.map((t) =>
-    t.id !== trackId ? t : { ...t, liked: reaction === ReactionType.Liked },
-  );
-};
-
-const adjustLikedTrackCount = (
-  playlists: Playlist[],
-  reaction: ReactionType,
-) => {
-  const [liked, ...rest] = playlists;
-
-  if (!liked) {
-    return playlists;
-  }
-
-  const trackCount =
-    liked.trackCount + (reaction === ReactionType.Liked ? 1 : -1);
-  return [{ ...liked, trackCount }, ...rest];
-};
-
 /**
  * Provides declarative access to track reaction toggling.
  */
@@ -106,8 +79,8 @@ export const useToggleTrackReaction = () => {
         track.liked ? ReactionType.None : ReactionType.Liked,
       );
 
-      trDispatch(update(trackReaction, track.id, reaction));
-      plDispatch(update(adjustLikedTrackCount, reaction));
+      trDispatch(updateTrackReaction(track.id, reaction));
+      plDispatch(updateLikedTrackCount(reaction));
     },
     [trDispatch, plDispatch],
   );
