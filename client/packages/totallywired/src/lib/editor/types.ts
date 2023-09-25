@@ -1,46 +1,69 @@
 import { MBTrack } from "../musicbrainz/types";
-import { AlbumWithTracks } from "../types";
+import { Track } from "../types";
 
 export type HasSimiliarity = { similarity: number };
+
+export type MatchedTrack = HasSimiliarity & {
+  track: Track;
+  match?: MBTrack;
+};
+
+export type ChangeRequest<T> = {
+  key: string;
+  oldValue: T;
+  newValue: T;
+};
 
 export type ChangeRequestApproval = {
   active: boolean;
   approved: boolean;
 };
 
-export type MetadataChangeRequest<T> = ChangeRequestApproval & {
-  value: T;
-};
+export type AttributeChangeRequest<T> = ChangeRequestApproval &
+  ChangeRequest<T>;
 
 export type TrackChangeRequest = ChangeRequestApproval &
   HasSimiliarity & {
     id: string;
-    number: string;
-    name: string;
     mbid: string;
+    track: Track;
+    number: ChangeRequest<string>;
+    name: ChangeRequest<string>;
   };
 
-export type AlbumChangeableFields = {
-  name: MetadataChangeRequest<string>;
-  artistName: MetadataChangeRequest<string>;
-  year: MetadataChangeRequest<number>;
-  recordLabel: MetadataChangeRequest<string>;
-  country: MetadataChangeRequest<string>;
-  coverArt: MetadataChangeRequest<string>;
-};
-
-export type AlbumChangeProposal = AlbumChangeableFields & {
+export type AlbumChangeProposal = {
   id: string;
+  mbid: string;
   artistId: string;
   artistMbid: string;
-  releaseMbid: string;
+  name: AttributeChangeRequest<string>;
+  artistName: AttributeChangeRequest<string>;
+  year: AttributeChangeRequest<number>;
+  recordLabel: AttributeChangeRequest<string>;
+  country: AttributeChangeRequest<string>;
+  coverArt: AttributeChangeRequest<string>;
   tracks: TrackChangeRequest[];
 };
 
 export type EditorContextState = {
   loading: boolean;
-  current?: AlbumWithTracks;
   proposal?: AlbumChangeProposal;
   candidateTracks: MBTrack[];
   artCollection: Record<string, string>;
 };
+
+export type EditorInputEventHandler = React.ChangeEventHandler<
+  Omit<HTMLInputElement, "dataset"> & {
+    dataset: {
+      /**
+       * Holds the attribute key
+       */
+      key?: string;
+
+      /**
+       * Holds the track id
+       */
+      tid?: string;
+    };
+  }
+>;

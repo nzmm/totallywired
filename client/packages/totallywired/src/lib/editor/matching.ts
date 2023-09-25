@@ -1,21 +1,13 @@
 import { Track } from "../types";
+import { MatchedTrack } from "./types";
 import { MBTrack } from "../musicbrainz/types";
-import { TrackChangeRequest } from "./types";
 import { calculateSimilarity, isSimilar } from "./similarity";
 
-const buildTrackProposal = ({
-  id,
-  number,
-  name,
-}: Track): TrackChangeRequest => {
+const createMatch = (track: Track): MatchedTrack => {
   return {
-    id,
-    mbid: "",
-    similarity: 1,
-    number,
-    name,
-    active: false,
-    approved: true,
+    track,
+    match: undefined,
+    similarity: 0,
   };
 };
 
@@ -26,18 +18,18 @@ const buildTrackProposal = ({
 export function bestMatchTracks(
   tracks: Track[],
   candidateTracks: MBTrack[],
-): TrackChangeRequest[] {
+): MatchedTrack[] {
   let l = candidateTracks.length;
   if (!l) {
-    return tracks.map((t) => buildTrackProposal(t));
+    return tracks.map((t) => createMatch(t));
   }
 
-  const matches: TrackChangeRequest[] = [];
+  const matches: MatchedTrack[] = [];
   const remaining: MBTrack[] = [...candidateTracks];
-  let i: number, match: TrackChangeRequest;
+  let i: number, match: MatchedTrack;
 
   for (const track of tracks) {
-    match = buildTrackProposal(track);
+    match = createMatch(track);
 
     if (!l) {
       matches.push(match);
@@ -48,9 +40,8 @@ export function bestMatchTracks(
       const result = remaining[i];
 
       if (track.name === result.title) {
-        match.number = result.position.toString();
-        match.active = track.number !== result.position.toString();
-        match.mbid = result.id;
+        match.match = result;
+        match.similarity = 1;
         remaining.splice(i, 1);
         l -= 1;
         break;
@@ -59,12 +50,8 @@ export function bestMatchTracks(
       const similarity = calculateSimilarity(track.name, result.title);
 
       if (isSimilar(similarity)) {
-        match.name = result.title;
-        match.number = result.position.toString();
+        match.match = result;
         match.similarity = similarity;
-        match.approved = true;
-        match.active = true;
-        match.mbid = result.id;
         remaining.splice(i, 1);
         l -= 1;
         break;

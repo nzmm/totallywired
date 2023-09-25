@@ -1,18 +1,18 @@
 import * as Dialog from "@radix-ui/react-dialog";
-import { useState } from "react";
 import { Splitter } from "@totallywired/ui-components";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
-import { buildProposal } from "../../lib/editor/proposals";
-import { update } from "../../lib/reducer";
+import { updateProposal } from "../../lib/editor/proposals";
 import EditorProvider, {
   editorDisptach,
   useEditor,
 } from "../../providers/EditorProvider";
 import Header from "../nav/Header";
+import Loading from "../display/Loading";
 import AlbumMetadataSearch from "./AlbumSearch";
 import AlbumMetadataComparison from "./AlbumComparison";
 import "./AlbumEditor.css";
+import { setProposal } from "../../lib/editor/actions";
 
 type AlbumMetadataEditorProps = {
   releaseId: string;
@@ -24,35 +24,22 @@ function AlbumMetadataEditorModal({
   onSave,
   onDiscard,
 }: Omit<AlbumMetadataEditorProps, "releaseId">) {
-  const [selectedId, setSelectedId] = useState("");
-
   const dispatch = editorDisptach();
   const editor = useEditor();
 
-  const { loading, current, proposal, candidateTracks } = editor;
+  const { loading, proposal, candidateTracks } = editor;
 
   const onSelect = async (candidate: MBReleaseSearchItem) => {
-    if (!current?.id) {
+    if (!proposal?.id) {
       return;
     }
-    if (selectedId === candidate.id) {
+    if (proposal.mbid === candidate.id) {
       return;
     }
 
-    setSelectedId(candidate.id);
+    const updates = await updateProposal(proposal, candidate);
 
-    const { proposal: newProposal, candidateTracks } = await buildProposal(
-      current,
-      candidate,
-    );
-
-    dispatch(
-      update((state) => ({
-        ...state,
-        candidateTracks,
-        proposal: newProposal,
-      })),
-    );
+    dispatch(setProposal(updates.proposal, updates.candidateTracks));
   };
 
   return (
@@ -61,24 +48,26 @@ function AlbumMetadataEditorModal({
         <Dialog.Content className="DialogContent editor fullscreen">
           <Header />
 
-          <Splitter
-            orientation="horizontal"
-            initialPosition="300px"
-            minSize="200px"
-          >
-            <AlbumMetadataSearch
-              release={current}
-              selectedId={selectedId}
-              disabled={loading}
-              onSelect={onSelect}
-            />
+          {proposal ? (
+            <Splitter
+              orientation="horizontal"
+              initialPosition="300px"
+              minSize="200px"
+            >
+              <AlbumMetadataSearch
+                proposal={proposal}
+                disabled={loading}
+                onSelect={onSelect}
+              />
 
-            <AlbumMetadataComparison
-              current={current}
-              proposal={proposal}
-              candidateTracks={candidateTracks}
-            />
-          </Splitter>
+              <AlbumMetadataComparison
+                proposal={proposal}
+                candidateTracks={candidateTracks}
+              />
+            </Splitter>
+          ) : (
+            <Loading />
+          )}
 
           <div className="toolbar">
             <Dialog.Close asChild onClick={onDiscard}>

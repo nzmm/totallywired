@@ -2,26 +2,25 @@ import { useState, FormEvent, useEffect } from "react";
 import { useReleaseSearch } from "../../lib/hooks/editor";
 import { AlbumSearchResult } from "./SearchResult";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
-import { Album } from "../../lib/types";
+import { AlbumChangeProposal } from "../../lib/editor/types";
 import Loading from "../display/Loading";
 import "./AlbumSearch.css";
 
 type AlbumMetadataSearchProps = {
-  release: Album | undefined;
-  selectedId: string;
+  proposal: AlbumChangeProposal;
   disabled: boolean;
   onSelect: (result: MBReleaseSearchItem) => void;
 };
 
 export default function AlbumMetadataSearch({
-  release,
-  selectedId,
+  proposal,
   disabled,
   onSelect,
 }: AlbumMetadataSearchProps) {
+  const { id, mbid, name, artistName } = proposal;
+
   const [autoRunFor, setAutoRunFor] = useState("");
-  const [searchLoading, searchResults, performSearch] =
-    useReleaseSearch(release);
+  const [searchLoading, searchResults, performSearch] = useReleaseSearch(id);
 
   const onSearch = async (
     e: FormEvent<HTMLFormElementWithInputs<"album" | "artist">>,
@@ -32,13 +31,13 @@ export default function AlbumMetadataSearch({
   };
 
   useEffect(() => {
-    if (!release || autoRunFor === release.id) {
+    if (autoRunFor === id) {
       return;
     }
 
-    setAutoRunFor(release.id);
-    performSearch(release.name, release.artistName);
-  }, [release, autoRunFor]);
+    setAutoRunFor(id);
+    performSearch(name.oldValue, artistName.oldValue);
+  }, [id, name, artistName, autoRunFor]);
 
   return (
     <section className="album-search">
@@ -48,13 +47,13 @@ export default function AlbumMetadataSearch({
             type="text"
             name="album"
             placeholder="Album"
-            defaultValue={release?.name}
+            defaultValue={name.oldValue}
           />
           <input
             type="text"
             name="artist"
             placeholder="Artist"
-            defaultValue={release?.artistName}
+            defaultValue={artistName.oldValue}
           />
 
           <button type="submit">Search</button>
@@ -70,7 +69,7 @@ export default function AlbumMetadataSearch({
           searchResults.map((sr) => (
             <AlbumSearchResult
               key={sr.id}
-              active={sr.id === selectedId}
+              active={sr.id === mbid}
               onSelect={onSelect}
               {...sr}
             />

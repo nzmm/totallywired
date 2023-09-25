@@ -1,12 +1,11 @@
 import { useState, useCallback } from "react";
-import { Album } from "../types";
 import { MBReleaseSearchItem } from "../musicbrainz/types";
 import { searchReleases } from "../musicbrainz";
 
 export type SearchResult = MBReleaseSearchItem;
 
 export const useReleaseSearch = (
-  release: Album | undefined,
+  releaseId: string,
 ): [
   boolean,
   SearchResult[],
@@ -20,7 +19,7 @@ export const useReleaseSearch = (
     results,
     useCallback(
       async (albumName: string, artistName: string) => {
-        if (!release) {
+        if (!releaseId) {
           setResults([]);
           setLoading(false);
           return;
@@ -37,7 +36,7 @@ export const useReleaseSearch = (
         setResults(releases);
         setLoading(false);
       },
-      [release, setLoading, setResults],
+      [releaseId, setLoading, setResults],
     ),
   ];
 };

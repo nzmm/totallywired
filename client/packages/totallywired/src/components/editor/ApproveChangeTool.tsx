@@ -1,32 +1,37 @@
-import { ChangeEvent } from "react";
-import { ChangeRequestApproval } from "../../lib/editor/types";
+import {
+  ChangeRequestApproval,
+  EditorInputEventHandler,
+} from "../../lib/editor/types";
 
 type ApproveChangeToolProps = {
-  name: string;
-  approval?: ChangeRequestApproval;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  attrKey: string;
+  cr: ChangeRequestApproval;
+  readOnly?: boolean;
+  onChange?: EditorInputEventHandler;
 };
 
 export default function ApproveChangeTool({
-  name,
-  approval,
+  attrKey,
+  cr,
+  readOnly,
   onChange,
 }: ApproveChangeToolProps) {
-  if (!approval) {
+  if (readOnly) {
     return null;
   }
-
+  const id = `approve[${attrKey}]`;
   return (
     <>
-      <label className="sr-only" htmlFor={name}>
+      <label className="sr-only" htmlFor={id}>
         Accept change
       </label>
       <input
-        id={name}
+        id={id}
         type="checkbox"
         autoComplete="off"
-        defaultChecked={approval.approved}
-        disabled={!approval.active}
+        defaultChecked={cr.approved}
+        disabled={!cr.active}
+        data-key={attrKey}
         onChange={onChange}
       />
     </>

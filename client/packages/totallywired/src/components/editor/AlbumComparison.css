@@ -2,9 +2,14 @@
   display: grid;
   min-height: 100%;
 
+  & .separator {
+    background-color: rgb(235, 235, 235);
+  }
+
   .metadata {
-    padding: 4px 20px;
+    margin: 1.25rem 3rem;
     overflow-x: hidden;
+    max-width: 600px;
 
     > div > h4 {
       margin: 4px 0;
@@ -21,12 +26,9 @@
     }
   }
 
-  > .current.metadata {
-    border-right: 1px solid lightgray;
+  .current.metadata {
+    margin-left: auto;
   }
-
-  /* > .proposed.metadata {
-  } */
 
   & caption {
     text-transform: uppercase;

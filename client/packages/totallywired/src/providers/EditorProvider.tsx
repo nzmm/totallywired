@@ -2,7 +2,8 @@ import { createContext, useContext, useEffect, useReducer } from "react";
 import { commonReducer, createDispatchContext } from "../lib/reducer";
 import { EditorContextState } from "../lib/editor/types";
 import { getAlbum, getTracksByAlbum } from "../lib/api";
-import { setCurrentRelease, setLoading } from "../lib/editor/actions";
+import { setLoading, setProposal } from "../lib/editor/actions";
+import { createDefaultProposal } from "../lib/editor/proposals";
 
 type EditorProviderProps = React.PropsWithChildren & {
   releaseId: string;
@@ -10,7 +11,6 @@ type EditorProviderProps = React.PropsWithChildren & {
 
 const INITIAL_STATE: EditorContextState = {
   loading: false,
-  current: undefined,
   proposal: undefined,
   candidateTracks: [],
   artCollection: {},
@@ -33,10 +33,10 @@ export default function EditorProvider({
   children,
 }: EditorProviderProps) {
   const [editor, dispatch] = useReducer(Reducer, INITIAL_STATE);
-  const { loading, current } = editor;
+  const { loading, proposal } = editor;
 
   useEffect(() => {
-    if (loading || !releaseId || releaseId === current?.id) {
+    if (loading || !releaseId || releaseId === proposal?.id) {
       return;
     }
 
@@ -52,10 +52,12 @@ export default function EditorProvider({
         if (!album) {
           return;
         }
-        dispatch(setCurrentRelease({ ...album, tracks }));
+        const proposal = createDefaultProposal(album, tracks);
+        console.log(proposal);
+        dispatch(setProposal(proposal));
       })
       .finally(() => dispatch(setLoading(false)));
-  }, [dispatch, releaseId, loading, current]);
+  }, [dispatch, releaseId, loading, proposal]);
 
   return (
     <EditorDispatchContext.Provider value={dispatch}>

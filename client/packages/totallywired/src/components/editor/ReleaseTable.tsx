@@ -1,41 +1,38 @@
 import { ChangeEvent } from "react";
 import {
   AlbumChangeProposal,
-  AlbumChangeableFields,
-  MetadataChangeRequest,
+  AttributeChangeRequest,
+  EditorInputEventHandler,
 } from "../../lib/editor/types";
-import { editorDisptach } from "../../providers/EditorProvider";
-import { updateReleaseProposal } from "../../lib/editor/actions";
-import { AlbumDetail } from "../../lib/types";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./MetadataTable.css";
 
 type ReleaseTableProps = {
-  current: AlbumDetail;
-  proposal?: AlbumChangeProposal;
+  proposal: AlbumChangeProposal;
+  version: "oldValue" | "newValue";
   readOnly?: boolean;
+  onChange?: EditorInputEventHandler;
+  onApprove?: EditorInputEventHandler;
 };
 
 type ReleaseRowProps = {
-  oldValue: string | number;
-  newValue?: MetadataChangeRequest<any>;
   label: string;
-  name: string;
+  cr: AttributeChangeRequest<string | number>;
+  version: "oldValue" | "newValue";
   readOnly?: boolean;
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  onApprove: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onApprove?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
 
 function ReleaseRow({
-  oldValue,
-  newValue,
-  name,
+  cr,
   label,
+  version,
   readOnly,
   onChange,
   onApprove,
 }: ReleaseRowProps) {
-  const isReadOnly = readOnly || !newValue?.approved || !newValue.active;
+  const isReadOnly = readOnly || !cr.approved || !cr.active;
   return (
     <tr>
       <th scope="row" className="sr-only">
@@ -44,22 +41,19 @@ function ReleaseRow({
       <td>
         <input
           type="text"
-          name={name}
+          name={cr.key}
           autoComplete="off"
           autoCorrect="off"
           placeholder={label}
           readOnly={isReadOnly}
-          value={newValue?.value ?? oldValue}
+          value={cr[version]}
+          data-key={cr.key}
           onInput={onChange}
         />
       </td>
       <td>
         {readOnly ? null : (
-          <ApproveChangeTool
-            name={name}
-            approval={newValue}
-            onChange={onApprove}
-          />
+          <ApproveChangeTool attrKey={cr.key} cr={cr} onChange={onApprove} />
         )}
       </td>
     </tr>
@@ -67,28 +61,12 @@ function ReleaseRow({
 }
 
 export default function ReleaseTable({
-  current,
   proposal,
+  version,
   readOnly,
+  onChange,
+  onApprove,
 }: ReleaseTableProps) {
-  const dispatch = editorDisptach();
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
-    dispatch(
-      updateReleaseProposal(name as keyof AlbumChangeableFields, { value }),
-    );
-  };
-
-  const onApprove = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, checked: approved } = e.currentTarget;
-    dispatch(
-      updateReleaseProposal(id as keyof AlbumChangeableFields, {
-        approved,
-      }),
-    );
-  };
-
   return (
     <table className="release metadata-table">
       <caption>Release</caption>
@@ -103,46 +81,41 @@ export default function ReleaseTable({
 
       <tbody>
         <ReleaseRow
-          name="name"
           label="Release name"
-          oldValue={current.name}
-          newValue={proposal?.name}
+          cr={proposal.name}
+          version={version}
           readOnly={readOnly}
           onChange={onChange}
           onApprove={onApprove}
         />
         <ReleaseRow
-          name="artistName"
           label="Release artist"
-          oldValue={current.artistName}
-          newValue={proposal?.artistName}
+          cr={proposal.artistName}
+          version={version}
           readOnly={readOnly}
           onChange={onChange}
           onApprove={onApprove}
         />
         <ReleaseRow
-          name="year"
           label="Release year"
-          oldValue={current.year}
-          newValue={proposal?.year}
+          cr={proposal.year}
+          version={version}
           readOnly={readOnly}
           onChange={onChange}
           onApprove={onApprove}
         />
         <ReleaseRow
-          name="recordLabel"
           label="Record label"
-          oldValue={current.recordLabel}
-          newValue={proposal?.recordLabel}
+          cr={proposal.recordLabel}
+          version={version}
           readOnly={readOnly}
           onChange={onChange}
           onApprove={onApprove}
         />
         <ReleaseRow
-          name="country"
           label="Country"
-          oldValue={current.country}
-          newValue={proposal?.country}
+          cr={proposal.country}
+          version={version}
           readOnly={readOnly}
           onChange={onChange}
           onApprove={onApprove}

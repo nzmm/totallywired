@@ -41,7 +41,7 @@ export const searchReleases = (releaseName: string, artistName: string) => {
 /**
  * Performs a MusicBrainz `release` lookup by release id.
  */
-export const getRelease = (
+export const getMBRelease = (
   releaseId: string,
   inc = "recordings+artist-credits+labels",
 ) => {
@@ -61,7 +61,7 @@ export const getRelease = (
  * Queries for any front coverart marching the release id. Returns a url if coverart exists.
  * If no art exists or any error is encountered then `DEFAULT_COVERART_URL` is returned.
  */
-export const getCoverArtUrl = async (
+export const getMBCoverArtUrl = async (
   releaseId: string,
   size: 250 | 500 | 1200 = 250,
 ) => {

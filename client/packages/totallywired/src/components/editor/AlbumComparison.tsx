@@ -1,26 +1,51 @@
 import { Splitter } from "@totallywired/ui-components";
 import { Thumbnail } from "../display/Thumbnail";
-import { AlbumWithTracks } from "../../lib/types";
-import { AlbumChangeProposal } from "../../lib/editor/types";
 import { MBTrack } from "../../lib/musicbrainz/types";
+import {
+  AlbumChangeProposal,
+  EditorInputEventHandler,
+} from "../../lib/editor/types";
+import { editorDisptach } from "../../providers/EditorProvider";
+import {
+  updateAttrApproval,
+  updateAttrValue,
+  updateTrackApproval,
+  updateTrackValue,
+} from "../../lib/editor/actions";
 import ReleaseTable from "./ReleaseTable";
 import TrackTable from "./TrackTable";
 import "./AlbumComparison.css";
 
 type AlbumMetadataComparisonProps = {
-  current?: AlbumWithTracks;
-  proposal?: AlbumChangeProposal;
+  proposal: AlbumChangeProposal;
   candidateTracks: MBTrack[];
 };
 
 export default function AlbumMetadataComparison({
-  current,
   proposal,
   candidateTracks,
 }: AlbumMetadataComparisonProps) {
-  if (!current) {
-    return null;
-  }
+  const dispatch = editorDisptach();
+
+  const onAttrChange: EditorInputEventHandler = (e) => {
+    const { dataset, value } = e.currentTarget;
+    dispatch(updateAttrValue(dataset.key, value));
+  };
+
+  const onAttrApprove: EditorInputEventHandler = (e) => {
+    const { dataset, checked } = e.currentTarget;
+    dispatch(updateAttrApproval(dataset.key, checked));
+  };
+
+  const onTrackChange: EditorInputEventHandler = (e) => {
+    const { dataset, value } = e.currentTarget;
+    dispatch(updateTrackValue(dataset.tid, dataset.key, value));
+  };
+
+  const onTrackApprove: EditorInputEventHandler = (e) => {
+    const { dataset, checked } = e.currentTarget;
+    dispatch(updateTrackApproval(dataset.key, checked));
+  };
 
   return (
     <section className="album-compare">
@@ -36,9 +61,9 @@ export default function AlbumMetadataComparison({
             className="large-release-art"
           />
 
-          <ReleaseTable current={current} readOnly />
+          <ReleaseTable proposal={proposal} version="oldValue" readOnly />
 
-          <TrackTable currentTracks={current.tracks} readOnly />
+          <TrackTable tracks={proposal.tracks} version="oldValue" readOnly />
         </div>
 
         <div className="proposed metadata">
@@ -53,16 +78,20 @@ export default function AlbumMetadataComparison({
           />
 
           <ReleaseTable
-            current={current}
             proposal={proposal}
-            readOnly={proposal == null}
+            version="newValue"
+            readOnly={!proposal?.mbid}
+            onChange={onAttrChange}
+            onApprove={onAttrApprove}
           />
 
           <TrackTable
-            currentTracks={current.tracks}
-            proposedTracks={proposal?.tracks ?? []}
+            tracks={proposal.tracks}
+            version="newValue"
             candidateTracks={candidateTracks}
-            readOnly={proposal == null}
+            readOnly={!proposal?.mbid}
+            onChange={onTrackChange}
+            onApprove={onTrackApprove}
           />
         </div>
       </Splitter>

@@ -1,40 +1,29 @@
-import { ChangeEvent } from "react";
-import { TrackChangeRequest } from "../../lib/editor/types";
+import {
+  EditorInputEventHandler,
+  TrackChangeRequest,
+} from "../../lib/editor/types";
 import { MBTrack } from "../../lib/musicbrainz/types";
-import { Track } from "../../lib/types";
-import { updateTrackProposal } from "../../lib/editor/actions";
-import { editorDisptach } from "../../providers/EditorProvider";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./MetadataTable.css";
 import "./TrackTable.css";
 
 type TrackTable = {
-  currentTracks: Track[];
-  proposedTracks?: TrackChangeRequest[];
+  tracks: TrackChangeRequest[];
+  version: "oldValue" | "newValue";
   candidateTracks?: MBTrack[];
   readOnly?: boolean;
+  onChange?: EditorInputEventHandler;
+  onApprove?: EditorInputEventHandler;
 };
 
 export default function TrackTable({
-  currentTracks,
-  proposedTracks,
-  candidateTracks = [],
+  tracks,
+  version,
+  // candidateTracks,
   readOnly,
+  onChange,
+  onApprove,
 }: TrackTable) {
-  const dispatch = editorDisptach();
-
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
-    const [key, id] = name.split(":", 2);
-    dispatch(updateTrackProposal(id, key as keyof TrackChangeRequest, value));
-  };
-
-  const onApprove = (e: ChangeEvent<HTMLInputElement>) => {
-    const { id, checked } = e.currentTarget;
-    const [, trackId] = id.split(":", 2);
-    dispatch(updateTrackProposal(trackId, "approved", checked));
-  };
-
   return (
     <table className="track metadata-table">
       <caption>Tracks</caption>
@@ -48,18 +37,19 @@ export default function TrackTable({
       </thead>
 
       <tbody>
-        {currentTracks.map((cur, i) => {
-          const id = cur.id;
-          const prop = proposedTracks?.[i];
+        {tracks.map((cr, i) => {
+          const id = cr.id;
           return (
             <tr key={id}>
               <td className="num">
                 <input
                   type="text"
-                  name={`number:${id}`}
-                  value={prop?.number ?? cur.number}
+                  name={`number[${i}]`}
+                  value={cr.number[version]}
                   autoComplete="off"
                   autoCorrect="off"
+                  data-tid={id}
+                  data-key="number"
                   readOnly={readOnly}
                   onInput={onChange}
                 />
@@ -67,10 +57,12 @@ export default function TrackTable({
               <td className="name">
                 <input
                   type="text"
-                  name={`name:${id}`}
-                  value={prop?.name ?? cur.name}
+                  name={`name[${i}]`}
+                  value={cr.name[version]}
                   autoComplete="off"
                   autoCorrect="off"
+                  data-tid={id}
+                  data-key="name"
                   readOnly={readOnly}
                   onInput={onChange}
                 />
@@ -78,18 +70,21 @@ export default function TrackTable({
               <td className="len">
                 <input
                   type="text"
-                  name={`len:${id}`}
-                  value={cur.displayLength}
+                  name={`len[${i}]`}
+                  value={cr.track.displayLength}
                   autoComplete="off"
                   readOnly
                 />
               </td>
               <td>
-                <ApproveChangeTool
-                  name={`approve:${id}`}
-                  approval={prop}
-                  onChange={onApprove}
-                />
+                {readOnly ? null : (
+                  <ApproveChangeTool
+                    attrKey={id}
+                    cr={cr}
+                    readOnly={readOnly}
+                    onChange={onApprove}
+                  />
+                )}
               </td>
             </tr>
           );
