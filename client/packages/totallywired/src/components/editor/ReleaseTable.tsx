@@ -53,7 +53,12 @@ function ReleaseRow({
       </td>
       <td>
         {readOnly ? null : (
-          <ApproveChangeTool attrKey={cr.key} cr={cr} onChange={onApprove} />
+          <ApproveChangeTool
+            cr={cr}
+            id={`approve[${cr.key}]`}
+            dataKey={cr.key}
+            onChange={onApprove}
+          />
         )}
       </td>
     </tr>

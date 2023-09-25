@@ -4,14 +4,16 @@ import {
 } from "../../lib/editor/types";
 
 type ApproveChangeToolProps = {
-  attrKey: string;
+  id: string;
+  dataKey: string;
   cr: ChangeRequestApproval;
   readOnly?: boolean;
   onChange?: EditorInputEventHandler;
 };
 
 export default function ApproveChangeTool({
-  attrKey,
+  id,
+  dataKey,
   cr,
   readOnly,
   onChange,
@@ -19,7 +21,6 @@ export default function ApproveChangeTool({
   if (readOnly) {
     return null;
   }
-  const id = `approve[${attrKey}]`;
   return (
     <>
       <label className="sr-only" htmlFor={id}>
@@ -31,7 +32,7 @@ export default function ApproveChangeTool({
         autoComplete="off"
         defaultChecked={cr.approved}
         disabled={!cr.active}
-        data-key={attrKey}
+        data-key={dataKey}
         onChange={onChange}
       />
     </>

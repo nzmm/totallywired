@@ -79,8 +79,9 @@ export default function TrackTable({
               <td>
                 {readOnly ? null : (
                   <ApproveChangeTool
-                    attrKey={id}
                     cr={cr}
+                    id={`approve[${i}]`}
+                    dataKey={id}
                     readOnly={readOnly}
                     onChange={onApprove}
                   />
