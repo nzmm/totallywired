@@ -1,4 +1,3 @@
-import * as Dialog from "@radix-ui/react-dialog";
 import { Splitter } from "@totallywired/ui-components";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
@@ -7,12 +6,13 @@ import EditorProvider, {
   editorDisptach,
   useEditor,
 } from "../../providers/EditorProvider";
+import { setProposal } from "../../lib/editor/actions";
+import { Dialog } from "../vendor/radix-ui/Dialog";
 import Header from "../nav/Header";
 import Loading from "../display/Loading";
 import AlbumMetadataSearch from "./AlbumSearch";
 import AlbumMetadataComparison from "./AlbumComparison";
 import "./AlbumEditor.css";
-import { setProposal } from "../../lib/editor/actions";
 
 type AlbumMetadataEditorProps = {
   releaseId: string;
@@ -43,45 +43,43 @@ function AlbumMetadataEditorModal({
   };
 
   return (
-    <Dialog.Root open>
-      <Dialog.Portal>
-        <Dialog.Content className="DialogContent editor fullscreen">
-          <Header />
+    <Dialog open className="editor fullscreen">
+      <Header />
 
-          {proposal ? (
-            <Splitter
-              orientation="horizontal"
-              initialPosition="300px"
-              minSize="200px"
-            >
-              <AlbumMetadataSearch
-                proposal={proposal}
-                disabled={loading}
-                onSelect={onSelect}
-              />
+      {proposal ? (
+        <Splitter
+          orientation="horizontal"
+          initialPosition="300px"
+          minSize="200px"
+        >
+          <AlbumMetadataSearch
+            proposal={proposal}
+            disabled={loading}
+            onSelect={onSelect}
+          />
 
-              <AlbumMetadataComparison
-                proposal={proposal}
-                candidateTracks={candidateTracks}
-              />
-            </Splitter>
-          ) : (
-            <Loading />
-          )}
+          <AlbumMetadataComparison
+            proposal={proposal}
+            candidateTracks={candidateTracks}
+          />
+        </Splitter>
+      ) : (
+        <Loading />
+      )}
 
-          <div className="toolbar">
-            <Dialog.Close asChild onClick={onDiscard}>
-              <button className="Button">Discard</button>
-            </Dialog.Close>
-
-            <Dialog.Close asChild onClick={() => onSave(editor.proposal)}>
-              <button className="Button green">Save changes</button>
-            </Dialog.Close>
-            <div />
-          </div>
-        </Dialog.Content>
-      </Dialog.Portal>
-    </Dialog.Root>
+      <div className="toolbar">
+        <button className="Button" onClick={onDiscard}>
+          Discard
+        </button>
+        <button
+          className="Button green"
+          onClick={() => onSave(editor.proposal)}
+        >
+          Save changes
+        </button>
+        <div />
+      </div>
+    </Dialog>
   );
 }
 

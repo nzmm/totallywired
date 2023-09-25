@@ -4,8 +4,6 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
 import { UserProvider } from "./providers/UserProvider";
 import { AppRouter } from "./router";
-import "./vendor/radix-ui/Dropdown.css";
-import "./vendor/radix-ui/Dialog.css";
 import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

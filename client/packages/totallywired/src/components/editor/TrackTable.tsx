@@ -1,8 +1,10 @@
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import {
   EditorInputEventHandler,
   TrackChangeRequest,
 } from "../../lib/editor/types";
 import { MBTrack } from "../../lib/musicbrainz/types";
+import TrackPickerPopover from "./TrackPickerPopover";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./MetadataTable.css";
 import "./TrackTable.css";
@@ -19,7 +21,7 @@ type TrackTable = {
 export default function TrackTable({
   tracks,
   version,
-  // candidateTracks,
+  candidateTracks,
   readOnly,
   onChange,
   onApprove,
@@ -31,8 +33,11 @@ export default function TrackTable({
       <thead>
         <tr className="sr-only">
           <th scope="column">Track number</th>
-          <th scope="column">Track name</th>
+          <th scope="column" colSpan={2}>
+            Track name
+          </th>
           <th scope="column">Track duration (h:m:s)</th>
+          <th scope="column"></th>
         </tr>
       </thead>
 
@@ -66,6 +71,15 @@ export default function TrackTable({
                   readOnly={readOnly}
                   onInput={onChange}
                 />
+              </td>
+              <td>
+                {readOnly ? null : (
+                  <TrackPickerPopover candidateTracks={candidateTracks}>
+                    <button className="picker-tool">
+                      <DotsHorizontalIcon />
+                    </button>
+                  </TrackPickerPopover>
+                )}
               </td>
               <td className="len">
                 <input

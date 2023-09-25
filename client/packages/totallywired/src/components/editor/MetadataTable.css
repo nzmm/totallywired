@@ -25,6 +25,7 @@ table.metadata-table {
 
   & tr > td {
     border-bottom: 1px dotted rgb(230, 230, 230);
+    height: 24px;
     padding-top: 2px;
     padding-bottom: 3px;
   }

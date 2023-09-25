@@ -10,4 +10,22 @@ table.track.metadata-table {
       text-align: right;
     }
   }
+
+  & button.picker-tool {
+    background-color: transparent;
+    border: 0;
+    padding: 0 6px;
+    padding-top: 4px;
+    margin: 0;
+
+    &:active,
+    &:focus {
+      background-color: pink;
+    }
+
+    > svg {
+      width: 12px;
+      height: 12px;
+    }
+  }
 }

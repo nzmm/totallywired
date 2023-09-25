@@ -1,41 +1,34 @@
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { User } from "../../lib/types";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../vendor/radix-ui/Popover";
+import { Avatar } from "../vendor/radix-ui/Avatar";
 import "./MeMenu.css";
 
 export default function MeMenu({ user }: { user: User }) {
   return user ? (
-    <div className="me-menu">
-      <label htmlFor="current-user-btn">{user.name}</label>
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild>
-          <button id="current-user-btn" className="avatar round md">
-            <img
-              src={`/avatars/${user.id}.jpg`}
-              alt="The current users avatar"
-            />
-          </button>
-        </DropdownMenu.Trigger>
+    <Popover>
+      <PopoverTrigger asChild>
+        <button id="me-btn">
+          <Avatar src={`/avatars/${user.id}.jpg`} name={user.name} />
+        </button>
+      </PopoverTrigger>
 
-        <DropdownMenu.Portal>
-          <DropdownMenu.Content className="DropdownMenuContent" sideOffset={5}>
-            <DropdownMenu.Item className="DropdownMenuItem">
-              <a href="#">My Profile</a>
-            </DropdownMenu.Item>
-
-            <DropdownMenu.Item className="DropdownMenuItem">
-              <a href="#">Settings</a>
-            </DropdownMenu.Item>
-
-            <DropdownMenu.DropdownMenuSeparator className="DropdownMenuSeparator" />
-
-            <DropdownMenu.Item className="DropdownMenuItem">
-              <a href="#">Sign out</a>
-            </DropdownMenu.Item>
-
-            <DropdownMenu.Arrow className="DropdownMenuArrow" />
-          </DropdownMenu.Content>
-        </DropdownMenu.Portal>
-      </DropdownMenu.Root>
-    </div>
+      <PopoverContent>
+        <menu id="me-menu">
+          <li>
+            <a href="#">My Profile</a>
+          </li>
+          <li>
+            <a href="#">Settings</a>
+          </li>
+          <li>
+            <a href="#">Sign out</a>
+          </li>
+        </menu>
+      </PopoverContent>
+    </Popover>
   ) : null;
 }

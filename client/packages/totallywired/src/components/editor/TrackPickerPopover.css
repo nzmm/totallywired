@@ -1,0 +1,11 @@
+.track-picker-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  > button {
+    text-align: left;
+    background-color: transparent;
+    border: 0;
+  }
+}
