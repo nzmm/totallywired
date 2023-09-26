@@ -83,7 +83,7 @@ export const updateAttrApproval = (
 };
 
 /**
- * Updates the a single attribute value on the release proposal
+ * Updates a single attribute value on the release proposal
  */
 export const updateAttrValue = (
   key: string | undefined,
@@ -167,7 +167,7 @@ export const updateTrackApproval = (
 };
 
 /**
- * Updates the a single track attribute on the release proposal
+ * Updates a single track attribute on the release proposal
  */
 export const updateTrackValue = (
   trackId: string | undefined,
