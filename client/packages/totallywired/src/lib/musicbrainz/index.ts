@@ -1,9 +1,5 @@
-import { Res, sendQuery } from "../requests";
-import {
-  CAResponse,
-  MBReleaseSearchResponse,
-  MBReleaseResponse,
-} from "./types";
+import { sendQuery } from "../requests";
+import { MBReleaseSearchResponse, MBReleaseResponse } from "./types";
 
 const DEFAULT_COVERART_URL = "/default-art.svg";
 
@@ -11,12 +7,14 @@ function getMbz<T>(request: string, params: URLSearchParams) {
   return sendQuery<T>(`https://musicbrainz.org/ws/2/${request}`, params);
 }
 
-function getArt(request: string) {
-  return sendQuery<CAResponse>(`https://coverartarchive.org/${request}/front`);
+function getArtUrl(request: string) {
+  return sendQuery(`https://coverartarchive.org/${request}`, undefined, {
+    method: "HEAD",
+  });
 }
 
 /**
- * Performs a MusicBrainz `release` query using artist and/or release names. Returns the top 25 results.
+ * Performs a MusicBrainz `release` query using artist and/or release names.
  */
 export const searchReleases = (releaseName: string, artistName: string) => {
   if (!releaseName && !artistName) {
@@ -32,7 +30,7 @@ export const searchReleases = (releaseName: string, artistName: string) => {
           : releaseName
           ? `release:"${releaseName}"`
           : `artist:"${artistName}"`,
-      limit: "25",
+      limit: "15",
       fmt: "json",
     }),
   );
@@ -58,24 +56,16 @@ export const getMBRelease = (
 };
 
 /**
- * Queries for any front coverart marching the release id. Returns a url if coverart exists.
- * If no art exists or any error is encountered then `DEFAULT_COVERART_URL` is returned.
+ * Queries for any front coverart for the specified release id.
+ * If any HTTP error is encountered then `DEFAULT_COVERART_URL` is returned as the art url.
  */
-export const getMBCoverArtUrl = async (
+export const getCAFrontArtUrl = async (
   releaseId: string,
   size: 250 | 500 | 1200 = 250,
 ) => {
   if (!releaseId) {
     throw new Error("releaseId is required");
   }
-
-  let r: Res<CAResponse>;
-
-  try {
-    r = await getArt(`release/${releaseId}/front-${size}`);
-  } catch {
-    return DEFAULT_COVERART_URL;
-  }
-
-  return r.ok ? r.data?.url ?? DEFAULT_COVERART_URL : DEFAULT_COVERART_URL;
+  const { ok, url } = await getArtUrl(`release/${releaseId}/front-${size}`);
+  return { url: ok ? url : DEFAULT_COVERART_URL, exists: ok };
 };

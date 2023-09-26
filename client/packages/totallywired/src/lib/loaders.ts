@@ -59,7 +59,3 @@ export function likedLoader({ request }: LoaderFunctionArgs) {
   searchParams.append("reaction", ReactionType.Liked.toString());
   return getTracks(searchParams);
 }
-
-export function albumEditorLoader() {
-  return Promise.resolve({});
-}

@@ -4,7 +4,6 @@ import {
   tracksLoader,
   albumsLoader,
   albumTracksLoader,
-  albumEditorLoader,
   artistsLoader,
   artistTracksLoader,
   likedLoader,
@@ -57,7 +56,6 @@ export const AppRouter = createBrowserRouter([
               {
                 path: "editor",
                 element: <AlbumEditor />,
-                loader: albumEditorLoader,
               },
             ],
           },

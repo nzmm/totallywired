@@ -22,7 +22,7 @@ export default function TrackPickerPopover({
           <h5>Tracks</h5>
           {candidateTracks.map((t) => {
             return (
-              <button>
+              <button key={t.id}>
                 <span className="num">{t.number}.</span>
                 <span className="name">{t.title}</span>
               </button>

@@ -1,4 +1,4 @@
-export type Res<T> = { ok: boolean; status: number; data?: T };
+export type Res<T> = { ok: boolean; status: number; url: string; data?: T };
 
 export const requestSearchParams = (request: Request) => {
   return new URL(request.url).searchParams;
@@ -25,29 +25,35 @@ function isJsonContent(res: Response) {
 }
 
 export async function sendQuery<T>(
-  url: string,
+  sendUrl: string,
   searchParams?: URLSearchParams,
+  options: RequestInit = {},
 ): Promise<Res<T>> {
   const includeSearchParams = searchParams?.size ?? 0 > 0;
-  const finalUrl = `${includeSearchParams ? `${url}?${searchParams}` : url}`;
-  const res = await fetch(finalUrl);
-  const { ok, status } = res;
+  const finalUrl = `${
+    includeSearchParams ? `${sendUrl}?${searchParams}` : sendUrl
+  }`;
 
-  if (!ok) {
-    return { ok, status };
+  const res = await fetch(finalUrl, options);
+
+  if (!res.ok) {
+    return res;
   }
 
+  const { ok, status, url } = res;
   const data = isJsonContent(res) ? await res.json() : await res.text();
-  return { ok, status, data };
+  return { ok, status, url, data };
 }
 
 export async function sendCommand<T = never>(
-  url: string,
+  commandUrl: string,
   payload?: unknown,
+  options: RequestInit = {},
 ): Promise<Res<T>> {
   const token = await getAntiforgeryToken();
 
-  const res = await fetch(url, {
+  const res = await fetch(commandUrl, {
+    ...options,
     method: "POST",
     body: JSON.stringify(payload),
     headers: {
@@ -56,7 +62,11 @@ export async function sendCommand<T = never>(
     },
   });
 
-  const { ok, status } = res;
+  if (!res.ok) {
+    return res;
+  }
+
+  const { ok, status, url } = res;
   const data = await res.json();
-  return { ok, status, data };
+  return { ok, status, url, data };
 }

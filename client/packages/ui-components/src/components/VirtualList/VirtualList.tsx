@@ -48,7 +48,7 @@ const VirtualList = <T extends IVirtualListItem>({
       if (!vlist.current) {
         return;
       }
-      
+
       const top = vlist.current.scrollTop;
 
       const [vis, ir, pr, update] = getVisible(
@@ -70,7 +70,7 @@ const VirtualList = <T extends IVirtualListItem>({
 
       scrollTop.current = top;
       pending.current = false;
-    }
+    };
 
     const handleScroll = () => {
       if (pending.current) {

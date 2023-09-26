@@ -45,6 +45,13 @@
 
   .search-release-details {
     flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+
+    > .detail {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
 
     > .additional-details {
       margin-top: 4px;

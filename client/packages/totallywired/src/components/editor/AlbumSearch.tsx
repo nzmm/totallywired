@@ -1,5 +1,5 @@
-import { useState, FormEvent, useEffect } from "react";
-import { useReleaseSearch } from "../../lib/editor/hooks";
+import { FormEvent, useEffect, useRef } from "react";
+import { useArtCollection, useReleaseSearch } from "../../lib/editor/hooks";
 import { AlbumSearchResult } from "./SearchResult";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
@@ -19,25 +19,25 @@ export default function AlbumMetadataSearch({
 }: AlbumMetadataSearchProps) {
   const { id, mbid, name, artistName } = proposal;
 
-  const [autoRunFor, setAutoRunFor] = useState("");
-  const [searchLoading, searchResults, performSearch] = useReleaseSearch(id);
+  const [searchLoading, searchResults, searchReleases] = useReleaseSearch();
+  const art = useArtCollection(searchResults);
+  const autoRunFor = useRef("");
 
   const onSearch = async (
     e: FormEvent<HTMLFormElementWithInputs<"album" | "artist">>,
   ) => {
     e.preventDefault();
     const { album, artist } = e.currentTarget;
-    await performSearch(album.value, artist.value);
+    await searchReleases(id, album.value, artist.value);
   };
 
   useEffect(() => {
-    if (autoRunFor === id) {
+    if (autoRunFor.current === id) {
       return;
     }
-
-    setAutoRunFor(id);
-    performSearch(name.oldValue, artistName.oldValue);
-  }, [id, name, artistName, autoRunFor, performSearch]);
+    autoRunFor.current = id;
+    searchReleases(id, name.oldValue, artistName.oldValue);
+  }, [id, name, artistName, autoRunFor, searchReleases]);
 
   return (
     <section className="album-search">
@@ -55,7 +55,6 @@ export default function AlbumMetadataSearch({
             placeholder="Artist"
             defaultValue={artistName.oldValue}
           />
-
           <button type="submit">Search</button>
         </fieldset>
       </form>
@@ -69,6 +68,7 @@ export default function AlbumMetadataSearch({
           searchResults.map((sr) => (
             <AlbumSearchResult
               key={sr.id}
+              coverArt={art[sr.id]}
               active={sr.id === mbid}
               onSelect={onSelect}
               {...sr}
