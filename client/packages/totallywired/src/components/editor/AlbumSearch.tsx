@@ -1,10 +1,15 @@
 import { FormEvent, useEffect, useRef } from "react";
-import { useArtCollection, useReleaseSearch } from "../../lib/editor/hooks";
+import {
+  useArtCollection,
+  useEditorDisptach,
+  useReleaseSearch,
+} from "../../lib/editor/hooks";
 import { AlbumSearchResult } from "./SearchResult";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
 import Loading from "../display/Loading";
 import "./AlbumSearch.css";
+import { updateArtCollection } from "../../lib/editor/actions";
 
 type AlbumMetadataSearchProps = {
   proposal: AlbumChangeProposal;
@@ -21,6 +26,7 @@ export default function AlbumMetadataSearch({
 
   const [searchLoading, searchResults, searchReleases] = useReleaseSearch();
   const art = useArtCollection(searchResults);
+  const dispatch = useEditorDisptach();
   const autoRunFor = useRef("");
 
   const onSearch = async (
@@ -35,9 +41,11 @@ export default function AlbumMetadataSearch({
     if (autoRunFor.current === id) {
       return;
     }
+
     autoRunFor.current = id;
+    dispatch(updateArtCollection({}));
     searchReleases(id, name.oldValue, artistName.oldValue);
-  }, [id, name, artistName, autoRunFor, searchReleases]);
+  }, [id, name, artistName, autoRunFor, searchReleases, dispatch]);
 
   return (
     <section className="album-search">

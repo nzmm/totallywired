@@ -42,11 +42,7 @@ export default function ArtTable({
       <tbody>
         <tr>
           <td>
-            <Thumbnail
-              src={src}
-              alt={label}
-              className="large-release-art"
-            />
+            <Thumbnail src={src} alt={label} className="large-release-art" />
           </td>
           <td></td>
           <td>

@@ -2,8 +2,7 @@ import { useState, useCallback, useContext, useEffect, useRef } from "react";
 import { MBReleaseSearchItem } from "../musicbrainz/types";
 import { getCAFrontArtUrl, searchReleases } from "../musicbrainz/api";
 import { EditorContext, EditorDispatchContext } from "./context";
-import { update } from "../reducer";
-import { setLoading } from "./actions";
+import { setLoading, updateArtCollection } from "./actions";
 import { DEFAULT_COVERART_URL } from "../musicbrainz/consts";
 
 export type SearchResult = MBReleaseSearchItem;
@@ -56,11 +55,11 @@ export const useArtCollection = (releases: MBReleaseSearchItem[]) => {
   const dispatch = useEditorDisptach();
 
   useEffect(() => {
-    dispatch(update((state) => ({ ...state, artCollection: {} })));
-
     Promise.all(
       releases.map(async (r) => {
-        const { exists, url = DEFAULT_COVERART_URL } = await getCAFrontArtUrl(r.id);
+        const { exists, url = DEFAULT_COVERART_URL } = await getCAFrontArtUrl(
+          r.id,
+        );
         setArt((a) => ({
           ...a,
           [r.id]: url,
@@ -71,11 +70,9 @@ export const useArtCollection = (releases: MBReleaseSearchItem[]) => {
         }
       }),
     ).finally(() => {
-      dispatch(
-        update((state) => ({ ...state, artCollection: curatedArt.current })),
-      );
+      dispatch(updateArtCollection(curatedArt.current));
     });
-  }, [releases, setLoading, setArt]);
+  }, [releases, setLoading, setArt, dispatch]);
 
   return art;
 };

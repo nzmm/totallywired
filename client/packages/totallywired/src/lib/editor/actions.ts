@@ -7,6 +7,7 @@ import {
   EditorContextState,
   TrackChangeRequest,
 } from "./types";
+import { DEFAULT_COVERART_URL } from "../musicbrainz/consts";
 
 /**
  * Update the loading state
@@ -204,6 +205,45 @@ export const updateTrackValue = (
       proposal: {
         ...state.proposal,
         tracks,
+      },
+    };
+  });
+};
+
+/**
+ * Updates the art collection.
+ * 
+ * If the current cover art is equal to the `DEFAULT_COVERART_URL`, and art for the
+ * selected MusicBrainz search result exists within the `curatedCollection`, then the
+ * proposed `coverArt` `newValue` will be updated to be the art from the `curatedCollection`.
+ */
+export const updateArtCollection = (
+  curatedCollection: Record<string, string>,
+) => {
+  return update<EditorContextState>((state) => {
+    const newState = { ...state, artCollection: curatedCollection };
+
+    if (!state.proposal) {
+      return newState;
+    }
+
+    const { mbid, coverArt } = state.proposal;
+
+    if (!mbid && coverArt.newValue !== DEFAULT_COVERART_URL) {
+      return newState;
+    }
+
+    const artSrc = curatedCollection[mbid] ?? DEFAULT_COVERART_URL;
+    return {
+      ...state,
+      artCollection: curatedCollection,
+      proposal: {
+        ...state.proposal,
+        coverArt: {
+          ...coverArt,
+          newValue: artSrc,
+          active: artSrc !== coverArt.oldValue,
+        },
       },
     };
   });
