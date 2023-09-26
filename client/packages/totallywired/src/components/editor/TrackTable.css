@@ -1,4 +1,6 @@
 table.track.metadata-table {
+  margin-bottom: 2rem;
+
   & tr > td.num {
     width: 2.5rem;
   }

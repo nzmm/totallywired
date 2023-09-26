@@ -8,7 +8,8 @@ import {
 } from "./types";
 import { getYear } from "../utils";
 import { bestMatchTracks } from "./matching";
-import { getMBRelease } from "../musicbrainz";
+import { getMBRelease } from "../musicbrainz/api";
+import { DEFAULT_COVERART_URL } from "../musicbrainz/consts";
 
 const attrCR = <T>(
   key: string,
@@ -88,6 +89,7 @@ export const getMediaTracks = (media: MBMedia[]) => {
  * Where no track exists to match against, the existing "oldValue" is used.
  */
 export const updateProposal = async (
+  artCollection: Record<string, string>,
   proposal: AlbumChangeProposal,
   candidate: MBReleaseSearchItem,
 ) => {
@@ -95,6 +97,7 @@ export const updateProposal = async (
   const res = await getMBRelease(candidate.id);
   const candidateTracks = getMediaTracks(res.data?.media ?? []);
 
+  const coverArtSrc = artCollection[candidate.id] ?? DEFAULT_COVERART_URL;
   const artistName = candidate["artist-credit"][0]?.name ?? "";
   const recordLabel = candidate["label-info"]?.[0]?.label.name ?? "";
   const year = getYear(candidate.date) ?? 0;
@@ -113,7 +116,7 @@ export const updateProposal = async (
       recordLabel,
     ),
     country: attrCR("country", proposal.country.oldValue, candidate.country),
-    coverArt: attrCR("coverArt", proposal.coverArt.oldValue, ""),
+    coverArt: attrCR("coverArt", proposal.coverArt.oldValue, coverArtSrc),
     tracks: bestMatchTracks(
       proposal.tracks.map((t) => t.track),
       candidateTracks,

@@ -38,6 +38,10 @@
     border-bottom: 1px solid lightgray;
     color: black;
   }
+  
+  &:active:not(.active) {
+    background-color: rgb(212, 212, 212);
+  }
 
   .search-release-art {
     width: 50px;

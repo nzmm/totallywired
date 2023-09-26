@@ -6,7 +6,6 @@ import {
 import { MBTrack } from "../../lib/musicbrainz/types";
 import TrackPickerPopover from "./TrackPickerPopover";
 import ApproveChangeTool from "./ApproveChangeTool";
-import "./MetadataTable.css";
 import "./TrackTable.css";
 
 type TrackTable = {

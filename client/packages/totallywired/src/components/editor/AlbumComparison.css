@@ -19,12 +19,6 @@
       text-transform: uppercase;
       font-size: smaller;
     }
-
-    > .large-release-art {
-      width: 132px;
-      height: 132px;
-      margin-left: 4px;
-    }
   }
 
   .current.metadata {

@@ -1,8 +1,6 @@
 import { sendQuery } from "../requests";
 import { MBReleaseSearchResponse, MBReleaseResponse } from "./types";
 
-const DEFAULT_COVERART_URL = "/default-art.svg";
-
 function getMbz<T>(request: string, params: URLSearchParams) {
   return sendQuery<T>(`https://musicbrainz.org/ws/2/${request}`, params);
 }
@@ -57,7 +55,7 @@ export const getMBRelease = (
 
 /**
  * Queries for any front coverart for the specified release id.
- * If any HTTP error is encountered then `DEFAULT_COVERART_URL` is returned as the art url.
+ * If any HTTP error is encountered then `null` is returned as the art url.
  */
 export const getCAFrontArtUrl = async (
   releaseId: string,
@@ -67,5 +65,5 @@ export const getCAFrontArtUrl = async (
     throw new Error("releaseId is required");
   }
   const { ok, url } = await getArtUrl(`release/${releaseId}/front-${size}`);
-  return { url: ok ? url : DEFAULT_COVERART_URL, exists: ok };
+  return { url, exists: ok };
 };

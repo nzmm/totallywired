@@ -5,7 +5,6 @@ import {
   EditorInputEventHandler,
 } from "../../lib/editor/types";
 import ApproveChangeTool from "./ApproveChangeTool";
-import "./MetadataTable.css";
 
 type ReleaseTableProps = {
   proposal: AlbumChangeProposal;

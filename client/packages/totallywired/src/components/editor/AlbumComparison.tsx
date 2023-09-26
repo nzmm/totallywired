@@ -1,5 +1,4 @@
 import { Splitter } from "@totallywired/ui-components";
-import { Thumbnail } from "../display/Thumbnail";
 import { MBTrack } from "../../lib/musicbrainz/types";
 import {
   AlbumChangeProposal,
@@ -12,6 +11,7 @@ import {
   updateTrackValue,
 } from "../../lib/editor/actions";
 import { useEditorDisptach } from "../../lib/editor/hooks";
+import ArtTable from "./ArtTable";
 import ReleaseTable from "./ReleaseTable";
 import TrackTable from "./TrackTable";
 import "./AlbumComparison.css";
@@ -47,18 +47,21 @@ export default function AlbumMetadataComparison({
     dispatch(updateTrackApproval(dataset.key, checked));
   };
 
+  const proposalReadOnly = !proposal?.mbid;
+
   return (
     <section className="album-compare">
       <Splitter orientation="horizontal">
         <div className="current metadata">
           <div>
-            <h4 className="muted">Current</h4>
+            <h4 className="muted">Current Metadata</h4>
           </div>
 
-          <Thumbnail
-            src=""
-            alt="The current album thumbnail"
-            className="large-release-art"
+          <ArtTable
+            proposal={proposal}
+            label="The current release cover art"
+            version="oldValue"
+            readOnly
           />
 
           <ReleaseTable proposal={proposal} version="oldValue" readOnly />
@@ -68,19 +71,22 @@ export default function AlbumMetadataComparison({
 
         <div className="proposed metadata">
           <div>
-            <h4 className="muted">Proposed</h4>
+            <h4 className="muted">Proposed Metadata</h4>
           </div>
 
-          <Thumbnail
-            src=""
-            alt="The updated album thumbnail"
-            className="large-release-art"
+          <ArtTable
+            proposal={proposal}
+            label="The proposed release cover art"
+            version="newValue"
+            readOnly={proposalReadOnly}
+            onChange={onAttrChange}
+            onApprove={onAttrApprove}
           />
 
           <ReleaseTable
             proposal={proposal}
             version="newValue"
-            readOnly={!proposal?.mbid}
+            readOnly={proposalReadOnly}
             onChange={onAttrChange}
             onApprove={onAttrApprove}
           />
@@ -89,7 +95,7 @@ export default function AlbumMetadataComparison({
             tracks={proposal.tracks}
             version="newValue"
             candidateTracks={candidateTracks}
-            readOnly={!proposal?.mbid}
+            readOnly={proposalReadOnly}
             onChange={onTrackChange}
             onApprove={onTrackApprove}
           />

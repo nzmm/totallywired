@@ -1,0 +1,11 @@
+.cover-art.metadata-table {
+  & .large-release-art {
+    width: 142px;
+    height: 142px;
+    margin-left: 3px;
+  }
+
+  > tbody > tr > td {
+    border-bottom: 0;
+  }
+}
