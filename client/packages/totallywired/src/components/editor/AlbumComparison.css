@@ -9,7 +9,7 @@
   .metadata {
     margin: 1.25rem 3rem;
     overflow-x: hidden;
-    max-width: 600px;
+    max-width: 500px;
     min-width: 200px;
 
     > div > h4 {
@@ -21,8 +21,8 @@
     }
 
     > .large-release-art {
-      width: 130px;
-      height: 130px;
+      width: 132px;
+      height: 132px;
       margin-left: 4px;
     }
   }

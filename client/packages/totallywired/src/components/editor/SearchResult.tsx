@@ -19,6 +19,7 @@ export function AlbumSearchResult({
   ...result
 }: AlbumSearchResultProps) {
   const whenWhere = dateCountryStr(result.date, result.country);
+  const format = result.media[0]?.format ?? "";
   return (
     <button
       className={`search-result${active ? " active" : ""}`}
@@ -37,8 +38,8 @@ export function AlbumSearchResult({
           <strong>{result.title}</strong>
         </div>
         <div>{result["artist-credit"].map((a) => a.name).join(", ")}</div>
-        <div>
-          {result["track-count"]} tracks {whenWhere ? ` · ${whenWhere}` : null}
+        <div className="additional-details">
+          <small>{format ? `${format} · ` : null}{result["track-count"]} tracks{whenWhere ? ` · ${whenWhere}` : null}</small>
         </div>
       </div>
       <div className="chevron">

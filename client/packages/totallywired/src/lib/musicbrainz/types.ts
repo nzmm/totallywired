@@ -33,7 +33,7 @@ export type MBReleaseSearchItem = {
     format: string;
     ["disc-count"]: number;
     ["track-count"]: number;
-  };
+  }[];
 };
 
 /**
