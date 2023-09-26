@@ -6,7 +6,7 @@ import {
   AttributeChangeRequest,
   TrackChangeRequest,
 } from "./types";
-import { tryParseDate } from "../utils";
+import { getYear } from "../utils";
 import { bestMatchTracks } from "./matching";
 import { getMBRelease } from "../musicbrainz";
 
@@ -97,7 +97,7 @@ export const updateProposal = async (
 
   const artistName = candidate["artist-credit"][0]?.name ?? "";
   const recordLabel = candidate["label-info"]?.[0]?.label.name ?? "";
-  const year = tryParseDate(candidate.date)?.getFullYear() ?? 0;
+  const year = getYear(candidate.date) ?? 0;
 
   const updatedProposal: AlbumChangeProposal = {
     id,

@@ -1,6 +1,7 @@
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { SearchResult } from "../../lib/editor/hooks";
+import { getYear } from "../../lib/utils";
 import { Thumbnail } from "../display/Thumbnail";
 import "./SearchResult.css";
 
@@ -9,8 +10,13 @@ export type AlbumSearchResultProps = SearchResult & {
   onSelect: (result: MBReleaseSearchItem) => void;
 };
 
-const dateCountryStr = (date?: string, country?: string) => {
-  return [date, country].filter((v) => !!v).join(", ");
+function AdditionalDetails(result: MBReleaseSearchItem) {
+  return [
+    result.country,
+    result.media[0]?.format,
+    `${result["track-count"]} tracks`,
+    getYear(result.date) ?? 0
+  ].filter(s => !!s).join(' · ');
 };
 
 export function AlbumSearchResult({
@@ -18,8 +24,6 @@ export function AlbumSearchResult({
   onSelect,
   ...result
 }: AlbumSearchResultProps) {
-  const whenWhere = dateCountryStr(result.date, result.country);
-  const format = result.media[0]?.format ?? "";
   return (
     <button
       className={`search-result${active ? " active" : ""}`}
@@ -39,7 +43,7 @@ export function AlbumSearchResult({
         </div>
         <div>{result["artist-credit"].map((a) => a.name).join(", ")}</div>
         <div className="additional-details">
-          <small>{format ? `${format} · ` : null}{result["track-count"]} tracks{whenWhere ? ` · ${whenWhere}` : null}</small>
+          <small><AdditionalDetails {...result} /></small>
         </div>
       </div>
       <div className="chevron">

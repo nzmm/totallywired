@@ -66,3 +66,14 @@ export const tryParseDate = (dateStr: string): Date | null => {
     return null;
   }
 };
+
+/**
+ * Normalises a date string to just the full year.
+ * @returns A year number or null if parsing fails
+ */
+export const getYear = (dateStr: string | undefined): number | null => {
+  if (dateStr) {
+    return tryParseDate(dateStr)?.getFullYear() ?? null;
+  }
+  return null;
+};
