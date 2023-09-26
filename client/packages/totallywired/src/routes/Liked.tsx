@@ -1,16 +1,7 @@
 import { Suspense } from "react";
-import { LoaderFunctionArgs, useLoaderData, Await } from "react-router-dom";
-import { getTracks } from "../lib/api";
+import { useLoaderData, Await } from "react-router-dom";
 import { useAsyncTracks } from "../lib/tracks/hooks";
-import { requestSearchParams } from "../lib/requests";
-import { ReactionType } from "../lib/types";
 import TrackList from "../components/lists/TrackList";
-
-export function likedLoader({ request }: LoaderFunctionArgs) {
-  const searchParams = requestSearchParams(request);
-  searchParams.append("reaction", ReactionType.Liked.toString());
-  return getTracks(searchParams);
-}
 
 function TrackListView() {
   const tracks = useAsyncTracks();

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../../lib/player";
 import { shuffle } from "../../lib/utils";
-import { useTracks } from "../../providers/TracksProvider";
+import { useTracks } from "../../lib/tracks/hooks";
 import Progressbar from "./Progressbar";
 
 type PlaybackControlsProps = {
@@ -28,7 +28,7 @@ export default function PlaybackControls({
     }, 500);
 
     return () => clearInterval(i);
-  }, [currentState]);
+  }, [currentState, player]);
 
   const handlePlayPause = () => {
     if (player.getPlaylistCount()) {

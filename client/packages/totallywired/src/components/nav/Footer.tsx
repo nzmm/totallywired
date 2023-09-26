@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PlayerTrack, TrackState } from "../../lib/player";
 import { Track } from "../../lib/types";
-import { usePlayer } from "../../providers/AudioProvider";
+import { usePlayer } from "../../lib/player/hooks";
 import OutputControls from "../inputs/OutputControls";
 import PlaybackControls from "../inputs/PlaybackControls";
 import NowPlaying from "../display/NowPlaying";

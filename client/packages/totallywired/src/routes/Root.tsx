@@ -2,12 +2,12 @@ import { Suspense, useMemo } from "react";
 import { Await, Outlet } from "react-router-dom";
 import { whoami } from "../lib/api";
 import { set } from "../lib/reducer";
-import { AudioProvider } from "../providers/AudioProvider";
-import { userDispatch } from "../providers/UserProvider";
+import { useUserDispatch } from "../lib/users/hooks";
 import Loading from "../components/display/Loading";
+import AudioProvider from "../components/providers/AudioProvider";
 
 export default function Root() {
-  const dispatch = userDispatch();
+  const dispatch = useUserDispatch();
 
   const promise = useMemo(async () => {
     const user = await whoami();

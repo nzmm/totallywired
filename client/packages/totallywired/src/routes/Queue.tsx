@@ -1,4 +1,4 @@
-import { usePlayer, useQueue } from "../providers/AudioProvider";
+import { usePlayer, useQueue } from "../lib/player/hooks";
 import PlaylistHeader from "../components/lists/PlaylistHeader";
 import Playlist from "../components/lists/Playlist";
 

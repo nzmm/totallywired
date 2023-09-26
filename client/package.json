@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "npx lerna run dev --parallel",
     "build": "npx lerna run build --scope=@totallywired/react",
+    "lint": "npx lerna run lint --scope=@totallywired/react",
     "prettier": "npx lerna run prettier"
   },
   "devDependencies": {

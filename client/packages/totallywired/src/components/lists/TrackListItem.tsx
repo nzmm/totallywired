@@ -4,12 +4,7 @@ import { Track } from "../../lib/types";
 
 export type TrackItemProps = ListItemProps<Track>;
 
-export default function TrackItem({
-  index,
-  top,
-  height,
-  ...track
-}: TrackItemProps) {
+export default function TrackItem({ top, height, ...track }: TrackItemProps) {
   return (
     <li tabIndex={0} style={{ top, height }}>
       <button className="col lgutter" title="Play now" data-intent="add">

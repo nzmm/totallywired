@@ -51,7 +51,7 @@ export class AudioPlayer {
   private _player1!: HTMLAudioElement;
 
   private _playlist = new PlaylistManager<PlayerTrack>();
-  private _currentId: string = "";
+  private _currentId = "";
   private _timeout = -1;
 
   private _handlers: Handlers = {
@@ -107,21 +107,19 @@ export class AudioPlayer {
       Math.min(remaining / 2, PRELOAD_DELAY_SECONDS) * 1000;
 
     this._timeout = window.setTimeout(async () => {
-      let { track, src } = nextItem;
+      let { src } = nextItem;
 
       console.log(`${nextItem.track.name}: preloading...`);
 
       const nextPlayer = this._getNextPlayer();
-      src = src ?? (await this._getUrl(track, nextItem.id));
+      src = src ?? (await this._getUrl(nextItem.track, nextItem.id));
       nextPlayer.id = nextItem.id;
       nextPlayer.src = src;
       nextItem.src = src;
     }, preloadDelayMs);
   }
 
-  private _setupPreload: (player: HTMLAudioElement) => void = debounce(
-    this._handlePreload.bind(this),
-  );
+  private _setupPreload = debounce(this._handlePreload.bind(this));
 
   private _emit(event: PlayerEvent, ...items: PlaylistItem<PlayerTrack>[]) {
     this._handlers[event].forEach((fn) => fn(...items));
@@ -194,7 +192,7 @@ export class AudioPlayer {
   }
 
   private async _getUrl(track: Track, id: string) {
-    let { data: url } = await getTrackUrl(track.id);
+    const { data: url } = await getTrackUrl(track.id);
     return `${url}#${id}`;
   }
 
@@ -208,8 +206,8 @@ export class AudioPlayer {
 
   private async _play(player: HTMLAudioElement, id: string) {
     this._currentId = id;
-    let { src, track } = this._playlist.getById(id);
-    src = src ?? (await this._getUrl(track, id));
+    const pl = this._playlist.getById(id);
+    const src = pl.src ?? (await this._getUrl(pl.track, id));
 
     if (player.id !== id) {
       player.id = id;

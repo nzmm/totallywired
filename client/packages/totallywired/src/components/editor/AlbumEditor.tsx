@@ -2,14 +2,12 @@ import { Splitter } from "@totallywired/ui-components";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
 import { updateProposal } from "../../lib/editor/proposals";
-import EditorProvider, {
-  editorDisptach,
-  useEditor,
-} from "../../providers/EditorProvider";
 import { setProposal } from "../../lib/editor/actions";
 import { Dialog } from "../vendor/radix-ui/Dialog";
+import { useEditor, useEditorDisptach } from "../../lib/editor/hooks";
 import Header from "../nav/Header";
 import Loading from "../display/Loading";
+import EditorProvider from "../providers/EditorProvider";
 import AlbumMetadataSearch from "./AlbumSearch";
 import AlbumMetadataComparison from "./AlbumComparison";
 import "./AlbumEditor.css";
@@ -24,7 +22,7 @@ function AlbumMetadataEditorModal({
   onSave,
   onDiscard,
 }: Omit<AlbumMetadataEditorProps, "releaseId">) {
-  const dispatch = editorDisptach();
+  const dispatch = useEditorDisptach();
   const editor = useEditor();
 
   const { loading, proposal, candidateTracks } = editor;

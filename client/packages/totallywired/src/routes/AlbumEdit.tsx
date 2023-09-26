@@ -1,13 +1,9 @@
 import React, { Suspense } from "react";
-import { LoaderFunctionArgs, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AlbumChangeProposal } from "../lib/editor/types";
 import Loading from "../components/display/Loading";
 
 const LazyEditor = React.lazy(() => import("../components/editor/AlbumEditor"));
-
-export function albumEditorLoader({}: LoaderFunctionArgs) {
-  return Promise.resolve({});
-}
 
 export default function AlbumEditor() {
   const params = useParams();

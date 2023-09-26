@@ -1,18 +1,26 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { useAsyncValue } from "react-router-dom";
-import { tracksDisptach, useTracks } from "../../providers/TracksProvider";
 import { set } from "../reducer";
 import { Res } from "../requests";
 import { AlbumDetail, ArtistDetail, ReactionType, Track } from "../types";
-import { playlistsDispatch } from "../../providers/PlaylistProvider";
 import { setTrackReaction } from "../api";
 import { updateLikedTrackCount, updateTrackReaction } from "./actions";
+import { TracksContext, TracksDispatchContext } from "./context";
+import { usePlaylistDispatch } from "../player/hooks";
+
+export const useTracks = () => {
+  return useContext(TracksContext);
+};
+
+export const useTracksDisptach = () => {
+  return useContext(TracksDispatchContext);
+};
 
 /**
  * Provides declarative access to the available tracks
  */
 export const useAsyncTracks = (): Track[] => {
-  const dispatch = tracksDisptach();
+  const dispatch = useTracksDisptach();
   const tracks = useTracks();
   const { data = [] } = useAsyncValue() as Res<Track[]>;
 
@@ -32,14 +40,18 @@ export const useAsyncAlbumTracks = (): [AlbumDetail, Track[]] => {
     Res<Track[]>,
   ];
 
-  const dispatch = tracksDisptach();
+  if (!album) {
+    throw new Error("album not found");
+  }
+
+  const dispatch = useTracksDisptach();
   const tracks = useTracks();
 
   useEffect(() => {
     dispatch(set(trackData));
   }, [dispatch, trackData]);
 
-  return [album!, tracks];
+  return [album, tracks];
 };
 
 /**
@@ -51,22 +63,26 @@ export const useAsyncArtistTracks = (): [ArtistDetail, Track[]] => {
     Res<Track[]>,
   ];
 
-  const dispatch = tracksDisptach();
+  if (!artist) {
+    throw new Error("artist not found");
+  }
+
+  const dispatch = useTracksDisptach();
   const tracks = useTracks();
 
   useEffect(() => {
     dispatch(set(trackData));
   }, [dispatch, trackData]);
 
-  return [artist!, tracks];
+  return [artist, tracks];
 };
 
 /**
  * Provides declarative access to track reaction toggling.
  */
 export const useToggleTrackReaction = () => {
-  const trDispatch = tracksDisptach();
-  const plDispatch = playlistsDispatch();
+  const trDispatch = useTracksDisptach();
+  const plDispatch = usePlaylistDispatch();
 
   return useCallback(
     async (track?: Track) => {

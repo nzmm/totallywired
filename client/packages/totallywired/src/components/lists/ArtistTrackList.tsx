@@ -1,14 +1,14 @@
 import { useMemo } from "react";
 import { ArtistDetail, Track } from "../../lib/types";
 import { duration } from "../../lib/utils";
-import { usePlayer } from "../../providers/AudioProvider";
-import { useTracks } from "../../providers/TracksProvider";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
 } from "./HeaderTrackList";
 import TrackItem from "./TrackListItem";
 import { ArtistArt } from "../display/Thumbnail";
+import { usePlayer } from "../../lib/player/hooks";
+import { useTracks } from "../../lib/tracks/hooks";
 
 const useArtistHeaderInfo = (tracks: Track[]) => {
   return useMemo(() => {
@@ -78,9 +78,9 @@ function ArtistTrackItem({
 }: HeaderTrackItemProps<ArtistDetail>) {
   return track ? (
     <TrackItem {...track} index={index} top={top} height={height} />
-  ) : (
-    <ArtistHeader artist={artist!} top={top} height={height} />
-  );
+  ) : artist ? (
+    <ArtistHeader artist={artist} top={top} height={height} />
+  ) : null;
 }
 
 export function ArtistTrackList({

@@ -5,8 +5,8 @@ import {
   VisibleItem,
 } from "@totallywired/ui-components";
 import { Track } from "../../lib/types";
-import { usePlayer } from "../../providers/AudioProvider";
 import { useToggleTrackReaction } from "../../lib/tracks/hooks";
+import { usePlayer } from "../../lib/player/hooks";
 import "./HeaderTrackList.css";
 
 export type HeaderTrackDataProps<T> = IVirtualListItem & {

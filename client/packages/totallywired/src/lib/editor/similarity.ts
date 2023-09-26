@@ -1,4 +1,3 @@
-// @ts-ignore
 import trigramSimilarity from "trigram-similarity";
 
 const TRIGRAM_SIMILARITY_THRESHOLD = 0.3; // same value as postgresql

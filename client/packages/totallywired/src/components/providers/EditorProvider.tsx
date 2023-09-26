@@ -1,38 +1,23 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
-import { commonReducer, createDispatchContext } from "../lib/reducer";
-import { EditorContextState } from "../lib/editor/types";
-import { getAlbum, getTracksByAlbum } from "../lib/api";
-import { setLoading, setProposal } from "../lib/editor/actions";
-import { createDefaultProposal } from "../lib/editor/proposals";
+import { useEffect, useReducer } from "react";
+import { getAlbum, getTracksByAlbum } from "../../lib/api";
+import { setLoading, setProposal } from "../../lib/editor/actions";
+import {
+  INIT_EDITOR,
+  EditorDispatchContext,
+  EditorContext,
+} from "../../lib/editor/context";
+import { createDefaultProposal } from "../../lib/editor/proposals";
+import { Reducer } from "../../lib/editor/context";
 
 type EditorProviderProps = React.PropsWithChildren & {
   releaseId: string;
-};
-
-const INITIAL_STATE: EditorContextState = {
-  loading: false,
-  proposal: undefined,
-  candidateTracks: [],
-  artCollection: {},
-};
-
-const EditorContext = createContext<EditorContextState>(INITIAL_STATE);
-const EditorDispatchContext = createDispatchContext<EditorContextState>();
-const Reducer = commonReducer<EditorContextState>();
-
-export const useEditor = () => {
-  return useContext(EditorContext);
-};
-
-export const editorDisptach = () => {
-  return useContext(EditorDispatchContext);
 };
 
 export default function EditorProvider({
   releaseId,
   children,
 }: EditorProviderProps) {
-  const [editor, dispatch] = useReducer(Reducer, INITIAL_STATE);
+  const [editor, dispatch] = useReducer(Reducer, INIT_EDITOR);
   const { loading, proposal } = editor;
 
   useEffect(() => {

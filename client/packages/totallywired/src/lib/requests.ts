@@ -43,7 +43,7 @@ export async function sendQuery<T>(
 
 export async function sendCommand<T = never>(
   url: string,
-  payload?: any,
+  payload?: unknown,
 ): Promise<Res<T>> {
   const token = await getAntiforgeryToken();
 

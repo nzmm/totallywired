@@ -37,7 +37,7 @@ export default function AlbumMetadataSearch({
 
     setAutoRunFor(id);
     performSearch(name.oldValue, artistName.oldValue);
-  }, [id, name, artistName, autoRunFor]);
+  }, [id, name, artistName, autoRunFor, performSearch]);
 
   return (
     <section className="album-search">

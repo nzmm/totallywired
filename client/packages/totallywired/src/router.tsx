@@ -1,18 +1,27 @@
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
 import { createBrowserRouter } from "react-router-dom";
-import AlbumTracks, { albumTracksLoader } from "./routes/AlbumTracks";
-import Albums, { albumsLoader } from "./routes/Albums";
-import ArtistTracks, { artistTracksLoader } from "./routes/ArtistTracks";
-import Artists, { artistsLoader } from "./routes/Artists";
+import {
+  tracksLoader,
+  albumsLoader,
+  albumTracksLoader,
+  albumEditorLoader,
+  artistsLoader,
+  artistTracksLoader,
+  likedLoader,
+} from "./lib/loaders";
+import AlbumTracks from "./routes/AlbumTracks";
+import Albums from "./routes/Albums";
+import ArtistTracks from "./routes/ArtistTracks";
+import Artists from "./routes/Artists";
 import ErrorPage from "./routes/Error";
 import Home from "./routes/Home";
 import Library from "./routes/Library";
 import Providers from "./routes/Providers";
 import Queue from "./routes/Queue";
 import Root from "./routes/Root";
-import Tracks, { tracksLoader } from "./routes/Tracks";
-import Liked, { likedLoader } from "./routes/Liked";
-import AlbumEditor, { albumEditorLoader } from "./routes/AlbumEdit";
+import Tracks from "./routes/Tracks";
+import Liked from "./routes/Liked";
+import AlbumEditor from "./routes/AlbumEdit";
 
 import "./styles.css";
 

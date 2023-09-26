@@ -18,7 +18,7 @@ type GenericActions<T> = UpdateManyAction<T> | UpdateAction<T> | SetAction<T>;
 type GenericReducer<T> = Reducer<T, GenericActions<T>>;
 export type GenericDispatch<T> = React.Dispatch<GenericActions<T>>;
 
-const INIT_DISPATCH = (_: any) => undefined;
+const INIT_DISPATCH = () => undefined;
 
 export function createDispatchContext<T>() {
   return createContext<GenericDispatch<T>>(INIT_DISPATCH);

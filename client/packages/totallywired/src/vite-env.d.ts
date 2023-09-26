@@ -1,5 +1,12 @@
 /// <reference types="vite/client" />
 
+/* Third-party modules */
+
+declare module "trigram-similarity" {
+  function trigramSimilarity(s1: string, s2: string): number;
+  export = trigramSimilarity;
+}
+
 /* Utility types */
 
 /**

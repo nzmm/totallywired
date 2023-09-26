@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useUser } from "../providers/UserProvider";
+import { useUser } from "../lib/users/hooks";
 
 export default function Home() {
   const user = useUser();

@@ -47,7 +47,7 @@ export type Artist = {
   name: string;
 };
 
-export type ArtistDetail = Artist & {};
+export type ArtistDetail = Artist;
 
 export type Provider = {
   sourceId: string;

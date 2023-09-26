@@ -5,8 +5,8 @@ import {
 } from "@totallywired/ui-components";
 import TrackItem from "./TrackListItem";
 import { useToggleTrackReaction } from "../../lib/tracks/hooks";
+import { usePlayer } from "../../lib/player/hooks";
 import { Track } from "../../lib/types";
-import { usePlayer } from "../../providers/AudioProvider";
 import "./TrackList.css";
 
 export type TrackDataProps = IVirtualListItem & Track;

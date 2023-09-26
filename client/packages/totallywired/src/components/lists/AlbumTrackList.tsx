@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { AlbumDetail, Track } from "../../lib/types";
 import { duration } from "../../lib/utils";
-import { usePlayer } from "../../providers/AudioProvider";
-import { useTracks } from "../../providers/TracksProvider";
+import { usePlayer } from "../../lib/player/hooks";
+import { useTracks } from "../../lib/tracks/hooks";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
@@ -83,9 +83,9 @@ function AlbumTrackItem({
 }: HeaderTrackItemProps<AlbumDetail>) {
   return track ? (
     <TrackItem {...track} index={index} top={top} height={height} />
-  ) : (
-    <AlbumHeader album={album!} top={top} height={height} />
-  );
+  ) : album ? (
+    <AlbumHeader album={album} top={top} height={height} />
+  ) : null;
 }
 
 export default function AlbumTracksList({

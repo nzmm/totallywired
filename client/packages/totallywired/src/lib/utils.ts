@@ -33,9 +33,14 @@ export const shuffle = <T>(source: T[], limit?: number) => {
   return result;
 };
 
-export const debounce = (func: (...args: any[]) => void, timeout = 300) => {
+export const debounce = <
+  T extends { apply: (obj: unknown, args: unknown[]) => void },
+>(
+  func: T,
+  timeout = 300,
+) => {
   let timer: number;
-  return (...args: any[]) => {
+  return (...args: unknown[]) => {
     clearTimeout(timer);
     timer = window.setTimeout(() => {
       func.apply(this, args);

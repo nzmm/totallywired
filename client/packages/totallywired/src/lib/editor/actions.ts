@@ -35,7 +35,7 @@ export const setProposal = (
 const getAttrCR = (
   state: EditorContextState,
   k: keyof AlbumChangeProposal,
-): AttributeChangeRequest<any> | null => {
+): AttributeChangeRequest<unknown> | null => {
   const { proposal } = state;
   if (!proposal) {
     return null;
@@ -57,7 +57,7 @@ export const updateAttrApproval = (
   approved: boolean,
 ) => {
   return update<EditorContextState>((state) => {
-    if (!key) {
+    if (!key || !state.proposal) {
       return state;
     }
 
@@ -71,7 +71,7 @@ export const updateAttrApproval = (
     return {
       ...state,
       proposal: {
-        ...state.proposal!,
+        ...state.proposal,
         [k]: {
           ...cr,
           approved,
@@ -89,7 +89,7 @@ export const updateAttrValue = (
   value: string | number,
 ) => {
   return update<EditorContextState>((state) => {
-    if (!key) {
+    if (!key || !state.proposal) {
       return state;
     }
 
@@ -103,7 +103,7 @@ export const updateAttrValue = (
     return {
       ...state,
       proposal: {
-        ...state.proposal!,
+        ...state.proposal,
         [k]: {
           ...cr,
           newValue: value,

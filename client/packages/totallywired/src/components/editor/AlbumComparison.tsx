@@ -5,13 +5,13 @@ import {
   AlbumChangeProposal,
   EditorInputEventHandler,
 } from "../../lib/editor/types";
-import { editorDisptach } from "../../providers/EditorProvider";
 import {
   updateAttrApproval,
   updateAttrValue,
   updateTrackApproval,
   updateTrackValue,
 } from "../../lib/editor/actions";
+import { useEditorDisptach } from "../../lib/editor/hooks";
 import ReleaseTable from "./ReleaseTable";
 import TrackTable from "./TrackTable";
 import "./AlbumComparison.css";
@@ -25,7 +25,7 @@ export default function AlbumMetadataComparison({
   proposal,
   candidateTracks,
 }: AlbumMetadataComparisonProps) {
-  const dispatch = editorDisptach();
+  const dispatch = useEditorDisptach();
 
   const onAttrChange: EditorInputEventHandler = (e) => {
     const { dataset, value } = e.currentTarget;

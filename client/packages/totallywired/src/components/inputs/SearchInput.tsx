@@ -22,12 +22,15 @@ export default function SearchInput() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
 
-  const onChange = useCallback((e: ChangeEvent) => {
-    e.preventDefault();
-    const q = e.currentTarget.value;
-    setQuery(q);
-    updateSearchParamsDebounced(q, setSearchParams);
-  }, []);
+  const onChange = useCallback(
+    (e: ChangeEvent) => {
+      e.preventDefault();
+      const q = e.currentTarget.value;
+      setQuery(q);
+      updateSearchParamsDebounced(q, setSearchParams);
+    },
+    [setSearchParams],
+  );
 
   const onClear = () => {
     const q = "";
@@ -37,7 +40,7 @@ export default function SearchInput() {
 
   useEffect(() => {
     setQuery(searchParams.get("q") ?? "");
-  }, [searchParams]);
+  }, [searchParams, setSearchParams]);
 
   return (
     <form className="search-input" onSubmit={onSubmit}>

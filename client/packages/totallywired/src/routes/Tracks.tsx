@@ -1,18 +1,7 @@
 import { Suspense } from "react";
-import {
-  Await,
-  LoaderFunctionArgs,
-  useLoaderData,
-} from "react-router-dom";
-import { getTracks } from "../lib/api";
+import { Await, useLoaderData } from "react-router-dom";
 import { useAsyncTracks } from "../lib/tracks/hooks";
-import { requestSearchParams } from "../lib/requests";
 import TrackList from "../components/lists/TrackList";
-
-export function tracksLoader({ request }: LoaderFunctionArgs) {
-  const searchParams = requestSearchParams(request);
-  return getTracks(searchParams);
-}
 
 function TrackListView() {
   const tracks = useAsyncTracks();

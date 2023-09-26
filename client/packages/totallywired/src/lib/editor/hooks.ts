@@ -1,8 +1,17 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useContext } from "react";
 import { MBReleaseSearchItem } from "../musicbrainz/types";
 import { searchReleases } from "../musicbrainz";
+import { EditorContext, EditorDispatchContext } from "./context";
 
 export type SearchResult = MBReleaseSearchItem;
+
+export const useEditor = () => {
+  return useContext(EditorContext);
+};
+
+export const useEditorDisptach = () => {
+  return useContext(EditorDispatchContext);
+};
 
 export const useReleaseSearch = (
   releaseId: string,
