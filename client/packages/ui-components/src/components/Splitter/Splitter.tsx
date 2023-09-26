@@ -19,6 +19,7 @@ const Splitter = ({
   initialPosition = "50%",
 }: SplitterProps) => {
   const id = useId();
+  const ts = useRef(0);
   const splitter = useRef<HTMLDivElement>(null);
   const handle = useRef<HTMLDivElement>(null);
 
@@ -73,7 +74,13 @@ const Splitter = ({
       }
 
       e.stopPropagation();
+      const td = e.timeStamp - ts.current;
 
+      if (td < 20) {
+        return;
+      }
+
+      ts.current = e.timeStamp;
       const pos = getPosition(e, orientation, splitter.current);
       setPosition(pos);
     };

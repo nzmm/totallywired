@@ -29,13 +29,14 @@ const VirtualList = <T extends IVirtualListItem>({
   onDragEnd,
   onDrop,
 }: VirtualListProps<T>) => {
+  const pending = useRef(false);
+  const scrollTop = useRef(0);
   const vlist = useRef<HTMLDivElement>(null);
-  const scrollTop = useRef<number>(0);
   const indexRange = useRef<NumericRange>([0, 0]);
   const pixelRange = useRef<NumericRange>([0, 0]);
   const focalItem = useRef<FocalItem>(NO_FOCUS);
 
-  const [height, setHeight] = useState<number>(0);
+  const [height, setHeight] = useState(0);
   const [visible, setVisible] = useState<VisibleItem<T>[]>([]);
 
   useEffect(() => {
@@ -43,11 +44,11 @@ const VirtualList = <T extends IVirtualListItem>({
       return;
     }
 
-    const handleScroll = () => {
+    const processScroll = () => {
       if (!vlist.current) {
         return;
       }
-
+      
       const top = vlist.current.scrollTop;
 
       const [vis, ir, pr, update] = getVisible(
@@ -68,6 +69,16 @@ const VirtualList = <T extends IVirtualListItem>({
       }
 
       scrollTop.current = top;
+      pending.current = false;
+    }
+
+    const handleScroll = () => {
+      if (pending.current) {
+        return;
+      }
+
+      pending.current = true;
+      window.requestAnimationFrame(processScroll);
     };
 
     const handleResize = () => {
