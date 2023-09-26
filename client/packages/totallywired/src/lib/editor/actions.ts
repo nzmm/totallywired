@@ -211,7 +211,7 @@ export const updateTrackValue = (
 };
 
 /**
- * Updates the art collection.
+ * Updates the art collection to be the `curatedCollection`.
  * 
  * If the current cover art is equal to the `DEFAULT_COVERART_URL`, and art for the
  * selected MusicBrainz search result exists within the `curatedCollection`, then the
