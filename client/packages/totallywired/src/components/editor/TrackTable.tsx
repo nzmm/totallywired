@@ -4,7 +4,7 @@ import {
   TrackChangeRequest,
 } from "../../lib/editor/types";
 import { MBTrack } from "../../lib/musicbrainz/types";
-import TrackPickerPopover from "./TrackPickerPopover";
+import TrackPickerPopover from "./MetadataSelector";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./TrackTable.css";
 

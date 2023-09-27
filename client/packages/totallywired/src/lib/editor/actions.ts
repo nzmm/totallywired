@@ -212,7 +212,7 @@ export const updateTrackValue = (
 
 /**
  * Updates the art collection to be the `curatedCollection`.
- * 
+ *
  * If the current cover art is equal to the `DEFAULT_COVERART_URL`, and art for the
  * selected MusicBrainz search result exists within the `curatedCollection`, then the
  * proposed `coverArt` `newValue` will be updated to be the art from the `curatedCollection`.
@@ -237,6 +237,29 @@ export const updateArtCollection = (
     return {
       ...state,
       artCollection: curatedCollection,
+      proposal: {
+        ...state.proposal,
+        coverArt: {
+          ...coverArt,
+          newValue: artSrc,
+          active: artSrc !== coverArt.oldValue,
+        },
+      },
+    };
+  });
+};
+
+/**
+ * Updates the proposed `coverArt` `newValue` to be the supplied `artSrc` url.
+ */
+export const updateCoverArt = (artSrc: string) => {
+  return update<EditorContextState>((state) => {
+    if (!state.proposal) {
+      return state;
+    }
+    const { coverArt } = state.proposal;
+    return {
+      ...state,
       proposal: {
         ...state.proposal,
         coverArt: {

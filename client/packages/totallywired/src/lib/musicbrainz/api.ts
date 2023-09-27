@@ -1,5 +1,10 @@
 import { sendQuery } from "../requests";
-import { MBReleaseSearchResponse, MBReleaseResponse } from "./types";
+import { DEFAULT_COVERART_URL } from "./consts";
+import {
+  MBReleaseSearchCollection,
+  MBReleaseResponse,
+  CAImageSize,
+} from "./types";
 
 function getMbz<T>(request: string, params: URLSearchParams) {
   return sendQuery<T>(`https://musicbrainz.org/ws/2/${request}`, params);
@@ -19,7 +24,7 @@ export const searchReleases = (releaseName: string, artistName: string) => {
     throw new Error("releaseName or artistName required");
   }
 
-  return getMbz<MBReleaseSearchResponse>(
+  return getMbz<MBReleaseSearchCollection>(
     "release",
     new URLSearchParams({
       query:
@@ -55,15 +60,22 @@ export const getMBRelease = (
 
 /**
  * Queries for any front coverart for the specified release id.
- * If any HTTP error is encountered then `null` is returned as the art url.
+ *
+ * If any HTTP error or an unhandled exception is encountered then `DEFAULT_COVERART_URL` is returned as the art url.
+ *
+ * Default thumbnail size is 250px.
  */
 export const getCAFrontArtUrl = async (
   releaseId: string,
-  size: 250 | 500 | 1200 = 250,
+  size: CAImageSize = 250,
 ) => {
   if (!releaseId) {
     throw new Error("releaseId is required");
   }
-  const { ok, url } = await getArtUrl(`release/${releaseId}/front-${size}`);
-  return { url, exists: ok };
+  try {
+    const { ok, url } = await getArtUrl(`release/${releaseId}/front-${size}`);
+    return { url: ok ? url : DEFAULT_COVERART_URL, exists: ok };
+  } catch {
+    return { url: DEFAULT_COVERART_URL, exists: false };
+  }
 };

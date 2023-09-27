@@ -7,6 +7,7 @@ import {
 import {
   updateAttrApproval,
   updateAttrValue,
+  updateCoverArt,
   updateTrackApproval,
   updateTrackValue,
 } from "../../lib/editor/actions";
@@ -15,15 +16,20 @@ import ArtTable from "./ArtTable";
 import ReleaseTable from "./ReleaseTable";
 import TrackTable from "./TrackTable";
 import "./AlbumComparison.css";
+import { MouseEventHandler } from "react";
 
 type AlbumMetadataComparisonProps = {
   proposal: AlbumChangeProposal;
   candidateTracks: MBTrack[];
+  artCollection: Record<string, string>;
 };
+
+const EMPTY_COLLECTION = {};
 
 export default function AlbumMetadataComparison({
   proposal,
   candidateTracks,
+  artCollection,
 }: AlbumMetadataComparisonProps) {
   const dispatch = useEditorDisptach();
 
@@ -47,6 +53,11 @@ export default function AlbumMetadataComparison({
     dispatch(updateTrackApproval(dataset.key, checked));
   };
 
+  const onArtSelect: MouseEventHandler<HTMLButtonElement> = (e) => {
+    const { value: artSrc } = e.currentTarget;
+    dispatch(updateCoverArt(artSrc));
+  };
+
   const proposalReadOnly = !proposal?.mbid;
 
   return (
@@ -59,6 +70,7 @@ export default function AlbumMetadataComparison({
 
           <ArtTable
             proposal={proposal}
+            artCollection={EMPTY_COLLECTION}
             label="The current release cover art"
             version="oldValue"
             readOnly
@@ -76,10 +88,11 @@ export default function AlbumMetadataComparison({
 
           <ArtTable
             proposal={proposal}
+            artCollection={artCollection}
             label="The proposed release cover art"
             version="newValue"
             readOnly={proposalReadOnly}
-            onChange={onAttrChange}
+            onSelect={onArtSelect}
             onApprove={onAttrApprove}
           />
 

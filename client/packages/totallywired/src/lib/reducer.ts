@@ -9,12 +9,7 @@ type UpdateAction<T> = {
   apply: UpdateFn<T>;
 };
 
-type UpdateManyAction<T> = {
-  type: "ACTION_UPDATE_MANY";
-  apply: UpdateFn<T>[];
-};
-
-type GenericActions<T> = UpdateManyAction<T> | UpdateAction<T> | SetAction<T>;
+type GenericActions<T> = UpdateAction<T> | SetAction<T>;
 type GenericReducer<T> = Reducer<T, GenericActions<T>>;
 export type GenericDispatch<T> = React.Dispatch<GenericActions<T>>;
 
@@ -29,12 +24,6 @@ export function commonReducer<T>(): GenericReducer<T> {
     switch (action.type) {
       case "ACTION_UPDATE_ONE": {
         return action.apply(obj);
-      }
-      case "ACTION_UPDATE_MANY": {
-        return action.apply.reduce<T>((acc, fn) => {
-          acc = fn(obj);
-          return acc;
-        }, obj);
       }
       case "ACTION_SET_ONE": {
         return action.apply;
@@ -52,8 +41,4 @@ export function set<T>(apply: T): SetAction<T> {
 
 export function update<T>(apply: UpdateFn<T>): UpdateAction<T> {
   return { apply, type: "ACTION_UPDATE_ONE" };
-}
-
-export function updateMany<T>(apply: UpdateFn<T>[]): UpdateManyAction<T> {
-  return { apply, type: "ACTION_UPDATE_MANY" };
 }

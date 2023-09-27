@@ -59,6 +59,7 @@ function AlbumMetadataEditorModal({
 
           <AlbumMetadataComparison
             proposal={proposal}
+            artCollection={artCollection}
             candidateTracks={candidateTracks}
           />
         </Splitter>

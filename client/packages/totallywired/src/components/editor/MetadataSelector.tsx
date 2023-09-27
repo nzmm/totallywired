@@ -4,7 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "../vendor/radix-ui/Popover";
-import "./TrackPickerPopover.css";
+import "./MetadataSelector.css";
 
 type TrackPickerPopover = React.PropsWithChildren & {
   candidateTracks?: MBTrack[];
@@ -18,7 +18,7 @@ export default function TrackPickerPopover({
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent sideOffset={-3}>
-        <div className="track-picker-content">
+        <div className="metadata-selector-content">
           <h5>Tracks</h5>
           {candidateTracks.map((t) => {
             return (

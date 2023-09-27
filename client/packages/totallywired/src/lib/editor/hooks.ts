@@ -2,8 +2,7 @@ import { useState, useCallback, useContext, useEffect, useRef } from "react";
 import { MBReleaseSearchItem } from "../musicbrainz/types";
 import { getCAFrontArtUrl, searchReleases } from "../musicbrainz/api";
 import { EditorContext, EditorDispatchContext } from "./context";
-import { setLoading, updateArtCollection } from "./actions";
-import { DEFAULT_COVERART_URL } from "../musicbrainz/consts";
+import { updateArtCollection } from "./actions";
 
 export type SearchResult = MBReleaseSearchItem;
 
@@ -57,9 +56,7 @@ export const useArtCollection = (releases: MBReleaseSearchItem[]) => {
   useEffect(() => {
     Promise.all(
       releases.map(async (r) => {
-        const { exists, url = DEFAULT_COVERART_URL } = await getCAFrontArtUrl(
-          r.id,
-        );
+        const { exists, url } = await getCAFrontArtUrl(r.id);
         setArt((a) => ({
           ...a,
           [r.id]: url,
@@ -72,7 +69,7 @@ export const useArtCollection = (releases: MBReleaseSearchItem[]) => {
     ).finally(() => {
       dispatch(updateArtCollection(curatedArt.current));
     });
-  }, [releases, setLoading, setArt, dispatch]);
+  }, [releases, setArt, dispatch]);
 
   return art;
 };

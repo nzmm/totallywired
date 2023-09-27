@@ -1,5 +1,10 @@
 /**
- * MusicBrainz release
+ * MusicBrainz
+ * @url https://musicbrainz.org/doc/MusicBrainz_API
+ */
+
+/**
+ * MusicBrainz release search item
  */
 export type MBReleaseSearchItem = {
   id: string;
@@ -37,9 +42,9 @@ export type MBReleaseSearchItem = {
 };
 
 /**
- * MusicBrainz release query response
+ * MusicBrainz release search result collection
  */
-export type MBReleaseSearchResponse = {
+export type MBReleaseSearchCollection = {
   created: string;
   count: number;
   offset: number;
@@ -109,12 +114,11 @@ export type MBReleaseResponse = {
 };
 
 /**
- * Coverart response
+ * Cover art archive
+ * @url https://musicbrainz.org/doc/Cover_Art_Archive/API
  */
-export type CAResponse = {
-  url: string;
-};
 
-export interface MetadataSearchResult extends MBReleaseSearchItem {
-  coverArtUrl?: string;
-}
+/**
+ * The current supported thumbnail sizes are 250px, 500px, and 1200px
+ */
+export type CAImageSize = 250 | 500 | 1200;
