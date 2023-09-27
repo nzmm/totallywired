@@ -13,13 +13,13 @@ public class ReleaseMetadataCommand
     public ReleaseMetadataModel Metadata { get; init; } = default!;
 }
 
-public class ReleaseMetadataCommandHandler
+public class UpdateReleaseMetadataCommandHandler
     : IRequestHandler<ReleaseMetadataCommand, ReleaseMetadataUpdateResult>
 {
     private readonly ICurrentUser _user;
     private readonly TotallyWiredDbContext _context;
 
-    public ReleaseMetadataCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public UpdateReleaseMetadataCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _user = user;
         _context = context;
@@ -171,9 +171,10 @@ public class ReleaseMetadataCommandHandler
             releaseToUpdate.Artist.MusicBrainzId = metadataChanges.ArtistMbid;
 
             releaseToUpdate.ThumbnailUrl = metadataChanges.CoverArtUrl.NotNull();
-            releaseToUpdate.Name = metadataChanges.ReleaseName;
-            releaseToUpdate.RecordLabel = metadataChanges.LabelName;
+            releaseToUpdate.Name = metadataChanges.Name;
+            releaseToUpdate.RecordLabel = metadataChanges.RecordLabel;
             releaseToUpdate.Country = metadataChanges.Country;
+            releaseToUpdate.Type = metadataChanges.TypeName;
             releaseToUpdate.Year = metadataChanges.Year;
             releaseToUpdate.MusicBrainzId = metadataChanges.ReleaseMbid;
 
@@ -209,10 +210,12 @@ public class ReleaseMetadataCommandHandler
 
                 var metadata = trackMetadata.FirstOrDefault(x => x.TrackId == track.Id);
                 if (metadata is null)
+                {
                     continue;
+                }
 
                 track.ArtistCredit = metadataChanges.ArtistName;
-                track.ReleaseName = metadataChanges.ReleaseName;
+                track.ReleaseName = metadataChanges.Name;
 
                 track.Name = metadata.TrackName;
                 track.Number = metadata.Number;

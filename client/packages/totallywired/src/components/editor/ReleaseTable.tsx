@@ -123,6 +123,14 @@ export default function ReleaseTable({
           onChange={onChange}
           onApprove={onApprove}
         />
+        <ReleaseRow
+          label="Release type"
+          cr={proposal.type}
+          version={version}
+          readOnly={readOnly}
+          onChange={onChange}
+          onApprove={onApprove}
+        />
       </tbody>
     </table>
   );

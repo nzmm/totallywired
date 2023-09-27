@@ -38,7 +38,6 @@ export default function EditorProvider({
           return;
         }
         const proposal = createDefaultProposal(album, tracks);
-        console.log(proposal);
         dispatch(setProposal(proposal));
       })
       .finally(() => dispatch(setLoading(false)));

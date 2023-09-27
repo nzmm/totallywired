@@ -9,7 +9,6 @@ import {
 import { getYear } from "../utils";
 import { bestMatchTracks } from "./matching";
 import { getMBRelease } from "../musicbrainz/api";
-import { DEFAULT_COVERART_URL } from "../musicbrainz/consts";
 
 const attrCR = <T>(
   key: string,
@@ -35,6 +34,7 @@ const trackCR = ({
     active: !!match && (numVariance || nameVariance),
     approved: true,
     track,
+    length: match?.length ?? track.length,
     number: {
       key: "number",
       oldValue: track.number,
@@ -55,6 +55,7 @@ export const createDefaultProposal = (
   album: AlbumDetail,
   tracks: Track[],
 ): AlbumChangeProposal => {
+  const defaultCoverArt = album.coverArt ?? `/api/v1/releases/${album.id}/art`;
   return {
     id: album.id,
     artistId: album.artistId,
@@ -65,7 +66,8 @@ export const createDefaultProposal = (
     year: attrCR("year", album.year, album.year),
     recordLabel: attrCR("recordLabel", album.recordLabel, album.recordLabel),
     country: attrCR("country", album.country, album.country),
-    coverArt: attrCR("coverArt", album.coverArt, album.coverArt),
+    type: attrCR("type", album.type ?? "", album.type ?? ""),
+    coverArt: attrCR("coverArt", defaultCoverArt, defaultCoverArt),
     tracks: tracks.map((track) =>
       trackCR({ track, match: undefined, similarity: 1 }),
     ),
@@ -96,17 +98,22 @@ export const updateProposal = async (
   const { id, artistId } = proposal;
   const res = await getMBRelease(candidate.id);
   const candidateTracks = getMediaTracks(res.data?.media ?? []);
+  console.log(res.data);
 
-  const coverArtSrc = artCollection[candidate.id] ?? DEFAULT_COVERART_URL;
+  const mbid = candidate.id;
+  const artistMbid = res.data?.["artist-credit"][0]?.artist.id ?? "";
+  const coverArtSrc =
+    artCollection[candidate.id] ?? `/api/v1/releases/${id}/art`;
   const artistName = candidate["artist-credit"][0]?.name ?? "";
   const recordLabel = candidate["label-info"]?.[0]?.label.name ?? "";
+  const type = res.data?.media[0]?.title ?? "";
   const year = getYear(candidate.date) ?? 0;
 
   const updatedProposal: AlbumChangeProposal = {
     id,
     artistId,
-    mbid: candidate.id,
-    artistMbid: "", // todo ?
+    mbid,
+    artistMbid,
     name: attrCR("name", proposal.name.oldValue, candidate.title),
     year: attrCR("year", proposal.year.oldValue, year),
     artistName: attrCR("artistName", proposal.artistName.oldValue, artistName),
@@ -116,6 +123,7 @@ export const updateProposal = async (
       recordLabel,
     ),
     country: attrCR("country", proposal.country.oldValue, candidate.country),
+    type: attrCR("type", proposal.type.oldValue, type),
     coverArt: attrCR("coverArt", proposal.coverArt.oldValue, coverArtSrc),
     tracks: bestMatchTracks(
       proposal.tracks.map((t) => t.track),

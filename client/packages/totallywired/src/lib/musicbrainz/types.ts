@@ -73,6 +73,7 @@ export type MBMedia = {
   ["track-count"]: number;
   position: number;
   format: string;
+  title: string;
   tracks: MBTrack[];
 };
 

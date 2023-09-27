@@ -7,7 +7,6 @@ import {
   EditorContextState,
   TrackChangeRequest,
 } from "./types";
-import { DEFAULT_COVERART_URL } from "../musicbrainz/consts";
 
 /**
  * Update the loading state
@@ -221,19 +220,18 @@ export const updateArtCollection = (
   curatedCollection: Record<string, string>,
 ) => {
   return update<EditorContextState>((state) => {
-    const newState = { ...state, artCollection: curatedCollection };
-
     if (!state.proposal) {
-      return newState;
+      return state;
     }
 
+    const newState = { ...state, artCollection: curatedCollection };
     const { mbid, coverArt } = state.proposal;
 
-    if (!mbid && coverArt.newValue !== DEFAULT_COVERART_URL) {
+    if (!mbid && coverArt.newValue !== coverArt.oldValue) {
       return newState;
     }
 
-    const artSrc = curatedCollection[mbid] ?? DEFAULT_COVERART_URL;
+    const artSrc = curatedCollection[mbid] ?? coverArt.oldValue;
     return {
       ...state,
       artCollection: curatedCollection,

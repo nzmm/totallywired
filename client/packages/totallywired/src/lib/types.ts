@@ -35,11 +35,11 @@ export type AlbumDetail = Album & {
   recordLabel: string;
   coverArt: string;
   country: string;
+  /**
+   * Album, Compilation etc...
+   */
+  type: string;
   mbid: string;
-};
-
-export type AlbumWithTracks = AlbumDetail & {
-  tracks: Track[];
 };
 
 export type Artist = {

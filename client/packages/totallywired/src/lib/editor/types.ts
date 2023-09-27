@@ -27,6 +27,7 @@ export type TrackChangeRequest = ChangeRequestApproval &
     id: string;
     mbid: string;
     track: Track;
+    length: number;
     number: ChangeRequest<string>;
     name: ChangeRequest<string>;
   };
@@ -41,6 +42,7 @@ export type AlbumChangeProposal = {
   year: AttributeChangeRequest<number>;
   recordLabel: AttributeChangeRequest<string>;
   country: AttributeChangeRequest<string>;
+  type: AttributeChangeRequest<string>;
   coverArt: AttributeChangeRequest<string>;
   tracks: TrackChangeRequest[];
 };

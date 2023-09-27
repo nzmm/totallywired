@@ -50,6 +50,7 @@ export default function ArtTable({
           <td>
             {readOnly ? null : (
               <ArtSelector
+                mbid={proposal.mbid}
                 coverArt={coverArt}
                 artCollection={artCollection}
                 onSelect={onSelect}
