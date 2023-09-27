@@ -20,6 +20,7 @@ public class Release : IUserSpecific
     public int? Year { get; set; }
     public string Country { get; set; } = default!;
     public string RecordLabel { get; set; } = default!;
+    public string Type { get; set; } = default!;
     public string MusicBrainzId { get; set; } = default!;
 
     public NpgsqlTsVector SearchVector_EN { get; set; } = default!;

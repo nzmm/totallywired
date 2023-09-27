@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Mvc;
+using TotallyWired.Handlers.ReleaseCommands;
 using TotallyWired.Handlers.ReleaseQueries;
 using TotallyWired.Handlers.TrackQueries;
+using TotallyWired.Models;
 using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
@@ -49,22 +52,28 @@ public static class ReleaseRoutes
             }
         );
 
-        /*
-        group.MapPost("/{releaseId:guid}", async (ReleaseMetadataUpdateHandler handler, Guid releaseId, [FromBody] ReleaseMetadataModel metadata, CancellationToken cancellationToken) =>
-        {
-            if (releaseId != metadata.ReleaseId)
+        group.MapPost(
+            "/{releaseId:guid}",
+            async (
+                UpdateReleaseMetadataCommandHandler handler,
+                Guid releaseId,
+                [FromBody] ReleaseMetadataModel metadata,
+                CancellationToken cancellationToken
+            ) =>
             {
-                return Results.BadRequest();
-            }
+                if (releaseId != metadata.ReleaseId)
+                {
+                    return Results.BadRequest();
+                }
 
-            var result = await handler.HandleAsync(new ReleaseMetadataUpdateCommand
-            {
-                ReleaseId = releaseId,
-                Metadata = metadata
-            }, cancellationToken);
-            
-            return result.Success ? Results.Ok(result.Release!.Id) : Results.BadRequest();
-        }); */
+                var result = await handler.HandleAsync(
+                    new ReleaseMetadataCommand { ReleaseId = releaseId, Metadata = metadata },
+                    cancellationToken
+                );
+
+                return result.Success ? Results.Ok(result.Release!.Id) : Results.BadRequest();
+            }
+        );
 
         group.MapGet(
             "/{releaseId:guid}/art",

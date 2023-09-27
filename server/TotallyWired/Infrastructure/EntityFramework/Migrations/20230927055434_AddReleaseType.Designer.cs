@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using NpgsqlTypes;
@@ -12,9 +13,11 @@ using TotallyWired.Infrastructure.EntityFramework;
 namespace TotallyWired.Infrastructure.EntityFramework.Migrations
 {
     [DbContext(typeof(TotallyWiredDbContext))]
-    partial class TotallyWiredDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230927055434_AddReleaseType")]
+    partial class AddReleaseType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -14,14 +14,14 @@ namespace TotallyWired.Tests.Handlers.ReleaseCommands;
 
 public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
 {
-    private ReleaseMetadataCommandHandler _subject = default!;
+    private UpdateReleaseMetadataCommandHandler _subject = default!;
 
     [SetUp]
     protected override void Setup()
     {
         base.Setup();
 
-        _subject = new ReleaseMetadataCommandHandler(MockCurrentUser.Object, MockDbContext.Object);
+        _subject = new UpdateReleaseMetadataCommandHandler(MockCurrentUser.Object, MockDbContext.Object);
     }
 
     [Test]

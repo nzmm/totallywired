@@ -5,6 +5,7 @@ using TotallyWired.Common;
 using TotallyWired.Contracts;
 using TotallyWired.Handlers.ArtistQueries;
 using TotallyWired.Handlers.PlaylistQueries;
+using TotallyWired.Handlers.ReleaseCommands;
 using TotallyWired.Handlers.ReleaseQueries;
 using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
@@ -47,6 +48,7 @@ public static class ConfigureServices
         services.AddScoped<ReleaseQueryHandler>();
         services.AddScoped<ReleaseListQueryHandler>();
         services.AddScoped<ReleaseThumbnailQueryHandler>();
+        services.AddScoped<UpdateReleaseMetadataCommandHandler>();
 
         // artists
         services.AddScoped<ArtistQueryHandler>();

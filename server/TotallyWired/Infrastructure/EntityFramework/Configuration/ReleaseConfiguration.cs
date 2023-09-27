@@ -18,6 +18,8 @@ public class ReleaseConfiguration : IEntityTypeConfiguration<Release>
 
         builder.Property(x => x.RecordLabel).HasDefaultValue("").HasMaxLength(1000);
 
+        builder.Property(x => x.Type).HasDefaultValue("").HasMaxLength(100);
+
         builder.Property(x => x.Country).HasDefaultValue("").HasMaxLength(8);
 
         builder.Property(x => x.MusicBrainzId).HasDefaultValue("").HasMaxLength(200);

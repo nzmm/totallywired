@@ -174,7 +174,7 @@ public class UpdateReleaseMetadataCommandHandler
             releaseToUpdate.Name = metadataChanges.Name;
             releaseToUpdate.RecordLabel = metadataChanges.RecordLabel;
             releaseToUpdate.Country = metadataChanges.Country;
-            releaseToUpdate.Type = metadataChanges.TypeName;
+            releaseToUpdate.Type = metadataChanges.Type;
             releaseToUpdate.Year = metadataChanges.Year;
             releaseToUpdate.MusicBrainzId = metadataChanges.ReleaseMbid;
 
