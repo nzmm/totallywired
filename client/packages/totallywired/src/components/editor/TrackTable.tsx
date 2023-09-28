@@ -1,4 +1,4 @@
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import { Link1Icon, LinkNone1Icon } from "@radix-ui/react-icons";
 import {
   EditorInputEventHandler,
   TrackChangeRequest,
@@ -51,6 +51,7 @@ export default function TrackTable({
                   type="text"
                   name={`number[${i}]`}
                   value={cr.number[version]}
+                  title={`${cr.disc[version]}:${cr.number[version]}`}
                   autoComplete="off"
                   autoCorrect="off"
                   data-tid={id}
@@ -74,11 +75,17 @@ export default function TrackTable({
               </td>
               <td>
                 {readOnly ? null : (
-                  <TrackPickerPopover candidateMedia={candidateMedia}>
-                    <button className="picker-tool">
-                      <DotsHorizontalIcon />
-                    </button>
-                  </TrackPickerPopover>
+                  <>
+                    <TrackPickerPopover cr={cr} candidateMedia={candidateMedia}>
+                      <button className="picker-tool">
+                        {cr.mbid ? (
+                          <Link1Icon className="matched" />
+                        ) : (
+                          <LinkNone1Icon className="unmatched" />
+                        )}
+                      </button>
+                    </TrackPickerPopover>
+                  </>
                 )}
               </td>
               <td className="len">

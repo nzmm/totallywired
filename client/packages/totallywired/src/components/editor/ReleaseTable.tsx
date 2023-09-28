@@ -44,7 +44,7 @@ function ReleaseRow({
           autoCorrect="off"
           placeholder={label}
           readOnly={readOnly}
-          value={cr[version]}
+          value={cr[version] ?? ""}
           data-key={cr.key}
           onInput={onChange}
         />

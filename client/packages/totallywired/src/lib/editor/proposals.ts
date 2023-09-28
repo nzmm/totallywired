@@ -26,13 +26,14 @@ const trackCR = ({
   match,
   similarity,
 }: MatchedTrack): TrackChangeRequest => {
+  const discVariance = track.disc !== match?.disc;
   const numVariance = track.number !== match?.position.toString();
-  const nameVariance = !!track.name && track.name !== match?.title;
+  const nameVariance = track.name !== match?.title;
   return {
     id: track.id,
     mbid: match?.id ?? "",
     similarity: similarity,
-    active: !!match && (numVariance || nameVariance),
+    active: !!match && (discVariance || numVariance || nameVariance),
     approved: true,
     track,
     length: match?.length ?? track.length,
@@ -82,9 +83,7 @@ export const createDefaultProposal = (
 /**
  * Returns a flattened list of all tracks belonging to the provided media.
  */
-export const getFlattenedCandidateTracks = (
-  media: MBMedia[],
-): MatchCandidate[] => {
+const getFlattenedCandidateTracks = (media: MBMedia[]): MatchCandidate[] => {
   return media.reduce<MatchCandidate[]>((acc, m) => {
     acc.push(...m.tracks.map((t) => ({ ...t, disc: m.position })));
     return acc;

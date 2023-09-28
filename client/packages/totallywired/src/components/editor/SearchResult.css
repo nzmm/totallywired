@@ -1,5 +1,3 @@
-@import "@radix-ui/colors/orange.css";
-
 .search-result {
   padding: 3px 8px;
   display: flex;
@@ -60,12 +58,6 @@
     > .additional-details {
       margin-top: 4px;
     }
-  }
-
-  .low-similarity {
-    padding-left: 4px;
-    vertical-align: text-top;
-    color: var(--orange-10);
   }
 
   .chevron {

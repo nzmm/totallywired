@@ -1,33 +1,61 @@
 .metadata-selector-content {
   display: flex;
   flex-direction: column;
-  gap: 1px;
   max-height: 500px;
+  width: 300px;
   overflow-y: auto;
   padding-right: 3px;
 
   > h5 {
     margin: 0;
     margin-bottom: 8px;
+    font-size: 13px;
   }
 
-  > button {
+  > .media {
     display: flex;
-    flex-direction: row;
-    gap: 3px;
-    text-align: left;
-    background-color: transparent;
-    border: 1px solid transparent;
-    border-radius: 3px;
-    padding: 3px 4px;
+    flex-direction: column;
+    gap: 1px;
 
-    &:hover {
-      background-color: rgb(245, 245, 245);
-      border: 1px solid lightgray;
-    }
+    > button {
+      display: flex;
+      flex-direction: row;
+      gap: 3px;
+      text-align: left;
+      background-color: transparent;
+      border: 1px solid transparent;
+      border-radius: 3px;
+      padding: 3px 4px;
 
-    > .num {
-      width: 2rem;
+      &.matched {
+        border: 1px dashed var(--blue-9);
+      }
+
+      &:hover {
+        background-color: rgb(245, 245, 245);
+        border: 1px solid lightgray;
+      }
+
+      > .num {
+        width: 2rem;
+      }
+
+      > .name {
+        flex-grow: 1;
+
+        > svg {
+          width: 12px;
+          height: 12px;
+          color: var(--blue-9);
+          vertical-align: middle;
+          padding-left: 4px;
+        }
+      }
+
+      > .len {
+        width: 2.5rem;
+        text-align: right;
+      }
     }
   }
 }

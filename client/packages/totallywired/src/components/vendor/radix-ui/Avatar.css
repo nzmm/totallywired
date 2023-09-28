@@ -1,6 +1,3 @@
-@import "@radix-ui/colors/black-alpha.css";
-@import "@radix-ui/colors/violet.css";
-
 .AvatarRoot {
   display: inline-flex;
   align-items: center;

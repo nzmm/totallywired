@@ -17,3 +17,12 @@ type HTMLFormElementWithInputs<
   InputNames extends string,
   E extends HTMLFormElement = HTMLFormElement,
 > = E & Record<InputNames, HTMLInputElement>;
+
+/**
+ * Helper type which extends `HTMLElement`, exposing the specified named values existing on the dataset.
+ * @example HTMLElementWithDataset<"key1" | "key2" | ...>
+ */
+type HTMLElementWithDataset<
+  DatasetKeys extends string,
+  E extends HTMLElement = HTMLElement,
+> = E & Omit<E, "dataset"> & { dataset: Record<DatasetKeys, string> };

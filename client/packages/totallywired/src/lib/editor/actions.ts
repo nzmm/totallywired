@@ -210,6 +210,63 @@ export const updateTrackValue = (
 };
 
 /**
+ * Updates all editable track attributes on the release proposal
+ */
+export const updateTrackFull = (
+  trackId: string,
+  mbid: string,
+  record: Record<"disc" | "number" | "name" | "length", string>,
+) => {
+  return update<EditorContextState>((state) => {
+    if (!trackId || !mbid || !state.proposal) {
+      return state;
+    }
+
+    const inf = getTrackInfo(state, trackId);
+    if (!inf) {
+      return state;
+    }
+
+    const [tracks, cr, i] = inf;
+
+    const { number, name } = record;
+    const discInt = parseInt(record.disc);
+    const lengthInt = parseInt(record.length);
+
+    const discVariance = discInt !== cr.disc.oldValue;
+    const numVariance = record.number !== cr.number.oldValue;
+    const nameVariance = record.name !== cr.name.oldValue;
+
+    tracks.splice(i, 1, {
+      ...cr,
+      disc: {
+        ...cr.disc,
+        newValue: discInt,
+      },
+      number: {
+        ...cr.number,
+        newValue: number,
+      },
+      name: {
+        ...cr.name,
+        newValue: name,
+      },
+      mbid,
+      length: lengthInt,
+      active: discVariance || numVariance || nameVariance,
+    });
+
+    return {
+      ...state,
+      proposal: {
+        ...state.proposal,
+        tracks,
+      },
+    };
+  });
+};
+
+/**
  * Updates the art collection to be the `curatedCollection`.
  *
  * If the current cover art is equal to the `DEFAULT_COVERART_URL`, and art for the
