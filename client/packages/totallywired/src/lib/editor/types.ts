@@ -47,6 +47,29 @@ export type AlbumChangeProposal = {
   tracks: TrackChangeRequest[];
 };
 
+export type TrackUpdate = {
+  trackId: string;
+  trackMbid: string;
+  name: string;
+  number: string;
+  position: number;
+  disc: number;
+};
+
+export type ReleaseUpdateCommand = {
+  releaseId: string;
+  artistMbid: string;
+  releaseMbid: string;
+  name: string;
+  artistName: string;
+  recordLabel: string;
+  type: string;
+  country: string;
+  year: number;
+  coverArtUrl: string;
+  tracks: TrackUpdate[];
+};
+
 export type EditorContextState = {
   loading: boolean;
   proposal?: AlbumChangeProposal;

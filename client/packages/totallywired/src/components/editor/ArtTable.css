@@ -7,5 +7,9 @@
 
   > tbody > tr > td {
     border-bottom: 0;
+
+    &.cover-art {
+      width: 148px;
+    }
   }
 }

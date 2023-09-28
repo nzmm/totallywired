@@ -10,7 +10,10 @@ type ArtSelectorProps = {
   onSelect?: MouseEventHandler<HTMLButtonElement>;
 };
 
-const getShortList = (newValue: string, artCollection: Record<string, string>) => {
+const getShortList = (
+  newValue: string,
+  artCollection: Record<string, string>,
+) => {
   const entries = Object.entries(artCollection);
   const i = entries.findIndex(([, v]) => v === newValue);
 
@@ -20,7 +23,7 @@ const getShortList = (newValue: string, artCollection: Record<string, string>) =
     entries.splice(0, 0, entry);
   }
   return entries.slice(0, 8);
-}
+};
 
 export default function ArtSelector({
   mbid,
@@ -28,7 +31,14 @@ export default function ArtSelector({
   artCollection,
   onSelect,
 }: ArtSelectorProps) {
-  const entries = useMemo(() => getShortList(coverArt.newValue, artCollection), [mbid, artCollection]);
+  // Only update shortlist when the musicbrainz selection changes
+  /* eslint-disable react-hooks/exhaustive-deps */
+  const entries = useMemo(
+    () => getShortList(coverArt.newValue, artCollection),
+    [mbid, artCollection],
+  );
+  /* eslint-enable */
+
   if (entries.length <= 1) {
     return null;
   }

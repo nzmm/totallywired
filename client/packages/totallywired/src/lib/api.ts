@@ -1,3 +1,4 @@
+import { ReleaseUpdateCommand } from "./editor/types";
 import { sendCommand, sendQuery } from "./requests";
 import {
   Album,
@@ -57,6 +58,16 @@ export function getAlbums(searchParams?: URLSearchParams) {
 
 export function getAlbum(releaseId: string) {
   return sendQuery<AlbumDetail>(`${API}/releases/${releaseId}`);
+}
+
+export function setAlbumMetadata(
+  releaseId: string,
+  updateCommand: ReleaseUpdateCommand,
+) {
+  return sendCommand<{ releaseId: string }>(
+    `${API}/releases/${releaseId}`,
+    updateCommand,
+  );
 }
 
 /* Artists */

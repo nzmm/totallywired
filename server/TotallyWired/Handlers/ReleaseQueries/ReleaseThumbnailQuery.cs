@@ -61,7 +61,7 @@ public class ReleaseThumbnailQueryHandler : IRequestHandler<Guid, string>
 
         if (resource is null)
         {
-            return DefaultAlbumArt;
+            return string.Empty;
         }
 
         if (!string.IsNullOrEmpty(resource.ThumbnailUrl))

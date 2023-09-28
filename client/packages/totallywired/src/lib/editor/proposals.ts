@@ -15,7 +15,7 @@ const attrCR = <T>(
   oldValue: T,
   newValue: T,
 ): AttributeChangeRequest<T> => {
-  const approved = !!newValue;
+  const approved = true;
   const active = oldValue !== newValue;
   return { key, oldValue, newValue, approved, active };
 };
@@ -55,7 +55,7 @@ export const createDefaultProposal = (
   album: AlbumDetail,
   tracks: Track[],
 ): AlbumChangeProposal => {
-  const defaultCoverArt = album.coverArt ?? `/api/v1/releases/${album.id}/art`;
+  const defaultCoverArt = album.coverArt ?? "";
   return {
     id: album.id,
     artistId: album.artistId,
@@ -86,8 +86,11 @@ export const getMediaTracks = (media: MBMedia[]) => {
 
 /**
  * Updates the provided a proposal, merging the current album & track metadata with the supplied MusicBrainz candidate.
+ *
  * Track matching is based on a best guess, using the trigram similarity of the track names.
+ *
  * Where metadata differs, the candidate value is always preferred.
+ *
  * Where no track exists to match against, the existing "oldValue" is used.
  */
 export const updateProposal = async (
@@ -98,12 +101,10 @@ export const updateProposal = async (
   const { id, artistId } = proposal;
   const res = await getMBRelease(candidate.id);
   const candidateTracks = getMediaTracks(res.data?.media ?? []);
-  console.log(res.data);
 
   const mbid = candidate.id;
   const artistMbid = res.data?.["artist-credit"][0]?.artist.id ?? "";
-  const coverArtSrc =
-    artCollection[candidate.id] ?? `/api/v1/releases/${id}/art`;
+  const coverArtSrc = artCollection[candidate.id] ?? "";
   const artistName = candidate["artist-credit"][0]?.name ?? "";
   const recordLabel = candidate["label-info"]?.[0]?.label.name ?? "";
   const type = res.data?.media[0]?.title ?? "";

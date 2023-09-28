@@ -36,7 +36,7 @@ export default function ArtTable({
 
       <thead>
         <tr className="sr-only">
-          <th scope="col">Image</th>
+          <th scope="col">Cover art</th>
           <th scope="col">Art selector</th>
           <th scope="col">Tools</th>
         </tr>
@@ -44,7 +44,7 @@ export default function ArtTable({
 
       <tbody>
         <tr>
-          <td>
+          <td className="cover-art">
             <Thumbnail src={src} alt={label} className="large-release-art" />
           </td>
           <td>

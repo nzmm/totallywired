@@ -2,7 +2,7 @@ ol.art-selector {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-start;
   gap: 4px;
   list-style: none;
   margin: 0;

@@ -7,10 +7,9 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseCommands;
 
-public class ReleaseMetadataCommand
+public class ReleaseMetadataCommand : ReleaseMetadataModel
 {
-    public Guid ReleaseId { get; init; }
-    public ReleaseMetadataModel Metadata { get; init; } = default!;
+    public Guid ReleaseId { get; set; }
 }
 
 public class UpdateReleaseMetadataCommandHandler
@@ -129,11 +128,10 @@ public class UpdateReleaseMetadataCommandHandler
 
         var userId = _user.UserId();
 
-        var metadataChanges = request.Metadata;
         if (
             request.ReleaseId == Guid.Empty
-            || string.IsNullOrEmpty(metadataChanges.ArtistMbid)
-            || string.IsNullOrEmpty(metadataChanges.ReleaseMbid)
+            || string.IsNullOrEmpty(request.ArtistMbid)
+            || string.IsNullOrEmpty(request.ReleaseMbid)
         )
         {
             return result;
@@ -147,7 +145,7 @@ public class UpdateReleaseMetadataCommandHandler
 
             var releaseToUpdate = await GetReleaseToUpdateAsync(
                 userId,
-                metadataChanges.ReleaseMbid,
+                request.ReleaseMbid,
                 request.ReleaseId,
                 cancellationToken
             );
@@ -159,28 +157,26 @@ public class UpdateReleaseMetadataCommandHandler
 
             var artistToUpdate = await GetArtistToUpdateAsync(
                 userId,
-                metadataChanges.ArtistMbid,
+                request.ArtistMbid,
                 releaseToUpdate,
                 cancellationToken
             );
 
             releaseToUpdate.Artist = artistToUpdate;
             releaseToUpdate.ArtistId = artistToUpdate.Id;
-
-            releaseToUpdate.Artist.Name = metadataChanges.ArtistName;
-            releaseToUpdate.Artist.MusicBrainzId = metadataChanges.ArtistMbid;
-
-            releaseToUpdate.ThumbnailUrl = metadataChanges.CoverArtUrl.NotNull();
-            releaseToUpdate.Name = metadataChanges.Name;
-            releaseToUpdate.RecordLabel = metadataChanges.RecordLabel;
-            releaseToUpdate.Country = metadataChanges.Country;
-            releaseToUpdate.Type = metadataChanges.Type;
-            releaseToUpdate.Year = metadataChanges.Year;
-            releaseToUpdate.MusicBrainzId = metadataChanges.ReleaseMbid;
+            releaseToUpdate.Artist.Name = request.ArtistName;
+            releaseToUpdate.Artist.MusicBrainzId = request.ArtistMbid;
+            releaseToUpdate.ThumbnailUrl = request.CoverArtUrl.NotNull();
+            releaseToUpdate.Name = request.Name;
+            releaseToUpdate.RecordLabel = request.RecordLabel;
+            releaseToUpdate.Country = request.Country;
+            releaseToUpdate.Type = request.Type;
+            releaseToUpdate.Year = request.Year;
+            releaseToUpdate.MusicBrainzId = request.ReleaseMbid;
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            var trackIds = request.Metadata.Tracks.Select(x => x.TrackId).ToArray();
+            var trackIds = request.Tracks.Select(x => x.TrackId).ToArray();
 
             var tracksToUpdate = trackIds.Any()
                 ? await _context.Tracks
@@ -193,7 +189,7 @@ public class UpdateReleaseMetadataCommandHandler
                     .ToArrayAsync(cancellationToken)
                 : Array.Empty<Track>();
 
-            var trackMetadata = metadataChanges.Tracks.ToArray();
+            var tracks = request.Tracks.ToArray();
 
             foreach (var track in tracksToUpdate)
             {
@@ -208,20 +204,19 @@ public class UpdateReleaseMetadataCommandHandler
                     track.ReleaseId = releaseToUpdate.Id;
                 }
 
-                var metadata = trackMetadata.FirstOrDefault(x => x.TrackId == track.Id);
-                if (metadata is null)
+                var trackMetadata = tracks.FirstOrDefault(x => x.TrackId == track.Id);
+                if (trackMetadata is null)
                 {
                     continue;
                 }
 
-                track.ArtistCredit = metadataChanges.ArtistName;
-                track.ReleaseName = metadataChanges.Name;
-
-                track.Name = metadata.TrackName;
-                track.Number = metadata.Number;
-                track.Position = metadata.Position;
-                track.Disc = metadata.Disc;
-                track.MusicBrainzId = metadata.TrackMbid;
+                track.ArtistCredit = request.ArtistName;
+                track.ReleaseName = request.Name;
+                track.Name = trackMetadata.Name;
+                track.Number = trackMetadata.Number;
+                track.Position = trackMetadata.Position;
+                track.Disc = trackMetadata.Disc;
+                track.MusicBrainzId = trackMetadata.TrackMbid;
             }
 
             await _context.SaveChangesAsync(cancellationToken);

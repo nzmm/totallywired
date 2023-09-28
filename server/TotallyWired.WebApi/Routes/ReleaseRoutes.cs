@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using TotallyWired.Handlers.ReleaseCommands;
 using TotallyWired.Handlers.ReleaseQueries;
 using TotallyWired.Handlers.TrackQueries;
-using TotallyWired.Models;
 using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
@@ -57,21 +56,15 @@ public static class ReleaseRoutes
             async (
                 UpdateReleaseMetadataCommandHandler handler,
                 Guid releaseId,
-                [FromBody] ReleaseMetadataModel metadata,
+                [FromBody] ReleaseMetadataCommand command,
                 CancellationToken cancellationToken
             ) =>
             {
-                if (releaseId != metadata.ReleaseId)
-                {
-                    return Results.BadRequest();
-                }
-
-                var result = await handler.HandleAsync(
-                    new ReleaseMetadataCommand { ReleaseId = releaseId, Metadata = metadata },
-                    cancellationToken
-                );
-
-                return result.Success ? Results.Ok(result.Release!.Id) : Results.BadRequest();
+                command.ReleaseId = releaseId;
+                var result = await handler.HandleAsync(command, cancellationToken);
+                return result.Success
+                    ? Results.Ok(new { ReleaseId = result.Release!.Id })
+                    : Results.BadRequest();
             }
         );
 
