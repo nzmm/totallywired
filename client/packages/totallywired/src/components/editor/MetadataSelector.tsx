@@ -22,10 +22,10 @@ type HTMLButtonWithTrackDataset = HTMLElementWithDataset<
   HTMLButtonElement
 >;
 
-export default function TrackPickerPopover({
+export default function MetadataSelector({
   cr,
-  candidateMedia = [],
   children,
+  candidateMedia = [],
 }: TrackPickerPopover) {
   const dispatch = useEditorDisptach();
 

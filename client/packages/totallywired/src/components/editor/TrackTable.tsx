@@ -5,7 +5,7 @@ import {
 } from "../../lib/editor/types";
 import { MBMedia } from "../../lib/musicbrainz/types";
 import { displayLength } from "../../lib/utils";
-import TrackPickerPopover from "./MetadataSelector";
+import MetadataSelector from "./MetadataSelector";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./TrackTable.css";
 
@@ -76,7 +76,7 @@ export default function TrackTable({
               <td>
                 {readOnly ? null : (
                   <>
-                    <TrackPickerPopover cr={cr} candidateMedia={candidateMedia}>
+                    <MetadataSelector cr={cr} candidateMedia={candidateMedia}>
                       <button className="picker-tool">
                         {cr.mbid ? (
                           <Link1Icon className="matched" />
@@ -84,7 +84,7 @@ export default function TrackTable({
                           <LinkNone1Icon className="unmatched" />
                         )}
                       </button>
-                    </TrackPickerPopover>
+                    </MetadataSelector>
                   </>
                 )}
               </td>
