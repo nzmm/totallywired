@@ -44,7 +44,6 @@ export default function TrackTable({
       <tbody>
         {tracks.map((cr, i) => {
           const id = cr.id;
-          console.log(cr.disc.oldValue, cr.disc.newValue)
           return (
             <tr key={id}>
               <td className="num">

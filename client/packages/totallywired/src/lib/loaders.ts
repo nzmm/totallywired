@@ -1,15 +1,15 @@
 import { LoaderFunctionArgs } from "react-router-dom";
 import { requestSearchParams } from "./requests";
+import { ReactionType } from "./types";
 import {
   getAlbum,
   getAlbums,
   getArtist,
   getArtists,
-  getTrackByArtist,
   getTracks,
   getTracksByAlbum,
+  getTracksByArtist,
 } from "./api";
-import { ReactionType } from "./types";
 
 export function tracksLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
@@ -31,7 +31,7 @@ export function artistTracksLoader({ request, params }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
   return Promise.all([
     getArtist(artistId),
-    getTrackByArtist(artistId, searchParams),
+    getTracksByArtist(artistId, searchParams),
   ]);
 }
 

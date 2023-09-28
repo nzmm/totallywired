@@ -33,7 +33,7 @@ export function getTracksByAlbum(
   );
 }
 
-export function getTrackByArtist(
+export function getTracksByArtist(
   artistId: string,
   searchParams?: URLSearchParams,
 ) {
