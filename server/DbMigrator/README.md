@@ -41,7 +41,7 @@ dotnet ef database update
 
 # Other
 
-To blow away all data when testing, the following SQL can be used:
+To blow away all library data when testing, the following SQL can be used:
 
 ```sql
 TRUNCATE "TrackReactions", "Tracks", "Releases", "Artists";
