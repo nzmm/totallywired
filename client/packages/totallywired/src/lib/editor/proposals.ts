@@ -1,10 +1,11 @@
-import { MBMedia, MBTrack, MBReleaseSearchItem } from "../musicbrainz/types";
+import { MBMedia, MBReleaseSearchItem } from "../musicbrainz/types";
 import { AlbumDetail, Track } from "../types";
 import {
   AlbumChangeProposal,
   MatchedTrack,
   AttributeChangeRequest,
   TrackChangeRequest,
+  MatchCandidate,
 } from "./types";
 import { getYear } from "../utils";
 import { bestMatchTracks } from "./matching";
@@ -35,6 +36,11 @@ const trackCR = ({
     approved: true,
     track,
     length: match?.length ?? track.length,
+    disc: {
+      key: "disc",
+      oldValue: track.disc,
+      newValue: match?.disc ?? track.disc,
+    },
     number: {
       key: "number",
       oldValue: track.number,
@@ -55,7 +61,6 @@ export const createDefaultProposal = (
   album: AlbumDetail,
   tracks: Track[],
 ): AlbumChangeProposal => {
-  const defaultCoverArt = album.coverArt ?? "";
   return {
     id: album.id,
     artistId: album.artistId,
@@ -67,7 +72,7 @@ export const createDefaultProposal = (
     recordLabel: attrCR("recordLabel", album.recordLabel, album.recordLabel),
     country: attrCR("country", album.country, album.country),
     type: attrCR("type", album.type ?? "", album.type ?? ""),
-    coverArt: attrCR("coverArt", defaultCoverArt, defaultCoverArt),
+    coverArt: attrCR("coverArt", album.coverArt ?? "", album.coverArt ?? ""),
     tracks: tracks.map((track) =>
       trackCR({ track, match: undefined, similarity: 1 }),
     ),
@@ -77,9 +82,11 @@ export const createDefaultProposal = (
 /**
  * Returns a flattened list of all tracks belonging to the provided media.
  */
-export const getMediaTracks = (media: MBMedia[]) => {
-  return media.reduce<MBTrack[]>((acc, m) => {
-    acc.push(...m.tracks);
+export const getFlattenedCandidateTracks = (
+  media: MBMedia[],
+): MatchCandidate[] => {
+  return media.reduce<MatchCandidate[]>((acc, m) => {
+    acc.push(...m.tracks.map((t) => ({ ...t, disc: m.position })));
     return acc;
   }, []);
 };
@@ -100,7 +107,8 @@ export const updateProposal = async (
 ) => {
   const { id, artistId } = proposal;
   const res = await getMBRelease(candidate.id);
-  const candidateTracks = getMediaTracks(res.data?.media ?? []);
+  const media = res.data?.media ?? [];
+  const candidateTracks = getFlattenedCandidateTracks(media);
 
   const mbid = candidate.id;
   const artistMbid = res.data?.["artist-credit"][0]?.artist.id ?? "";
@@ -132,5 +140,5 @@ export const updateProposal = async (
     ).map((m) => trackCR(m)),
   };
 
-  return { proposal: updatedProposal, candidateTracks };
+  return { proposal: updatedProposal, candidateMedia: media };
 };

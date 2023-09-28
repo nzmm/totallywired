@@ -6,6 +6,7 @@ public class TrackListModel
     public Guid ArtistId { get; set; }
     public Guid ReleaseId { get; set; }
     public bool Liked { get; set; }
+    public int Disc { get; set; } = default!;
     public string Number { get; set; } = default!;
     public string Name { get; set; } = default!;
     public string ArtistName { get; set; } = default!;

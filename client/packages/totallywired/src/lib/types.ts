@@ -13,6 +13,7 @@ export type User = {
 export type Track = {
   id: string;
   name: string;
+  disc: number;
   number: string;
   releaseId: string;
   releaseName: string;

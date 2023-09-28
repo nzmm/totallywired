@@ -36,6 +36,7 @@ public class ReleaseQueryHandler : IRequestHandler<Guid, ReleaseModel?>
                         ArtistName = r.Artist.Name,
                         RecordLabel = r.RecordLabel,
                         Country = r.Country,
+                        Type = r.Type,
                         CoverArtUrl = r.ThumbnailUrl
                     }
             )

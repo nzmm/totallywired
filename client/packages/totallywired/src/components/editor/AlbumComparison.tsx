@@ -1,5 +1,5 @@
 import { Splitter } from "@totallywired/ui-components";
-import { MBTrack } from "../../lib/musicbrainz/types";
+import { MBMedia } from "../../lib/musicbrainz/types";
 import {
   AlbumChangeProposal,
   EditorInputEventHandler,
@@ -20,7 +20,7 @@ import { MouseEventHandler } from "react";
 
 type AlbumMetadataComparisonProps = {
   proposal: AlbumChangeProposal;
-  candidateTracks: MBTrack[];
+  candidateMedia: MBMedia[];
   artCollection: Record<string, string>;
 };
 
@@ -28,7 +28,7 @@ const EMPTY_COLLECTION = {};
 
 export default function AlbumMetadataComparison({
   proposal,
-  candidateTracks,
+  candidateMedia,
   artCollection,
 }: AlbumMetadataComparisonProps) {
   const dispatch = useEditorDisptach();
@@ -107,7 +107,7 @@ export default function AlbumMetadataComparison({
           <TrackTable
             tracks={proposal.tracks}
             version="newValue"
-            candidateTracks={candidateTracks}
+            candidateMedia={candidateMedia}
             readOnly={proposalReadOnly}
             onChange={onTrackChange}
             onApprove={onTrackApprove}

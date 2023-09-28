@@ -1,5 +1,5 @@
 import { update } from "../reducer";
-import { MBTrack } from "../musicbrainz/types";
+import { MBMedia } from "../musicbrainz/types";
 import {
   AlbumChangeProposal,
   AttributeChangeRequest,
@@ -23,12 +23,12 @@ export const setLoading = (loading: boolean) => {
  */
 export const setProposal = (
   proposal: AlbumChangeProposal,
-  candidateTracks: MBTrack[] = [],
+  candidateMedia: MBMedia[] = [],
 ) => {
   return update<EditorContextState>((state) => ({
     ...state,
     proposal,
-    candidateTracks,
+    candidateMedia,
   }));
 };
 

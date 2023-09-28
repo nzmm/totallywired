@@ -40,6 +40,20 @@ export const duration = (ms: number) => {
 };
 
 /**
+ * Zero pads the start of the number ensuring its at least two characters in length.
+ * 
+ * Example: `5` ➝ `'05'`
+ */
+const pad0 = (n: number) => n.toString().padStart(2, '0');
+
+export const displayLength = (ms: number) => {
+  const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
+  const m = Math.floor((ms / (1000 * 60)) % 60);
+  const s = Math.floor((ms / 1000) % 60);
+  return h >= 1 ? `${h}:${pad0(m)}:${pad0(s)}` : `${m}:${pad0(s)}`;
+};
+
+/**
  * Attmempts to parse a date time string.
  * @returns A Date object or null if parsing fails
  */

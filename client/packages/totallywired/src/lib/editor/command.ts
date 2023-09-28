@@ -17,11 +17,11 @@ const getTrackValue = (cr: TrackChangeRequest) => {
   let disc: number, number: string, name: string;
 
   if (cr.active && cr.approved) {
-    disc = 0; // todo
+    disc = cr.disc.newValue;
     number = cr.number.newValue;
     name = cr.name.newValue;
   } else {
-    disc = 0; // todo
+    disc = cr.disc.oldValue;
     number = cr.number.oldValue;
     name = cr.name.oldValue;
   }
@@ -44,13 +44,14 @@ export function createReleaseUpdateCommand(
     coverArtUrl: getAttrValue(proposal.coverArt),
     tracks: proposal.tracks.map((t): TrackUpdate => {
       const { disc, number, name } = getTrackValue(t);
+      const position = parseInt(t.number.newValue);
       return {
         trackId: t.id,
         trackMbid: t.mbid,
         name,
         disc,
         number,
-        position: parseInt(t.number.newValue),
+        position,
       };
     }),
   };

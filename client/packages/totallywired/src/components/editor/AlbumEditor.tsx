@@ -26,7 +26,7 @@ function AlbumMetadataEditorModal({
   const dispatch = useEditorDisptach();
   const editor = useEditor();
 
-  const { loading, proposal, candidateTracks, artCollection } = editor;
+  const { loading, proposal, candidateMedia, artCollection } = editor;
 
   const onSelect = async (candidate: MBReleaseSearchItem) => {
     if (!proposal || !proposal.id) {
@@ -38,7 +38,7 @@ function AlbumMetadataEditorModal({
 
     const updated = await updateProposal(artCollection, proposal, candidate);
 
-    dispatch(setProposal(updated.proposal, updated.candidateTracks));
+    dispatch(setProposal(updated.proposal, updated.candidateMedia));
   };
 
   return (
@@ -60,7 +60,7 @@ function AlbumMetadataEditorModal({
           <AlbumMetadataComparison
             proposal={proposal}
             artCollection={artCollection}
-            candidateTracks={candidateTracks}
+            candidateMedia={candidateMedia}
           />
         </Splitter>
       ) : (

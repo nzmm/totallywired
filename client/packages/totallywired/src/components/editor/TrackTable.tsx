@@ -3,7 +3,8 @@ import {
   EditorInputEventHandler,
   TrackChangeRequest,
 } from "../../lib/editor/types";
-import { MBTrack } from "../../lib/musicbrainz/types";
+import { MBMedia } from "../../lib/musicbrainz/types";
+import { displayLength } from "../../lib/utils";
 import TrackPickerPopover from "./MetadataSelector";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./TrackTable.css";
@@ -11,7 +12,7 @@ import "./TrackTable.css";
 type TrackTable = {
   tracks: TrackChangeRequest[];
   version: "oldValue" | "newValue";
-  candidateTracks?: MBTrack[];
+  candidateMedia?: MBMedia[];
   readOnly?: boolean;
   onChange?: EditorInputEventHandler;
   onApprove?: EditorInputEventHandler;
@@ -20,8 +21,8 @@ type TrackTable = {
 export default function TrackTable({
   tracks,
   version,
-  candidateTracks,
   readOnly,
+  candidateMedia = [],
   onChange,
   onApprove,
 }: TrackTable) {
@@ -43,6 +44,7 @@ export default function TrackTable({
       <tbody>
         {tracks.map((cr, i) => {
           const id = cr.id;
+          console.log(cr.disc.oldValue, cr.disc.newValue)
           return (
             <tr key={id}>
               <td className="num">
@@ -73,7 +75,7 @@ export default function TrackTable({
               </td>
               <td>
                 {readOnly ? null : (
-                  <TrackPickerPopover candidateTracks={candidateTracks}>
+                  <TrackPickerPopover candidateMedia={candidateMedia}>
                     <button className="picker-tool">
                       <DotsHorizontalIcon />
                     </button>
@@ -84,7 +86,9 @@ export default function TrackTable({
                 <input
                   type="text"
                   name={`len[${i}]`}
-                  value={cr.track.displayLength}
+                  value={
+                    readOnly ? cr.track.displayLength : displayLength(cr.length)
+                  }
                   autoComplete="off"
                   readOnly
                 />

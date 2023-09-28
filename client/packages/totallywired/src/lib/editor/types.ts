@@ -1,11 +1,15 @@
-import { MBTrack } from "../musicbrainz/types";
+import { MBMedia, MBTrack } from "../musicbrainz/types";
 import { Track } from "../types";
 
-export type HasSimiliarity = { similarity: number };
+type HasSimiliarity = { similarity: number };
+
+export type MatchCandidate = MBTrack & {
+  disc: number;
+};
 
 export type MatchedTrack = HasSimiliarity & {
   track: Track;
-  match?: MBTrack;
+  match?: MatchCandidate;
 };
 
 export type ChangeRequest<T> = {
@@ -28,6 +32,7 @@ export type TrackChangeRequest = ChangeRequestApproval &
     mbid: string;
     track: Track;
     length: number;
+    disc: ChangeRequest<number>;
     number: ChangeRequest<string>;
     name: ChangeRequest<string>;
   };
@@ -73,7 +78,7 @@ export type ReleaseUpdateCommand = {
 export type EditorContextState = {
   loading: boolean;
   proposal?: AlbumChangeProposal;
-  candidateTracks: MBTrack[];
+  candidateMedia: MBMedia[];
   artCollection: Record<string, string>;
 };
 

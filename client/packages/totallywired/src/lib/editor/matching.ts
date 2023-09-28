@@ -1,6 +1,5 @@
 import { Track } from "../types";
-import { MatchedTrack } from "./types";
-import { MBTrack } from "../musicbrainz/types";
+import { MatchCandidate, MatchedTrack } from "./types";
 import { calculateSimilarity, isSimilar } from "./similarity";
 
 const createMatch = (track: Track): MatchedTrack => {
@@ -17,7 +16,7 @@ const createMatch = (track: Track): MatchedTrack => {
  */
 export function bestMatchTracks(
   tracks: Track[],
-  candidateTracks: MBTrack[],
+  candidateTracks: MatchCandidate[],
 ): MatchedTrack[] {
   let l = candidateTracks.length;
   if (!l) {
@@ -25,7 +24,7 @@ export function bestMatchTracks(
   }
 
   const matches: MatchedTrack[] = [];
-  const remaining: MBTrack[] = [...candidateTracks];
+  const remaining: MatchCandidate[] = [...candidateTracks];
   let i: number, match: MatchedTrack;
 
   for (const track of tracks) {

@@ -81,6 +81,7 @@ public class TrackListQueryHandler
                         Name = t.Name,
                         ArtistName = t.Artist.Name,
                         ReleaseName = t.ReleaseName,
+                        Disc = t.Disc,
                         Number = t.Number,
                         Length = t.Length,
                         DisplayLength = t.DisplayLength,

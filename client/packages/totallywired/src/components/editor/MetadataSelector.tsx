@@ -1,4 +1,4 @@
-import { MBTrack } from "../../lib/musicbrainz/types";
+import { MBMedia } from "../../lib/musicbrainz/types";
 import {
   Popover,
   PopoverContent,
@@ -7,12 +7,12 @@ import {
 import "./MetadataSelector.css";
 
 type TrackPickerPopover = React.PropsWithChildren & {
-  candidateTracks?: MBTrack[];
+  candidateMedia: MBMedia[];
 };
 
 export default function TrackPickerPopover({
   children,
-  candidateTracks = [],
+  candidateMedia = [],
 }: TrackPickerPopover) {
   return (
     <Popover>
@@ -20,12 +20,19 @@ export default function TrackPickerPopover({
       <PopoverContent sideOffset={-3}>
         <div className="metadata-selector-content">
           <h5>Tracks</h5>
-          {candidateTracks.map((t) => {
+          {candidateMedia.map((m) => {
             return (
-              <button key={t.id}>
-                <span className="num">{t.number}.</span>
-                <span className="name">{t.title}</span>
-              </button>
+              <div key={m.position}>
+                <p>{m.title || `Disc ${m.position}`}</p>
+                {m.tracks.map((t) => {
+                  return (
+                    <button key={t.id}>
+                      <span className="num">{t.number}.</span>
+                      <span className="name">{t.title}</span>
+                    </button>
+                  );
+                })}
+              </div>
             );
           })}
         </div>

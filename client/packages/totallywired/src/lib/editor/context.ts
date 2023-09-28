@@ -5,7 +5,7 @@ import { EditorContextState } from "./types";
 export const INIT_EDITOR: EditorContextState = {
   loading: false,
   proposal: undefined,
-  candidateTracks: [],
+  candidateMedia: [],
   artCollection: {},
 };
 
