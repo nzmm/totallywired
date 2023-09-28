@@ -29,7 +29,7 @@ export default function ArtTable({
   onApprove,
 }: ArtTableProps) {
   const { coverArt } = proposal;
-  const src = coverArt[version] ? coverArt[version] : DEFAULT_COVERART_URL;
+  const src = !!coverArt[version] ? coverArt[version] : `/api/v1/releases/${proposal.id}/art`;
   return (
     <table className="cover-art metadata-table">
       <caption>Cover art</caption>
@@ -44,7 +44,7 @@ export default function ArtTable({
 
       <tbody>
         <tr>
-          <td className="cover-art">
+          <td >
             <Thumbnail src={src} alt={label} className="large-release-art" />
           </td>
           <td>
