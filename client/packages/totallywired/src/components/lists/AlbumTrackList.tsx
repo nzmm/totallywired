@@ -1,36 +1,37 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { AlbumDetail, Track } from "../../lib/types";
-import { duration } from "../../lib/utils";
 import { usePlayer } from "../../lib/player/hooks";
 import { useTracks } from "../../lib/tracks/hooks";
+import { useAlbumHeaderInfo } from "../../lib/lists/hooks";
+import { separatedNodes } from "../../lib/lists/helpers";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
 } from "./HeaderTrackList";
 import TrackItem from "./TrackListItem";
-import { ReleaseArt } from "../display/Thumbnail";
+import { ReleaseArt } from "../common/Thumbnail";
 import "./AlbumTrackList.css";
 
-const useAlbumHeaderInfo = (tracks: Track[]) => {
-  return useMemo(() => {
-    const { releases, lengthMs } = tracks.reduce<{
-      releases: Set<string>;
-      lengthMs: number;
-    }>(
-      (acc, track) => {
-        acc.lengthMs += track.length;
-        return acc;
-      },
-      { releases: new Set(), lengthMs: 0 },
-    );
-
-    const releaseCount = releases.size;
-    const durationHms = duration(lengthMs);
-
-    return { releaseCount, durationHms };
-  }, [tracks]);
-};
+function PrimaryDetails({ artistId, artistName, year, recordLabel, country }: AlbumDetail) {
+  return (
+    <div className="primary">
+      {separatedNodes(
+        [true, <Link to={`/lib/artists/${artistId}`}>{artistName}</Link>],
+        [!!year, <Link to={`/lib/albums?year=${year}`}>{year}</Link>],
+        [
+          !!recordLabel,
+          <Link to={`/lib/albums?label=${recordLabel}`}>{recordLabel}</Link>,
+        ],
+        [
+          // country of XW represents [Worldwide] which isn't super meaningful so we hide it
+          !!country && country !== 'XW',
+          <Link to={`/lib/albums?country=${country}`}>{country}</Link>,
+        ],
+      )}
+    </div>
+  );
+}
 
 function AlbumHeader({
   album,
@@ -45,19 +46,14 @@ function AlbumHeader({
   const tracks = useTracks();
   const { durationHms } = useAlbumHeaderInfo(tracks);
   return (
-    <li className="list-header" style={{ top, height }}>
+    <li className="release list-header" style={{ top, height }}>
       <ReleaseArt releaseId={album.id} />
 
-      <div className="album-info">
+      <div className="details">
         <h2>{album.name}</h2>
-        <div>
-          <Link to={`/lib/artists/${album.artistId}`}>{album.artistName}</Link>{" "}
-          &middot;{" "}
-          <Link to={`/lib/albums?year=${album.year}`}>{album.year}</Link>
-        </div>
-        <div>
-          {tracks.length} tracks, {durationHms}
-        </div>
+        <PrimaryDetails {...album} />
+
+        {tracks.length} tracks, {durationHms}
         <div className="actions">
           <button
             onClick={() => {

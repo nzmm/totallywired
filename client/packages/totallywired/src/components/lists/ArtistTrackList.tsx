@@ -1,35 +1,14 @@
 import { useMemo } from "react";
 import { ArtistDetail, Track } from "../../lib/types";
-import { duration } from "../../lib/utils";
+import { ArtistArt } from "../common/Thumbnail";
+import { usePlayer } from "../../lib/player/hooks";
+import { useTracks } from "../../lib/tracks/hooks";
+import { useArtistHeaderInfo } from "../../lib/lists/hooks";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
 } from "./HeaderTrackList";
 import TrackItem from "./TrackListItem";
-import { ArtistArt } from "../display/Thumbnail";
-import { usePlayer } from "../../lib/player/hooks";
-import { useTracks } from "../../lib/tracks/hooks";
-
-const useArtistHeaderInfo = (tracks: Track[]) => {
-  return useMemo(() => {
-    const { releases, lengthMs } = tracks.reduce<{
-      releases: Set<string>;
-      lengthMs: number;
-    }>(
-      (acc, track) => {
-        acc.lengthMs += track.length;
-        acc.releases.add(track.releaseId);
-        return acc;
-      },
-      { releases: new Set(), lengthMs: 0 },
-    );
-
-    const releaseCount = releases.size;
-    const durationHms = duration(lengthMs);
-
-    return { releaseCount, durationHms };
-  }, [tracks]);
-};
 
 function ArtistHeader({
   artist,
@@ -44,16 +23,18 @@ function ArtistHeader({
   const tracks = useTracks();
   const { releaseCount, durationHms } = useArtistHeaderInfo(tracks);
   return (
-    <li className="list-header" style={{ top, height }}>
+    <li className="artist list-header" style={{ top, height }}>
       {/* todo: support artists */}
       <ArtistArt artistId={artist.id} />
 
-      <div className="album-info">
+      <div className="details">
         <h2>{artist.name}</h2>
+
         <div>
           {releaseCount} album{releaseCount === 1 ? "" : "s"} &middot;{" "}
           {tracks.length} tracks, {durationHms}
         </div>
+        
         <div className="actions">
           <button
             onClick={() => {
