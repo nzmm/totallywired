@@ -71,6 +71,6 @@ public abstract class BaseTestFixture
 
         MockDbContext.Setup(x => x.Database).Returns(MockDbFacade.Object);
 
-        MockCurrentUser.Setup(x => x.UserId()).Returns(Guid.NewGuid());
+        MockCurrentUser.Setup(x => x.UserId()).Returns(CurrentUser.Id);
     }
 }

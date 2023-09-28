@@ -21,18 +21,17 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
     {
         base.Setup();
 
-        _subject = new UpdateReleaseMetadataCommandHandler(MockCurrentUser.Object, MockDbContext.Object);
+        _subject = new UpdateReleaseMetadataCommandHandler(
+            MockCurrentUser.Object,
+            MockDbContext.Object
+        );
     }
 
     [Test]
     public async ValueTask ReleaseId_Empty_Should_Return_SuccessFalse()
     {
         // Arrange
-        var command = new ReleaseMetadataCommand
-        {
-            ReleaseId = Guid.Empty,
-            Metadata = new ReleaseMetadataModel()
-        };
+        var command = new ReleaseMetadataCommand { ReleaseId = Guid.Empty };
 
         // Act
         var result = await _subject.HandleAsync(command, default);
@@ -54,12 +53,8 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         var command = new ReleaseMetadataCommand
         {
             ReleaseId = releaseId,
-            Metadata = new ReleaseMetadataModel
-            {
-                ReleaseId = releaseId,
-                ReleaseMbid = string.Empty,
-                ArtistMbid = Guid.NewGuid().ToString()
-            }
+            ReleaseMbid = string.Empty,
+            ArtistMbid = Guid.NewGuid().ToString()
         };
 
         // Act
@@ -82,12 +77,8 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         var command = new ReleaseMetadataCommand
         {
             ReleaseId = releaseId,
-            Metadata = new ReleaseMetadataModel
-            {
-                ReleaseId = releaseId,
-                ReleaseMbid = Guid.NewGuid().ToString(),
-                ArtistMbid = string.Empty
-            }
+            ReleaseMbid = Guid.NewGuid().ToString(),
+            ArtistMbid = string.Empty
         };
 
         // Act
@@ -110,12 +101,8 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         var command = new ReleaseMetadataCommand
         {
             ReleaseId = releaseId,
-            Metadata = new ReleaseMetadataModel
-            {
-                ReleaseId = releaseId,
-                ReleaseMbid = Guid.NewGuid().ToString(),
-                ArtistMbid = Guid.NewGuid().ToString()
-            }
+            ReleaseMbid = Guid.NewGuid().ToString(),
+            ArtistMbid = Guid.NewGuid().ToString()
         };
 
         // Act
@@ -152,23 +139,23 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         var command = new ReleaseMetadataCommand
         {
             ReleaseId = release.Id,
-            Metadata = new ReleaseMetadataModel
-            {
-                ReleaseId = release.Id,
-                ReleaseMbid = release.MusicBrainzId,
-                ArtistMbid = artist.MusicBrainzId,
-                Tracks = Array.Empty<TrackMetadataModel>()
-            }
+            ReleaseMbid = release.MusicBrainzId,
+            ArtistMbid = artist.MusicBrainzId,
+            Tracks = Array.Empty<TrackMetadataModel>()
         };
 
+        var mockArtists = new[] { artist }.AsQueryable().BuildMockDbSet();
         var mockReleases = new[] { release }.AsQueryable().BuildMockDbSet();
 
-        MockDbContext.Setup(x => x.Releases).Returns(mockReleases.Object);
+        MockDbContext.Setup(x => x.Artists).Returns(mockArtists.Object);
+        MockDbContext.Setup(x => x.Releases).Returns(mockReleases.Object).Verifiable();
 
         // Act
         var result = await _subject.HandleAsync(command, default);
 
         // Assert
+        mockReleases.Verify();
+
         result.Should().NotBeNull();
         result.Success.Should().BeTrue();
         result.Release.Should().NotBeNull();
@@ -204,13 +191,9 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         var command = new ReleaseMetadataCommand
         {
             ReleaseId = release.Id,
-            Metadata = new ReleaseMetadataModel
-            {
-                ReleaseId = release.Id,
-                ReleaseMbid = Guid.NewGuid().ToString(),
-                ArtistMbid = Guid.NewGuid().ToString(),
-                Tracks = Array.Empty<TrackMetadataModel>()
-            }
+            ReleaseMbid = Guid.NewGuid().ToString(),
+            ArtistMbid = Guid.NewGuid().ToString(),
+            Tracks = Array.Empty<TrackMetadataModel>()
         };
 
         var mockReleases = new[] { release }.AsQueryable().BuildMockDbSet();
@@ -256,13 +239,9 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         var command = new ReleaseMetadataCommand
         {
             ReleaseId = release.Id,
-            Metadata = new ReleaseMetadataModel
-            {
-                ReleaseId = release.Id,
-                ReleaseMbid = Guid.NewGuid().ToString(),
-                ArtistMbid = Guid.NewGuid().ToString(),
-                Tracks = Array.Empty<TrackMetadataModel>()
-            }
+            ReleaseMbid = Guid.NewGuid().ToString(),
+            ArtistMbid = Guid.NewGuid().ToString(),
+            Tracks = Array.Empty<TrackMetadataModel>()
         };
 
         var mockReleases = new[] { release }.AsQueryable().BuildMockDbSet();
@@ -279,8 +258,8 @@ public class ReleaseMetadataUpdateCommandTests : BaseTestFixture
         result.Release.Should().NotBe(release);
         result.Release!.Artist.Should().NotBe(artist);
 
-        result.Release.MusicBrainzId.Should().Be(command.Metadata.ReleaseMbid);
-        result.Release.Artist.MusicBrainzId.Should().Be(command.Metadata.ArtistMbid);
+        result.Release.MusicBrainzId.Should().Be(command.ReleaseMbid);
+        result.Release.Artist.MusicBrainzId.Should().Be(command.ArtistMbid);
 
         MockDbContext.Verify(
             x => x.SaveChangesAsync(It.IsAny<CancellationToken>()),
