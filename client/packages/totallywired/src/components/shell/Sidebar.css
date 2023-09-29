@@ -19,14 +19,22 @@ aside {
           padding: 6px 8px;
         }
   
-        > a > .jube {
-          color: var(--gray-12);
-          font-size: smaller;
-          background-color: var(--gray-3);
-          border: 1px solid var(--gray-10);
-          border-radius: 9px;
-          padding: 1px 8px;
-          float: right;
+        > a {
+          > .jube {
+            color: var(--gray-12);
+            font-size: smaller;
+            background-color: var(--gray-3);
+            border: 1px solid var(--gray-10);
+            border-radius: 9px;
+            padding: 1px 8px;
+            float: right;
+          }
+
+          &.active > .jube {
+            color: var(--tomato-12);
+            border-color: var(--tomato-9);
+            background-color: var(--tomato-3);
+          } 
         }
       }
     }

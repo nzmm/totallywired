@@ -29,6 +29,7 @@
 
       &.active {
         border: 1px dashed var(--blue-9);
+        background-color: var(--tomato-4);
       }
 
       > .num {
