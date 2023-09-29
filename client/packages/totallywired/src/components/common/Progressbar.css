@@ -6,6 +6,10 @@ div[role="progressbar"] {
   border-radius: 4px;
   overflow: hidden;
 
+  &[aria-valuenow="0"] > .progress {
+    display: none;
+  }
+
   > .progress {
     height: 100%;
     background-color: var(--tomato-8);

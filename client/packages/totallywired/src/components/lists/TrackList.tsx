@@ -41,6 +41,7 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
 
   return tracks.length ? (
     <VirtualList
+      className="tracklist"
       items={tracks.map((t) => ({ ...t, height: 42 }))}
       renderer={TrackItem}
       onClick={handleClick}

@@ -45,6 +45,11 @@ export type VirtualListProps<T extends IVirtualListItem> = {
   yOverflow?: "auto" | "scroll" | "hidden";
 
   /**
+   * Optional class name
+   */
+  className?: string;
+
+  /**
    * Option click handler
    */
   onClick?: (e: React.MouseEvent<HTMLElement>, item: VisibleItem<T>) => void;

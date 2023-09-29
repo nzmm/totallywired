@@ -1,0 +1,29 @@
+.vlist.tracklist.playlist {
+  > ol {
+    > li[draggable="true"] {
+      transition: top 0.15s ease 0s;
+    }
+
+    > li[tabindex="0"].playing,
+    > li[tabindex="0"].paused {
+      font-weight: bold;
+    }
+
+    > li[tabindex="0"].finished {
+      > span,
+      > span > a {
+        color: var(--gray-10);
+      }
+    }
+
+    > li[tabindex="0"] {
+      .col.lgutter {
+        height: unset;
+      }
+
+      .col.rgutter {
+        padding-right: 12px;
+      }
+    }
+  }
+}

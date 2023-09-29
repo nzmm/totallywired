@@ -32,9 +32,9 @@ export default function Sidebar() {
               Artists
             </NavLink>
           </li>
-          </menu>
-          <div className="spacer"></div>
-          <menu>
+        </menu>
+        <div className="spacer"></div>
+        <menu>
           <li>
             <NavLink to="/lib/queue" className={classNamer}>
               Queue
@@ -47,9 +47,9 @@ export default function Sidebar() {
               <span className="jube">{playlists[0]?.trackCount ?? 0}</span>
             </NavLink>
           </li>
-          </menu>
-          <div className="spacer"></div>
-          <menu>
+        </menu>
+        <div className="spacer"></div>
+        <menu>
           <li>
             <NavLink to="/lib/providers" className={classNamer}>
               Content Providers

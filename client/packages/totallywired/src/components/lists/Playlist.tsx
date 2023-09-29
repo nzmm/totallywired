@@ -11,6 +11,8 @@ import {
   TrackState,
   TRACK_STATE_ARRAY,
 } from "../../lib/player";
+import "./Playlist.css";
+import { Link } from "react-router-dom";
 
 type PlaylistItemProps = ListItemProps<Item<PlayerTrack>>;
 type PlaylistProps = {
@@ -37,7 +39,7 @@ const stateInfo = (state: TrackState) => {
   const tips: string[] = [];
   for (const ts of TRACK_STATE_ARRAY) {
     if (ts & state) {
-      tips.push(`${TrackState[ts]} ✔️`);
+      tips.push(`🔹${TrackState[ts]}`);
     }
   }
   return tips.join("\n");
@@ -55,12 +57,16 @@ function PlaylistItem({ track, state, i, top, height }: PlaylistItemProps) {
         <em>{i + 1}.</em>
       </span>
       <span className="col name">{track.name}</span>
-      <span className="col album">{track.releaseName}</span>
-      <span className="col artist">{track.artistName}</span>
-      <span className="col duration">{track.displayLength}</span>
-      <span className="col rgutter" title={stateInfo(state)}>
+      <span className="col album">
+        <Link to={`/lib/albums/${track.releaseId}`}>{track.releaseName}</Link>
+      </span>
+      <span className="col artist">
+        <Link to={`/lib/artists/${track.artistId}`}>{track.artistName}</Link>
+      </span>
+      <span className="col state" title={stateInfo(state)}>
         {state}
       </span>
+      <span className="col rgutter">{track.displayLength}</span>
     </li>
   );
 }
@@ -86,6 +92,7 @@ export default function Playlist({ player, items }: PlaylistProps) {
 
   return (
     <VirtualList
+      className="tracklist playlist"
       items={items.map((it) => ({ ...it, height: 42, key: it.id }))}
       renderer={PlaylistItem}
       onDragStart={handlDragStart}

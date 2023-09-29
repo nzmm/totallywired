@@ -1,7 +1,6 @@
 import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { SearchResult } from "../../lib/editor/hooks";
-import { getYear } from "../../lib/utils";
 import { Thumbnail } from "../common/Thumbnail";
 import "./SearchResult.css";
 
@@ -12,11 +11,7 @@ export type AlbumSearchResultProps = SearchResult & {
 };
 
 function AdditionalDetails(result: MBReleaseSearchItem) {
-  return [
-    result.country,
-    `${result["track-count"]} tracks`,
-    getYear(result.date) ?? 0,
-  ]
+  return [result.country, `${result["track-count"]} tracks`, result.date]
     .filter((s) => !!s)
     .join(" · ");
 }

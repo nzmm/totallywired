@@ -12,13 +12,13 @@ aside {
       padding: 0;
       margin: 0;
       gap: 4px;
-  
+
       > li {
         > a {
           display: block;
           padding: 6px 8px;
         }
-  
+
         > a {
           > .jube {
             color: var(--gray-12);
@@ -34,7 +34,7 @@ aside {
             color: var(--tomato-12);
             border-color: var(--tomato-9);
             background-color: var(--tomato-3);
-          } 
+          }
         }
       }
     }

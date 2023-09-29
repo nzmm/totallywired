@@ -1,5 +1,4 @@
 import { MouseEventHandler } from "react";
-import { Link1Icon } from "@radix-ui/react-icons";
 import { useEditorDisptach } from "../../lib/editor/hooks";
 import { MBMedia } from "../../lib/musicbrainz/types";
 import { updateTrackFull } from "../../lib/editor/actions";
@@ -58,9 +57,7 @@ export default function MetadataSelector({
                       onClick={onClick}
                     >
                       <span className="num">{t.position}</span>
-                      <span className="name">
-                        {t.title}
-                      </span>
+                      <span className="name">{t.title}</span>
                       <span className="len">{displayLength(t.length)}</span>
                     </button>
                   );

@@ -64,6 +64,7 @@ export default function HeaderTrackList<T>({
 
   return items?.length ?? 0 ? (
     <VirtualList
+      className="tracklist"
       items={items}
       renderer={itemRenderer}
       onClick={handleClick}

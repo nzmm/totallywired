@@ -121,7 +121,7 @@ main {
   &:focus:not(.active) {
     background-color: var(--gray-5);
     border-color: var(--gray-7);
-  } 
+  }
 
   &:active:not(.active) {
     background-color: var(--gray-6);

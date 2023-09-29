@@ -22,6 +22,7 @@ const VirtualList = <T extends IVirtualListItem>({
   renderer: ItemRenderer,
   xOverflow = "auto",
   yOverflow = "auto",
+  className,
   onClick,
   onDoubleClick,
   onDragStart,
@@ -223,7 +224,9 @@ const VirtualList = <T extends IVirtualListItem>({
 
   return (
     <div
-      className={`vlist x-${xOverflow} y-${yOverflow}`}
+      className={`vlist x-${xOverflow} y-${yOverflow}${
+        className ? ` ${className}` : ""
+      }`}
       ref={vlist}
       onFocus={handleFocus}
       onBlur={handleBlur}

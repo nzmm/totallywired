@@ -28,7 +28,7 @@ export default function PlaylistHeader({ player, queue }: PlaylistHeaderProps) {
     <div className="playlist-header">
       {l} tracks, {d}
       <button onClick={() => player.removeAll()} disabled={!l}>
-        Clear Playlist
+        Clear playlist
       </button>
     </div>
   );
