@@ -1,13 +1,14 @@
 div[role="progressbar"] {
   height: 7px;
   width: 100%;
-  background-color: gray;
-  border: 1px solid black;
+  background-color: var(--tomato-3);
+  border: 1px solid var(--tomato-10);
   border-radius: 4px;
   overflow: hidden;
 
   > .progress {
     height: 100%;
-    background-color: coral;
+    background-color: var(--tomato-8);
+    border-right: 1px solid var(--tomato-10);
   }
 }

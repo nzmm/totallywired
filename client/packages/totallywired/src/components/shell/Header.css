@@ -2,7 +2,7 @@ header {
   align-items: center;
   justify-content: space-between;
   padding: 2px 8px;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--gray-9);
 
   > h1.brand {
     margin: 0;

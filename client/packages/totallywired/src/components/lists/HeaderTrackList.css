@@ -3,7 +3,7 @@ li.list-header {
   flex-direction: row;
   align-items: center;
   line-height: 1.65;
-  background-color: #fff;
+  background-color: white;
   gap: 15px;
 
   .release-art,

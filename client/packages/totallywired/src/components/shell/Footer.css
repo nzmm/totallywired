@@ -3,7 +3,7 @@ footer {
   justify-content: space-between;
   padding: 8px;
   min-height: 80px;
-  border-top: 1px solid gray;
+  border-top: 1px solid var(--gray-9);
 
   > .panel {
     width: 33%;

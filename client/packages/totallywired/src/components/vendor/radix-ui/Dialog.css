@@ -26,13 +26,13 @@
 .DialogTitle {
   margin: 0;
   font-weight: 500;
-  color: var(--mauve-12);
+  color: var(--gray-12);
   font-size: 17px;
 }
 
 .DialogDescription {
   margin: 10px 0 20px;
-  color: var(--mauve-11);
+  color: var(--gray-11);
   font-size: 15px;
   line-height: 1.5;
 }

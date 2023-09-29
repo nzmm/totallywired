@@ -2,8 +2,13 @@ import { NavLink } from "react-router-dom";
 import { useAwaitingQueue, usePlaylists } from "../../lib/player/hooks";
 import "./Sidebar.css";
 
-const classNamer = ({ isActive }: { isActive: boolean }) =>
-  isActive ? "active" : "";
+type NavLinkClassNamer = (props: {
+  isActive: boolean;
+  isPending: boolean;
+}) => string;
+
+const classNamer: NavLinkClassNamer = ({ isActive }) =>
+  isActive ? "list selector active" : "list selector";
 
 export default function Sidebar() {
   const queue = useAwaitingQueue();
@@ -27,20 +32,24 @@ export default function Sidebar() {
               Artists
             </NavLink>
           </li>
-          <hr />
+          </menu>
+          <div className="spacer"></div>
+          <menu>
           <li>
             <NavLink to="/lib/queue" className={classNamer}>
               Queue
+              <span className="jube">{queue.length}</span>
             </NavLink>
-            <span className="jube">{queue.length}</span>
           </li>
           <li>
             <NavLink to="/lib/liked" className={classNamer}>
               Liked
+              <span className="jube">{playlists[0]?.trackCount ?? 0}</span>
             </NavLink>
-            <span className="jube">{playlists[0]?.trackCount ?? 0}</span>
           </li>
-          <hr />
+          </menu>
+          <div className="spacer"></div>
+          <menu>
           <li>
             <NavLink to="/lib/providers" className={classNamer}>
               Content Providers

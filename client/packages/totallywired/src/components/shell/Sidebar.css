@@ -1,27 +1,41 @@
 aside {
-  padding: 8px;
+  > nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 
-  > nav > menu {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-
-    > li + li {
-      margin-top: 8px;
+    > menu {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+      gap: 4px;
+  
+      > li {
+        > a {
+          display: block;
+          padding: 6px 8px;
+        }
+  
+        > a > .jube {
+          color: var(--gray-12);
+          font-size: smaller;
+          background-color: var(--gray-3);
+          border: 1px solid var(--gray-10);
+          border-radius: 9px;
+          padding: 1px 8px;
+          float: right;
+        }
+      }
     }
 
-    > li > a.active {
-      background-color: pink;
-    }
-
-    > li > .jube {
-      float: right;
-      color: rgb(65, 65, 65);
-      font-size: smaller;
-      background-color: whitesmoke;
-      border: 1px solid gray;
-      border-radius: 9px;
-      padding: 1px 8px;
+    > .spacer {
+      height: 1px;
+      width: calc(100% - 16px);
+      margin: 8px auto;
+      background-color: var(--gray-6);
     }
   }
 }

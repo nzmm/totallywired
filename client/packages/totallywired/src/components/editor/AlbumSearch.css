@@ -1,6 +1,5 @@
 section.album-search {
   min-height: 100%;
-  background-color: rgb(247, 247, 247);
 
   > form > fieldset {
     display: flex;

@@ -1,7 +1,7 @@
 .thumbnail {
   aspect-ratio: 1;
-  background-color: #fff;
-  border: 1px solid #000;
+  background-color: white;
+  border: 1px solid black;
   padding: 2px;
 
   > img {

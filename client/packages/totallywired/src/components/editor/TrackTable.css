@@ -22,7 +22,7 @@ table.track.metadata-table {
     margin: 0;
 
     &:hover {
-      background-color: var(--mauve-2);
+      background-color: var(--gray-2);
     }
 
     &:active,

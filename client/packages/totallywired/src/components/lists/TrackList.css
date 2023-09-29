@@ -11,30 +11,34 @@
     > li[tabindex="0"].paused {
       font-weight: bold;
     }
-    > li[tabindex="0"].finished {
-      color: gray;
-    }
 
     > li[tabindex="0"]:last-child {
-      border-bottom: 1px solid #e4e4e4;
+      border-bottom: 1px solid var(--gray-4);
     }
 
     > li[tabindex="0"]:not(:first-child) {
-      border-top: 1px solid #f0f0f0;
+      border-top: 1px solid var(--gray-4);
     }
 
     > li[tabindex="0"]:hover {
       z-index: 1;
-      border-top: 1px solid pink;
-      border-bottom: 1px solid pink;
-      background-color: rgb(255, 240, 242);
+      border-top: 1px solid var(--tomato-6);
+      border-bottom: 1px solid var(--tomato-6);
+      background-color: var(--tomato-3);
     }
 
     > li[tabindex="0"]:focus {
       z-index: 2;
-      border-top: 1px solid rgb(255, 169, 183);
-      border-bottom: 1px solid rgb(255, 169, 183);
-      background-color: pink;
+      border-top: 1px solid var(--tomato-8);
+      border-bottom: 1px solid var(--tomato-8);
+      background-color: var(--tomato-6);
+    }
+
+    > li[tabindex="0"]:active {
+      z-index: 2;
+      border-top: 1px solid var(--tomato-9);
+      border-bottom: 1px solid var(--tomato-9);
+      background-color: var(--tomato-7);
     }
 
     > li[tabindex="0"] {
@@ -64,13 +68,13 @@
       .col.lgutter:hover {
         color: transparent;
         background-color: white;
-        border: 1px solid rgb(255, 169, 183);
+        border: 1px solid var(--tomato-8);
         box-shadow:
           rgba(255, 169, 183, 0.3) 0px 1px 2px 0px,
           rgba(255, 169, 183, 0.15) 0px 2px 6px 2px;
         background-position: center;
         background-repeat: no-repeat;
-        /* Play svg from https://www.radix-ui.com/icons */
+        /* Url encoded "play" svg from https://www.radix-ui.com/icons */
         background-image: url("data:image/svg+xml,%3Csvg%20width%3D%2215%22%20height%3D%2215%22%20viewBox%3D%220%200%2015%2015%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M3.24182%202.32181C3.3919%202.23132%203.5784%202.22601%203.73338%202.30781L12.7334%207.05781C12.8974%207.14436%2013%207.31457%2013%207.5C13%207.68543%2012.8974%207.85564%2012.7334%207.94219L3.73338%2012.6922C3.5784%2012.774%203.3919%2012.7687%203.24182%2012.6782C3.09175%2012.5877%203%2012.4252%203%2012.25V2.75C3%202.57476%203.09175%202.4123%203.24182%202.32181ZM4%203.57925V11.4207L11.4288%207.5L4%203.57925Z%22%20fill%3D%22currentColor%22%20fill-rule%3D%22evenodd%22%20clip-rule%3D%22evenodd%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E");
       }
       .col.rgutter {

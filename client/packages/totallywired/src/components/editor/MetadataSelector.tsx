@@ -54,13 +54,12 @@ export default function MetadataSelector({
                       data-number={t.number}
                       data-name={t.title}
                       data-length={t.length}
-                      className={matched ? "matched" : ""}
+                      className={matched ? "selector active" : "selector"}
                       onClick={onClick}
                     >
                       <span className="num">{t.position}</span>
                       <span className="name">
                         {t.title}
-                        {matched ? <Link1Icon className="matched" /> : null}
                       </span>
                       <span className="len">{displayLength(t.length)}</span>
                     </button>

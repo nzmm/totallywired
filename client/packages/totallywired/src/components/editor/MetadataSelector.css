@@ -27,13 +27,8 @@
       border-radius: 3px;
       padding: 3px 4px;
 
-      &.matched {
+      &.active {
         border: 1px dashed var(--blue-9);
-      }
-
-      &:hover {
-        background-color: rgb(245, 245, 245);
-        border: 1px solid lightgray;
       }
 
       > .num {

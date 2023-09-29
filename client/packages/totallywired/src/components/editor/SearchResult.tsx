@@ -29,7 +29,7 @@ export function AlbumSearchResult({
 }: AlbumSearchResultProps) {
   return (
     <button
-      className={`search-result${active ? " active" : ""}`}
+      className={`search-result list selector${active ? " active" : ""}`}
       onClick={() => onSelect(result)}
     >
       <div>

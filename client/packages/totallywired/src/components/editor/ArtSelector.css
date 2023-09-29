@@ -23,7 +23,7 @@ ol.art-selector {
         border-radius: 3px;
 
         > .tiny-release-art {
-          border: 2px solid red;
+          border: 3px solid var(--blue-9);
           padding: 1px;
         }
       }

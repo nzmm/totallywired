@@ -42,6 +42,6 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    border-top: 1px solid gray;
+    border-top: 1px solid var(--gray-9);
   }
 }
