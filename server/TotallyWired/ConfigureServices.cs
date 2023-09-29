@@ -40,6 +40,7 @@ public static class ConfigureServices
         services.AddTransient<ISourceIndexer, MicrosoftGraphSourceIndexer>();
 
         // tracks
+        services.AddScoped<TrackQueryHandler>();
         services.AddScoped<TrackListQueryHandler>();
         services.AddScoped<TrackDownloadUrlQueryHandler>();
         services.AddScoped<TrackReactionCommandHandler>();

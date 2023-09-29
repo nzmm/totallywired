@@ -26,6 +26,15 @@ public static class TrackRoutes
         );
 
         group.MapGet(
+            "/{trackId:guid}",
+            async (TrackQueryHandler handler, Guid trackId, CancellationToken cancellationToken) =>
+            {
+                var track = await handler.HandleAsync(trackId, cancellationToken);
+                return Results.Ok(track);
+            }
+        );
+
+        group.MapGet(
             "/{trackId:guid}/downloadUrl",
             async (
                 TrackDownloadUrlQueryHandler handler,

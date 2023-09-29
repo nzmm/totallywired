@@ -1,6 +1,21 @@
-import { useMemo } from "react";
-import { Track } from "../types";
+import { useEffect, useMemo, useState } from "react";
+import { AlbumDetail, Track } from "../types";
 import { duration } from "../utils";
+import { getAlbum } from "../api";
+
+export const useAlbum = (albumId: string | undefined) => {
+  const [album, setAlbum] = useState<AlbumDetail>();
+
+  useEffect(() => {
+    if (!albumId) {
+      setAlbum(undefined);
+      return;
+    }
+    getAlbum(albumId).then((res) => setAlbum(res.data));
+  }, [albumId]);
+
+  return album;
+};
 
 export const useAlbumHeaderInfo = (tracks: Track[]) => {
   return useMemo(() => {

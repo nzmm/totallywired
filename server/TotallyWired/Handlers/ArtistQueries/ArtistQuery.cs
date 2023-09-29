@@ -28,7 +28,8 @@ public class ArtistQueryHandler : IRequestHandler<Guid, ArtistModel?>
                     {
                         Id = a.Id,
                         Name = a.Name,
-                        CoverArtUrl = a.ThumbnailUrl
+                        CoverArtUrl = a.ThumbnailUrl,
+                        MusicBrainzId = a.MusicBrainzId
                     }
             )
             .FirstOrDefaultAsync(cancellationToken);

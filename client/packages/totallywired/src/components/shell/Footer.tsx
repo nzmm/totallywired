@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
-import { PlayerTrack, TrackState } from "../../lib/player";
-import { Track } from "../../lib/types";
-import { usePlayer } from "../../lib/player/hooks";
+import { useCurrentTrackState, usePlayer } from "../../lib/player/hooks";
 import OutputControls from "./OutputControls";
 import PlaybackControls from "./PlaybackControls";
 import NowPlaying from "./NowPlaying";
@@ -9,30 +6,13 @@ import "./Footer.css";
 
 export default function Footer() {
   const player = usePlayer();
-  const [currentState, setCurrentState] = useState<TrackState>(
-    TrackState.Unknown,
-  );
-  const [currentTrack, setCurrentTrack] = useState<Track | undefined>(
-    undefined,
-  );
-
-  useEffect(() => {
-    const stateChangeHandler = ({ state, track }: PlayerTrack) => {
-      setCurrentState(state);
-      setCurrentTrack(track);
-    };
-
-    player.addEventHandler("current-state-change", stateChangeHandler);
-    return () => {
-      player.removeEventHandler("current-state-change", stateChangeHandler);
-    };
-  }, [player]);
+  const [track, state] = useCurrentTrackState(player);
 
   return (
     <footer className="d-flex row">
-      <NowPlaying currentTrack={currentTrack} />
+      <NowPlaying currentTrack={track} />
 
-      <PlaybackControls player={player} currentState={currentState} />
+      <PlaybackControls player={player} currentState={state} />
 
       <OutputControls player={player} />
     </footer>

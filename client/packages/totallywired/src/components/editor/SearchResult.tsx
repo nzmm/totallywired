@@ -14,7 +14,6 @@ export type AlbumSearchResultProps = SearchResult & {
 function AdditionalDetails(result: MBReleaseSearchItem) {
   return [
     result.country,
-    result.media[0]?.format,
     `${result["track-count"]} tracks`,
     getYear(result.date) ?? 0,
   ]

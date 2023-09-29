@@ -37,7 +37,8 @@ public class ReleaseQueryHandler : IRequestHandler<Guid, ReleaseModel?>
                         RecordLabel = r.RecordLabel,
                         Country = r.Country,
                         Type = r.Type,
-                        CoverArtUrl = r.ThumbnailUrl
+                        CoverArtUrl = r.ThumbnailUrl,
+                        MusicBrainzId = r.MusicBrainzId
                     }
             )
             .FirstOrDefaultAsync(cancellationToken);

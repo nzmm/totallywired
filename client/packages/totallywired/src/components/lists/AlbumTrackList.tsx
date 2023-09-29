@@ -4,7 +4,7 @@ import { AlbumDetail, Track } from "../../lib/types";
 import { usePlayer } from "../../lib/player/hooks";
 import { useTracks } from "../../lib/tracks/hooks";
 import { useAlbumHeaderInfo } from "../../lib/lists/hooks";
-import { separatedNodes } from "../../lib/lists/helpers";
+import { separatedNodes } from "../../components/helpers";
 import HeaderTrackList, {
   HeaderTrackDataProps,
   HeaderTrackItemProps,
@@ -13,20 +13,40 @@ import TrackItem from "./TrackListItem";
 import { ReleaseArt } from "../common/Thumbnail";
 import "./AlbumTrackList.css";
 
-function PrimaryDetails({ artistId, artistName, year, recordLabel, country }: AlbumDetail) {
+function PrimaryDetails({
+  artistId,
+  artistName,
+  year,
+  recordLabel,
+  country,
+}: AlbumDetail) {
   return (
     <div className="primary">
       {separatedNodes(
-        [true, <Link to={`/lib/artists/${artistId}`}>{artistName}</Link>],
-        [!!year, <Link to={`/lib/albums?year=${year}`}>{year}</Link>],
+        [
+          true,
+          <Link key="artist" to={`/lib/artists/${artistId}`}>
+            {artistName}
+          </Link>,
+        ],
+        [
+          !!year,
+          <Link key="year" to={`/lib/albums?year=${year}`}>
+            {year}
+          </Link>,
+        ],
         [
           !!recordLabel,
-          <Link to={`/lib/albums?label=${recordLabel}`}>{recordLabel}</Link>,
+          <Link key="label" to={`/lib/albums?label=${recordLabel}`}>
+            {recordLabel}
+          </Link>,
         ],
         [
           // country of XW represents [Worldwide] which isn't super meaningful so we hide it
-          !!country && country !== 'XW',
-          <Link to={`/lib/albums?country=${country}`}>{country}</Link>,
+          !!country && country !== "XW",
+          <Link key="country" to={`/lib/albums?country=${country}`}>
+            {country}
+          </Link>,
         ],
       )}
     </div>
@@ -52,7 +72,6 @@ function AlbumHeader({
       <div className="details">
         <h2>{album.name}</h2>
         <PrimaryDetails {...album} />
-
         {tracks.length} tracks, {durationHms}
         <div className="actions">
           <button
