@@ -5,7 +5,9 @@ import { Artist } from "../../lib/types";
 function ArtistItem({ top, height, ...artist }: ListItemProps<Artist>) {
   return (
     <li tabIndex={0} style={{ top, height }}>
-      <button className="col lgutter">&nbsp;</button>
+      <button className="col lgutter" data-intent="add" title="Enqueue">
+        &nbsp;
+      </button>
       <Link
         className="col name"
         to={`/lib/artists/${artist.id}`}
@@ -17,6 +19,7 @@ function ArtistItem({ top, height, ...artist }: ListItemProps<Artist>) {
 export default function ArtistList({ artists }: { artists: Artist[] }) {
   return artists.length ? (
     <VirtualList
+      className="tracklist"
       items={artists.map((a) => ({ ...a, height: 42 }))}
       renderer={ArtistItem}
     />

@@ -5,7 +5,7 @@ import { Album } from "../../lib/types";
 function AlbumItem({ top, height, ...album }: ListItemProps<Album>) {
   return (
     <li tabIndex={0} style={{ top, height }}>
-      <button className="col lgutter" title="Play all now">
+      <button className="col lgutter" data-intent="add" title="Enqueue">
         &nbsp;
       </button>
       <Link
@@ -25,6 +25,7 @@ function AlbumItem({ top, height, ...album }: ListItemProps<Album>) {
 export default function AlbumList({ albums }: { albums: Album[] }) {
   return albums.length ? (
     <VirtualList
+      className="tracklist"
       items={albums.map((a) => ({ ...a, height: 42 }))}
       renderer={AlbumItem}
     />

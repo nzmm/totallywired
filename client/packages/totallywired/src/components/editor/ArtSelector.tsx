@@ -1,4 +1,4 @@
-import { MouseEventHandler, useMemo } from "react";
+import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { AttributeChangeRequest } from "../../lib/editor/types";
 import { Thumbnail } from "../common/Thumbnail";
 import "./ArtSelector.css";
@@ -31,20 +31,24 @@ export default function ArtSelector({
   artCollection,
   onSelect,
 }: ArtSelectorProps) {
-  // Only update shortlist when the musicbrainz selection changes
-  /* eslint-disable react-hooks/exhaustive-deps */
-  const entries = useMemo(
-    () => getShortList(coverArt.newValue, artCollection),
-    [mbid, artCollection],
-  );
-  /* eslint-enable */
+  const shortlistFor = useRef("");
+  const [shorlist, setShortlist] = useState<[string, string][]>([]);
 
-  if (entries.length <= 1) {
+  useEffect(() => {
+    if (shortlistFor.current === mbid) {
+      return;
+    }
+    setShortlist(getShortList(coverArt.newValue, artCollection));
+    shortlistFor.current = mbid;
+  }, [mbid, coverArt, artCollection, setShortlist]);
+
+  if (shorlist.length <= 1) {
     return null;
   }
+
   return (
     <ol className="art-selector">
-      {entries.map(([mbid, artSrc]) => {
+      {shorlist.map(([mbid, artSrc]) => {
         return (
           <li key={mbid}>
             <button
