@@ -2,7 +2,7 @@ import { ChevronRightIcon } from "@radix-ui/react-icons";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { SearchResult } from "../../lib/editor/hooks";
 import { getYear } from "../../lib/utils";
-import { Thumbnail } from "../display/Thumbnail";
+import { Thumbnail } from "../common/Thumbnail";
 import "./SearchResult.css";
 
 export type AlbumSearchResultProps = SearchResult & {

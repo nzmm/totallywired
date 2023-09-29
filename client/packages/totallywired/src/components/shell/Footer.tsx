@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { PlayerTrack, TrackState } from "../../lib/player";
 import { Track } from "../../lib/types";
 import { usePlayer } from "../../lib/player/hooks";
-import OutputControls from "../inputs/OutputControls";
-import PlaybackControls from "../inputs/PlaybackControls";
-import NowPlaying from "../display/NowPlaying";
+import OutputControls from "./OutputControls";
+import PlaybackControls from "./PlaybackControls";
+import NowPlaying from "./NowPlaying";
 import "./Footer.css";
 
 export default function Footer() {

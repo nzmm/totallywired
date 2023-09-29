@@ -3,7 +3,7 @@ import { Suspense, useMemo } from "react";
 import { Await, useAsyncValue } from "react-router-dom";
 import { getProviders, syncProvider } from "../lib/api";
 import { ProviderCollection } from "../lib/types";
-import Loading from "../components/display/Loading";
+import Loading from "../components/common/Loading";
 
 type ProviderMetadata = {
   name: string;

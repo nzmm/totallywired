@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../../lib/users/hooks";
 import MeMenu from "./MeMenu";
-import SearchInput from "../inputs/SearchInput";
+import SearchInput from "./SearchInput";
 import "./Header.css";
 
 type HeaderProps = {

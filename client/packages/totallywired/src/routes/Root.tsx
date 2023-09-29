@@ -3,7 +3,7 @@ import { Await, Outlet } from "react-router-dom";
 import { whoami } from "../lib/api";
 import { set } from "../lib/reducer";
 import { useUserDispatch } from "../lib/users/hooks";
-import Loading from "../components/display/Loading";
+import Loading from "../components/common/Loading";
 import AudioProvider from "../components/providers/AudioProvider";
 
 export default function Root() {

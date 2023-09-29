@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AlbumChangeProposal } from "../lib/editor/types";
 import { createReleaseUpdateCommand } from "../lib/editor/command";
 import { setAlbumMetadata } from "../lib/api";
-import Loading from "../components/display/Loading";
+import Loading from "../components/common/Loading";
 
 const LazyEditor = React.lazy(() => import("../components/editor/AlbumEditor"));
 

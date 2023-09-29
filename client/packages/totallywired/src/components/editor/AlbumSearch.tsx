@@ -7,7 +7,7 @@ import {
 import { AlbumSearchResult } from "./SearchResult";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
-import Loading from "../display/Loading";
+import Loading from "../common/Loading";
 import "./AlbumSearch.css";
 import { updateArtCollection } from "../../lib/editor/actions";
 

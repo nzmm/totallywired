@@ -1,8 +1,8 @@
 import { Splitter } from "@totallywired/ui-components";
 import { Outlet } from "react-router-dom";
-import Footer from "../components/nav/Footer";
-import Header from "../components/nav/Header";
-import Sidebar from "../components/nav/Sidebar";
+import Footer from "../components/shell/Footer";
+import Header from "../components/shell/Header";
+import Sidebar from "../components/shell/Sidebar";
 import PlaylistsProvider from "../components/providers/PlaylistProvider";
 import TracksProvider from "../components/providers/TracksProvider";
 

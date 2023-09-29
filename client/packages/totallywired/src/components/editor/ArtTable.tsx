@@ -3,7 +3,7 @@ import {
   AlbumChangeProposal,
   EditorInputEventHandler,
 } from "../../lib/editor/types";
-import { Thumbnail } from "../display/Thumbnail";
+import { Thumbnail } from "../common/Thumbnail";
 import ApproveChangeTool from "./ApproveChangeTool";
 import ArtSelector from "./ArtSelector";
 import "./ArtTable.css";

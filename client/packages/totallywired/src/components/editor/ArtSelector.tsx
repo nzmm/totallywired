@@ -1,6 +1,6 @@
 import { MouseEventHandler, useMemo } from "react";
 import { AttributeChangeRequest } from "../../lib/editor/types";
-import { Thumbnail } from "../display/Thumbnail";
+import { Thumbnail } from "../common/Thumbnail";
 import "./ArtSelector.css";
 
 type ArtSelectorProps = {
