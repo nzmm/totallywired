@@ -13,7 +13,7 @@ import TrackItem from "./TrackListItem";
 import { ReleaseArt } from "../common/Thumbnail";
 import "./AlbumTrackList.css";
 
-function PrimaryDetails({
+export function PrimaryDetails({
   artistId,
   artistName,
   year,

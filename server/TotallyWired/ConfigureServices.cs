@@ -48,6 +48,7 @@ public static class ConfigureServices
         // releases
         services.AddScoped<ReleaseQueryHandler>();
         services.AddScoped<ReleaseListQueryHandler>();
+        services.AddScoped<ReleaseCollectionQueryHandler>();
         services.AddScoped<ReleaseThumbnailQueryHandler>();
         services.AddScoped<UpdateReleaseMetadataCommandHandler>();
 

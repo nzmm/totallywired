@@ -26,6 +26,19 @@ public static class ReleaseRoutes
         );
 
         group.MapGet(
+            "/as-collection",
+            async (
+                ReleaseCollectionQueryHandler handler,
+                [AsParameters] ReleaseCollectionSearchParams @params,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var releases = await handler.HandleAsync(@params, cancellationToken);
+                return Results.Ok(releases);
+            }
+        );
+
+        group.MapGet(
             "/{releaseId:guid}",
             async (
                 ReleaseQueryHandler handler,

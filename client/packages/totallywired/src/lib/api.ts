@@ -2,6 +2,7 @@ import { ReleaseUpdateCommand } from "./editor/types";
 import { sendCommand, sendQuery } from "./requests";
 import {
   Album,
+  AlbumCollection,
   AlbumDetail,
   Artist,
   Playlist,
@@ -51,6 +52,13 @@ export function setTrackReaction(trackId: string, reaction: ReactionType) {
 }
 
 /* Albums */
+
+export function getCollection(searchParams?: URLSearchParams) {
+  return sendQuery<AlbumCollection[]>(
+    `${API}/releases/as-collection`,
+    searchParams,
+  );
+}
 
 export function getAlbums(searchParams?: URLSearchParams) {
   return sendQuery<Album[]>(`${API}/releases`, searchParams);

@@ -43,6 +43,11 @@ export type AlbumDetail = Album & {
   mbid: string;
 };
 
+export type AlbumCollection = AlbumDetail & {
+  trackCount: number;
+  tracks?: Track[];
+};
+
 export type Artist = {
   id: string;
   name: string;

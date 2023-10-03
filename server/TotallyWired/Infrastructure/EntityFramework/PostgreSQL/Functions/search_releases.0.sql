@@ -12,7 +12,8 @@ SELECT
     r."Country",
     r."RecordLabel",
     r."MusicBrainzId",
-    r."SearchVector_EN"
+    r."SearchVector_EN",
+    r."Type"
 FROM (
     SELECT r.*, ts_rank(r."SearchVector_EN", query) AS rank
     FROM "Releases" AS r, to_tsquery('simple', $2) AS query

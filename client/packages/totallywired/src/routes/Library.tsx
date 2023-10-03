@@ -4,28 +4,32 @@ import Footer from "../components/shell/Footer";
 import Header from "../components/shell/Header";
 import Sidebar from "../components/shell/Sidebar";
 import PlaylistsProvider from "../components/providers/PlaylistProvider";
-import TracksProvider from "../components/providers/TracksProvider";
+import TracksProvider, {
+  CollectionProvider,
+} from "../components/providers/TracksProvider";
 
 export default function Library() {
   return (
     <TracksProvider>
-      <PlaylistsProvider>
-        <Header withSearch />
+      <CollectionProvider>
+        <PlaylistsProvider>
+          <Header withSearch />
 
-        <Splitter
-          orientation="horizontal"
-          initialPosition="200px"
-          minSize="200px"
-        >
-          <Sidebar />
+          <Splitter
+            orientation="horizontal"
+            initialPosition="200px"
+            minSize="200px"
+          >
+            <Sidebar />
 
-          <main>
-            <Outlet />
-          </main>
-        </Splitter>
+            <main>
+              <Outlet />
+            </main>
+          </Splitter>
 
-        <Footer />
-      </PlaylistsProvider>
+          <Footer />
+        </PlaylistsProvider>
+      </CollectionProvider>
     </TracksProvider>
   );
 }

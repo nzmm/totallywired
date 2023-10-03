@@ -6,6 +6,7 @@ import {
   getAlbums,
   getArtist,
   getArtists,
+  getCollection,
   getTracks,
   getTracksByAlbum,
   getTracksByArtist,
@@ -14,6 +15,11 @@ import {
 export function tracksLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
   return getTracks(searchParams);
+}
+
+export function collectionLoader({ request }: LoaderFunctionArgs) {
+  const searchParams = requestSearchParams(request);
+  return getCollection(searchParams);
 }
 
 export function artistsLoader({ request }: LoaderFunctionArgs) {

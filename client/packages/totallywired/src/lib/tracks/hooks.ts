@@ -1,11 +1,22 @@
 import { useCallback, useContext, useEffect } from "react";
 import { useAsyncValue } from "react-router-dom";
-import { set } from "../reducer";
+import { set, update } from "../reducer";
 import { Res } from "../requests";
-import { AlbumDetail, ArtistDetail, ReactionType, Track } from "../types";
-import { setTrackReaction } from "../api";
+import {
+  AlbumCollection,
+  AlbumDetail,
+  ArtistDetail,
+  ReactionType,
+  Track,
+} from "../types";
+import { getTracksByAlbum, setTrackReaction } from "../api";
 import { updateLikedTrackCount, updateTrackReaction } from "./actions";
-import { TracksContext, TracksDispatchContext } from "./context";
+import {
+  CollectionContext,
+  CollectionDispatchContext,
+  TracksContext,
+  TracksDispatchContext,
+} from "./context";
 import { usePlaylistDispatch } from "../player/hooks";
 
 export const useTracks = () => {
@@ -14,6 +25,36 @@ export const useTracks = () => {
 
 export const useTracksDisptach = () => {
   return useContext(TracksDispatchContext);
+};
+
+export const useCollection = (releaseId: string) => {
+  const dispatch = useCollectionDisptach();
+  const context = useContext(CollectionContext);
+
+  useEffect(() => {
+    if (releaseId in context.collection) {
+      return;
+    }
+
+    getTracksByAlbum(releaseId).then((res) => {
+      dispatch(
+        update((state) => {
+          if (!res.data) {
+            return state;
+          }
+          const newState = { ...state };
+          newState.collection[releaseId] = res.data;
+          return newState;
+        }),
+      );
+    });
+  }, [dispatch, context, releaseId]);
+
+  return context.collection[releaseId];
+};
+
+export const useCollectionDisptach = () => {
+  return useContext(CollectionDispatchContext);
 };
 
 /**
@@ -29,6 +70,14 @@ export const useAsyncTracks = (): Track[] => {
   }, [dispatch, data]);
 
   return tracks;
+};
+
+/**
+ * Provides declarative access to the available tracks
+ */
+export const useAsyncCollection = (): AlbumCollection[] => {
+  const { data = [] } = useAsyncValue() as Res<AlbumCollection[]>;
+  return data;
 };
 
 /**
