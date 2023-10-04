@@ -1,7 +1,6 @@
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
 import { createBrowserRouter } from "react-router-dom";
 import {
-  tracksLoader,
   albumsLoader,
   albumTracksLoader,
   artistsLoader,
@@ -19,7 +18,6 @@ import Library from "./routes/Library";
 import Providers from "./routes/Providers";
 import Queue from "./routes/Queue";
 import Root from "./routes/Root";
-import Tracks from "./routes/Tracks";
 import MusicCollection from "./routes/MusicCollection";
 import Liked from "./routes/Liked";
 import AlbumEditor from "./routes/AlbumEdit";
@@ -42,11 +40,6 @@ export const AppRouter = createBrowserRouter([
         children: [
           {
             path: "tracks",
-            element: <Tracks />,
-            loader: tracksLoader,
-          },
-          {
-            path: "collection",
             element: <MusicCollection />,
             loader: collectionLoader,
           },

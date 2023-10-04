@@ -2,14 +2,10 @@ import { LoaderFunctionArgs } from "react-router-dom";
 import { requestSearchParams } from "./requests";
 import { ReactionType } from "./types";
 import {
-  getAlbum,
   getAlbums,
-  getArtist,
   getArtists,
-  getCollection,
+  getCollections,
   getTracks,
-  getTracksByAlbum,
-  getTracksByArtist,
 } from "./api";
 
 export function tracksLoader({ request }: LoaderFunctionArgs) {
@@ -19,7 +15,7 @@ export function tracksLoader({ request }: LoaderFunctionArgs) {
 
 export function collectionLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
-  return getCollection(searchParams);
+  return getCollections(searchParams);
 }
 
 export function artistsLoader({ request }: LoaderFunctionArgs) {
@@ -35,10 +31,8 @@ export function artistTracksLoader({ request, params }: LoaderFunctionArgs) {
   }
 
   const searchParams = requestSearchParams(request);
-  return Promise.all([
-    getArtist(artistId),
-    getTracksByArtist(artistId, searchParams),
-  ]);
+  searchParams.append('artistId', artistId);
+  return getCollections(searchParams);
 }
 
 export function albumsLoader({ request }: LoaderFunctionArgs) {
@@ -54,10 +48,8 @@ export function albumTracksLoader({ request, params }: LoaderFunctionArgs) {
   }
 
   const searchParams = requestSearchParams(request);
-  return Promise.all([
-    getAlbum(releaseId),
-    getTracksByAlbum(releaseId, searchParams),
-  ]);
+  searchParams.append('releaseId', releaseId);
+  return getCollections(searchParams);
 }
 
 export function likedLoader({ request }: LoaderFunctionArgs) {

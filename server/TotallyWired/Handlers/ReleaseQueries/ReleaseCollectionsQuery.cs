@@ -6,28 +6,30 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseCollectionSearchParams
+public class ReleaseCollectionsSearchParams
 {
     public string? Q { get; set; }
     public int? Year { get; set; }
     public string? Label { get; set; }
     public string? Country { get; set; }
+    public Guid? ArtistId { get; set; }
+    public Guid? ReleaseId { get; set; }
 }
 
-public class ReleaseCollectionQueryHandler
-    : IRequestHandler<ReleaseCollectionSearchParams, IEnumerable<ReleaseListModel>>
+public class ReleaseCollectionsQueryHandler
+    : IRequestHandler<ReleaseCollectionsSearchParams, IEnumerable<ReleaseListModel>>
 {
     private readonly TotallyWiredDbContext _context;
     private readonly ICurrentUser _user;
 
-    public ReleaseCollectionQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
+    public ReleaseCollectionsQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     {
         _context = context;
         _user = user;
     }
 
     public async Task<IEnumerable<ReleaseListModel>> HandleAsync(
-        ReleaseCollectionSearchParams @params,
+        ReleaseCollectionsSearchParams @params,
         CancellationToken cancellationToken
     )
     {
@@ -35,6 +37,8 @@ public class ReleaseCollectionQueryHandler
         var year = @params.Year;
         var label = @params.Label;
         var country = @params.Country;
+        var artistId = @params.ArtistId;
+        var releaseId = @params.ReleaseId;
         var tsQuery = @params.Q.TsQuery();
         var hasQuery = tsQuery.Length >= 2;
 
@@ -44,17 +48,25 @@ public class ReleaseCollectionQueryHandler
             )
             : _context.Releases.Where(t => t.UserId == userId);
 
-        if (@params.Year.HasValue)
+        if (year.HasValue)
         {
             query = query.Where(r => r.Year == year);
         }
-        if (!string.IsNullOrEmpty(@params.Label))
+        if (!string.IsNullOrEmpty(label))
         {
             query = query.Where(r => r.RecordLabel == label);
         }
-        if (!string.IsNullOrEmpty(@params.Country))
+        if (!string.IsNullOrEmpty(country))
         {
             query = query.Where(r => r.Country == country);
+        }
+        if (artistId.HasValue)
+        {
+            query = query.Where(r => r.ArtistId == artistId);
+        }
+        else if (releaseId.HasValue)
+        {
+            query = query.Where(r => r.Id == releaseId);
         }
 
         var releases = await query

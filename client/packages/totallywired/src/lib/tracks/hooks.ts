@@ -4,8 +4,6 @@ import { set, update } from "../reducer";
 import { Res } from "../requests";
 import {
   AlbumCollection,
-  AlbumDetail,
-  ArtistDetail,
   ReactionType,
   Track,
 } from "../types";
@@ -73,57 +71,11 @@ export const useAsyncTracks = (): Track[] => {
 };
 
 /**
- * Provides declarative access to the available tracks
+ * Provides declarative access to the available album collection data
  */
-export const useAsyncCollection = (): AlbumCollection[] => {
-  const { data = [] } = useAsyncValue() as Res<AlbumCollection[]>;
-  return data;
-};
-
-/**
- * Provides declarative access to the available album details and the associated tracks
- */
-export const useAsyncAlbumTracks = (): [AlbumDetail, Track[]] => {
-  const [{ data: album }, { data: trackData = [] }] = useAsyncValue() as [
-    Res<AlbumDetail>,
-    Res<Track[]>,
-  ];
-
-  if (!album) {
-    throw new Error("album not found");
-  }
-
-  const dispatch = useTracksDisptach();
-  const tracks = useTracks();
-
-  useEffect(() => {
-    dispatch(set(trackData));
-  }, [dispatch, trackData]);
-
-  return [album, tracks];
-};
-
-/**
- * Provides declarative access to the available artist details and the associated tracks
- */
-export const useAsyncArtistTracks = (): [ArtistDetail, Track[]] => {
-  const [{ data: artist }, { data: trackData = [] }] = useAsyncValue() as [
-    Res<ArtistDetail>,
-    Res<Track[]>,
-  ];
-
-  if (!artist) {
-    throw new Error("artist not found");
-  }
-
-  const dispatch = useTracksDisptach();
-  const tracks = useTracks();
-
-  useEffect(() => {
-    dispatch(set(trackData));
-  }, [dispatch, trackData]);
-
-  return [artist, tracks];
+export const useAsyncCollections = (): AlbumCollection[] => {
+  const { data: collections = [] } = useAsyncValue() as Res<AlbumCollection[]>;
+  return collections;
 };
 
 /**

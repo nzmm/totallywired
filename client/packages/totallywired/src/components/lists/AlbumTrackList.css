@@ -1,9 +1,0 @@
-.release.list-header {
-  > .details {
-    > .actions {
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-    }
-  }
-}

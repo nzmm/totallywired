@@ -53,7 +53,7 @@ export function setTrackReaction(trackId: string, reaction: ReactionType) {
 
 /* Albums */
 
-export function getCollection(searchParams?: URLSearchParams) {
+export function getCollections(searchParams?: URLSearchParams) {
   return sendQuery<AlbumCollection[]>(
     `${API}/releases/as-collection`,
     searchParams,

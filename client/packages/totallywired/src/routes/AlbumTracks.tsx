@@ -1,19 +1,15 @@
 import { Suspense } from "react";
 import { Await, Outlet, useLoaderData } from "react-router-dom";
-import { useAsyncAlbumTracks } from "../lib/tracks/hooks";
-import AlbumTracksList from "../components/lists/AlbumTrackList";
+import { useAsyncCollections } from "../lib/tracks/hooks";
+import MusicCollectionList from "../components/lists/MusicCollectionList";
 
 function AlbumTracksView() {
-  const [album, tracks] = useAsyncAlbumTracks();
-  if (!album) {
-    return null;
-  }
-  return <AlbumTracksList album={album} tracks={tracks} />;
+  const collections = useAsyncCollections();
+  return <MusicCollectionList collections={collections} />;
 }
 
 export default function AlbumTracks() {
   const data = useLoaderData();
-
   return (
     <>
       <Suspense>

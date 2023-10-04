@@ -28,8 +28,8 @@ public static class ReleaseRoutes
         group.MapGet(
             "/as-collection",
             async (
-                ReleaseCollectionQueryHandler handler,
-                [AsParameters] ReleaseCollectionSearchParams @params,
+                ReleaseCollectionsQueryHandler handler,
+                [AsParameters] ReleaseCollectionsSearchParams @params,
                 CancellationToken cancellationToken
             ) =>
             {

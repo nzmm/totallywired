@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router-dom";
-import { useAsyncCollection } from "../lib/tracks/hooks";
+import { useAsyncCollections } from "../lib/tracks/hooks";
 import MusicCollectionList from "../components/lists/MusicCollectionList";
 
 function MusicCollectionView() {
-  const collection = useAsyncCollection();
-  return <MusicCollectionList collection={collection} />;
+  const collections = useAsyncCollections();
+  return <MusicCollectionList collections={collections} />;
 }
 
 export default function MusicCollection() {
