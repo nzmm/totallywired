@@ -1,12 +1,7 @@
 import { LoaderFunctionArgs } from "react-router-dom";
 import { requestSearchParams } from "./requests";
 import { ReactionType } from "./types";
-import {
-  getAlbums,
-  getArtists,
-  getCollections,
-  getTracks,
-} from "./api";
+import { getAlbums, getArtists, getCollections, getTracks } from "./api";
 
 export function tracksLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
@@ -31,7 +26,7 @@ export function artistTracksLoader({ request, params }: LoaderFunctionArgs) {
   }
 
   const searchParams = requestSearchParams(request);
-  searchParams.append('artistId', artistId);
+  searchParams.append("artistId", artistId);
   return getCollections(searchParams);
 }
 
@@ -48,7 +43,7 @@ export function albumTracksLoader({ request, params }: LoaderFunctionArgs) {
   }
 
   const searchParams = requestSearchParams(request);
-  searchParams.append('releaseId', releaseId);
+  searchParams.append("releaseId", releaseId);
   return getCollections(searchParams);
 }
 

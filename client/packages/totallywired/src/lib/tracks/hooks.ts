@@ -1,29 +1,14 @@
 import { useCallback, useContext, useEffect } from "react";
 import { useAsyncValue } from "react-router-dom";
-import { set, update } from "../reducer";
+import { update } from "../reducer";
 import { Res } from "../requests";
-import {
-  AlbumCollection,
-  ReactionType,
-  Track,
-} from "../types";
+import { AlbumCollection, ReactionType, Track } from "../types";
 import { getTracksByAlbum, setTrackReaction } from "../api";
-import { updateLikedTrackCount, updateTrackReaction } from "./actions";
-import {
-  CollectionContext,
-  CollectionDispatchContext,
-  TracksContext,
-  TracksDispatchContext,
-} from "./context";
+import { updateLikedTrackCount } from "./actions";
+import { CollectionContext, CollectionDispatchContext } from "./context";
 import { usePlaylistDispatch } from "../player/hooks";
 
-export const useTracks = () => {
-  return useContext(TracksContext);
-};
-
-export const useTracksDisptach = () => {
-  return useContext(TracksDispatchContext);
-};
+export const useCollectionContext = () => useContext(CollectionContext);
 
 export const useCollection = (releaseId: string) => {
   const dispatch = useCollectionDisptach();
@@ -59,14 +44,7 @@ export const useCollectionDisptach = () => {
  * Provides declarative access to the available tracks
  */
 export const useAsyncTracks = (): Track[] => {
-  const dispatch = useTracksDisptach();
-  const tracks = useTracks();
-  const { data = [] } = useAsyncValue() as Res<Track[]>;
-
-  useEffect(() => {
-    dispatch(set(data));
-  }, [dispatch, data]);
-
+  const { data: tracks = [] } = useAsyncValue() as Res<Track[]>;
   return tracks;
 };
 
@@ -82,7 +60,7 @@ export const useAsyncCollections = (): AlbumCollection[] => {
  * Provides declarative access to track reaction toggling.
  */
 export const useToggleTrackReaction = () => {
-  const trDispatch = useTracksDisptach();
+  // const trDispatch = useTracksDisptach();
   const plDispatch = usePlaylistDispatch();
 
   return useCallback(
@@ -96,9 +74,9 @@ export const useToggleTrackReaction = () => {
         track.liked ? ReactionType.None : ReactionType.Liked,
       );
 
-      trDispatch(updateTrackReaction(track.id, reaction));
+      // trDispatch(updateTrackReaction(track.id, reaction));
       plDispatch(updateLikedTrackCount(reaction));
     },
-    [trDispatch, plDispatch],
+    [plDispatch],
   );
 };

@@ -1,10 +1,9 @@
 import { ListItemProps, VirtualList } from "@totallywired/ui-components";
 import { Link } from "react-router-dom";
 import { useCollection, useToggleTrackReaction } from "../../lib/tracks/hooks";
-import { AlbumCollection, AlbumDetail, Track } from "../../lib/types";
+import { AlbumCollection, AlbumDetail } from "../../lib/types";
 import { ReleaseArt } from "../common/Thumbnail";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
-import { AudioPlayer } from "../../lib/player";
 import { usePlayer } from "../../lib/player/hooks";
 import { separatedNodes } from "../helpers";
 import "./MuiscCollectionList.css";
@@ -13,12 +12,7 @@ type MusicCollectionListProps = {
   collections: AlbumCollection[];
 };
 
-type ToggleLikeFunction = (track?: Track) => Promise<void>;
-
-export type CollectionItemProps = ListItemProps<
-  AlbumCollection & { toggleLike: ToggleLikeFunction; player: AudioPlayer }
->;
-
+export type CollectionItemProps = ListItemProps<AlbumCollection>;
 
 function PrimaryDetails({
   artistId,
@@ -64,11 +58,11 @@ function CollectionItem({
   top,
   height,
   trackCount,
-  toggleLike,
-  player,
   ...album
 }: CollectionItemProps) {
+  const player = usePlayer();
   const tracks = useCollection(album.id);
+  const toggleLike = useToggleTrackReaction();
   return (
     <li tabIndex={0} style={{ top, height }}>
       <div className="release-collection">
@@ -137,16 +131,13 @@ function CollectionItem({
 export default function MusicCollectionList({
   collections,
 }: MusicCollectionListProps) {
-  const player = usePlayer();
-  const toggleLike = useToggleTrackReaction();
   return collections.length ? (
     <VirtualList
       className="collection"
-      renderer={(props) => (
-        <CollectionItem {...props} player={player} toggleLike={toggleLike} />
-      )}
+      renderer={CollectionItem}
       items={collections.map((c) => ({
         ...c,
+        key: c.id,
         height: 270 + c.trackCount * 32,
       }))}
     />

@@ -20,7 +20,7 @@ export default function ArtistList({ artists }: { artists: Artist[] }) {
   return artists.length ? (
     <VirtualList
       className="tracklist"
-      items={artists.map((a) => ({ ...a, height: 42 }))}
+      items={artists.map((a) => ({ ...a, key: a.id, height: 42 }))}
       renderer={ArtistItem}
     />
   ) : (

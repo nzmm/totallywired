@@ -1,4 +1,5 @@
 import "@totallywired/ui-components/dist/cjs/totallywired.css";
+import { ScrollRestorationProvider } from "@totallywired/ui-components";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
@@ -8,8 +9,10 @@ import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <UserProvider>
-      <RouterProvider router={AppRouter} />
-    </UserProvider>
+    <ScrollRestorationProvider>
+      <UserProvider>
+        <RouterProvider router={AppRouter} />
+      </UserProvider>
+    </ScrollRestorationProvider>
   </React.StrictMode>,
 );

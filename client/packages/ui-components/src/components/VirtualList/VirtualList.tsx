@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   FocalItem,
   IVirtualListItem,
@@ -13,6 +13,7 @@ import {
   getVisible,
 } from "./VirtualList.library";
 import "./VirtualList.scss";
+import { useScrollRestoration } from "./ScrollRestoration";
 
 /**
  * A list component which renders only the visible items.
@@ -30,8 +31,11 @@ const VirtualList = <T extends IVirtualListItem>({
   onDragEnd,
   onDrop,
 }: VirtualListProps<T>) => {
-  const pending = useRef(false);
+  const restoration = useScrollRestoration();
+  const [initialYOffset] = useState(() => restoration.get(location.pathname));
+
   const scrollTop = useRef(0);
+  const pending = useRef(false);
   const vlist = useRef<HTMLDivElement>(null);
   const indexRange = useRef<NumericRange>([0, 0]);
   const pixelRange = useRef<NumericRange>([0, 0]);
@@ -40,6 +44,31 @@ const VirtualList = <T extends IVirtualListItem>({
   const [height, setHeight] = useState(0);
   const [visible, setVisible] = useState<VisibleItem<T>[]>([]);
 
+  // Update height
+  useLayoutEffect(() => {
+    if (!vlist.current) {
+      return;
+    }
+
+    const h = getHeight(items);
+    setHeight(h);
+  }, [items, setHeight]);
+
+  // Scroll restoration
+  useLayoutEffect(() => {
+    const key = location.pathname;
+
+    if (vlist.current && initialYOffset && height) {
+      vlist.current.scrollTo(0, initialYOffset);
+      restoration.complete(key);
+    }
+
+    return () => {
+      restoration.add(key, scrollTop.current);
+    };
+  }, [restoration, initialYOffset, height]);
+
+  // Wire up signal handlers
   useEffect(() => {
     if (!vlist.current) {
       return;
@@ -51,7 +80,6 @@ const VirtualList = <T extends IVirtualListItem>({
       }
 
       const top = vlist.current.scrollTop;
-
       const [vis, ir, pr, update] = getVisible(
         items,
         indexRange.current,
@@ -60,7 +88,7 @@ const VirtualList = <T extends IVirtualListItem>({
         top - scrollTop.current,
         vlist.current.clientHeight,
         focalItem.current,
-        500, // pixels
+        500, // overscan pixels
       );
 
       if (update) {
@@ -78,6 +106,8 @@ const VirtualList = <T extends IVirtualListItem>({
         return;
       }
 
+      scrollTop.current = vlist.current?.scrollTop ?? 0;
+
       pending.current = true;
       window.requestAnimationFrame(processScroll);
     };
@@ -87,12 +117,9 @@ const VirtualList = <T extends IVirtualListItem>({
         return;
       }
 
-      const h = getHeight(items);
-      setHeight(h);
-
       scrollTop.current = vlist.current.scrollTop;
       indexRange.current = [0, items.length];
-      pixelRange.current = [0, h];
+      pixelRange.current = [0, height];
 
       handleScroll();
     };
@@ -118,7 +145,7 @@ const VirtualList = <T extends IVirtualListItem>({
       vlist.current.removeEventListener("scroll", handleScroll);
       observer.unobserve(vlist.current);
     };
-  }, [items]);
+  }, [height, items, setVisible]);
 
   const handleFocus = (e: React.FocusEvent<HTMLDivElement>) => {
     if (!vlist.current || e.target.nodeName !== "LI") {

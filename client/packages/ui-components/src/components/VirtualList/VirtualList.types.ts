@@ -35,6 +35,11 @@ export type VirtualListProps<T extends IVirtualListItem> = {
   renderer: ListItemRenderer<T>;
 
   /**
+   * The initial y-offset
+   */
+  initialYOffset?: number;
+
+  /**
    * The x-overflow behaviour.
    */
   xOverflow?: "auto" | "scroll" | "hidden";
