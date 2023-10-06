@@ -10,6 +10,8 @@ import { usePlaylistDispatch } from "../player/hooks";
 
 export const useCollectionContext = () => useContext(CollectionContext);
 
+const DEFAULT: Track[] = [];
+
 export const useCollection = (releaseId: string) => {
   const dispatch = useCollectionDisptach();
   const context = useContext(CollectionContext);
@@ -33,7 +35,7 @@ export const useCollection = (releaseId: string) => {
     });
   }, [dispatch, context, releaseId]);
 
-  return context.collection[releaseId];
+  return context.collection[releaseId] ?? DEFAULT;
 };
 
 export const useCollectionDisptach = () => {

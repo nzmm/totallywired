@@ -103,8 +103,8 @@ function CollectionItem({
           </thead>
 
           <tbody>
-            {(tracks ?? []).map((t, i) => (
-              <tr key={i} tabIndex={0}>
+            {tracks.map((t) => (
+              <tr key={t.id} tabIndex={0}>
                 <td className="num">
                   <button onClick={() => player.addTrack(t)}>{t.number}</button>
                 </td>
