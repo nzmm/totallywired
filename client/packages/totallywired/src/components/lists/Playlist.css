@@ -14,6 +14,19 @@
       > span > a {
         color: var(--gray-10);
       }
+
+      &:hover {
+        background-color: unset;
+        border-color: transparent;
+
+        &:last-child {
+          border-bottom: 1px solid var(--gray-4);
+        }
+    
+        &:not(:first-child) {
+          border-top: 1px solid var(--gray-4);
+        }
+      }
     }
 
     > li[tabindex="0"] {
