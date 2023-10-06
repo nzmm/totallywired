@@ -52,12 +52,10 @@ export const AppRouter = createBrowserRouter([
             path: "albums/:releaseId",
             element: <AlbumTracks />,
             loader: albumTracksLoader,
-            children: [
-              {
-                path: "editor",
-                element: <AlbumEditor />,
-              },
-            ],
+          },
+          {
+            path: "albums/:releaseId/editor",
+            element: <AlbumEditor />,
           },
           {
             path: "artists",

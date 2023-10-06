@@ -3,10 +3,8 @@ import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
 import { updateProposal } from "../../lib/editor/proposals";
 import { setProposal } from "../../lib/editor/actions";
-import { Dialog } from "../vendor/radix-ui/Dialog";
 import { useEditor, useEditorDisptach } from "../../lib/editor/hooks";
 import Header from "../shell/Header";
-import Loading from "../common/Loading";
 import EditorProvider from "../providers/EditorProvider";
 import AlbumMetadataSearch from "./AlbumSearch";
 import AlbumMetadataComparison from "./AlbumComparison";
@@ -42,7 +40,7 @@ function AlbumMetadataEditorModal({
   };
 
   return (
-    <Dialog open className="editor fullscreen">
+    <>
       <Header />
 
       {proposal ? (
@@ -63,10 +61,7 @@ function AlbumMetadataEditorModal({
             candidateMedia={candidateMedia}
           />
         </Splitter>
-      ) : (
-        <Loading />
-      )}
-
+      ) : null}
       <div className="toolbar">
         <button className="Button" onClick={onDiscard}>
           Discard
@@ -79,7 +74,7 @@ function AlbumMetadataEditorModal({
         </button>
         <div />
       </div>
-    </Dialog>
+    </>
   );
 }
 

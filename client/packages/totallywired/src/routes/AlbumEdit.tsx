@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AlbumChangeProposal } from "../lib/editor/types";
 import { createReleaseUpdateCommand } from "../lib/editor/command";
 import { setAlbumMetadata } from "../lib/api";
+import { Dialog } from "../components/vendor/radix-ui/Dialog";
 import Loading from "../components/common/Loading";
 
 const LazyEditor = React.lazy(() => import("../components/editor/AlbumEditor"));
@@ -34,12 +35,14 @@ export default function AlbumEditor() {
   }
 
   return (
-    <Suspense fallback={<Loading />}>
-      <LazyEditor
-        releaseId={params.releaseId}
-        onSave={onSave}
-        onDiscard={onDiscard}
-      />
-    </Suspense>
+    <Dialog open className="editor fullscreen">
+      <Suspense fallback={<Loading />}>
+        <LazyEditor
+          releaseId={params.releaseId}
+          onSave={onSave}
+          onDiscard={onDiscard}
+        />
+      </Suspense>
+    </Dialog>
   );
 }
