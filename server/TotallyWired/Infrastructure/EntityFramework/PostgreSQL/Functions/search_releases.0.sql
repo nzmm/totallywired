@@ -15,9 +15,15 @@ SELECT
     r."SearchVector_EN",
     r."Type"
 FROM (
-    SELECT r.*, ts_rank(r."SearchVector_EN", query) AS rank
-    FROM "Releases" AS r, to_tsquery('simple', $2) AS query
-    WHERE r."UserId" = $1 AND r."SearchVector_EN" @@ query
-    ORDER BY rank DESC, r."Name"
+     SELECT r.*
+     FROM "Releases" AS r
+          CROSS JOIN to_tsquery('simple', $2) AS query
+          INNER JOIN "Artists" a on a."Id" = r."ArtistId" and a."UserId" = r."UserId"
+     WHERE
+         r."UserId" = $1 AND
+         (r."SearchVector_EN" @@ query OR
+          a."SearchVector_EN" @@ query)
+
+    ORDER BY r."Name"
 ) r
 $$ LANGUAGE SQL;
