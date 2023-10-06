@@ -62,16 +62,10 @@ function AlbumMetadataEditorModal({
           />
         </Splitter>
       ) : null}
+
       <div className="toolbar">
-        <button className="Button" onClick={onDiscard}>
-          Discard
-        </button>
-        <button
-          className="Button green"
-          onClick={() => onSave(editor.proposal)}
-        >
-          Save changes
-        </button>
+        <button onClick={onDiscard}>Discard</button>
+        <button onClick={() => onSave(editor.proposal)}>Save changes</button>
         <div />
       </div>
     </>
