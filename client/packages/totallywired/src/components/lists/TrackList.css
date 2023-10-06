@@ -25,11 +25,11 @@
         border-top: 1px solid var(--tomato-6);
         border-bottom: 1px solid var(--tomato-6);
         background-color: var(--tomato-3);
-  
+
         &:focus {
           border-top: 1px solid var(--tomato-9);
           border-bottom: 1px solid var(--tomato-9);
-          background-color: var(--tomato-7);  
+          background-color: var(--tomato-7);
         }
       }
 

@@ -24,7 +24,7 @@ import AlbumEditor from "./routes/AlbumEdit";
 
 import "./styles.css";
 
-export const AppRouter = createBrowserRouter([
+const AppRouter = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
@@ -85,3 +85,5 @@ export const AppRouter = createBrowserRouter([
     ],
   },
 ]);
+
+export default AppRouter;

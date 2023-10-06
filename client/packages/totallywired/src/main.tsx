@@ -1,10 +1,11 @@
-import "@totallywired/ui-components/dist/cjs/totallywired.css";
-import { ScrollRestorationProvider } from "@totallywired/ui-components";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
-import { AppRouter } from "./router";
+import { ScrollRestorationProvider } from "@totallywired/ui-components";
+import AppRouter from "./router";
 import UserProvider from "./components/providers/UserProvider";
+
+import "@totallywired/ui-components/dist/cjs/totallywired.css";
 import "./styles.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
