@@ -32,7 +32,9 @@ const VirtualList = <T extends IVirtualListItem>({
   onDrop,
 }: VirtualListProps<T>) => {
   const restoration = useScrollRestoration();
-  const [initialYOffset] = useState(() => restoration.get(location.pathname));
+  const [initialYOffset] = useState(() =>
+    restoration.get(location.pathname + location.search),
+  );
 
   const scrollTop = useRef(0);
   const pending = useRef(false);
@@ -56,7 +58,7 @@ const VirtualList = <T extends IVirtualListItem>({
 
   // Scroll restoration
   useLayoutEffect(() => {
-    const key = location.pathname;
+    const key = location.pathname + location.search;
 
     if (vlist.current && initialYOffset && height) {
       vlist.current.scrollTo(0, initialYOffset);

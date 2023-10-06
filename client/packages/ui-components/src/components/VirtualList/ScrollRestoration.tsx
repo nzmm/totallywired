@@ -1,34 +1,35 @@
 import React, { useContext } from "react";
 import { createContext } from "react";
 
-declare global {
-  interface Window {
-    __offsetCache__: Record<string, number>;
-  }
-}
-
 type RestorationContextProps = {
   add: (key: string, offset: number) => void;
   get: (key: string) => number;
   complete: (key: string) => void;
 };
 
-window.__offsetCache__ = {};
+const NOOP_STORE: RestorationContextProps = {
+  get: (key: string) => 0,
+  add: () => null,
+  complete: (key: string) => null,
+};
 
-const INIT_STATE: RestorationContextProps = {
+const getKey = (key: string) => `tw:scrollY:${key}`;
+
+const SESSION_STORE: RestorationContextProps = {
   get: (key: string) => {
-    return window.__offsetCache__[key] ?? 0;
+    const val = window.sessionStorage.getItem(getKey(key));
+    return val ? parseInt(val) : 0;
   },
   add: (key: string, offset: number) => {
-    window.__offsetCache__[key] = offset;
+    window.sessionStorage.setItem(getKey(key), offset.toString());
   },
   complete: (key: string) => {
-    delete window.__offsetCache__[key];
+    window.sessionStorage.removeItem(getKey(key));
   },
 };
 
 const ScrollRestorationContext =
-  createContext<RestorationContextProps>(INIT_STATE);
+  createContext<RestorationContextProps>(NOOP_STORE);
 
 export const useScrollRestoration = () => useContext(ScrollRestorationContext);
 
@@ -36,7 +37,7 @@ export function ScrollRestorationProvider({
   children,
 }: React.PropsWithChildren) {
   return (
-    <ScrollRestorationContext.Provider value={INIT_STATE}>
+    <ScrollRestorationContext.Provider value={SESSION_STORE}>
       {children}
     </ScrollRestorationContext.Provider>
   );
