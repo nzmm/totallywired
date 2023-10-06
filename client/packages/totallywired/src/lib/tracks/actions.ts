@@ -1,17 +1,32 @@
 import { update } from "../reducer";
 import { Track, ReactionType, Playlist } from "../types";
+import { MusicCollection } from "./context";
 
 export const updateTrackReaction = (
-  trackId: string,
+  track: Track,
   reaction: ReactionType | undefined,
 ) => {
-  return update<Track[]>((tracks) => {
+  return update<MusicCollection>((state) => {
     if (reaction == null) {
-      return tracks;
+      return state;
     }
-    return tracks.map((t) =>
-      t.id !== trackId ? t : { ...t, liked: reaction === ReactionType.Liked },
+
+    const releaseId = track.releaseId;
+    if (!(releaseId in state.collection)) {
+      return state;
+    }
+
+    const trackId = track.id;
+    const tracks = state.collection[releaseId].map((t) =>
+      trackId !== t.id ? t : { ...t, liked: reaction === ReactionType.Liked },
     );
+
+    return {
+      collection: {
+        ...state.collection,
+        [releaseId]: tracks,
+      },
+    };
   });
 };
 

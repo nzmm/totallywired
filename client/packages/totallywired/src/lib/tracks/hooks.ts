@@ -4,7 +4,7 @@ import { update } from "../reducer";
 import { Res } from "../requests";
 import { AlbumCollection, ReactionType, Track } from "../types";
 import { getTracksByAlbum, setTrackReaction } from "../api";
-import { updateLikedTrackCount } from "./actions";
+import { updateLikedTrackCount, updateTrackReaction } from "./actions";
 import { CollectionContext, CollectionDispatchContext } from "./context";
 import { usePlaylistDispatch } from "../player/hooks";
 
@@ -62,7 +62,7 @@ export const useAsyncCollections = (): AlbumCollection[] => {
  * Provides declarative access to track reaction toggling.
  */
 export const useToggleTrackReaction = () => {
-  // const trDispatch = useTracksDisptach();
+  const cxDispatch = useCollectionDisptach();
   const plDispatch = usePlaylistDispatch();
 
   return useCallback(
@@ -76,7 +76,7 @@ export const useToggleTrackReaction = () => {
         track.liked ? ReactionType.None : ReactionType.Liked,
       );
 
-      // trDispatch(updateTrackReaction(track.id, reaction));
+      cxDispatch(updateTrackReaction(track, reaction));
       plDispatch(updateLikedTrackCount(reaction));
     },
     [plDispatch],
