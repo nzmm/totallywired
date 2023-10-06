@@ -60,6 +60,7 @@ const VirtualList = <T extends IVirtualListItem>({
 
     if (vlist.current && initialYOffset && height) {
       vlist.current.scrollTo(0, initialYOffset);
+      scrollTop.current = initialYOffset;
       restoration.complete(key);
     }
 
@@ -105,8 +106,6 @@ const VirtualList = <T extends IVirtualListItem>({
       if (pending.current) {
         return;
       }
-
-      scrollTop.current = vlist.current?.scrollTop ?? 0;
 
       pending.current = true;
       window.requestAnimationFrame(processScroll);
