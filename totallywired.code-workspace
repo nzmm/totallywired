@@ -7,7 +7,7 @@
 			"path": "server"
 		},
 		{
-			"path": "compose"
+			"path": "operations"
 		}
 	],
 	"settings": {
