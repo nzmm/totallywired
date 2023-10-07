@@ -5,12 +5,15 @@ import Header from "../components/shell/Header";
 import Sidebar from "../components/shell/Sidebar";
 import PlaylistsProvider from "../components/providers/PlaylistProvider";
 import CollectionProvider from "../components/providers/CollectionProvider";
+import SearchInput from "../components/shell/SearchInput";
 
 export default function Library() {
   return (
     <CollectionProvider>
       <PlaylistsProvider>
-        <Header withSearch />
+        <Header>
+          <SearchInput />
+        </Header>
 
         <Splitter
           orientation="horizontal"

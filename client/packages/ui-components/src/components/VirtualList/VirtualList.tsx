@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useScrollRestoration } from "./ScrollRestoration";
 import {
   FocalItem,
   IVirtualListItem,
@@ -13,7 +14,6 @@ import {
   getVisible,
 } from "./VirtualList.library";
 import "./VirtualList.scss";
-import { useScrollRestoration } from "./ScrollRestoration";
 
 /**
  * A list component which renders only the visible items.
@@ -31,11 +31,6 @@ const VirtualList = <T extends IVirtualListItem>({
   onDragEnd,
   onDrop,
 }: VirtualListProps<T>) => {
-  const restoration = useScrollRestoration();
-  const [initialYOffset] = useState(() =>
-    restoration.get(location.pathname + location.search),
-  );
-
   const scrollTop = useRef(0);
   const pending = useRef(false);
   const vlist = useRef<HTMLDivElement>(null);
@@ -45,6 +40,8 @@ const VirtualList = <T extends IVirtualListItem>({
 
   const [height, setHeight] = useState(0);
   const [visible, setVisible] = useState<VisibleItem<T>[]>([]);
+
+  const restoration = useScrollRestoration();
 
   // Update height
   useLayoutEffect(() => {
@@ -58,18 +55,24 @@ const VirtualList = <T extends IVirtualListItem>({
 
   // Scroll restoration
   useLayoutEffect(() => {
-    const key = location.pathname + location.search;
-
-    if (vlist.current && initialYOffset && height) {
-      vlist.current.scrollTo(0, initialYOffset);
-      scrollTop.current = initialYOffset;
-      restoration.complete(key);
+    if (!height) {
+      return;
+    }
+    if (!vlist.current) {
+      return;
     }
 
+    const key = restoration.getKey();
+    const offset = restoration.popScrollRestoration(key);
+    vlist.current.scrollTo(0, offset);
+    scrollTop.current = offset;
+
     return () => {
-      restoration.add(key, scrollTop.current);
+      if (!restoration.scrollRestorationPrevented(key)) {
+        restoration.addScrollRestoration(key, scrollTop.current);
+      }
     };
-  }, [restoration, initialYOffset, height]);
+  }, [restoration, height]);
 
   // Wire up signal handlers
   useEffect(() => {
@@ -158,16 +161,6 @@ const VirtualList = <T extends IVirtualListItem>({
     if (item) {
       focalItem.current = { i: item.i, y: item.y };
     }
-
-    /*
-      const [imin, imax] = indexRange.current;
-
-      if (i >= imax - 1) {
-        vlist.current.scrollBy(0, items[imax].height);
-      } else if (i <= imin + 1) {
-        vlist.current.scrollBy(0, -items[imin].height);
-      }
-      */
   };
 
   const handleBlur = (e: React.FocusEvent) => {
