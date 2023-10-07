@@ -1,4 +1,4 @@
-import { MouseEventHandler } from "react";
+import { Fragment, MouseEventHandler } from "react";
 import { useEditorDisptach } from "../../lib/editor/hooks";
 import { MBMedia } from "../../lib/musicbrainz/types";
 import { updateTrackFull } from "../../lib/editor/actions";
@@ -18,7 +18,7 @@ type TrackPickerPopover = React.PropsWithChildren & {
 
 type HTMLButtonWithTrackDataset = HTMLElementWithDataset<
   "disc" | "number" | "name" | "length",
-  HTMLButtonElement
+  HTMLTableRowElement
 >;
 
 export default function MetadataSelector({
@@ -29,7 +29,7 @@ export default function MetadataSelector({
   const dispatch = useEditorDisptach();
 
   const onClick: MouseEventHandler<HTMLButtonWithTrackDataset> = (e) => {
-    const { value: mbid, dataset } = e.currentTarget;
+    const { id: mbid, dataset } = e.currentTarget;
     dispatch(updateTrackFull(cr.id, mbid, dataset));
   };
 
@@ -38,33 +38,42 @@ export default function MetadataSelector({
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent sideOffset={-3}>
         <div className="metadata-selector-content">
-          <h5>Tracks</h5>
+          <table>
+            <caption className="sr-only">Matched Tracks</caption>
 
-          {candidateMedia.map((m) => {
-            return (
-              <div className="media" key={m.position}>
-                {m.tracks.map((t) => {
-                  const matched = cr.mbid === t.id;
-                  return (
-                    <button
-                      key={t.id}
-                      value={t.id}
-                      data-disc={m.position}
-                      data-number={t.number}
-                      data-name={t.title}
-                      data-length={t.length}
-                      className={matched ? "selector active" : "selector"}
-                      onClick={onClick}
-                    >
-                      <span className="num">{t.position}</span>
-                      <span className="name">{t.title}</span>
-                      <span className="len">{displayLength(t.length)}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            );
-          })}
+            <tbody>
+              {candidateMedia.map((m) => {
+                return (
+                  <Fragment key={m.position}>
+                    <tr className="media">
+                      <th colSpan={3}>Set {m.position}</th>
+                    </tr>
+
+                    {m.tracks.map((t) => {
+                      const matched = cr.mbid === t.id;
+                      return (
+                        <tr
+                          tabIndex={0}
+                          key={t.id}
+                          id={t.id}
+                          data-disc={m.position}
+                          data-number={t.position}
+                          data-name={t.title}
+                          data-length={t.length}
+                          className={matched ? "selector active" : "selector"}
+                          onClick={onClick}
+                        >
+                          <td className="num">{t.position}</td>
+                          <td className="name">{t.title}</td>
+                          <td className="len">{displayLength(t.length)}</td>
+                        </tr>
+                      );
+                    })}
+                  </Fragment>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </PopoverContent>
     </Popover>

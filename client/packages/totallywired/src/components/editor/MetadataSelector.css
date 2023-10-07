@@ -6,51 +6,50 @@
   overflow-y: auto;
   padding-right: 3px;
 
-  > h5 {
-    margin: 0;
-    margin-bottom: 8px;
-    font-size: 13px;
-  }
+  > table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 2px;
 
-  > .media {
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-
-    > button {
-      display: flex;
-      flex-direction: row;
-      gap: 3px;
+    > tbody > .media {
       text-align: left;
-      background-color: transparent;
-      border: 1px solid transparent;
-      border-radius: 3px;
-      padding: 3px 4px;
 
-      &.active {
-        border: 1px dashed var(--blue-9);
-        background-color: var(--tomato-4);
+      > th {
+        padding-top: 4px;
+        padding-bottom: 4px;
       }
+    }
 
-      > .num {
-        width: 2rem;
-      }
+    > tbody > .selector {
+      text-align: left;
 
-      > .name {
-        flex-grow: 1;
+      > td {
+        border-width: 0;
+        border-style: solid;
+        border-color: transparent;
+        border-top-width: 1px;
+        border-bottom-width: 1px;
+        padding: 3px 4px;
+        
+        &:first-child {
+          border-top-left-radius: 3px;
+          border-bottom-left-radius: 3px;
+          border-left-width: 1px;
+        }
 
-        > svg {
-          width: 12px;
-          height: 12px;
-          color: var(--blue-9);
-          vertical-align: middle;
-          padding-left: 4px;
+        &:last-child {
+          border-top-right-radius: 3px;
+          border-bottom-right-radius: 3px;
+          border-right-width: 1px;
         }
       }
 
-      > .len {
-        width: 2.5rem;
-        text-align: right;
+      &.active {
+        > td {
+          border-style: dashed;
+          border-color: var(--blue-9);
+          background-color: var(--tomato-4);  
+        }
       }
     }
   }
