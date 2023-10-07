@@ -64,18 +64,6 @@ main {
   overflow: hidden;
 }
 
-.d-flex {
-  display: flex;
-
-  &.col {
-    flex-direction: column;
-  }
-
-  &.row {
-    flex-direction: row;
-  }
-}
-
 .round {
   aspect-ratio: 1 / 1;
   border-radius: 100%;

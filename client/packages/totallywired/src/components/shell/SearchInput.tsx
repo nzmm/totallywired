@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
-import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
+import { SetURLSearchParams, useSearchParams } from "react-router-dom";
+import { Cross2Icon } from "@radix-ui/react-icons";
+import {
+  useScrollRestoration,
+  ScrollRestoration,
+} from "@totallywired/ui-components";
 import { debounce } from "../../lib/utils";
 import "./SearchInput.css";
 
@@ -12,13 +17,23 @@ const onSubmit = (e: React.FormEvent) => {
 };
 
 const updateSearchParamsDebounced = debounce(
-  (q: string, setSearchParams: (next: URLSearchParamsInit) => void) => {
-    setSearchParams({ q });
+  (
+    q: string,
+    setSearchParams: SetURLSearchParams,
+    restoration: ScrollRestoration,
+    restorationKey: string,
+  ) => {
+    restoration.preventScrollRestoration(restorationKey);
+    setSearchParams((prev) => {
+      prev.set("q", q);
+      return prev;
+    });
   },
   500,
 );
 
 export default function SearchInput() {
+  const restoration = useScrollRestoration();
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
 
@@ -27,34 +42,45 @@ export default function SearchInput() {
       e.preventDefault();
       const q = e.currentTarget.value;
       setQuery(q);
-      updateSearchParamsDebounced(q, setSearchParams);
+      updateSearchParamsDebounced(
+        q,
+        setSearchParams,
+        restoration,
+        restoration.getKey(),
+      );
     },
-    [setSearchParams],
+    [restoration, setSearchParams],
   );
 
   const onClear = () => {
-    const q = "";
-    setQuery(q);
-    updateSearchParamsDebounced(q, setSearchParams);
+    const key = restoration.getKey();
+    restoration.preventScrollRestoration(key);
+    setQuery("");
+    setSearchParams((prev) => {
+      prev.delete("q");
+      return prev;
+    });
   };
 
   useEffect(() => {
     setQuery(searchParams.get("q") ?? "");
-  }, [searchParams, setSearchParams]);
+  }, [searchParams]);
 
   return (
-    <form className="search-input" onSubmit={onSubmit}>
-      <input
-        name="q"
-        type="text"
-        placeholder="Search your library..."
-        autoComplete="off"
-        value={query}
-        onChange={onChange}
-      />
-      <button type="reset" disabled={!query} onClick={onClear}>
-        X
-      </button>
-    </form>
+    <div className="search-input">
+      <form onSubmit={onSubmit}>
+        <input
+          name="q"
+          type="text"
+          placeholder="Search"
+          autoComplete="off"
+          value={query}
+          onChange={onChange}
+        />
+        <button type="reset" disabled={!query} onClick={onClear}>
+          <Cross2Icon />
+        </button>
+      </form>
+    </div>
   );
 }

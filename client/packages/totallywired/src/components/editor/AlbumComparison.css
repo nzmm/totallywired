@@ -1,10 +1,9 @@
 .album-compare {
   display: grid;
+  grid-template-columns: 1fr 1px 1fr;
   min-height: 100%;
-
-  & .separator {
-    background-color: var(--gray-6);
-  }
+  max-width: 1300px;
+  margin: 0 auto;
 
   .metadata {
     margin: 1.25rem 3rem;
@@ -21,8 +20,10 @@
     }
   }
 
-  .current.metadata {
-    margin-left: auto;
+  > .separator {
+    width: 1px;
+    height: 100%;
+    background-color: var(--gray-3);
   }
 
   & caption {

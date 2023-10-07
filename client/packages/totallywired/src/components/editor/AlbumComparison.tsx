@@ -1,4 +1,3 @@
-import { Splitter } from "@totallywired/ui-components";
 import { MBMedia } from "../../lib/musicbrainz/types";
 import {
   AlbumChangeProposal,
@@ -62,58 +61,58 @@ export default function AlbumMetadataComparison({
 
   return (
     <section className="album-compare">
-      <Splitter orientation="horizontal">
-        <div className="current metadata">
-          <div>
-            <h4 className="muted">Current Metadata</h4>
-          </div>
-
-          <ArtTable
-            proposal={proposal}
-            artCollection={EMPTY_COLLECTION}
-            label="The current release cover art"
-            version="oldValue"
-            readOnly
-          />
-
-          <ReleaseTable proposal={proposal} version="oldValue" readOnly />
-
-          <TrackTable tracks={proposal.tracks} version="oldValue" readOnly />
+      <div className="current metadata">
+        <div>
+          <h4 className="muted">Current Metadata</h4>
         </div>
 
-        <div className="proposed metadata">
-          <div>
-            <h4 className="muted">Proposed Metadata</h4>
-          </div>
+        <ArtTable
+          proposal={proposal}
+          artCollection={EMPTY_COLLECTION}
+          label="The current release cover art"
+          version="oldValue"
+          readOnly
+        />
 
-          <ArtTable
-            proposal={proposal}
-            artCollection={artCollection}
-            label="The proposed release cover art"
-            version="newValue"
-            readOnly={proposalReadOnly}
-            onSelect={onArtSelect}
-            onApprove={onAttrApprove}
-          />
+        <ReleaseTable proposal={proposal} version="oldValue" readOnly />
 
-          <ReleaseTable
-            proposal={proposal}
-            version="newValue"
-            readOnly={proposalReadOnly}
-            onChange={onAttrChange}
-            onApprove={onAttrApprove}
-          />
+        <TrackTable tracks={proposal.tracks} version="oldValue" readOnly />
+      </div>
 
-          <TrackTable
-            tracks={proposal.tracks}
-            version="newValue"
-            candidateMedia={candidateMedia}
-            readOnly={proposalReadOnly}
-            onChange={onTrackChange}
-            onApprove={onTrackApprove}
-          />
+      <div className="separator"></div>
+
+      <div className="proposed metadata">
+        <div>
+          <h4 className="muted">Proposed Metadata</h4>
         </div>
-      </Splitter>
+
+        <ArtTable
+          proposal={proposal}
+          artCollection={artCollection}
+          label="The proposed release cover art"
+          version="newValue"
+          readOnly={proposalReadOnly}
+          onSelect={onArtSelect}
+          onApprove={onAttrApprove}
+        />
+
+        <ReleaseTable
+          proposal={proposal}
+          version="newValue"
+          readOnly={proposalReadOnly}
+          onChange={onAttrChange}
+          onApprove={onAttrApprove}
+        />
+
+        <TrackTable
+          tracks={proposal.tracks}
+          version="newValue"
+          candidateMedia={candidateMedia}
+          readOnly={proposalReadOnly}
+          onChange={onTrackChange}
+          onApprove={onTrackApprove}
+        />
+      </div>
     </section>
   );
 }

@@ -9,12 +9,18 @@ export default function Footer() {
   const [track, state] = useCurrentTrackState(player);
 
   return (
-    <footer className="d-flex row">
+    <footer>
+      <div>
       <NowPlaying currentTrack={track} />
+      </div>
 
-      <PlaybackControls player={player} currentState={state} />
+    <div>
+    <PlaybackControls player={player} currentState={state} />
+    </div>
 
-      <OutputControls player={player} />
+    <div>
+    <OutputControls player={player} />
+    </div>
     </footer>
   );
 }

@@ -1,27 +1,23 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../../lib/users/hooks";
 import MeMenu from "./MeMenu";
-import SearchInput from "./SearchInput";
 import "./Header.css";
 
-type HeaderProps = {
-  withSearch?: boolean;
-};
+type HeaderProps = React.PropsWithChildren;
 
-export default function Header({ withSearch }: HeaderProps) {
+export default function Header({ children }: HeaderProps) {
   const user = useUser();
   return (
-    <header className="d-flex row">
-      <h1 className="brand" title="TotallyWired!">
-        <Link to="/">TotallyWired</Link>
-      </h1>
+    <header>
+      <div>
+        <h1 className="brand" title="TotallyWired!">
+          <Link to="/">TotallyWired</Link>
+        </h1>
+      </div>
 
-      {user ? (
-        <>
-          {withSearch ? <SearchInput /> : null}
-          <MeMenu user={user} />
-        </>
-      ) : null}
+      <div>{children}</div>
+
+      <div>{user ? <MeMenu user={user} /> : null}</div>
     </header>
   );
 }

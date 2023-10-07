@@ -40,8 +40,8 @@ export default function PlaybackControls({
   };
 
   return (
-    <div className="playback-ctrl panel d-flex col">
-      <div className="actions d-flex row">
+    <div className="playback-controls">
+      <div className="actions">
         <button className="round md" onClick={() => player.prev()}>
           prev
         </button>

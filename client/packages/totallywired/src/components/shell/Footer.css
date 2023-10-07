@@ -1,15 +1,26 @@
 footer {
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   padding: 8px;
   min-height: 80px;
   border-top: 1px solid var(--gray-9);
 
-  > .panel {
-    width: 33%;
+  > div {
     display: flex;
     flex-direction: row;
-    gap: 6px;
+    align-items: center;
+
+    &:first-child {
+      justify-content: flex-start;
+    }
+
+    &:nth-child(2) {
+      justify-content: center;
+    }
+
+    &:last-child {
+      justify-content: flex-end;
+    }
   }
 
   /*
@@ -29,11 +40,16 @@ footer {
   /*
    * Component: PlaybackControls.tsx
    */
-  > .playback-ctrl {
-    width: 33%;
+  & .playback-controls {
+    display: flex;
+    flex-direction: column;
     justify-content: center;
+    gap: 10px;
+    width: 100%;
 
     > .actions {
+      display: flex;
+      flex-direction: row;
       align-items: center;
       justify-content: center;
       gap: 8px;
@@ -44,7 +60,6 @@ footer {
    * Component: OutputControls.tsx
    */
   > .output-ctrl {
-    width: 33%;
     justify-content: end;
   }
 }

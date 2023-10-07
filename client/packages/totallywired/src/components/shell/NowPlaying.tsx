@@ -12,11 +12,11 @@ type NowPlayingProps = {
 export default function NowPlaying({ currentTrack }: NowPlayingProps) {
   const album = useAlbum(currentTrack?.releaseId);
   return (
-    <div className="now-playing panel">
+    <div className="now-playing">
       <ReleaseArt releaseId={currentTrack?.releaseId} />
 
       {currentTrack ? (
-        <div className="track d-flex col">
+        <div className="track">
           <div className="name">{currentTrack.name}</div>
           <div className="album">
             <Link to={`/lib/albums/${currentTrack.releaseId}`}>
