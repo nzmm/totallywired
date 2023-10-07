@@ -3,6 +3,7 @@ import { Track, Artist } from "../../lib/types";
 import { ReleaseArt } from "../common/Thumbnail";
 import { useAlbum } from "../../lib/lists/hooks";
 import { separatedNodes } from "../../components/helpers";
+import "./NowPlaying.css";
 
 type NowPlayingProps = {
   currentTrack?: Track;
@@ -12,7 +13,7 @@ type NowPlayingProps = {
 export default function NowPlaying({ currentTrack }: NowPlayingProps) {
   const album = useAlbum(currentTrack?.releaseId);
   return (
-    <div className="now-playing">
+    <div id="now-playing">
       <ReleaseArt releaseId={currentTrack?.releaseId} />
 
       {currentTrack ? (

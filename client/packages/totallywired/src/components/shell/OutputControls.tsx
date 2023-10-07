@@ -20,7 +20,7 @@ export default function OutputControls({ player }: OutputControlsProps) {
   }, [player]);
 
   return (
-    <div className="output-ctrl">
+    <div id="output-controls">
       <button
         className="round md"
         onClick={() => {

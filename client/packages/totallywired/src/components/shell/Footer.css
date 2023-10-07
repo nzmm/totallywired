@@ -22,44 +22,4 @@ footer {
       justify-content: flex-end;
     }
   }
-
-  /*
-   * Component: NowPlaying.tsx
-   */
-  > .now-playing {
-    > .track {
-      gap: 5px;
-      justify-content: center;
-
-      > .name {
-        font-weight: bold;
-      }
-    }
-  }
-
-  /*
-   * Component: PlaybackControls.tsx
-   */
-  & .playback-controls {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-
-    > .actions {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-  }
-
-  /*
-   * Component: OutputControls.tsx
-   */
-  > .output-ctrl {
-    justify-content: end;
-  }
 }

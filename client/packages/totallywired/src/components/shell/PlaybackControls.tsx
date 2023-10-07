@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../../lib/player";
-import Progressbar from "../common/Progressbar";
 //import { useCollectionContext } from "../../lib/tracks/hooks";
+import Progressbar from "../common/Progressbar";
+import "./PlaybackControls.css";
 
 type PlaybackControlsProps = {
   player: AudioPlayer;
@@ -40,7 +41,7 @@ export default function PlaybackControls({
   };
 
   return (
-    <div className="playback-controls">
+    <div id="playback-controls">
       <div className="actions">
         <button className="round md" onClick={() => player.prev()}>
           prev

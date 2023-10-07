@@ -1,0 +1,18 @@
+#now-playing {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 8px;
+
+  > .track {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    line-height: 1.33;
+
+    > .name {
+      line-height: 2;
+      font-weight: bold;
+    }
+  }
+}

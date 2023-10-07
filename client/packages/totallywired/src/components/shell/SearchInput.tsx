@@ -67,7 +67,7 @@ export default function SearchInput() {
   }, [searchParams]);
 
   return (
-    <div className="search-input">
+    <div id="global-search-input">
       <form onSubmit={onSubmit}>
         <input
           name="q"

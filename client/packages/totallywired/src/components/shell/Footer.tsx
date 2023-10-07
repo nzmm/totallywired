@@ -11,16 +11,16 @@ export default function Footer() {
   return (
     <footer>
       <div>
-      <NowPlaying currentTrack={track} />
+        <NowPlaying currentTrack={track} />
       </div>
 
-    <div>
-    <PlaybackControls player={player} currentState={state} />
-    </div>
+      <div>
+        <PlaybackControls player={player} currentState={state} />
+      </div>
 
-    <div>
-    <OutputControls player={player} />
-    </div>
+      <div>
+        <OutputControls player={player} />
+      </div>
     </footer>
   );
 }
