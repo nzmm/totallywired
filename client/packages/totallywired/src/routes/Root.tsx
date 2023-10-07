@@ -4,7 +4,6 @@ import { whoami } from "../lib/api";
 import { set } from "../lib/reducer";
 import { useUserDispatch } from "../lib/users/hooks";
 import Loading from "../components/common/Loading";
-import AudioProvider from "../components/providers/AudioProvider";
 
 export default function Root() {
   const dispatch = useUserDispatch();
@@ -24,11 +23,7 @@ export default function Root() {
         children={(res) => {
           switch (res.status) {
             case 200: {
-              return (
-                <AudioProvider>
-                  <Outlet />
-                </AudioProvider>
-              );
+              return <Outlet />;
             }
             case 401: {
               return (
