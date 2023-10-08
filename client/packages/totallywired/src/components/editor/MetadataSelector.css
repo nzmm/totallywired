@@ -30,7 +30,7 @@
         border-top-width: 1px;
         border-bottom-width: 1px;
         padding: 3px 4px;
-        
+
         &:first-child {
           border-top-left-radius: 3px;
           border-bottom-left-radius: 3px;
@@ -48,7 +48,7 @@
         > td {
           border-style: dashed;
           border-color: var(--blue-9);
-          background-color: var(--tomato-4);  
+          background-color: var(--tomato-4);
         }
       }
     }

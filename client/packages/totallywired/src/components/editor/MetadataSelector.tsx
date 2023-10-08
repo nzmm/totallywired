@@ -46,7 +46,7 @@ export default function MetadataSelector({
                 return (
                   <Fragment key={m.position}>
                     <tr className="media">
-                      <th colSpan={3}>Set {m.position}</th>
+                      <th colSpan={3}>Media {m.position}</th>
                     </tr>
 
                     {m.tracks.map((t) => {
