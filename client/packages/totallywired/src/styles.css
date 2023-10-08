@@ -81,6 +81,12 @@ main {
   color: var(--gray-9);
 }
 
+button {
+  > svg {
+    vertical-align: middle;
+  }
+}
+
 .selector {
   background-color: transparent;
   border: 1px solid transparent;

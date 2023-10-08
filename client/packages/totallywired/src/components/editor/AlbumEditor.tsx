@@ -14,12 +14,12 @@ import "./AlbumEditor.css";
 type AlbumMetadataEditorProps = {
   releaseId: string;
   onSave: (proposal?: AlbumChangeProposal) => void;
-  onDiscard: () => void;
+  onClose: () => void;
 };
 
 function AlbumMetadataEditorModal({
   onSave,
-  onDiscard,
+  onClose,
 }: Omit<AlbumMetadataEditorProps, "releaseId">) {
   const dispatch = useEditorDisptach();
   const editor = useEditor();
@@ -64,7 +64,7 @@ function AlbumMetadataEditorModal({
       ) : null}
 
       <div className="toolbar">
-        <button onClick={onDiscard}>Discard</button>
+        <button onClick={onClose}>Close</button>
         <button onClick={() => onSave(editor.proposal)}>Save changes</button>
         <div />
       </div>
@@ -75,11 +75,11 @@ function AlbumMetadataEditorModal({
 export default function AlbumMetadataEditor({
   releaseId,
   onSave,
-  onDiscard,
+  onClose,
 }: AlbumMetadataEditorProps) {
   return (
     <EditorProvider releaseId={releaseId}>
-      <AlbumMetadataEditorModal onSave={onSave} onDiscard={onDiscard} />
+      <AlbumMetadataEditorModal onSave={onSave} onClose={onClose} />
     </EditorProvider>
   );
 }

@@ -11,5 +11,10 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+
+    > button {
+      border: 1px solid var(--gray-11);
+      background-color: var(--gray-3);
+    }
   }
 }

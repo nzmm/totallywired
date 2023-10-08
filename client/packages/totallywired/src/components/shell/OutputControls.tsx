@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
+import { SpeakerLoudIcon, SpeakerOffIcon } from "@radix-ui/react-icons";
 import type { AudioPlayer } from "../../lib/player";
+import "./OutputControls.css";
 
 type OutputControlsProps = {
   player: AudioPlayer;
@@ -27,7 +29,7 @@ export default function OutputControls({ player }: OutputControlsProps) {
           player.isMuted() ? player.unmute() : player.mute();
         }}
       >
-        vol {volume}
+        {volume !== 0 ? <SpeakerLoudIcon /> : <SpeakerOffIcon />}
       </button>
     </div>
   );

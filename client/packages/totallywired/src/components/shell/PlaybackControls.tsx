@@ -3,6 +3,13 @@ import { AudioPlayer, TrackState } from "../../lib/player";
 import Progressbar from "../common/Progressbar";
 import "./PlaybackControls.css";
 import { getRandomTracks } from "../../lib/api";
+import {
+  PauseIcon,
+  PlayIcon,
+  TrackNextIcon,
+  TrackPreviousIcon,
+  UpdateIcon,
+} from "@radix-ui/react-icons";
 
 type PlaybackControlsProps = {
   player: AudioPlayer;
@@ -42,27 +49,28 @@ export default function PlaybackControls({
     <div id="playback-controls">
       <div className="actions">
         <button className="round md" onClick={() => player.prev()}>
-          prev
+          <TrackPreviousIcon />
         </button>
+
         <button
+          id="play-pause"
           className="round lg"
           onClick={handlePlayPause}
           disabled={(currentState & TrackState.Loading) > 0}
         >
           {(currentState & TrackState.Playing) > 0 ? (
-            <>Pause</>
+            <PauseIcon />
           ) : (currentState & TrackState.Paused) > 0 ? (
-            <>Play</>
+            <PlayIcon />
           ) : (currentState & TrackState.Loading) > 0 ? (
-            <>Loading</>
+            <UpdateIcon />
           ) : (
-            <>Play</>
+            <PlayIcon />
           )}
-          <br />
-          {currentState}
         </button>
+
         <button className="round md" onClick={() => player.next()}>
-          next
+          <TrackNextIcon />
         </button>
       </div>
 

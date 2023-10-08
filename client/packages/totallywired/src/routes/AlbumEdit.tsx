@@ -12,7 +12,7 @@ export default function AlbumEditor() {
   const params = useParams();
   const navigate = useNavigate();
 
-  const onDiscard = () => navigate(-1);
+  const onClose = () => navigate(-1);
 
   const onSave = async (proposal?: AlbumChangeProposal) => {
     console.log({ proposal });
@@ -40,7 +40,7 @@ export default function AlbumEditor() {
         <LazyEditor
           releaseId={params.releaseId}
           onSave={onSave}
-          onDiscard={onDiscard}
+          onClose={onClose}
         />
       </Suspense>
     </Dialog>
