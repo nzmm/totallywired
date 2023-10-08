@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../../lib/player";
-//import { useCollectionContext } from "../../lib/tracks/hooks";
 import Progressbar from "../common/Progressbar";
 import "./PlaybackControls.css";
+import { getRandomTracks } from "../../lib/api";
 
 type PlaybackControlsProps = {
   player: AudioPlayer;
@@ -13,8 +13,6 @@ export default function PlaybackControls({
   player,
   currentState,
 }: PlaybackControlsProps) {
-  //const tracks = useCollection();
-  //const collections = useCollectionContext();
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -31,12 +29,12 @@ export default function PlaybackControls({
     return () => clearInterval(i);
   }, [currentState, player]);
 
-  const handlePlayPause = () => {
+  const handlePlayPause = async () => {
     if (player.getPlaylistCount()) {
       player.playPause();
     } else {
-      // const shuffledTracks = shuffle(tracks, 25);
-      // player.addTracks(shuffledTracks);
+      const res = await getRandomTracks();
+      player.addTracks(res.data ?? []);
     }
   };
 

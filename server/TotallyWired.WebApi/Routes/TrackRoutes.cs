@@ -75,5 +75,18 @@ public static class TrackRoutes
                 return Results.Ok(reaction);
             }
         );
+
+        group.MapGet(
+            "/random",
+            async (
+                TrackRandomListQueryHandler handler,
+                [FromQuery] int? take,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var tracks = await handler.HandleAsync(take, cancellationToken);
+                return Results.Ok(tracks);
+            }
+        );
     }
 }

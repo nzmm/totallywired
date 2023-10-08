@@ -24,6 +24,19 @@ export function getTracks(searchParams?: URLSearchParams) {
   return sendQuery<Track[]>(`${API}/tracks`, searchParams);
 }
 
+/**
+ * Returns a random selection of tracks.
+ *
+ * - Maximum take is `100`.
+ * - Minimum take is `1`.
+ */
+export function getRandomTracks(take = 25) {
+  return sendQuery<Track[]>(
+    `${API}/tracks/random`,
+    new URLSearchParams({ take: take.toString() }),
+  );
+}
+
 export function getTracksByAlbum(
   releaseId: string,
   searchParams?: URLSearchParams,

@@ -27,6 +27,7 @@ public static class ConfigureServices
         // data
         var connectionString =
             config.GetConnectionString("Postgres") ?? throw new ArgumentNullException();
+
         services.AddDbContext<TotallyWiredDbContext>(opts =>
         {
             opts.UseNpgsql(connectionString);
@@ -42,6 +43,7 @@ public static class ConfigureServices
         // tracks
         services.AddScoped<TrackQueryHandler>();
         services.AddScoped<TrackListQueryHandler>();
+        services.AddScoped<TrackRandomListQueryHandler>();
         services.AddScoped<TrackDownloadUrlQueryHandler>();
         services.AddScoped<TrackReactionCommandHandler>();
 
