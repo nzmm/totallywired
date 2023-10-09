@@ -2,6 +2,10 @@ table.metadata-table {
   width: 100%;
   overflow: hidden;
 
+  & tr > td.changed > input {
+    background-color: var(--plum-3);
+  }
+
   & tr > td > input[type="text"],
   & tr > td > input[type="number"] {
     text-overflow: ellipsis;

@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import { changeClassName } from "../../lib/editor/helpers";
 import {
   AlbumChangeProposal,
   AttributeChangeRequest,
@@ -19,6 +20,7 @@ type ReleaseRowProps = {
   cr: AttributeChangeRequest<string | number>;
   version: "oldValue" | "newValue";
   readOnly?: boolean;
+  type?: "text" | "number";
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   onApprove?: (e: ChangeEvent<HTMLInputElement>) => void;
 };
@@ -28,6 +30,7 @@ function ReleaseRow({
   label,
   version,
   readOnly,
+  type = "text",
   onChange,
   onApprove,
 }: ReleaseRowProps) {
@@ -36,9 +39,9 @@ function ReleaseRow({
       <th scope="row" className="sr-only">
         {label}
       </th>
-      <td>
+      <td className={changeClassName(cr, readOnly)}>
         <input
-          type="text"
+          type={type}
           name={cr.key}
           autoComplete="off"
           autoCorrect="off"
@@ -100,6 +103,7 @@ export default function ReleaseTable({
           onApprove={onApprove}
         />
         <ReleaseRow
+          type="number"
           label="Release year"
           cr={proposal.year}
           version={version}

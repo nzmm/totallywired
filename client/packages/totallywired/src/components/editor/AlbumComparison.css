@@ -3,13 +3,12 @@
   grid-template-columns: 1fr 1px 1fr;
   min-height: 100%;
   max-width: 1300px;
+  min-width: 400px;
   margin: 0 auto;
 
   .metadata {
     margin: 1.25rem 3rem;
     overflow-x: hidden;
-    max-width: 500px;
-    min-width: 200px;
 
     > div > h4 {
       margin: 4px 0;

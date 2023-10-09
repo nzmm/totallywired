@@ -1,11 +1,11 @@
 import { Link1Icon, LinkNone1Icon } from "@radix-ui/react-icons";
 import {
-  ChangeRequest,
   EditorInputEventHandler,
   TrackChangeRequest,
 } from "../../lib/editor/types";
 import { MBMedia } from "../../lib/musicbrainz/types";
 import { displayLength } from "../../lib/utils";
+import { changeClassName } from "../../lib/editor/helpers";
 import MetadataSelector from "./MetadataSelector";
 import ApproveChangeTool from "./ApproveChangeTool";
 import "./TrackTable.css";
@@ -18,10 +18,6 @@ type TrackTable = {
   onChange?: EditorInputEventHandler;
   onApprove?: EditorInputEventHandler;
 };
-
-function changeClassName<T extends string | number>(cr: ChangeRequest<T>, readOnly?: boolean) {
-  return !readOnly && (cr['oldValue'].toString() !== cr['newValue'].toString()) ? "changed" : "";
-}
 
 export default function TrackTable({
   tracks,
@@ -86,6 +82,7 @@ export default function TrackTable({
                 <input
                   type="text"
                   name={`name[${i}]`}
+                  title={cr.name[version]}
                   value={cr.name[version]}
                   autoComplete="off"
                   autoCorrect="off"
@@ -99,11 +96,11 @@ export default function TrackTable({
                 {readOnly ? null : (
                   <>
                     <MetadataSelector cr={cr} candidateMedia={candidateMedia}>
-                      <button className="picker-tool">
+                      <button className={`picker-tool${cr.mbid ? " matched" : ""}`}>
                         {cr.mbid ? (
-                          <Link1Icon className="matched" />
+                          <Link1Icon />
                         ) : (
-                          <LinkNone1Icon className="unmatched" />
+                          <LinkNone1Icon />
                         )}
                       </button>
                     </MetadataSelector>

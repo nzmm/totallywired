@@ -1,11 +1,6 @@
 table.track.metadata-table {
   margin-bottom: 2rem;
 
-  & tr > td.changed > input {
-    background-color: var(--plum-3);
-    border: 1px solid var(--plum-5);
-  }
-
   & tr > td.disc,
   & tr > td.num {
     width: 2rem;
@@ -29,9 +24,7 @@ table.track.metadata-table {
     background-color: transparent;
     border: 1px solid transparent;
     border-radius: 4px;
-    padding: 0 6px;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding: 1px 6px;
     margin: 0;
 
     &:hover,
