@@ -196,7 +196,7 @@ export const updateTrackValue = (
         ...attr,
         newValue: value,
       },
-      active: !!value && value !== attr.oldValue,
+      active: !!value && value !== attr.oldValue.toString(),
     });
 
     return {

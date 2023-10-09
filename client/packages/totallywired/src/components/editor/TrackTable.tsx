@@ -1,5 +1,6 @@
 import { Link1Icon, LinkNone1Icon } from "@radix-ui/react-icons";
 import {
+  ChangeRequest,
   EditorInputEventHandler,
   TrackChangeRequest,
 } from "../../lib/editor/types";
@@ -18,6 +19,10 @@ type TrackTable = {
   onApprove?: EditorInputEventHandler;
 };
 
+function changeClassName<T extends string | number>(cr: ChangeRequest<T>, readOnly?: boolean) {
+  return !readOnly && (cr['oldValue'].toString() !== cr['newValue'].toString()) ? "changed" : "";
+}
+
 export default function TrackTable({
   tracks,
   version,
@@ -32,6 +37,7 @@ export default function TrackTable({
 
       <thead>
         <tr className="sr-only">
+          <th scope="column">Media position</th>
           <th scope="column">Track number</th>
           <th scope="column" colSpan={2}>
             Track name
@@ -46,12 +52,28 @@ export default function TrackTable({
           const id = cr.id;
           return (
             <tr key={id}>
-              <td className="num">
+              <td className={`disc ${changeClassName(cr.disc, readOnly)}`}>
                 <input
-                  type="text"
+                  type="number"
+                  min={0}
+                  step={1}
+                  name={`disc[${i}]`}
+                  value={cr.disc[version]}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  data-tid={id}
+                  data-key="disc"
+                  readOnly={readOnly}
+                  onInput={onChange}
+                />
+              </td>
+              <td className={`num ${changeClassName(cr.number, readOnly)}`}>
+                <input
+                  type="number"
+                  min={0}
+                  step={1}
                   name={`number[${i}]`}
                   value={cr.number[version]}
-                  title={`${cr.disc[version]}:${cr.number[version]}`}
                   autoComplete="off"
                   autoCorrect="off"
                   data-tid={id}
@@ -60,7 +82,7 @@ export default function TrackTable({
                   onInput={onChange}
                 />
               </td>
-              <td className="name">
+              <td className={`name ${changeClassName(cr.name, readOnly)}`}>
                 <input
                   type="text"
                   name={`name[${i}]`}

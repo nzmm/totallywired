@@ -2,7 +2,8 @@ table.metadata-table {
   width: 100%;
   overflow: hidden;
 
-  & tr > td > input[type="text"] {
+  & tr > td > input[type="text"],
+  & tr > td > input[type="number"] {
     text-overflow: ellipsis;
     box-sizing: border-box;
     width: 100%;

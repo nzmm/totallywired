@@ -1,8 +1,20 @@
 table.track.metadata-table {
   margin-bottom: 2rem;
 
+  & tr > td.changed > input {
+    background-color: var(--plum-3);
+    border: 1px solid var(--plum-5);
+  }
+
+  & tr > td.disc,
   & tr > td.num {
-    width: 2.5rem;
+    width: 2rem;
+
+    > input::-webkit-outer-spin-button,
+    > input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
   }
 
   & tr > td.len {
@@ -18,7 +30,8 @@ table.track.metadata-table {
     border: 1px solid transparent;
     border-radius: 4px;
     padding: 0 6px;
-    padding-top: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     margin: 0;
 
     &:hover,
@@ -36,6 +49,7 @@ table.track.metadata-table {
       width: 12px;
       height: 12px;
       color: var(--blue-9);
+      vertical-align: middle;
     }
   }
 }
