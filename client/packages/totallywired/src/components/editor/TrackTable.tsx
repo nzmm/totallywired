@@ -96,12 +96,10 @@ export default function TrackTable({
                 {readOnly ? null : (
                   <>
                     <MetadataSelector cr={cr} candidateMedia={candidateMedia}>
-                      <button className={`picker-tool${cr.mbid ? " matched" : ""}`}>
-                        {cr.mbid ? (
-                          <Link1Icon />
-                        ) : (
-                          <LinkNone1Icon />
-                        )}
+                      <button
+                        className={`picker-tool${cr.mbid ? " matched" : ""}`}
+                      >
+                        {cr.mbid ? <Link1Icon /> : <LinkNone1Icon />}
                       </button>
                     </MetadataSelector>
                   </>

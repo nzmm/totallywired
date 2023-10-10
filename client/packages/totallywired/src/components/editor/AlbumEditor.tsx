@@ -1,9 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { Splitter } from "@totallywired/ui-components";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
 import { updateProposal } from "../../lib/editor/proposals";
-import { setProposal } from "../../lib/editor/actions";
+import { commitAllChanges, setProposal } from "../../lib/editor/actions";
 import { useEditor, useEditorDisptach } from "../../lib/editor/hooks";
+import { createReleaseUpdateCommand } from "../../lib/editor/command";
+import { setAlbumMetadata } from "../../lib/api";
+import { useToastNotifications } from "../vendor/radix-ui/context";
 import Header from "../shell/Header";
 import EditorProvider from "../providers/EditorProvider";
 import AlbumMetadataSearch from "./AlbumSearch";
@@ -13,18 +17,13 @@ import "./AlbumEditor.css";
 
 type AlbumMetadataEditorProps = {
   releaseId: string;
-  onSave: (proposal?: AlbumChangeProposal) => void;
-  onClose: () => void;
 };
 
-function AlbumMetadataEditorModal({
-  onSave,
-  onClose,
-}: Omit<AlbumMetadataEditorProps, "releaseId">) {
+function AlbumMetadataEditorModal() {
+  const navigate = useNavigate();
   const dispatch = useEditorDisptach();
-  const editor = useEditor();
-
-  const { loading, proposal, candidateMedia, artCollection } = editor;
+  const toast = useToastNotifications();
+  const { loading, proposal, candidateMedia, artCollection } = useEditor();
 
   const onSelect = async (candidate: MBReleaseSearchItem) => {
     if (!proposal || !proposal.id) {
@@ -38,6 +37,44 @@ function AlbumMetadataEditorModal({
 
     dispatch(setProposal(updated.proposal, updated.candidateMedia));
   };
+
+  const onSave = async (proposal?: AlbumChangeProposal) => {
+    if (!proposal) {
+      return;
+    }
+
+    const command = createReleaseUpdateCommand(proposal);
+    const res = await setAlbumMetadata(proposal.id, command);
+
+    if (!res.ok) {
+      toast({
+        title: "Save failed",
+        description: "No changes were saved",
+      });
+      return;
+    }
+
+    const releaseId = res.data?.releaseId;
+    const success = releaseId != null;
+
+    if (!success) {
+      return;
+    }
+
+    toast({
+      title: "Saved",
+      description: `${proposal.name.newValue} saved successfully`,
+    });
+
+    dispatch(commitAllChanges());
+
+    // releaseId's may be updated in some cases, so we will need to update the url
+    if (proposal.id !== releaseId) {
+      navigate(`/lib/albums/${releaseId}/editor`, { replace: true });
+    }
+  };
+
+  const onClose = () => navigate(-1);
 
   return (
     <>
@@ -65,7 +102,7 @@ function AlbumMetadataEditorModal({
 
       <div className="toolbar">
         <button onClick={onClose}>Close</button>
-        <button onClick={() => onSave(editor.proposal)}>Save changes</button>
+        <button onClick={() => onSave(proposal)}>Save changes</button>
         <div />
       </div>
     </>
@@ -74,12 +111,10 @@ function AlbumMetadataEditorModal({
 
 export default function AlbumMetadataEditor({
   releaseId,
-  onSave,
-  onClose,
 }: AlbumMetadataEditorProps) {
   return (
     <EditorProvider releaseId={releaseId}>
-      <AlbumMetadataEditorModal onSave={onSave} onClose={onClose} />
+      <AlbumMetadataEditorModal />
     </EditorProvider>
   );
 }

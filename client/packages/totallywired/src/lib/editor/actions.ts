@@ -1,5 +1,6 @@
 import { update } from "../reducer";
 import { MBMedia } from "../musicbrainz/types";
+import { hasChanged } from "./helpers";
 import {
   AlbumChangeProposal,
   AttributeChangeRequest,
@@ -190,13 +191,17 @@ export const updateTrackValue = (
       return state;
     }
 
+    const active =
+      (hasChanged(cr.disc) || hasChanged(cr.number) || hasChanged(cr.name)) &&
+      !!value;
+
     tracks.splice(i, 1, {
       ...cr,
       [k]: {
         ...attr,
         newValue: value,
       },
-      active: !!value && value !== attr.oldValue.toString(),
+      active,
     });
 
     return {
@@ -322,6 +327,59 @@ export const updateCoverArt = (artSrc: string) => {
           newValue: artSrc,
           active: artSrc !== coverArt.oldValue,
         },
+      },
+    };
+  });
+};
+
+const commitChange = <T extends ChangeRequest<unknown>>(cr: T): T => {
+  return { ...cr, oldValue: cr.newValue };
+};
+
+const commitAttrChange = <T extends string | number>(
+  cr: AttributeChangeRequest<T>,
+): AttributeChangeRequest<T> => {
+  return cr.active && cr.approved ? { ...commitChange(cr), active: false } : cr;
+};
+
+const commitTrackChange = (cr: TrackChangeRequest): TrackChangeRequest => {
+  if (cr.active && cr.approved) {
+    return {
+      ...cr,
+      disc: commitChange(cr.disc),
+      number: commitChange(cr.number),
+      name: commitChange(cr.name),
+      active: false,
+    };
+  }
+  return cr;
+};
+
+/**
+ * Commits (synchronises) all accepted newValues to be oldValues
+ */
+export const commitAllChanges = () => {
+  return update<EditorContextState>((state) => {
+    const proposal = state.proposal;
+
+    if (!proposal) {
+      return state;
+    }
+
+    return {
+      ...state,
+      proposal: {
+        ...proposal,
+        name: commitAttrChange(proposal.name),
+        artistName: commitAttrChange(proposal.artistName),
+        year: commitAttrChange(proposal.year),
+        recordLabel: commitAttrChange(proposal.recordLabel),
+        country: commitAttrChange(proposal.country),
+        type: commitAttrChange(proposal.type),
+        coverArt: commitAttrChange(proposal.coverArt),
+        tracks: proposal.tracks.map((t) => {
+          return t.active && t.approved ? commitTrackChange(t) : t;
+        }),
       },
     };
   });

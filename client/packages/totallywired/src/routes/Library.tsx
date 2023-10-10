@@ -6,29 +6,36 @@ import Sidebar from "../components/shell/Sidebar";
 import PlaylistsProvider from "../components/providers/PlaylistProvider";
 import CollectionProvider from "../components/providers/CollectionProvider";
 import SearchInput from "../components/shell/SearchInput";
+import {
+  ToastProvider,
+  ToastViewport,
+} from "../components/vendor/radix-ui/Toast";
 
 export default function Library() {
   return (
-    <CollectionProvider>
-      <PlaylistsProvider>
-        <Header>
-          <SearchInput />
-        </Header>
+    <ToastProvider>
+      <CollectionProvider>
+        <PlaylistsProvider>
+          <Header>
+            <SearchInput />
+          </Header>
 
-        <Splitter
-          orientation="horizontal"
-          initialPosition="200px"
-          minSize="200px"
-        >
-          <Sidebar />
+          <Splitter
+            orientation="horizontal"
+            initialPosition="200px"
+            minSize="200px"
+          >
+            <Sidebar />
 
-          <main>
-            <Outlet />
-          </main>
-        </Splitter>
+            <main>
+              <Outlet />
+            </main>
+          </Splitter>
 
-        <Footer />
-      </PlaylistsProvider>
-    </CollectionProvider>
+          <Footer />
+        </PlaylistsProvider>
+      </CollectionProvider>
+      <ToastViewport />
+    </ToastProvider>
   );
 }
