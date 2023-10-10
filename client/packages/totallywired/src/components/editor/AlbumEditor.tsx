@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Splitter } from "@totallywired/ui-components";
 import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
-import { AlbumChangeProposal } from "../../lib/editor/types";
 import { updateProposal } from "../../lib/editor/proposals";
 import { commitAllChanges, setProposal } from "../../lib/editor/actions";
 import { useEditor, useEditorDisptach } from "../../lib/editor/hooks";
@@ -38,32 +37,29 @@ function AlbumMetadataEditorModal() {
     dispatch(setProposal(updated.proposal, updated.candidateMedia));
   };
 
-  const onSave = async (proposal?: AlbumChangeProposal) => {
+  const onSave = async () => {
     if (!proposal) {
       return;
     }
 
     const command = createReleaseUpdateCommand(proposal);
     const res = await setAlbumMetadata(proposal.id, command);
-
-    if (!res.ok) {
-      toast({
-        title: "Save failed",
-        description: "No changes were saved",
-      });
-      return;
-    }
-
     const releaseId = res.data?.releaseId;
     const success = releaseId != null;
 
-    if (!success) {
+    if (!res.ok || !success) {
+      toast({
+        title: "Save failed",
+        description: "No changes were saved",
+        state: "danger",
+      });
       return;
     }
 
     toast({
       title: "Saved",
       description: `${proposal.name.newValue} saved successfully`,
+      state: "success",
     });
 
     dispatch(commitAllChanges());
@@ -102,7 +98,7 @@ function AlbumMetadataEditorModal() {
 
       <div className="toolbar">
         <button onClick={onClose}>Close</button>
-        <button onClick={() => onSave(proposal)}>Save changes</button>
+        <button onClick={onSave}>Save changes</button>
         <div />
       </div>
     </>

@@ -48,7 +48,12 @@ export const ToastProvider = ({
       <ToastContext.Provider value={notify}>{children}</ToastContext.Provider>
 
       {notifications.map((t) => (
-        <Toast key={t.ts} title={t.title} description={t.description} />
+        <Toast
+          key={t.ts}
+          title={t.title}
+          description={t.description}
+          state={t.state}
+        />
       ))}
     </RToast.Provider>
   );
