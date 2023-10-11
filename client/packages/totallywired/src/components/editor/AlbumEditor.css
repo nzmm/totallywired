@@ -35,13 +35,28 @@
   }
 
   .toolbar {
+    box-sizing: border-box;
     height: 60px;
     width: 100%;
-    gap: 8px;
+    padding: 0 8px;
     display: flex;
     flex-direction: row;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     border-top: 1px solid var(--gray-9);
+
+    > .kudos {
+      color: var(--gray-11);
+
+      & img {
+        vertical-align: middle;
+      }
+    }
+
+    > .actions {
+      display: flex;
+      flex-direction: row;
+      gap: 8px;
+    }
   }
 }

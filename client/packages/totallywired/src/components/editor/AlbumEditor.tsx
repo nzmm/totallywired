@@ -97,9 +97,17 @@ function AlbumMetadataEditorModal() {
       ) : null}
 
       <div className="toolbar">
-        <button onClick={onClose}>Close</button>
-        <button onClick={onSave}>Save changes</button>
-        <div />
+        <p className="kudos">
+          Metadata provided by&nbsp;
+          <a href="https://musicbrainz.org/">
+            <img src="/musicbrainz.svg" alt="Musicbrainz logo" height="16" />
+          </a>
+        </p>
+
+        <div className="actions">
+          <button onClick={onClose}>Close</button>
+          <button onClick={onSave}>Save changes</button>
+        </div>
       </div>
     </>
   );
