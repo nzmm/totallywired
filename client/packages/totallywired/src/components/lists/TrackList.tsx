@@ -43,7 +43,7 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
     <VirtualList
       className="tracklist"
       items={tracks.map((t) => ({ ...t, height: 42 }))}
-      renderer={TrackItem}
+      itemRenderer={TrackItem}
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
     />

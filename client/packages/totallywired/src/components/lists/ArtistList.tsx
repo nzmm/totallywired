@@ -21,7 +21,7 @@ export default function ArtistList({ artists }: { artists: Artist[] }) {
     <VirtualList
       className="tracklist"
       items={artists.map((a) => ({ ...a, key: a.id, height: 42 }))}
-      renderer={ArtistItem}
+      itemRenderer={ArtistItem}
     />
   ) : (
     <section>

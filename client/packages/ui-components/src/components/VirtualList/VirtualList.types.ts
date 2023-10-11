@@ -32,7 +32,7 @@ export type VirtualListProps<T extends IVirtualListItem> = {
   /**
    * A component to render each list item.
    */
-  renderer: ListItemRenderer<T>;
+  itemRenderer: ListItemRenderer<T>;
 
   /**
    * The initial y-offset

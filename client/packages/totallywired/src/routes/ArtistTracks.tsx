@@ -5,7 +5,7 @@ import MusicCollectionList from "../components/lists/MusicCollectionList";
 
 function ArtistTracksView() {
   const collections = useAsyncCollections();
-  return <MusicCollectionList collections={collections} />;
+  return <MusicCollectionList scope="artist" collections={collections} />;
 }
 
 export default function ArtistTracks() {

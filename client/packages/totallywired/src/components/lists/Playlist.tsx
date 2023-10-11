@@ -38,7 +38,7 @@ export default function Playlist({ player, items }: PlaylistProps) {
     <VirtualList
       className="tracklist playlist"
       items={items.map((it) => ({ ...it, height: 42, key: it.id }))}
-      renderer={PlaylistItem}
+      itemRenderer={PlaylistItem}
       onDragStart={handlDragStart}
       onDragOver={handleDragOver}
       onDrop={NOOP}

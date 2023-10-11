@@ -20,7 +20,7 @@ import "./VirtualList.scss";
  */
 const VirtualList = <T extends IVirtualListItem>({
   items,
-  renderer: ItemRenderer,
+  itemRenderer: ItemRenderer,
   xOverflow = "auto",
   yOverflow = "auto",
   className,
