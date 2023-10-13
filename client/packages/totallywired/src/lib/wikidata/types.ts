@@ -32,7 +32,8 @@ export type WikipediaPageQuery = {
 
 export type WikipediaPageExtract = {
   pageid: string;
-  url: string;
   title: string;
   extract: string;
+  url: string;
+  wikidataUrl: string;
 };

@@ -40,6 +40,11 @@
               padding: 2px 0;
               padding-top: 4px;
               border-bottom: 1px solid var(--gray-4);
+              color: var(--gray-12);
+
+              &.sources > a {
+                color: var(--gray-12);
+              }
             }
           }
         }

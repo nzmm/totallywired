@@ -77,5 +77,6 @@ export const getPageExract = async (
     url: page.url,
     title: page.title,
     extract: wikipedia.query.pages[pageid].extract,
+    wikidataUrl: `https://www.wikidata.org/wiki/${wikidataId}`,
   };
 };

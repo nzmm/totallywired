@@ -23,14 +23,16 @@ const INIT_DATA: ReleaseGroupExtract = {
   loaded: undefined,
 };
 
-const getWikidataId = (releaseGroup: MBReleaseGroup | undefined) => {
+const getWikidataRel = (releaseGroup: MBReleaseGroup | undefined) => {
   const wikidata = releaseGroup?.relations.find(
     (rel) => rel.type === "wikidata",
   );
   if (!wikidata) {
-    return "";
+    return { id: "", url: "" };
   }
-  return wikidata.url.resource.split("/").slice(-1)[0] ?? "";
+  const url = wikidata.url.resource;
+  const id = url.split("/").slice(-1)[0] ?? "";
+  return { id, url };
 };
 
 const asyncLoader = async (
@@ -43,7 +45,7 @@ const asyncLoader = async (
     return;
   }
 
-  const wikidataId = getWikidataId(releaseGroup);
+  const { id: wikidataId } = getWikidataRel(releaseGroup);
   if (!wikidataId) {
     return;
   }
@@ -54,7 +56,7 @@ const asyncLoader = async (
   }
 
   setData({
-    loaded: { releaseGroup, pageExtract },
+    loaded: { releaseGroup, pageExtract: pageExtract },
   });
 };
 
@@ -92,12 +94,30 @@ function AboutReleaseGroup({ loaded }: ReleaseGroupExtract) {
           <dd>{releaseGroup["primary-type"]}</dd>
 
           <dt>Genres</dt>
-          <dd className="genres">
+          <dd>
             {releaseGroup.genres
               .sort((a, b) => b.count - a.count)
               .slice(0, 10)
               .map((g) => g.name)
               .join("; ")}
+          </dd>
+
+          <dt>Sources</dt>
+          <dd className="sources">
+            <a
+              href={`https://musicbrainz.org/release-group/${releaseGroup.id}`}
+              target="_blank"
+            >
+              MusicBrainz
+            </a>{" "}
+            (
+            <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a>
+            ); <a className="cc" href={pageExtract.wikidataUrl} target="_blank">Wikidata</a>;{" "}
+            <a href={pageExtract.url} target="_blank">Wikipedia</a> (
+            <a className="cc" href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank">
+              CC BY-SA
+            </a>
+            )
           </dd>
         </dl>
 
