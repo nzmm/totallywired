@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { getYear } from "../../lib/utils";
 import { MBReleaseGroup } from "../../lib/musicbrainz/types";
 import { WikipediaPageExtract } from "../../lib/wikidata/types";
 import { AlbumCollection } from "../../lib/types";
@@ -81,17 +82,30 @@ function AboutReleaseGroup({ loaded }: ReleaseGroupExtract) {
     <section className="about-rg">
       <h2>About</h2>
       <div>
-        <div>Type: {releaseGroup["primary-type"]}</div>
-        <div>First released: {releaseGroup["first-release-date"]}</div>
+        {pageExtract ? <p>{pageExtract.extract}</p> : null}
 
-        {pageExtract ? (
-          <>
-            <p className="wiki-extract">{pageExtract.extract}</p>
-            <a href={pageExtract.url} target="_blank">
-              Read more at Wikipedia&hellip;
-            </a>
-          </>
-        ) : null}
+        <dl>
+          <dt>First Released</dt>
+          <dd>{getYear(releaseGroup["first-release-date"])}</dd>
+
+          <dt>Type</dt>
+          <dd>{releaseGroup["primary-type"]}</dd>
+
+          <dt>Genres</dt>
+          <dd className="genres">
+            {releaseGroup.genres
+              .sort((a, b) => b.count - a.count)
+              .slice(0, 10)
+              .map((g) => g.name)
+              .join("; ")}
+          </dd>
+        </dl>
+
+        <p>
+          <a href={pageExtract.url} target="_blank">
+            Read more at Wikipedia&hellip;
+          </a>
+        </p>
       </div>
     </section>
   );

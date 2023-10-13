@@ -59,7 +59,13 @@ export const getMBRelease = (
   );
 };
 
-export const getMBReleaseGroup = (releaseId: string, inc = "url-rels") => {
+/**
+ * Performs a MusicBrainz `release-group` lookup by release id.
+ */
+export const getMBReleaseGroup = (
+  releaseId: string,
+  inc = "url-rels+genres",
+) => {
   if (!releaseId) {
     throw new Error("releaseId is required");
   }

@@ -20,6 +20,28 @@
         > div {
           padding: 0 8px;
           line-height: 1.5;
+
+          & dl {
+            display: flex;
+            flex-flow: row wrap;
+
+            > dt {
+              flex-basis: 20%;
+              padding: 2px 0;
+              padding-top: 6px;
+              color: var(--gray-11);
+              border-bottom: 1px solid var(--gray-4);
+            }
+
+            > dd {
+              flex-basis: 70%;
+              flex-grow: 1;
+              margin: 0;
+              padding: 2px 0;
+              padding-top: 4px;
+              border-bottom: 1px solid var(--gray-4);
+            }
+          }
         }
       }
     }

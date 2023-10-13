@@ -10,10 +10,10 @@ const WIKIDATA_API = "https://www.wikidata.org/w/api.php";
 const WIKIPEDIA_API = (lang: string) =>
   `https://${lang}.wikipedia.org/w/api.php`;
 
-export const getWikiDataSiteLinks = (
-  wikidataId: string,
-  sitefilter = "enwiki",
-) => {
+/**
+ * Retrieves the wikidata sitelinks entities
+ */
+const getWikiDataSiteLinks = (wikidataId: string, sitefilter = "enwiki") => {
   return sendQuery<WikiDataSiteLinkEntities>(
     WIKIDATA_API,
     new URLSearchParams({
@@ -28,7 +28,7 @@ export const getWikiDataSiteLinks = (
 };
 
 /**
- *
+ * Retrieves the extract of the wikipedia page, specified by `title`
  */
 export const getWikiPageExtract = (title: string, lang = "en") => {
   return sendQuery<WikipediaPageQuery>(
@@ -46,6 +46,9 @@ export const getWikiPageExtract = (title: string, lang = "en") => {
   );
 };
 
+/**
+ * For the given `wikidataId`, it will retrieve the wikipedia page extract information (if any exists)
+ */
 export const getPageExract = async (
   wikidataId: string,
   lang = "en",

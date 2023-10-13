@@ -96,6 +96,12 @@ export type MBReleaseGroup = {
       resource: string;
     };
   }[];
+  genres: {
+    id: string;
+    name: string;
+    count: number;
+    disambiguation: string;
+  }[];
 };
 
 export type MBReleaseGroupSearchCollection = {
