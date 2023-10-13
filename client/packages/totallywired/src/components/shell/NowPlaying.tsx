@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Track, Artist } from "../../lib/types";
 import { ReleaseArt } from "../common/Thumbnail";
-import { useAlbum } from "../../lib/lists/hooks";
+import { useAlbum } from "../../lib/api/hooks";
 import { separatedNodes } from "../../components/helpers";
 import "./NowPlaying.css";
 

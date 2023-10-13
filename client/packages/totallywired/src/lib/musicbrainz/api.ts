@@ -1,9 +1,10 @@
 import { sendQuery } from "../requests";
 import { DEFAULT_COVERART_URL } from "./consts";
 import {
-  MBReleaseSearchCollection,
-  MBReleaseResponse,
+  MBRelease,
   CAImageSize,
+  MBReleaseGroupSearchCollection,
+  MBReleaseSearchCollection,
 } from "./types";
 
 function getMbz<T>(request: string, params: URLSearchParams) {
@@ -49,9 +50,23 @@ export const getMBRelease = (
   if (!releaseId) {
     throw new Error("releaseId is required");
   }
-  return getMbz<MBReleaseResponse>(
+  return getMbz<MBRelease>(
     `release/${releaseId}`,
     new URLSearchParams({
+      inc,
+      fmt: "json",
+    }),
+  );
+};
+
+export const getMBReleaseGroup = (releaseId: string, inc = "url-rels") => {
+  if (!releaseId) {
+    throw new Error("releaseId is required");
+  }
+  return getMbz<MBReleaseGroupSearchCollection>(
+    `release-group`,
+    new URLSearchParams({
+      release: releaseId,
       inc,
       fmt: "json",
     }),

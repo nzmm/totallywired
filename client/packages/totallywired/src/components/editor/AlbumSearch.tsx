@@ -5,7 +5,7 @@ import {
   useReleaseSearch,
 } from "../../lib/editor/hooks";
 import { AlbumSearchResult } from "./SearchResult";
-import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
+import { MBReleaseSearchResult } from "../../lib/musicbrainz/types";
 import { AlbumChangeProposal } from "../../lib/editor/types";
 import Loading from "../common/Loading";
 import "./AlbumSearch.css";
@@ -14,7 +14,7 @@ import { updateArtCollection } from "../../lib/editor/actions";
 type AlbumMetadataSearchProps = {
   proposal: AlbumChangeProposal;
   disabled: boolean;
-  onSelect: (result: MBReleaseSearchItem) => void;
+  onSelect: (result: MBReleaseSearchResult) => void;
 };
 
 export default function AlbumMetadataSearch({

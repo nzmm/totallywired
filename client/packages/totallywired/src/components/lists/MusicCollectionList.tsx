@@ -3,7 +3,6 @@ import { AlbumCollection } from "../../lib/types";
 import MusicCollectionListItem, {
   MusicCollectionListScopes,
 } from "./MusicCollectionListItem";
-import "./MuiscCollectionList.css";
 
 type MusicCollectionListProps = {
   collections: AlbumCollection[];

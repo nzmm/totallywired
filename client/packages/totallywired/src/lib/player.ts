@@ -1,5 +1,5 @@
 import { Track } from "../lib/types";
-import { getTrackUrl } from "./api";
+import { getTrackUrl } from "./api/v1";
 import { PlaylistManager, PlaylistItem } from "./playlist";
 import { debounce } from "./utils";
 

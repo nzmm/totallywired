@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { getAlbum, getTracksByAlbum } from "../../lib/api";
+import { getAlbum, getTracksByAlbum } from "../../lib/api/v1";
 import { setLoading, setProposal } from "../../lib/editor/actions";
 import {
   INIT_EDITOR,

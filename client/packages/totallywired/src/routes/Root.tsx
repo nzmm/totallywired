@@ -1,6 +1,6 @@
 import { Suspense, useMemo } from "react";
 import { Await, Outlet } from "react-router-dom";
-import { whoami } from "../lib/api";
+import { whoami } from "../lib/api/v1";
 import { set } from "../lib/reducer";
 import { useUserDispatch } from "../lib/users/hooks";
 import Loading from "../components/common/Loading";

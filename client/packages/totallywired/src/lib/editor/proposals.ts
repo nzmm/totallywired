@@ -1,4 +1,4 @@
-import { MBMedia, MBReleaseSearchItem } from "../musicbrainz/types";
+import { MBMedia, MBReleaseSearchResult } from "../musicbrainz/types";
 import { AlbumDetail, Track } from "../types";
 import {
   AlbumChangeProposal,
@@ -102,7 +102,7 @@ const getFlattenedCandidateTracks = (media: MBMedia[]): MatchCandidate[] => {
 export const updateProposal = async (
   artCollection: Record<string, string>,
   proposal: AlbumChangeProposal,
-  candidate: MBReleaseSearchItem,
+  candidate: MBReleaseSearchResult,
 ) => {
   const { id, artistId } = proposal;
   const res = await getMBRelease(candidate.id);

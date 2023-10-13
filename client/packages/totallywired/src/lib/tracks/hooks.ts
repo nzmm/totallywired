@@ -3,7 +3,7 @@ import { useAsyncValue } from "react-router-dom";
 import { update } from "../reducer";
 import { Res } from "../requests";
 import { AlbumCollection, ReactionType, Track } from "../types";
-import { getTracksByAlbum, setTrackReaction } from "../api";
+import { getTracksByAlbum, setTrackReaction } from "../api/v1";
 import { updateLikedTrackCount, updateTrackReaction } from "./actions";
 import { CollectionContext, CollectionDispatchContext } from "./context";
 import { usePlaylistDispatch } from "../player/hooks";

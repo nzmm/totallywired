@@ -76,6 +76,7 @@ public class ReleaseCollectionsQueryHandler
                     {
                         Id = r.Id,
                         ArtistId = r.ArtistId,
+                        Mbid = r.MusicBrainzId,
                         Year = r.Year,
                         Name = r.Name,
                         ArtistName = r.Artist.Name,

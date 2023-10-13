@@ -1,10 +1,10 @@
 import { useState, useCallback, useContext, useEffect, useRef } from "react";
-import { MBReleaseSearchItem } from "../musicbrainz/types";
+import { MBReleaseSearchResult } from "../musicbrainz/types";
 import { getCAFrontArtUrl, searchReleases } from "../musicbrainz/api";
 import { EditorContext, EditorDispatchContext } from "./context";
 import { updateArtCollection } from "./actions";
 
-export type SearchResult = MBReleaseSearchItem;
+export type SearchResult = MBReleaseSearchResult;
 
 export const useEditor = () => {
   return useContext(EditorContext);
@@ -48,7 +48,7 @@ export const useReleaseSearch = (): [
   ];
 };
 
-export const useArtCollection = (releases: MBReleaseSearchItem[]) => {
+export const useArtCollection = (releases: MBReleaseSearchResult[]) => {
   const [art, setArt] = useState<Record<string, string>>({});
   const curatedArt = useRef<Record<string, string>>({});
   const dispatch = useEditorDisptach();

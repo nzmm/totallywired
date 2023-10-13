@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Splitter } from "@totallywired/ui-components";
-import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
+import { MBReleaseSearchResult } from "../../lib/musicbrainz/types";
 import { updateProposal } from "../../lib/editor/proposals";
 import { commitAllChanges, setProposal } from "../../lib/editor/actions";
 import { useEditor, useEditorDisptach } from "../../lib/editor/hooks";
 import { createReleaseUpdateCommand } from "../../lib/editor/command";
-import { setAlbumMetadata } from "../../lib/api";
+import { setAlbumMetadata } from "../../lib/api/v1";
 import { useToastNotifications } from "../vendor/radix-ui/context";
 import Header from "../shell/Header";
 import EditorProvider from "../providers/EditorProvider";
@@ -24,7 +24,7 @@ function AlbumMetadataEditorModal() {
   const toast = useToastNotifications();
   const { loading, proposal, candidateMedia, artCollection } = useEditor();
 
-  const onSelect = async (candidate: MBReleaseSearchItem) => {
+  const onSelect = async (candidate: MBReleaseSearchResult) => {
     if (!proposal || !proposal.id) {
       return;
     }

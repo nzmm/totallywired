@@ -1,5 +1,5 @@
-import { ReleaseUpdateCommand } from "./editor/types";
-import { sendCommand, sendQuery } from "./requests";
+import { ReleaseUpdateCommand } from "../editor/types";
+import { sendCommand, sendQuery } from "../requests";
 import {
   Album,
   AlbumCollection,
@@ -10,7 +10,7 @@ import {
   ReactionType,
   Track,
   User,
-} from "./types";
+} from "../types";
 
 const API = "/api/v1";
 

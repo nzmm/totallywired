@@ -1,7 +1,7 @@
 import { LoaderFunctionArgs } from "react-router-dom";
 import { requestSearchParams } from "./requests";
 import { ReactionType } from "./types";
-import { getAlbums, getArtists, getCollections, getTracks } from "./api";
+import { getAlbums, getArtists, getCollections, getTracks } from "./api/v1";
 
 export function tracksLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);

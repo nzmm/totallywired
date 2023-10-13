@@ -1,7 +1,7 @@
 import { TabList } from "@totallywired/ui-components";
 import { Suspense, useMemo } from "react";
 import { Await, useAsyncValue } from "react-router-dom";
-import { getProviders, syncProvider } from "../lib/api";
+import { getProviders, syncProvider } from "../lib/api/v1";
 import { ProviderCollection } from "../lib/types";
 import Loading from "../components/common/Loading";
 

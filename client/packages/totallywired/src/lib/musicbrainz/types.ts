@@ -6,7 +6,7 @@
 /**
  * MusicBrainz release search item
  */
-export type MBReleaseSearchItem = {
+export type MBReleaseSearchResult = {
   id: string;
   score: number;
   status: string;
@@ -48,7 +48,7 @@ export type MBReleaseSearchCollection = {
   created: string;
   count: number;
   offset: number;
-  releases: MBReleaseSearchItem[];
+  releases: MBReleaseSearchResult[];
 };
 
 /**
@@ -78,9 +78,36 @@ export type MBMedia = {
 };
 
 /**
+ * MusicBrainz release group
+ */
+export type MBReleaseGroup = {
+  id: string;
+  title: string;
+  ["primary-type"]: string;
+  ["first-release-date"]: string;
+  ["primary-type-id"]: string;
+  disambiguation: string;
+  relations: {
+    ended: boolean;
+    type: string;
+    direction: string;
+    url: {
+      id: string;
+      resource: string;
+    };
+  }[];
+};
+
+export type MBReleaseGroupSearchCollection = {
+  ["release-group-count"]: number;
+  ["release-group-offset"]: number;
+  ["release-groups"]: MBReleaseGroup[];
+};
+
+/**
  * MusicBrainz release details
  */
-export type MBReleaseResponse = {
+export type MBRelease = {
   id: string;
   status: string;
   title: string;

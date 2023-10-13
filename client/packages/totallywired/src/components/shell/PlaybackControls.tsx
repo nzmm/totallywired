@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AudioPlayer, TrackState } from "../../lib/player";
 import Progressbar from "../common/Progressbar";
 import "./PlaybackControls.css";
-import { getRandomTracks } from "../../lib/api";
+import { getRandomTracks } from "../../lib/api/v1";
 import {
   PauseIcon,
   PlayIcon,

@@ -1,5 +1,5 @@
 import { ChevronRightIcon } from "@radix-ui/react-icons";
-import { MBReleaseSearchItem } from "../../lib/musicbrainz/types";
+import { MBReleaseSearchResult } from "../../lib/musicbrainz/types";
 import { SearchResult } from "../../lib/editor/hooks";
 import { Thumbnail } from "../common/Thumbnail";
 import "./SearchResult.css";
@@ -7,10 +7,10 @@ import "./SearchResult.css";
 export type AlbumSearchResultProps = SearchResult & {
   coverArt?: string;
   active?: boolean;
-  onSelect: (result: MBReleaseSearchItem) => void;
+  onSelect: (result: MBReleaseSearchResult) => void;
 };
 
-function AdditionalDetails(result: MBReleaseSearchItem) {
+function AdditionalDetails(result: MBReleaseSearchResult) {
   return [result.country, `${result["track-count"]} tracks`, result.date]
     .filter((s) => !!s)
     .join(" · ");

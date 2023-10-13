@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { getPlaylists } from "../../lib/api";
+import { getPlaylists } from "../../lib/api/v1";
 import {
   INIT_PLAYLISTS,
   PlaylistsDispatchContext,
