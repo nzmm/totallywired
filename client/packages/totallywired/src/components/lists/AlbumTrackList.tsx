@@ -111,10 +111,26 @@ function AboutReleaseGroup({ loaded }: ReleaseGroupExtract) {
               MusicBrainz
             </a>{" "}
             (
-            <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank">CC0</a>
-            ); <a className="cc" href={pageExtract.wikidataUrl} target="_blank">Wikidata</a>;{" "}
-            <a href={pageExtract.url} target="_blank">Wikipedia</a> (
-            <a className="cc" href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank">
+            <a
+              href="https://creativecommons.org/publicdomain/zero/1.0/"
+              target="_blank"
+            >
+              CC0
+            </a>
+            );{" "}
+            <a className="cc" href={pageExtract.wikidataUrl} target="_blank">
+              Wikidata
+            </a>
+            ;{" "}
+            <a href={pageExtract.url} target="_blank">
+              Wikipedia
+            </a>{" "}
+            (
+            <a
+              className="cc"
+              href="https://creativecommons.org/licenses/by-sa/3.0/"
+              target="_blank"
+            >
               CC BY-SA
             </a>
             )
