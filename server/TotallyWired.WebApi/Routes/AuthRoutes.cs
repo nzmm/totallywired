@@ -11,7 +11,14 @@ public static class AuthRoutes
     {
         var group = app.MapGroup("/accounts");
 
-        group.MapGet("/signout", context => context.SignOutAsync());
+        group.MapGet(
+            "/signout",
+            async (HttpContext context) =>
+            {
+                await context.SignOutAsync();
+                return Results.Redirect("/");
+            }
+        );
 
         group.MapGet(
             "/login/{provider}",
