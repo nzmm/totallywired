@@ -1,3 +1,7 @@
+div[data-radix-popper-content-wrapper] {
+  z-index: 10 !important;
+}
+
 .PopoverContent {
   border-radius: 4px;
   padding: 20px;

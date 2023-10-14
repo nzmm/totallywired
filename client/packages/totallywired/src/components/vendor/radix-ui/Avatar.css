@@ -8,7 +8,8 @@
   width: 42px;
   height: 42px;
   border-radius: 100%;
-  background-color: var(--black-a3);
+  background: linear-gradient(45deg,red,blue);
+  padding: 3px;
 }
 
 .AvatarImage {
@@ -16,6 +17,7 @@
   height: 100%;
   object-fit: cover;
   border-radius: inherit;
+  border: 2px solid white;
 }
 
 .AvatarFallback {
@@ -25,7 +27,7 @@
   align-items: center;
   justify-content: center;
   color: white;
-  background-color: var(--violet-11);
+  background:linear-gradient(45deg,red,blue);
   font-size: 15px;
   line-height: 1;
   font-weight: 500;

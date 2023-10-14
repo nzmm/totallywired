@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Await, useAsyncValue, useLoaderData } from "react-router-dom";
 import { Res } from "../lib/requests";
 import { Album } from "../lib/types";
-import AlbumList from "../components/lists/AlbumList";
+import AlbumList from "../components/lib/AlbumList";
 
 function AlbumsView() {
   const { data: albums = [] } = useAsyncValue() as Res<Album[]>;

@@ -2,7 +2,7 @@ aside {
   > nav {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 12px;
 
     > menu {
       display: flex;
@@ -11,7 +11,7 @@ aside {
       list-style-type: none;
       padding: 0;
       margin: 0;
-      gap: 4px;
+      gap: 2px;
 
       > li {
         > a {
@@ -39,11 +39,9 @@ aside {
       }
     }
 
-    > .spacer {
-      height: 1px;
+    > .separator {
       width: calc(100% - 16px);
-      margin: 8px auto;
-      background-color: var(--gray-6);
+      margin: 0 auto;
     }
   }
 }

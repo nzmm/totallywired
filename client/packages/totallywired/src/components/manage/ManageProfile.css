@@ -1,0 +1,9 @@
+#my-profile {
+  margin: 30px;
+
+  & .AvatarRoot {
+    width: 75px;
+    height: 75px;
+    padding: 5px;
+  }
+}

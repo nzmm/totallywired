@@ -6,8 +6,8 @@ import {
   PopoverTrigger,
 } from "../vendor/radix-ui/Popover";
 import { Avatar } from "../vendor/radix-ui/Avatar";
-import "./MeMenu.css";
 import Separator from "../common/Separator";
+import "./MeMenu.css";
 
 export default function MeMenu({ user }: { user: User }) {
   return user ? (
