@@ -95,7 +95,7 @@ function AboutReleaseGroup({ loaded }: ReleaseGroupExtract) {
           <dt>Type</dt>
           <dd>
             {primaryType}
-            {secondaryTypes ? ` + ${secondaryTypes.join(" + ")}` : ""}
+            {secondaryTypes.length ? ` + ${secondaryTypes.join(" + ")}` : ""}
           </dd>
 
           <dt>Genres</dt>
