@@ -48,7 +48,7 @@ const AppRouter = createBrowserRouter([
             path: "providers",
             element: <Providers />,
           },
-        ]
+        ],
       },
       {
         path: "lib/",

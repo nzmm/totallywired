@@ -98,13 +98,13 @@ export default function ContentProviders() {
   }, []);
 
   return (
-      <section className="manage-providers">
-        <h2 id="providers-tablist-header">Content Providers</h2>
-        <Suspense fallback={<Loading />}>
-          <Await resolve={promise}>
-            <ProviderList />
-          </Await>
-        </Suspense>
-      </section>
+    <section className="manage-providers">
+      <h2 id="providers-tablist-header">Content Providers</h2>
+      <Suspense fallback={<Loading />}>
+        <Await resolve={promise}>
+          <ProviderList />
+        </Await>
+      </Suspense>
+    </section>
   );
 }
