@@ -84,8 +84,10 @@ export type MBReleaseGroup = {
   id: string;
   title: string;
   ["primary-type"]: string;
-  ["first-release-date"]: string;
   ["primary-type-id"]: string;
+  ["secondary-types"]: string[];
+  ["secondary-type-ids"]: string[];
+  ["first-release-date"]: string;
   disambiguation: string;
   relations: {
     ended: boolean;

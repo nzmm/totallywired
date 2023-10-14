@@ -80,6 +80,8 @@ function AboutReleaseGroup({ loaded }: ReleaseGroupExtract) {
   }
 
   const { releaseGroup, pageExtract } = loaded;
+  const { ["primary-type"]: primaryType, ["secondary-types"]: secondaryTypes } =
+    releaseGroup;
   return (
     <section className="about-rg">
       <h2>About</h2>
@@ -91,7 +93,10 @@ function AboutReleaseGroup({ loaded }: ReleaseGroupExtract) {
           <dd>{getYear(releaseGroup["first-release-date"])}</dd>
 
           <dt>Type</dt>
-          <dd>{releaseGroup["primary-type"]}</dd>
+          <dd>
+            {primaryType}
+            {secondaryTypes ? ` + ${secondaryTypes.join(" + ")}` : ""}
+          </dd>
 
           <dt>Genres</dt>
           <dd>
