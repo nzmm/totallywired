@@ -8,6 +8,8 @@ import {
   likedLoader,
   collectionLoader,
 } from "./lib/loaders";
+import Manage from "./routes/manage/Manage";
+import Me from "./routes/manage/Me";
 import AlbumTracks from "./routes/AlbumTracks";
 import Albums from "./routes/Albums";
 import ArtistTracks from "./routes/ArtistTracks";
@@ -15,7 +17,7 @@ import Artists from "./routes/Artists";
 import ErrorPage from "./routes/Error";
 import Home from "./routes/Home";
 import Library from "./routes/Library";
-import Providers from "./routes/Providers";
+import Providers from "./routes/manage/Providers";
 import Queue from "./routes/Queue";
 import Root from "./routes/Root";
 import MusicCollection from "./routes/MusicCollection";
@@ -33,6 +35,20 @@ const AppRouter = createBrowserRouter([
       {
         path: "",
         element: <Home />,
+      },
+      {
+        path: "manage/",
+        element: <Manage />,
+        children: [
+          {
+            path: "me",
+            element: <Me />,
+          },
+          {
+            path: "providers",
+            element: <Providers />,
+          },
+        ]
       },
       {
         path: "lib/",
@@ -75,10 +91,6 @@ const AppRouter = createBrowserRouter([
             path: "liked",
             element: <Liked />,
             loader: likedLoader,
-          },
-          {
-            path: "providers",
-            element: <Providers />,
           },
         ],
       },

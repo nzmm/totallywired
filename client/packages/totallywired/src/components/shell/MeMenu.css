@@ -5,9 +5,15 @@
 }
 
 #me-menu {
-  all: unset;
-  list-style-type: none;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px;
+
+  & menu {
+    all: unset;
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
 }

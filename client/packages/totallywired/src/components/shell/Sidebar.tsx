@@ -48,14 +48,6 @@ export default function Sidebar() {
             </NavLink>
           </li>
         </menu>
-        <div className="spacer"></div>
-        <menu>
-          <li>
-            <NavLink to="/lib/providers" className={classNamer}>
-              Content Providers
-            </NavLink>
-          </li>
-        </menu>
       </nav>
     </aside>
   );

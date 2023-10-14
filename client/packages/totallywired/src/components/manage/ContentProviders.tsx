@@ -1,9 +1,9 @@
 import { TabList } from "@totallywired/ui-components";
-import { Suspense, useMemo } from "react";
 import { Await, useAsyncValue } from "react-router-dom";
-import { getProviders, syncProvider } from "../lib/api/v1";
-import { ProviderCollection } from "../lib/types";
-import Loading from "../components/common/Loading";
+import { getProviders, syncProvider } from "../../lib/api/v1";
+import { ProviderCollection } from "../../lib/types";
+import { useMemo, Suspense } from "react";
+import Loading from "../common/Loading";
 
 type ProviderMetadata = {
   name: string;
@@ -81,7 +81,7 @@ function ProviderList() {
   );
 }
 
-export default function Providers() {
+export default function ContentProviders() {
   const promise = useMemo<Promise<Collections>>(async () => {
     const { data = [] } = await getProviders();
 
@@ -98,13 +98,13 @@ export default function Providers() {
   }, []);
 
   return (
-    <section className="manage-providers">
-      <h2 id="providers-tablist-header">Content Providers</h2>
-      <Suspense fallback={<Loading />}>
-        <Await resolve={promise}>
-          <ProviderList />
-        </Await>
-      </Suspense>
-    </section>
+      <section className="manage-providers">
+        <h2 id="providers-tablist-header">Content Providers</h2>
+        <Suspense fallback={<Loading />}>
+          <Await resolve={promise}>
+            <ProviderList />
+          </Await>
+        </Suspense>
+      </section>
   );
 }
