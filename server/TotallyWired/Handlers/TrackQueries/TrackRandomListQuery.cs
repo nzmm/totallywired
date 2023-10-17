@@ -6,26 +6,18 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackRandomListQueryHandler : IRequestHandler<int?, IEnumerable<TrackListModel>>
+public class TrackRandomListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
+    : IRequestHandler<int?, IEnumerable<TrackListModel>>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public TrackRandomListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _user = user;
-        _context = context;
-    }
-
     public async Task<IEnumerable<TrackListModel>> HandleAsync(
         int? take,
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
         var validatedTake = Math.Max(1, Math.Min(100, take ?? 25));
 
-        return await _context.Tracks
+        return await context.Tracks
             .Where(x => x.UserId == userId)
             .OrderBy(t => EF.Functions.Random())
             .Take(validatedTake)

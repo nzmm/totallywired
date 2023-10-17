@@ -5,25 +5,17 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.ReleaseQueries;
 
-public class ReleaseQueryHandler : IRequestHandler<Guid, ReleaseModel?>
+public class ReleaseQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
+    : IRequestHandler<Guid, ReleaseModel?>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public ReleaseQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _context = context;
-        _user = user;
-    }
-
     public async Task<ReleaseModel?> HandleAsync(
         Guid releaseId,
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
 
-        var release = await _context.Releases
+        var release = await context.Releases
             .Where(r => r.Id == releaseId && r.UserId == userId)
             .Select(
                 r =>

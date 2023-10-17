@@ -16,24 +16,15 @@ public class ReleaseCollectionsSearchParams
     public Guid? ReleaseId { get; set; }
 }
 
-public class ReleaseCollectionsQueryHandler
+public class ReleaseCollectionsQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     : IRequestHandler<ReleaseCollectionsSearchParams, IEnumerable<ReleaseListModel>>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public ReleaseCollectionsQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _context = context;
-        _user = user;
-    }
-
     public async Task<IEnumerable<ReleaseListModel>> HandleAsync(
         ReleaseCollectionsSearchParams @params,
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
         var year = @params.Year;
         var label = @params.Label;
         var country = @params.Country;
@@ -43,10 +34,10 @@ public class ReleaseCollectionsQueryHandler
         var hasQuery = tsQuery.Length >= 2;
 
         var query = hasQuery
-            ? _context.Releases.FromSqlInterpolated(
+            ? context.Releases.FromSqlInterpolated(
                 $"SELECT * FROM search_releases({userId}, {tsQuery})"
             )
-            : _context.Releases.Where(t => t.UserId == userId);
+            : context.Releases.Where(t => t.UserId == userId);
 
         if (year.HasValue)
         {

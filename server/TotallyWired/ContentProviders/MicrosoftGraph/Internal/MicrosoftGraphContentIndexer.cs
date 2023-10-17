@@ -6,22 +6,13 @@ using TotallyWired.Domain.Enums;
 using TotallyWired.Extensions;
 using TotallyWired.Infrastructure.EntityFramework;
 
-namespace TotallyWired.Indexers.MicrosoftGraph;
+namespace TotallyWired.ContentProviders.MicrosoftGraph.Internal;
 
-public class MicrosoftGraphSourceIndexer : ISourceIndexer
+public class MicrosoftGraphContentIndexer(
+    TotallyWiredDbContext context,
+    MicrosoftGraphClientProvider clientProvider
+) : IContentIndexer
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly MicrosoftGraphClientProvider _clientProvider;
-
-    public MicrosoftGraphSourceIndexer(
-        TotallyWiredDbContext context,
-        MicrosoftGraphClientProvider clientProvider
-    )
-    {
-        _context = context;
-        _clientProvider = clientProvider;
-    }
-
     private static Task<IDriveItemDeltaCollectionPage> GetMusicPaged(
         GraphServiceClient graphClient,
         string delta
@@ -219,12 +210,12 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
 
     public async Task<(bool, string)> IndexAsync(Source source)
     {
-        if (source.Type != SourceType.MicrosoftGraph)
+        if (source.Type != SourceType.Microsoft)
         {
             return (false, "Source type not supported");
         }
 
-        var graphClient = await _clientProvider.GetClientAsync(source.Id);
+        var graphClient = await clientProvider.GetClientAsync(source.Id);
         if (graphClient is null)
         {
             return (
@@ -236,7 +227,7 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
         var page = await GetMusicPaged(graphClient, source.Delta);
         Console.WriteLine($"Page retrieved with length {page.Count}. Current update count is {0}.");
 
-        var updateCount = await ProcessDeltaCollectionAsync(_context, page, source);
+        var updateCount = await ProcessDeltaCollectionAsync(context, page, source);
 
         while (page.NextPageRequest != null)
         {
@@ -244,14 +235,14 @@ public class MicrosoftGraphSourceIndexer : ISourceIndexer
             Console.WriteLine(
                 $"Page retrieved with length {page.Count}. Current update count is {updateCount}."
             );
-            updateCount += await ProcessDeltaCollectionAsync(_context, page, source);
+            updateCount += await ProcessDeltaCollectionAsync(context, page, source);
         }
 
         if (page.AdditionalData.TryGetValue("@odata.deltaLink", out var deltaLink))
         {
             var delta = deltaLink?.ToString() ?? string.Empty;
             source.Delta = delta;
-            await _context.SaveChangesAsync();
+            await context.SaveChangesAsync();
         }
 
         return (true, $"Finished sync. {updateCount} tracks updated.");

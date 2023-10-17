@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TotallyWired.Indexers.MicrosoftGraph;
+using TotallyWired.Handlers.ContentProviderCommands;
 using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
-using TotallyWired.OAuth;
 using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
@@ -14,25 +13,40 @@ public static class ProviderRoutes
         var oauth = app.MapGroup("/providers").RequireAuthorization().ValidateAntiforgery();
 
         oauth.MapGet(
-            "/begin-auth/msgraph",
-            (OAuthUriHelper helper) =>
+            "/auth-request/{providerName}",
+            async (ContentProviderAuthRequestHandler handler, string providerName) =>
             {
-                var authorizeUri = helper.GetAuthorizeUri();
+                var authorizeUri = await handler.HandleAsync(providerName, CancellationToken.None);
                 return Results.Redirect(authorizeUri);
             }
         );
 
         oauth.MapGet(
-            "/auth-msgraph",
-            async (MicrosoftGraphTokenProvider tokenProvider, [FromQuery] string code) =>
+            "/auth-confirm/{providerName}",
+            async (
+                ContentProviderAuthConfirmHandler handler,
+                string providerName,
+                [FromQuery] string code,
+                CancellationToken cancellationToken
+            ) =>
             {
                 if (string.IsNullOrEmpty(code))
                 {
-                    return Results.Problem("No code was found");
+                    return Results.Problem("Auth code missing");
                 }
 
-                await tokenProvider.RetrieveAndStoreTokensAsync(code);
-                return Results.Redirect("/lib/providers");
+                var success = await handler.HandleAsync(
+                    new ContentProviderAuthConfirmCommand
+                    {
+                        ProviderName = providerName,
+                        Code = code
+                    },
+                    cancellationToken
+                );
+
+                return success
+                    ? Results.Redirect("/lib/providers")
+                    : Results.Problem("Authorization failed");
             }
         );
 

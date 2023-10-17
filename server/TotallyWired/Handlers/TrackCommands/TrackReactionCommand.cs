@@ -12,25 +12,17 @@ public class TrackReactionCommand
     public ReactionType Reaction { get; set; }
 }
 
-public class TrackReactionCommandHandler : IRequestHandler<TrackReactionCommand, ReactionType>
+public class TrackReactionCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
+    : IRequestHandler<TrackReactionCommand, ReactionType>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public TrackReactionCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _context = context;
-        _user = user;
-    }
-
     public async Task<ReactionType> HandleAsync(
         TrackReactionCommand request,
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
 
-        var track = await _context.Tracks
+        var track = await context.Tracks
             .Include(x => x.Reactions.Where(r => r.UserId == userId))
             .Where(x => x.Id == request.TrackId && x.UserId == userId)
             .Select(
@@ -64,14 +56,14 @@ public class TrackReactionCommandHandler : IRequestHandler<TrackReactionCommand,
                     Reaction = request.Reaction
                 };
 
-                await _context.AddAsync(reaction, cancellationToken);
+                await context.AddAsync(reaction, cancellationToken);
                 break;
             default:
                 reaction.Reaction = request.Reaction;
                 break;
         }
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
         return request.Reaction;
     }
 }

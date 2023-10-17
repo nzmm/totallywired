@@ -1,34 +1,25 @@
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.ContentProviders;
 using TotallyWired.Contracts;
 using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired.Handlers.SourceCommands;
 
-public class SourceSyncCommandHandler : IRequestHandler<Guid, (bool, string)>
+public class SourceSyncCommandHandler(
+    IServiceProvider services,
+    ICurrentUser user,
+    TotallyWiredDbContext context,
+    RegisteredContentProviders registry
+) : IRequestHandler<Guid, (bool, string)>
 {
-    private readonly ICurrentUser _user;
-    private readonly TotallyWiredDbContext _context;
-    private readonly IEnumerable<ISourceIndexer> _indexers;
-
-    public SourceSyncCommandHandler(
-        ICurrentUser user,
-        TotallyWiredDbContext context,
-        IEnumerable<ISourceIndexer> indexers
-    )
-    {
-        _user = user;
-        _context = context;
-        _indexers = indexers;
-    }
-
     public async Task<(bool, string)> HandleAsync(
         Guid sourceId,
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
 
-        var source = await _context.Sources
+        var source = await context.Sources
             .Include(x => x.User)
             .FirstOrDefaultAsync(
                 x => x.Id == sourceId && x.UserId == userId,
@@ -40,13 +31,13 @@ public class SourceSyncCommandHandler : IRequestHandler<Guid, (bool, string)>
             return (false, $"Source '{sourceId}' does not exist");
         }
 
-        foreach (var synchroniser in _indexers)
+        var provider = registry.GetProvider(source.Type);
+        var indexer = provider.GetIndexer(services);
+
+        var (success, message) = await indexer.IndexAsync(source);
+        if (success)
         {
-            var (success, message) = await synchroniser.IndexAsync(source);
-            if (success)
-            {
-                return (success, message);
-            }
+            return (success, message);
         }
 
         return (false, $"No handlers configured for source '{source.Id}'");

@@ -1,6 +1,6 @@
-namespace TotallyWired.OAuth;
+namespace TotallyWired.ContentProviders.OAuth;
 
-public class OAuthConfiguration
+public abstract class OAuthCommonOptions
 {
     public string Authority { get; set; } = default!;
     public string ClientId { get; set; } = default!;

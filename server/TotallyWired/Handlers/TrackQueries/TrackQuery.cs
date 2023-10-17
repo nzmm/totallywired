@@ -6,21 +6,13 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackQueryHandler : IRequestHandler<Guid, TrackListModel>
+public class TrackQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
+    : IRequestHandler<Guid, TrackListModel>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public TrackQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _user = user;
-        _context = context;
-    }
-
     public async Task<TrackListModel> HandleAsync(Guid trackId, CancellationToken cancellationToken)
     {
-        var userId = _user.UserId();
-        var track = await _context.Tracks
+        var userId = user.UserId();
+        var track = await context.Tracks
             .Where(t => t.Id == trackId && t.UserId == userId)
             .Select(
                 t =>

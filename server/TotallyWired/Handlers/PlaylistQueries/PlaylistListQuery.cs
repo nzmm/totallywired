@@ -6,25 +6,17 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.PlaylistQueries;
 
-public class PlaylistListQueryHandler : IRequestHandler<IEnumerable<PlaylistListModel>>
+public class PlaylistListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
+    : IRequestHandler<IEnumerable<PlaylistListModel>>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public PlaylistListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _user = user;
-        _context = context;
-    }
-
     public async Task<IEnumerable<PlaylistListModel>> HandleAsync(
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
 
         // special case: liked tracks
-        var likedCount = await _context.Tracks
+        var likedCount = await context.Tracks
             .Where(
                 t =>
                     t.UserId == userId

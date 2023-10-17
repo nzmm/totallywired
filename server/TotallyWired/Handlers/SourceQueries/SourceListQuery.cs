@@ -6,24 +6,16 @@ using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.SourceQueries;
 
-public class SourceListQueryHandler : IRequestHandler<IEnumerable<SourceTypeListModel>>
+public class SourceListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
+    : IRequestHandler<IEnumerable<SourceTypeListModel>>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public SourceListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _context = context;
-        _user = user;
-    }
-
     public async Task<IEnumerable<SourceTypeListModel>> HandleAsync(
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
 
-        var sources = await _context.Sources
+        var sources = await context.Sources
             .Where(x => x.UserId == userId)
             .Select(
                 x =>

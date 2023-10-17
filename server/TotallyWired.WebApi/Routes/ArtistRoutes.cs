@@ -52,7 +52,7 @@ public static class ArtistRoutes
         group.MapGet(
             "/{artistId:guid}/art",
             async (
-                ArtistThumbnailQueryHandler handler,
+                ArtistArtQueryHandler handler,
                 Guid artistId,
                 CancellationToken cancellationToken
             ) =>

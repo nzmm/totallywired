@@ -1,50 +1,32 @@
 using System.Net.Http.Json;
 using System.Security.Authentication;
 using Microsoft.EntityFrameworkCore;
-using TotallyWired.Common;
+using TotallyWired.ContentProviders.OAuth;
 using TotallyWired.Contracts;
 using TotallyWired.Domain.Entities;
 using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
-using TotallyWired.OAuth;
 
-namespace TotallyWired.Indexers.MicrosoftGraph;
+namespace TotallyWired.ContentProviders.MicrosoftGraph.Internal;
 
-public class MicrosoftGraphTokenProvider : ITokenProvider
+public class MicrosoftGraphTokenProvider(
+    ICurrentUser user,
+    HttpClient httpClient,
+    ITimeProvider timeProvider,
+    TotallyWiredDbContext dbContext,
+    MicrosoftGraphContentProviderOptions config
+)
 {
-    private readonly ICurrentUser _user;
-    private readonly HttpClient _httpClient;
-    private readonly TotallyWiredDbContext _context;
-    private readonly OAuthUriHelper _uriHelper;
-    private readonly MicrosoftGraphIndexerOptions _config;
-
-    public MicrosoftGraphTokenProvider(
-        ICurrentUser user,
-        HttpClient httpClient,
-        TotallyWiredDbContext dbContext,
-        MicrosoftGraphIndexerOptions config,
-        OAuthUriHelper uriHelper
-    )
-    {
-        _user = user;
-        _httpClient = httpClient;
-        _context = dbContext;
-        _config = config;
-        _uriHelper = uriHelper;
-    }
-
     private IQueryable<Source> GetSource()
     {
-        var userId = _user.UserId();
-        return _context.Sources.Where(
-            x => x.UserId == userId && x.Type == SourceType.MicrosoftGraph
-        );
+        var userId = user.UserId();
+        return dbContext.Sources.Where(x => x.UserId == userId && x.Type == SourceType.Microsoft);
     }
 
     private async Task<Source> StoreTokensAsync(TokenResultModel tokens)
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
         if (userId == default)
         {
             throw new ArgumentException(nameof(userId));
@@ -52,10 +34,10 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
 
         var source =
             await GetSource().FirstOrDefaultAsync()
-            ?? new Source { UserId = userId, Type = SourceType.MicrosoftGraph };
+            ?? new Source { UserId = userId, Type = SourceType.Microsoft };
 
         var created = source.Id == Guid.Empty;
-        var expiry = UtcProvider.UtcNow.AddSeconds(tokens.ext_expires_in * .9);
+        var expiry = timeProvider.UtcNow.AddSeconds(tokens.ext_expires_in * .9);
 
         source.RefreshToken = tokens.refresh_token;
         source.AccessToken = tokens.access_token;
@@ -64,14 +46,14 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         if (created)
         {
             source.Id = Guid.NewGuid();
-            await _context.AddAsync(source);
+            await dbContext.AddAsync(source);
         }
         else
         {
-            _context.Update(source);
+            dbContext.Update(source);
         }
 
-        await _context.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
         return source;
     }
 
@@ -85,17 +67,17 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         var content = new FormUrlEncodedContent(
             new[]
             {
-                new KeyValuePair<string, string>("client_id", _config.ClientId),
-                new KeyValuePair<string, string>("client_secret", _config.ClientSecret),
-                new KeyValuePair<string, string>("redirect_uri", _config.RedirectUri),
-                new KeyValuePair<string, string>("scope", _config.Scope),
+                new KeyValuePair<string, string>("client_id", config.ClientId),
+                new KeyValuePair<string, string>("client_secret", config.ClientSecret),
+                new KeyValuePair<string, string>("redirect_uri", config.RedirectUri),
+                new KeyValuePair<string, string>("scope", config.Scope),
                 new KeyValuePair<string, string>("code", authorizationCode),
                 new KeyValuePair<string, string>("grant_type", "authorization_code")
             }
         );
 
-        var tokenUrl = _uriHelper.GetTokenUri();
-        var response = await _httpClient.PostAsync(tokenUrl, content);
+        var tokenUrl = OAuthUriHelper.GetTokenUri(config);
+        var response = await httpClient.PostAsync(tokenUrl, content);
         var tokenResult = await response.Content.ReadFromJsonAsync<TokenResultModel>();
 
         if (tokenResult?.access_token is null || tokenResult.refresh_token is null)
@@ -111,16 +93,16 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         var content = new FormUrlEncodedContent(
             new[]
             {
-                new KeyValuePair<string, string>("client_id", _config.ClientId),
-                new KeyValuePair<string, string>("client_secret", _config.ClientSecret),
-                new KeyValuePair<string, string>("scope", _config.Scope),
+                new KeyValuePair<string, string>("client_id", config.ClientId),
+                new KeyValuePair<string, string>("client_secret", config.ClientSecret),
+                new KeyValuePair<string, string>("scope", config.Scope),
                 new KeyValuePair<string, string>("refresh_token", refreshToken),
                 new KeyValuePair<string, string>("grant_type", "refresh_token")
             }
         );
 
-        var tokenUrl = _uriHelper.GetTokenUri();
-        var response = await _httpClient.PostAsync(tokenUrl, content);
+        var tokenUrl = OAuthUriHelper.GetTokenUri(config);
+        var response = await httpClient.PostAsync(tokenUrl, content);
         var tokenResult = await response.Content.ReadFromJsonAsync<TokenResultModel>();
 
         if (tokenResult?.access_token is null || tokenResult.refresh_token is null)
@@ -142,7 +124,7 @@ public class MicrosoftGraphTokenProvider : ITokenProvider
         {
             throw new ArgumentNullException(nameof(cachedTokens), "cached tokens do not., exist");
         }
-        if (UtcProvider.UtcNow <= cachedTokens.ExpiresAt)
+        if (timeProvider.UtcNow <= cachedTokens.ExpiresAt)
         {
             return (cachedTokens.AccessToken, cachedTokens.ExpiresAt);
         }

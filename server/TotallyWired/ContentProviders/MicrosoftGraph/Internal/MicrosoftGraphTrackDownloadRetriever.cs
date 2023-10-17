@@ -1,34 +1,23 @@
 using Microsoft.EntityFrameworkCore;
 using TotallyWired.Contracts;
-using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
 
-namespace TotallyWired.Handlers.TrackQueries;
+namespace TotallyWired.ContentProviders.MicrosoftGraph.Internal;
 
-public class TrackDownloadUrlQueryHandler : IRequestHandler<Guid, string>
+public class MicrosoftGraphTrackDownloadRetriever(
+    TotallyWiredDbContext context,
+    MicrosoftGraphClientProvider clientProvider
+) : IContentRetriever<string>
 {
     private const string DownloadUrlAttribute = "@microsoft.graph.downloadUrl";
 
-    private readonly ICurrentUser _user;
-    private readonly TotallyWiredDbContext _context;
-    private readonly MicrosoftGraphClientProvider _clientProvider;
-
-    public TrackDownloadUrlQueryHandler(
-        ICurrentUser user,
-        TotallyWiredDbContext context,
-        MicrosoftGraphClientProvider clientProvider
+    public async Task<string> RetrieveAsync(
+        Guid userId,
+        Guid trackId,
+        CancellationToken cancellationToken
     )
     {
-        _user = user;
-        _context = context;
-        _clientProvider = clientProvider;
-    }
-
-    public async Task<string> HandleAsync(Guid trackId, CancellationToken cancellationToken)
-    {
-        var userId = _user.UserId();
-
-        var resource = await _context.Tracks
+        var resource = await context.Tracks
             .Where(t => t.Id == trackId && t.UserId == userId)
             .Select(t => new { t.ResourceId, t.SourceId })
             .FirstOrDefaultAsync(cancellationToken);
@@ -38,7 +27,7 @@ public class TrackDownloadUrlQueryHandler : IRequestHandler<Guid, string>
             return string.Empty;
         }
 
-        var graphClient = await _clientProvider.GetClientAsync(resource.SourceId);
+        var graphClient = await clientProvider.GetClientAsync(resource.SourceId);
         if (graphClient is null)
         {
             return string.Empty;

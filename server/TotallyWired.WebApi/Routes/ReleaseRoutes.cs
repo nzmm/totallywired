@@ -84,7 +84,7 @@ public static class ReleaseRoutes
         group.MapGet(
             "/{releaseId:guid}/art",
             async (
-                ReleaseThumbnailQueryHandler handler,
+                ReleaseArtQueryHandler handler,
                 Guid releaseId,
                 CancellationToken cancellationToken
             ) =>

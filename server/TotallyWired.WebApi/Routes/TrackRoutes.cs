@@ -37,7 +37,7 @@ public static class TrackRoutes
         group.MapGet(
             "/{trackId:guid}/downloadUrl",
             async (
-                TrackDownloadUrlQueryHandler handler,
+                TrackDownloadQueryHandler handler,
                 Guid trackId,
                 CancellationToken cancellationToken
             ) =>

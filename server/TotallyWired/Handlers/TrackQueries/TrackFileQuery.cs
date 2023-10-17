@@ -1,41 +1,30 @@
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.ContentProviders.MicrosoftGraph.Internal;
 using TotallyWired.Contracts;
-using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.TrackQueries;
 
-public class TrackFileInfoQuery
+public class TrackFileQuery
 {
     public Guid TrackId { get; init; }
 }
 
-public class ReleaseFilenameHandler : IRequestHandler<TrackFileInfoQuery, TrackFileInfoModel>
+public class ReleaseFilenameHandler(
+    ICurrentUser user,
+    TotallyWiredDbContext context,
+    MicrosoftGraphClientProvider clientProvider
+) : IRequestHandler<TrackFileQuery, TrackFileInfoModel>
 {
-    private readonly ICurrentUser _user;
-    private readonly TotallyWiredDbContext _context;
-    private readonly MicrosoftGraphClientProvider _clientProvider;
-
-    public ReleaseFilenameHandler(
-        ICurrentUser user,
-        TotallyWiredDbContext context,
-        MicrosoftGraphClientProvider clientProvider
-    )
-    {
-        _user = user;
-        _context = context;
-        _clientProvider = clientProvider;
-    }
-
     public async Task<TrackFileInfoModel> HandleAsync(
-        TrackFileInfoQuery request,
+        TrackFileQuery request,
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
 
-        var track = await _context.Tracks
+        var track = await context.Tracks
             .Where(r => r.Id == request.TrackId && r.UserId == userId)
             .Select(
                 r =>
@@ -65,7 +54,7 @@ public class ReleaseFilenameHandler : IRequestHandler<TrackFileInfoQuery, TrackF
             MusicBrainzId = track.MusicBrainzId
         };
 
-        var graphClient = await _clientProvider.GetClientAsync(track.SourceId);
+        var graphClient = await clientProvider.GetClientAsync(track.SourceId);
         if (graphClient is null)
         {
             return trackInfo;

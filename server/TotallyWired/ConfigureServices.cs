@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TotallyWired.Common;
+using TotallyWired.ContentProviders;
 using TotallyWired.Contracts;
 using TotallyWired.Handlers.ArtistQueries;
 using TotallyWired.Handlers.PlaylistQueries;
@@ -11,9 +12,7 @@ using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
 using TotallyWired.Handlers.TrackCommands;
 using TotallyWired.Handlers.TrackQueries;
-using TotallyWired.Indexers.MicrosoftGraph;
 using TotallyWired.Infrastructure.EntityFramework;
-using TotallyWired.OAuth;
 
 namespace TotallyWired;
 
@@ -21,12 +20,12 @@ public static class ConfigureServices
 {
     public static void AddCoreServices(this IServiceCollection services, IConfiguration config)
     {
-        // system
-        services.AddSingleton<UtcProvider>();
+        // common
+        services.AddSingleton<ITimeProvider>(new SystemTimeProvider());
 
-        // data
+        // database
         var connectionString =
-            config.GetConnectionString("Postgres") ?? throw new ArgumentNullException();
+            config.GetConnectionString("Postgres") ?? throw new ArgumentNullException("Postgres");
 
         services.AddDbContext<TotallyWiredDbContext>(opts =>
         {
@@ -34,30 +33,27 @@ public static class ConfigureServices
             //opts.EnableSensitiveDataLogging();
         });
 
-        // indexing
-        services.AddScoped<OAuthUriHelper>();
-        services.AddScoped<MicrosoftGraphTokenProvider>();
-        services.AddScoped<MicrosoftGraphClientProvider>();
-        services.AddTransient<ISourceIndexer, MicrosoftGraphSourceIndexer>();
+        // content providers
+        services.AddContentProviders(config);
 
         // tracks
         services.AddScoped<TrackQueryHandler>();
         services.AddScoped<TrackListQueryHandler>();
         services.AddScoped<TrackRandomListQueryHandler>();
-        services.AddScoped<TrackDownloadUrlQueryHandler>();
+        services.AddScoped<TrackDownloadQueryHandler>();
         services.AddScoped<TrackReactionCommandHandler>();
 
         // releases
         services.AddScoped<ReleaseQueryHandler>();
         services.AddScoped<ReleaseListQueryHandler>();
-        services.AddScoped<ReleaseThumbnailQueryHandler>();
+        services.AddScoped<ReleaseArtQueryHandler>();
         services.AddScoped<UpdateReleaseMetadataCommandHandler>();
         services.AddScoped<ReleaseCollectionsQueryHandler>();
 
         // artists
         services.AddScoped<ArtistQueryHandler>();
         services.AddScoped<ArtistListQueryHandler>();
-        services.AddScoped<ArtistThumbnailQueryHandler>();
+        services.AddScoped<ArtistArtQueryHandler>();
 
         // playlists
         services.AddScoped<PlaylistListQueryHandler>();

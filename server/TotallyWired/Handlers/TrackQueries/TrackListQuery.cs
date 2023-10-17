@@ -15,24 +15,15 @@ public class TrackListSearchParams
     public ReactionType? Reaction { get; set; }
 }
 
-public class TrackListQueryHandler
+public class TrackListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
     : IRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
 {
-    private readonly TotallyWiredDbContext _context;
-    private readonly ICurrentUser _user;
-
-    public TrackListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    {
-        _user = user;
-        _context = context;
-    }
-
     private async Task<IEnumerable<TrackListModel>> GetQueryAsync(
         TrackListSearchParams @params,
         CancellationToken cancellationToken
     )
     {
-        var userId = _user.UserId();
+        var userId = user.UserId();
 
         var releaseId = @params.ReleaseId;
         var artistId = @params.ArtistId;
@@ -42,10 +33,10 @@ public class TrackListQueryHandler
         var hasQuery = tsQuery.Length >= 3;
 
         var query = hasQuery
-            ? _context.Tracks.FromSqlInterpolated(
+            ? context.Tracks.FromSqlInterpolated(
                 $"SELECT * FROM search_tracks({userId}, {tsQuery})"
             )
-            : _context.Tracks.Where(t => t.UserId == userId);
+            : context.Tracks.Where(t => t.UserId == userId);
 
         if (releaseId.HasValue)
         {

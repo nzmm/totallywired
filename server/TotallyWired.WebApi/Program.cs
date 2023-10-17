@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.HttpOverrides;
 using TotallyWired;
-using TotallyWired.Indexers.MicrosoftGraph;
+using TotallyWired.ContentProviders.MicrosoftGraph;
 using TotallyWired.WebApi.Routes;
 using TotallyWired.WebApi.Authentication;
 
@@ -18,7 +18,7 @@ builder.Services.AddSingleton(
     new HttpClient(new SocketsHttpHandler { PooledConnectionLifetime = TimeSpan.FromMinutes(2) })
 );
 
-var msIndexerOpts = new MicrosoftGraphIndexerOptions();
+var msIndexerOpts = new MicrosoftGraphContentProviderOptions();
 config.GetSection("ContentProviders:Microsoft").Bind(msIndexerOpts);
 
 builder.Services.AddSingleton(msIndexerOpts);

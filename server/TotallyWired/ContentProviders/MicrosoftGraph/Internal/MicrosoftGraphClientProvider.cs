@@ -1,20 +1,13 @@
 using System.Net.Http.Headers;
 using Microsoft.Graph;
 
-namespace TotallyWired.Indexers.MicrosoftGraph;
+namespace TotallyWired.ContentProviders.MicrosoftGraph.Internal;
 
-public class MicrosoftGraphClientProvider
+public class MicrosoftGraphClientProvider(MicrosoftGraphTokenProvider tokenProvider)
 {
-    private readonly MicrosoftGraphTokenProvider _tokenProvider;
-
-    public MicrosoftGraphClientProvider(MicrosoftGraphTokenProvider tokenProvider)
-    {
-        _tokenProvider = tokenProvider;
-    }
-
     public async Task<GraphServiceClient?> GetClientAsync(Guid sourceId)
     {
-        var (accessToken, _) = await _tokenProvider.GetAccessTokenAsync(sourceId);
+        var (accessToken, _) = await tokenProvider.GetAccessTokenAsync(sourceId);
 
         if (string.IsNullOrEmpty(accessToken))
         {
