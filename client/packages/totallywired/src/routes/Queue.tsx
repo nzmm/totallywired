@@ -1,6 +1,6 @@
 import { usePlayer, useQueue } from "../lib/player/hooks";
-import PlaylistHeader from "../components/lib/PlaylistHeader";
-import Playlist from "../components/lib/Playlist";
+import PlaylistHeader from "../components/library/PlaylistHeader";
+import Playlist from "../components/library/Playlist";
 
 export default function Queue() {
   const queue = useQueue();

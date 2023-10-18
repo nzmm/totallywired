@@ -2,7 +2,7 @@ import { Splitter } from "@totallywired/ui-components";
 import { Outlet } from "react-router-dom";
 import Footer from "../components/shell/Footer";
 import Header from "../components/shell/Header";
-import Sidebar from "../components/lib/LibrarySidebar";
+import Sidebar from "../components/library/LibrarySidebar";
 import PlaylistsProvider from "../components/providers/PlaylistProvider";
 import CollectionProvider from "../components/providers/CollectionProvider";
 import SearchInput from "../components/shell/SearchInput";
@@ -22,7 +22,7 @@ export default function Library() {
 
           <Splitter
             orientation="horizontal"
-            initialPosition="200px"
+            initialPosition="250px"
             minSize="200px"
           >
             <Sidebar />

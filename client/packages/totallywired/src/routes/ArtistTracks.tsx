@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { Await, useLoaderData } from "react-router-dom";
 import { useAsyncCollections } from "../lib/tracks/hooks";
-import MusicCollectionList from "../components/lib/MusicCollectionList";
+import MusicCollectionList from "../components/library/MusicCollectionList";
 
 function ArtistTracksView() {
   const collections = useAsyncCollections();

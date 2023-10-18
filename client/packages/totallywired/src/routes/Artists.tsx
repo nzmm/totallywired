@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import { Await, useAsyncValue, useLoaderData } from "react-router-dom";
 import { Res } from "../lib/requests";
 import { Artist } from "../lib/types";
-import ArtistList from "../components/lib/ArtistList";
+import ArtistList from "../components/library/ArtistList";
 
 function ArtistsView() {
   const { data: artists = [] } = useAsyncValue() as Res<Artist[]>;
