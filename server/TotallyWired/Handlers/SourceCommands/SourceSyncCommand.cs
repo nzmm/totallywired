@@ -6,11 +6,10 @@ using TotallyWired.Infrastructure.EntityFramework;
 namespace TotallyWired.Handlers.SourceCommands;
 
 public class SourceSyncCommandHandler(
-    IServiceProvider services,
-    ICurrentUser user,
     TotallyWiredDbContext context,
-    RegisteredContentProviders registry
-) : IRequestHandler<Guid, (bool, string)>
+    ContentProviderServices providers,
+    ICurrentUser user
+) : IAsyncRequestHandler<Guid, (bool, string)>
 {
     public async Task<(bool, string)> HandleAsync(
         Guid sourceId,
@@ -31,15 +30,15 @@ public class SourceSyncCommandHandler(
             return (false, $"Source '{sourceId}' does not exist");
         }
 
-        var provider = registry.GetProvider(source.Type);
-        var indexer = provider.GetIndexer(services);
-
-        var (success, message) = await indexer.IndexAsync(source);
-        if (success)
+        var provider = providers.GetProvider(source.Type);
+        if (provider is null)
         {
-            return (success, message);
+            return (false, "Provider not found");
         }
 
-        return (false, $"No handlers configured for source '{source.Id}'");
+        var (success, message) = await provider.Indexer.IndexAsync(source);
+        return success
+            ? (success, message)
+            : (false, $"No handlers configured for source '{source.Id}'");
     }
 }

@@ -7,10 +7,9 @@ namespace TotallyWired.Handlers.ReleaseQueries;
 
 public class ReleaseArtQueryHandler(
     TotallyWiredDbContext context,
-    ICurrentUser user,
-    IServiceProvider services,
-    RegisteredContentProviders registry
-) : IRequestHandler<Guid, string>
+    ContentProviderServices providers,
+    ICurrentUser user
+) : IAsyncRequestHandler<Guid, string>
 {
     private const string DefaultAlbumArt = "/default-art.svg";
 
@@ -39,9 +38,18 @@ public class ReleaseArtQueryHandler(
             return resource.ThumbnailUrl;
         }
 
-        var provider = registry.GetProvider(resource.SourceType);
-        var retriever = provider.GetReleaseArtRetriever(services);
-        var thumbnail = await retriever.RetrieveAsync(userId, releaseId, cancellationToken);
+        var provider = providers.GetProvider(resource.SourceType);
+        if (provider is null)
+        {
+            return DefaultAlbumArt;
+        }
+
+        var thumbnail = await provider.ReleaseArt.RetrieveAsync(
+            userId,
+            releaseId,
+            cancellationToken
+        );
+
         return string.IsNullOrEmpty(thumbnail) ? DefaultAlbumArt : thumbnail;
     }
 }

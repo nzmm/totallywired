@@ -6,13 +6,18 @@ namespace TotallyWired.ContentProviders.MicrosoftGraph;
 
 public static class MicrosoftGraphExtensions
 {
-    public static IContentProvider AddMicrosoftGraphContentProvider(
+    public static IContentProviderServiceProvider AddMicrosoftGraphContentProvider(
         this IServiceCollection services,
         Action<object> configureOptions
     )
     {
         var options = new MicrosoftGraphContentProviderOptions();
         configureOptions(options);
+
+        if (!options.Enabled)
+        {
+            return new MicrosoftGraphContentProviderServiceProvider(options);
+        }
 
         services.AddSingleton(options);
         services.AddScoped<MicrosoftGraphTokenProvider>();
@@ -21,6 +26,6 @@ public static class MicrosoftGraphExtensions
         services.AddTransient<MicrosoftGraphReleaseArtRetriever>();
         services.AddTransient<MicrosoftGraphTrackDownloadRetriever>();
 
-        return new MicrosoftGraphContentProvider(options);
+        return new MicrosoftGraphContentProviderServiceProvider(options);
     }
 }

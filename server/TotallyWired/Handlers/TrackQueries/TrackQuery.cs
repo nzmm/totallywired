@@ -7,7 +7,7 @@ using TotallyWired.Models;
 namespace TotallyWired.Handlers.TrackQueries;
 
 public class TrackQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<Guid, TrackListModel>
+    : IAsyncRequestHandler<Guid, TrackListModel>
 {
     public async Task<TrackListModel> HandleAsync(Guid trackId, CancellationToken cancellationToken)
     {

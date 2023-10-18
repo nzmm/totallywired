@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Graph;
 using TotallyWired.Contracts;
@@ -8,7 +7,7 @@ namespace TotallyWired.ContentProviders.MicrosoftGraph.Internal;
 
 public class MicrosoftGraphReleaseArtRetriever(
     TotallyWiredDbContext context,
-    MicrosoftGraphTokenProvider tokenProvider
+    MicrosoftGraphClientProvider clientProvider
 ) : IContentRetriever<string>
 {
     public async Task<string> RetrieveAsync(
@@ -35,8 +34,12 @@ public class MicrosoftGraphReleaseArtRetriever(
         }
 
         var sourceId = resource.Tracks.Select(x => x.SourceId).FirstOrDefault();
-        var (accessToken, _) = await tokenProvider.GetAccessTokenAsync(sourceId);
-        var graphClient = GetGraphClient(accessToken);
+        var graphClient = await clientProvider.GetClientAsync(sourceId);
+
+        if (graphClient is null)
+        {
+            return string.Empty;
+        }
 
         try
         {
@@ -65,21 +68,5 @@ public class MicrosoftGraphReleaseArtRetriever(
         }
 
         return string.Empty;
-    }
-
-    private static GraphServiceClient GetGraphClient(string accessToken)
-    {
-        return new GraphServiceClient((IAuthenticationProvider)null!)
-        {
-            AuthenticationProvider = new DelegateAuthenticationProvider(request =>
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue(
-                    "Bearer",
-                    accessToken
-                );
-
-                return Task.CompletedTask;
-            })
-        };
     }
 }

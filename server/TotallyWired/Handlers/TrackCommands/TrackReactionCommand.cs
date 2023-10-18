@@ -13,7 +13,7 @@ public class TrackReactionCommand
 }
 
 public class TrackReactionCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<TrackReactionCommand, ReactionType>
+    : IAsyncRequestHandler<TrackReactionCommand, ReactionType>
 {
     public async Task<ReactionType> HandleAsync(
         TrackReactionCommand request,

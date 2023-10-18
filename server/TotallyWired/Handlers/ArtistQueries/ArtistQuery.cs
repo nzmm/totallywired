@@ -6,7 +6,7 @@ using TotallyWired.Models;
 namespace TotallyWired.Handlers.ArtistQueries;
 
 public class ArtistQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<Guid, ArtistModel?>
+    : IAsyncRequestHandler<Guid, ArtistModel?>
 {
     public async Task<ArtistModel?> HandleAsync(Guid artistId, CancellationToken cancellationToken)
     {

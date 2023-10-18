@@ -7,7 +7,7 @@ using TotallyWired.Models;
 namespace TotallyWired.Handlers.PlaylistQueries;
 
 public class PlaylistListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<IEnumerable<PlaylistListModel>>
+    : IAsyncRequestHandler<IEnumerable<PlaylistListModel>>
 {
     public async Task<IEnumerable<PlaylistListModel>> HandleAsync(
         CancellationToken cancellationToken

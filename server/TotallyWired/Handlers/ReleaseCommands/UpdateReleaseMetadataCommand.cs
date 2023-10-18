@@ -13,7 +13,7 @@ public class ReleaseMetadataCommand : ReleaseMetadataModel
 }
 
 public class UpdateReleaseMetadataCommandHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<ReleaseMetadataCommand, ReleaseMetadataUpdateResult>
+    : IAsyncRequestHandler<ReleaseMetadataCommand, ReleaseMetadataUpdateResult>
 {
     private async Task<Artist> GetArtistToUpdateAsync(
         Guid userId,

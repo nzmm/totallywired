@@ -16,7 +16,7 @@ public class TrackListSearchParams
 }
 
 public class TrackListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
+    : IAsyncRequestHandler<TrackListSearchParams, IEnumerable<TrackListModel>>
 {
     private async Task<IEnumerable<TrackListModel>> GetQueryAsync(
         TrackListSearchParams @params,

@@ -6,7 +6,7 @@ using TotallyWired.Models;
 namespace TotallyWired.Handlers.ReleaseQueries;
 
 public class ReleaseQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<Guid, ReleaseModel?>
+    : IAsyncRequestHandler<Guid, ReleaseModel?>
 {
     public async Task<ReleaseModel?> HandleAsync(
         Guid releaseId,

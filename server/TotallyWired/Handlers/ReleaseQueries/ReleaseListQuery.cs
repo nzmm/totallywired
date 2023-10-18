@@ -15,7 +15,7 @@ public class ReleaseListSearchParams
 }
 
 public class ReleaseListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<ReleaseListSearchParams, IEnumerable<ReleaseListModel>>
+    : IAsyncRequestHandler<ReleaseListSearchParams, IEnumerable<ReleaseListModel>>
 {
     public async Task<IEnumerable<ReleaseListModel>> HandleAsync(
         ReleaseListSearchParams @params,

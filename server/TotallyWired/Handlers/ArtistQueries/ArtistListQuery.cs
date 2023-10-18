@@ -12,7 +12,7 @@ public class ArtistListSearchParams
 }
 
 public class ArtistListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<ArtistListSearchParams, IEnumerable<ArtistListModel>>
+    : IAsyncRequestHandler<ArtistListSearchParams, IEnumerable<ArtistListModel>>
 {
     public async Task<IEnumerable<ArtistListModel>> HandleAsync(
         ArtistListSearchParams request,

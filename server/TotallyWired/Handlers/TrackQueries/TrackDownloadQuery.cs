@@ -7,10 +7,9 @@ namespace TotallyWired.Handlers.TrackQueries;
 
 public class TrackDownloadQueryHandler(
     TotallyWiredDbContext context,
-    IServiceProvider services,
-    ICurrentUser user,
-    RegisteredContentProviders registry
-) : IRequestHandler<Guid, string>
+    ContentProviderServices providers,
+    ICurrentUser user
+) : IAsyncRequestHandler<Guid, string>
 {
     public async Task<string> HandleAsync(Guid trackId, CancellationToken cancellationToken)
     {
@@ -20,8 +19,18 @@ public class TrackDownloadQueryHandler(
             .Select(x => x.Source.Type)
             .FirstOrDefaultAsync(cancellationToken);
 
-        var provider = registry.GetProvider(sourceType);
-        var retriever = provider.GetTrackDownloadRetriever(services);
-        return await retriever.RetrieveAsync(userId, trackId, cancellationToken);
+        var provider = providers.GetProvider(sourceType);
+        if (provider is null)
+        {
+            return string.Empty;
+        }
+
+        var downloadUri = await provider.TrackDownload.RetrieveAsync(
+            userId,
+            trackId,
+            cancellationToken
+        );
+
+        return downloadUri;
     }
 }

@@ -3,12 +3,12 @@ using TotallyWired.Contracts;
 
 namespace TotallyWired.Handlers.ContentProviderCommands;
 
-public class ContentProviderAuthRequestHandler(RegisteredContentProviders registry)
+public class ContentProviderAuthRequestHandler(ContentProviderServices providers)
     : IRequestHandler<string, string>
 {
-    public Task<string> HandleAsync(string providerName, CancellationToken cancellationToken)
+    public string Handle(string providerName)
     {
-        var provider = registry.GetProvider(providerName);
-        return Task.FromResult(provider.GetAuthorizeUri());
+        var provider = providers.GetProvider(providerName);
+        return provider?.AuthorizationUri ?? string.Empty;
     }
 }

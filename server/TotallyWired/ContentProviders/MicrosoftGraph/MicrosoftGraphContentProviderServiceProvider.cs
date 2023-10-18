@@ -5,8 +5,8 @@ using TotallyWired.Contracts;
 
 namespace TotallyWired.ContentProviders.MicrosoftGraph;
 
-public class MicrosoftGraphContentProvider(MicrosoftGraphContentProviderOptions options)
-    : IContentProvider
+public class MicrosoftGraphContentProviderServiceProvider(MicrosoftGraphContentProviderOptions options)
+    : IContentProviderServiceProvider
 {
     public string Name => "Microsoft";
     public bool Enabled => options.Enabled;

@@ -15,7 +15,7 @@ public class ReleaseFilenameHandler(
     ICurrentUser user,
     TotallyWiredDbContext context,
     MicrosoftGraphClientProvider clientProvider
-) : IRequestHandler<TrackFileQuery, TrackFileInfoModel>
+) : IAsyncRequestHandler<TrackFileQuery, TrackFileInfoModel>
 {
     public async Task<TrackFileInfoModel> HandleAsync(
         TrackFileQuery request,

@@ -9,7 +9,7 @@ namespace TotallyWired.ContentProviders;
 
 public static class ContentProviderExtensions
 {
-    private delegate IContentProvider ContentProviderFactory(
+    private delegate IContentProviderServiceProvider ContentProviderFactory(
         IServiceCollection services,
         Action<object> configure
     );
@@ -28,8 +28,8 @@ public static class ContentProviderExtensions
                 services.AddMicrosoftGraphContentProvider(configure),
         };
 
-        var enabledProviders = new List<IContentProvider>();
-        foreach (var (providerName, providerFac) in contentProviders)
+        var serviceProviders = new List<IContentProviderServiceProvider>();
+        foreach (var (providerName, serviceProviderFactory) in contentProviders)
         {
             var section = configuration.GetSection($"ContentProviders:{providerName}");
             if (!section.Exists())
@@ -37,22 +37,22 @@ public static class ContentProviderExtensions
                 continue;
             }
 
-            var provider = providerFac(
+            var serviceProvider = serviceProviderFactory(
                 serviceCollection,
                 options =>
                 {
                     section.Bind(options);
                 }
             );
-
-            if (provider.Enabled)
+            if (serviceProvider.Enabled)
             {
-                enabledProviders.Add(provider);
+                serviceProviders.Add(serviceProvider);
             }
         }
 
-        serviceCollection.AddSingleton(new RegisteredContentProviders(enabledProviders));
-        serviceCollection.AddTransient<ContentProviderAuthRequestHandler>();
+        serviceCollection.AddSingleton(new ContentProviderRegistry(serviceProviders));
+        serviceCollection.AddTransient<ContentProviderServices>();
+        serviceCollection.AddTransient<ContentProviderAuthConfirmHandler>();
         serviceCollection.AddTransient<ContentProviderAuthConfirmHandler>();
     }
 }

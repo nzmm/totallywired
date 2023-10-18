@@ -5,7 +5,7 @@ namespace TotallyWired.ContentProviders.GoogleDrive;
 
 public static class GoogleDriveExtensions
 {
-    public static IContentProvider AddGoogleDriveContentProvider(
+    public static IContentProviderServiceProvider AddGoogleDriveContentProvider(
         this IServiceCollection services,
         Action<object> configuration
     )

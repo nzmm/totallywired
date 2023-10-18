@@ -7,7 +7,7 @@ using TotallyWired.Models;
 namespace TotallyWired.Handlers.TrackQueries;
 
 public class TrackRandomListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<int?, IEnumerable<TrackListModel>>
+    : IAsyncRequestHandler<int?, IEnumerable<TrackListModel>>
 {
     public async Task<IEnumerable<TrackListModel>> HandleAsync(
         int? take,

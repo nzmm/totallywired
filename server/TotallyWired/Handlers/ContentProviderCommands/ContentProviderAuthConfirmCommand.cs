@@ -9,17 +9,19 @@ public class ContentProviderAuthConfirmCommand
     public string Code { get; set; } = default!;
 }
 
-public class ContentProviderAuthConfirmHandler(
-    IServiceProvider services,
-    RegisteredContentProviders registry
-) : IRequestHandler<ContentProviderAuthConfirmCommand, bool>
+public class ContentProviderAuthConfirmHandler(ContentProviderServices providers)
+    : IAsyncRequestHandler<ContentProviderAuthConfirmCommand, bool>
 {
-    public Task<bool> HandleAsync(
+    public async Task<bool> HandleAsync(
         ContentProviderAuthConfirmCommand request,
         CancellationToken cancellationToken
     )
     {
-        var provider = registry.GetProvider(request.ProviderName);
-        return provider.AuthorizeAsync(services, request.Code);
+        var provider = providers.GetProvider(request.ProviderName);
+        if (provider is null)
+        {
+            return false;
+        }
+        return await provider.AuthorizeAsync(request.Code);
     }
 }

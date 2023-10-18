@@ -14,10 +14,12 @@ public static class ProviderRoutes
 
         oauth.MapGet(
             "/auth-request/{providerName}",
-            async (ContentProviderAuthRequestHandler handler, string providerName) =>
+            ([FromServices] ContentProviderAuthRequestHandler handler, string providerName) =>
             {
-                var authorizeUri = await handler.HandleAsync(providerName, CancellationToken.None);
-                return Results.Redirect(authorizeUri);
+                var authorizeUri = handler.Handle(providerName);
+                return string.IsNullOrEmpty(authorizeUri)
+                    ? Results.BadRequest()
+                    : Results.Redirect(authorizeUri);
             }
         );
 

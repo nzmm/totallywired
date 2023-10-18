@@ -5,7 +5,7 @@ using TotallyWired.Infrastructure.EntityFramework;
 namespace TotallyWired.Handlers.ArtistQueries;
 
 public class ArtistArtQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<Guid, string>
+    : IAsyncRequestHandler<Guid, string>
 {
     private const string DefaultAlbumArt = "/default-art.svg";
 

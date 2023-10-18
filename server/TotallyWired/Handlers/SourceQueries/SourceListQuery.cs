@@ -7,7 +7,7 @@ using TotallyWired.Models;
 namespace TotallyWired.Handlers.SourceQueries;
 
 public class SourceListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IRequestHandler<IEnumerable<SourceTypeListModel>>
+    : IAsyncRequestHandler<IEnumerable<SourceTypeListModel>>
 {
     public async Task<IEnumerable<SourceTypeListModel>> HandleAsync(
         CancellationToken cancellationToken
