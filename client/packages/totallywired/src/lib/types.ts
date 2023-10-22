@@ -29,7 +29,7 @@ export type Album = {
   name: string;
   artistId: string;
   artistName: string;
-  year: number;
+  year?: number;
 };
 
 export type AlbumDetail = Album & {

@@ -44,7 +44,7 @@ export type AlbumChangeProposal = {
   artistMbid: string;
   name: AttributeChangeRequest<string>;
   artistName: AttributeChangeRequest<string>;
-  year: AttributeChangeRequest<number>;
+  year: AttributeChangeRequest<number | undefined>;
   recordLabel: AttributeChangeRequest<string>;
   country: AttributeChangeRequest<string>;
   type: AttributeChangeRequest<string>;

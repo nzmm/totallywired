@@ -24,6 +24,7 @@
 
         + button {
           opacity: 1;
+          color: var(--gray-12);
         }
       }
     }
@@ -38,7 +39,12 @@
       background-color: transparent;
       border: 0;
       text-align: center;
-      opacity: 0;
+      opacity: 1;
+      color: var(--gray-9);
+
+      &:disabled {
+        opacity: 0;
+      }
 
       > svg {
         vertical-align: middle;
