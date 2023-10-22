@@ -9,7 +9,10 @@ type TrackListHeaderProps = {
   tracks: Track[];
 };
 
-export default function TrackListHeader({ player, tracks }: TrackListHeaderProps) {
+export default function TrackListHeader({
+  player,
+  tracks,
+}: TrackListHeaderProps) {
   const [d, l] = useMemo(() => {
     const [ms, l] = tracks.reduce(
       ([ms, l], cur) => {
@@ -23,14 +26,13 @@ export default function TrackListHeader({ player, tracks }: TrackListHeaderProps
   return (
     <div className="tracklist-header">
       {l} tracks, {d}
-
       <div className="actions">
-      <button onClick={() => player.addTracks(tracks)} disabled={!l}>
-        Play all
-      </button>
-      <button onClick={() => player.addTracks(shuffle(tracks))} disabled={!l}>
-        Shuffle all
-      </button>
+        <button onClick={() => player.addTracks(tracks)} disabled={!l}>
+          Play all
+        </button>
+        <button onClick={() => player.addTracks(shuffle(tracks))} disabled={!l}>
+          Shuffle all
+        </button>
       </div>
     </div>
   );

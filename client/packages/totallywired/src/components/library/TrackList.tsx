@@ -42,14 +42,14 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
 
   return tracks.length ? (
     <>
-    <TrackListHeader player={player} tracks={tracks} />
-    <VirtualList
-      className="tracklist"
-      items={tracks.map((t) => ({ ...t, height: 42 }))}
-      itemRenderer={TrackItem}
-      onClick={handleClick}
-      onDoubleClick={handleDoubleClick}
-    />
+      <TrackListHeader player={player} tracks={tracks} />
+      <VirtualList
+        className="tracklist"
+        items={tracks.map((t) => ({ ...t, height: 42 }))}
+        itemRenderer={TrackItem}
+        onClick={handleClick}
+        onDoubleClick={handleDoubleClick}
+      />
     </>
   ) : (
     <section>

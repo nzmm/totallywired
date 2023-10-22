@@ -33,7 +33,9 @@ function ProviderList() {
         {providers.map((p) => {
           return (
             <SidebarSection key={p.groupName}>
-              <div className="provider-title">{METADATA[p.groupName]?.name ?? "?"}</div>
+              <div className="provider-title">
+                {METADATA[p.groupName]?.name ?? "?"}
+              </div>
 
               {p.contentProviders.map((cp) => (
                 <SidebarLink key={cp.id} to={cp.id}>
