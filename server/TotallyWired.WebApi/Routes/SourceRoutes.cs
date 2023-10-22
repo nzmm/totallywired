@@ -6,13 +6,13 @@ using TotallyWired.WebApi.Security;
 
 namespace TotallyWired.WebApi.Routes;
 
-public static class ProviderRoutes
+public static class SourceRoutes
 {
-    public static void MapProviderRoutes(this WebApplication app)
+    public static void MapSourceRoutes(this WebApplication app)
     {
-        var oauth = app.MapGroup("/providers").RequireAuthorization().ValidateAntiforgery();
+        var providers = app.MapGroup("/providers").RequireAuthorization().ValidateAntiforgery();
 
-        oauth.MapGet(
+        providers.MapGet(
             "/auth-request/{providerName}",
             ([FromServices] ContentProviderAuthRequestHandler handler, string providerName) =>
             {
@@ -23,7 +23,7 @@ public static class ProviderRoutes
             }
         );
 
-        oauth.MapGet(
+        providers.MapGet(
             "/auth-confirm/{providerName}",
             async (
                 ContentProviderAuthConfirmHandler handler,
@@ -60,6 +60,19 @@ public static class ProviderRoutes
             {
                 var sources = await handler.HandleAsync(cancellationToken);
                 return Results.Ok(sources);
+            }
+        );
+
+        group.MapGet(
+            "/{sourceId:guid}",
+            async (
+                Guid sourceId,
+                SourceQueryHandler handler,
+                CancellationToken cancellationToken
+            ) =>
+            {
+                var source = await handler.HandleAsync(sourceId, cancellationToken);
+                return source is null ? Results.NotFound() : Results.Ok(source);
             }
         );
 

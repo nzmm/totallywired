@@ -1,7 +1,14 @@
 import { LoaderFunctionArgs } from "react-router-dom";
 import { requestSearchParams } from "./requests";
 import { ReactionType } from "./types";
-import { getAlbums, getArtists, getCollections, getTracks } from "./api/v1";
+import {
+  getAlbums,
+  getArtists,
+  getCollections,
+  getProvider,
+  getProviders,
+  getTracks,
+} from "./api/v1";
 
 export function tracksLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
@@ -51,4 +58,15 @@ export function likedLoader({ request }: LoaderFunctionArgs) {
   const searchParams = requestSearchParams(request);
   searchParams.append("reaction", ReactionType.Liked.toString());
   return getTracks(searchParams);
+}
+
+export function providersLoader() {
+  return getProviders();
+}
+
+export function providerLoader({ params }: LoaderFunctionArgs) {
+  if (!params.sourceId) {
+    throw new Error("sourceId required");
+  }
+  return getProvider(params.sourceId);
 }

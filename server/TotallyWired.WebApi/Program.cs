@@ -45,7 +45,7 @@ app.UseCurrentUser();
 app.MapAuthRoutes();
 app.MapSecurityRoutes();
 app.MapUserRoutes();
-app.MapProviderRoutes();
+app.MapSourceRoutes();
 app.MapArtistRoutes();
 app.MapReleaseRoutes();
 app.MapTrackRoutes();

@@ -6,7 +6,8 @@ import {
   AlbumDetail,
   Artist,
   Playlist,
-  ProviderCollection,
+  Provider,
+  ProviderGroup,
   ReactionType,
   Track,
   User,
@@ -110,7 +111,11 @@ export function getPlaylists() {
 /* Content Providers */
 
 export function getProviders() {
-  return sendQuery<ProviderCollection[]>(`${API}/providers`);
+  return sendQuery<ProviderGroup[]>(`${API}/providers`);
+}
+
+export function getProvider(providerId: string) {
+  return sendQuery<Provider>(`${API}/providers/${providerId}`);
 }
 
 export function syncProvider(sourceId: string) {

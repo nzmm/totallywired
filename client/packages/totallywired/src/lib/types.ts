@@ -56,16 +56,17 @@ export type Artist = {
 export type ArtistDetail = Artist;
 
 export type Provider = {
-  sourceId: string;
+  id: string;
   sourceType: number;
-  trackCount: number;
+  sourceName: string;
   createdOn: string;
   modifiedOn: string;
+  trackCount: number;
 };
 
-export type ProviderCollection = {
-  sourceType: number;
-  providers: Provider[];
+export type ProviderGroup = {
+  groupName: string;
+  contentProviders: Provider[];
 };
 
 export type Playlist = {

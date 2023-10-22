@@ -1,46 +1,50 @@
 using Microsoft.EntityFrameworkCore;
+using TotallyWired.ContentProviders;
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Enums;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Models;
 
 namespace TotallyWired.Handlers.SourceQueries;
 
-public class SourceListQueryHandler(ICurrentUser user, TotallyWiredDbContext context)
-    : IAsyncRequestHandler<IEnumerable<SourceTypeListModel>>
+public class SourceListQueryHandler(
+    TotallyWiredDbContext context,
+    ContentProviderRegistry registry,
+    ICurrentUser user
+) : IAsyncRequestHandler<IEnumerable<SourceGroupListModel>>
 {
-    public async Task<IEnumerable<SourceTypeListModel>> HandleAsync(
+    public async Task<IEnumerable<SourceGroupListModel>> HandleAsync(
         CancellationToken cancellationToken
     )
     {
         var userId = user.UserId();
 
-        var sources = await context.Sources
+        var groupings = await context.Sources
             .Where(x => x.UserId == userId)
             .Select(
                 x =>
                     new SourceListModel
                     {
-                        SourceId = x.Id,
+                        Id = x.Id,
                         SourceType = x.Type,
-                        CreatedOn = x.Created,
-                        ModifiedOn = x.Modified,
                         TrackCount = x.Tracks.Count()
                     }
             )
             .GroupBy(x => x.SourceType, x => x)
-            .ToDictionaryAsync(x => x.Key, x => x.ToArray(), cancellationToken);
+            .ToDictionaryAsync(
+                x => x.Key.ToString().ToLowerInvariant(),
+                x => x.ToArray(),
+                cancellationToken
+            );
 
-        return Enum.GetValues<SourceType>()
-            .Where(t => t != SourceType.None)
-            .Select(t =>
+        var registered = registry.RegisteredServiceProviders.Keys;
+        return registered.Select(k =>
+        {
+            groupings.TryGetValue(k, out var sourceList);
+            return new SourceGroupListModel
             {
-                sources.TryGetValue(t, out var typedSources);
-                return new SourceTypeListModel
-                {
-                    SourceType = t,
-                    Providers = typedSources ?? Enumerable.Empty<SourceListModel>()
-                };
-            });
+                GroupName = k,
+                ContentProviders = sourceList ?? Enumerable.Empty<SourceListModel>()
+            };
+        });
     }
 }

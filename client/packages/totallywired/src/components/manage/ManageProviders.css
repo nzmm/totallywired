@@ -1,0 +1,15 @@
+#my-content-providers {
+  flex-grow: 1;
+
+  & .provider-title {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding-left: 8px;
+    font-weight: bold;
+    color: var(--gray-11);
+  }
+
+  & .provider {
+    margin: 30px;
+  }
+}

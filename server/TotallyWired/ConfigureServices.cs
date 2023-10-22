@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TotallyWired.Infrastructure.EntityFramework;
+using TotallyWired.Contracts;
 using TotallyWired.Common;
 using TotallyWired.ContentProviders;
-using TotallyWired.Contracts;
 using TotallyWired.Handlers.ArtistQueries;
 using TotallyWired.Handlers.PlaylistQueries;
 using TotallyWired.Handlers.ReleaseCommands;
@@ -12,7 +13,6 @@ using TotallyWired.Handlers.SourceCommands;
 using TotallyWired.Handlers.SourceQueries;
 using TotallyWired.Handlers.TrackCommands;
 using TotallyWired.Handlers.TrackQueries;
-using TotallyWired.Infrastructure.EntityFramework;
 
 namespace TotallyWired;
 
@@ -58,15 +58,15 @@ public static class ConfigureServices
         // playlists
         services.AddScoped<PlaylistListQueryHandler>();
 
-        // providers
+        // sources
         services.AddScoped<SourceListQueryHandler>();
+        services.AddScoped<SourceQueryHandler>();
         services.AddScoped<SourceSyncCommandHandler>();
     }
 
     public static void PrepareDatabase(this IServiceProvider services)
     {
         using var scope = services.CreateScope();
-
         var db = scope.ServiceProvider.GetRequiredService<TotallyWiredDbContext>();
         db.Database.Migrate();
     }

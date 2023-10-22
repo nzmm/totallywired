@@ -7,6 +7,8 @@ import {
   artistTracksLoader,
   likedLoader,
   collectionLoader,
+  providersLoader,
+  providerLoader,
 } from "./lib/loaders";
 import Manage from "./routes/manage/Manage";
 import Me from "./routes/manage/Me";
@@ -25,6 +27,7 @@ import Liked from "./routes/Liked";
 import AlbumEditor from "./routes/AlbumEdit";
 
 import "./styles.css";
+import ManageProvider from "./components/manage/ManageProvider";
 
 const AppRouter = createBrowserRouter([
   {
@@ -47,6 +50,14 @@ const AppRouter = createBrowserRouter([
           {
             path: "providers",
             element: <Providers />,
+            loader: providersLoader,
+            children: [
+              {
+                path: ":sourceId",
+                element: <ManageProvider />,
+                loader: providerLoader,
+              },
+            ],
           },
         ],
       },

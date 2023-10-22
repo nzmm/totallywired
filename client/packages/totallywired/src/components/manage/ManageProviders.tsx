@@ -1,107 +1,62 @@
-import { TabList } from "@totallywired/ui-components";
-import { Await, useAsyncValue } from "react-router-dom";
-import { getProviders, syncProvider } from "../../lib/api/v1";
-import { ProviderCollection } from "../../lib/types";
-import { useMemo, Suspense } from "react";
+import { Await, Outlet, useAsyncValue, useLoaderData } from "react-router-dom";
+import { ProviderGroup } from "../../lib/types";
+import { Suspense } from "react";
+import { Res } from "../../lib/requests";
+import {
+  Sidebar,
+  SidebarJube,
+  SidebarLink,
+  SidebarSection,
+} from "../common/Sidebar";
+import { Splitter } from "@totallywired/ui-components";
 import Loading from "../common/Loading";
+import "./ManageProviders.css";
 
 type ProviderMetadata = {
   name: string;
-  enabled: boolean;
-  sourceType: number;
 };
 
-type Collections = (ProviderCollection & ProviderMetadata)[];
-
-const METADATA: ProviderMetadata[] = [
-  {
+const METADATA: Record<string, ProviderMetadata> = {
+  microsoft: {
     name: "Microsoft OneDrive",
-    enabled: true,
-    sourceType: 1,
   },
-  {
+  google: {
     name: "Google Drive",
-    enabled: false,
-    sourceType: 2,
   },
-  {
-    name: "Dropbox",
-    enabled: false,
-    sourceType: 3,
-  },
-];
+};
 
 function ProviderList() {
-  const collections = useAsyncValue() as Collections;
-
-  const handleClick = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    sourceId: string,
-  ) => {
-    e.preventDefault();
-    await syncProvider(sourceId);
-  };
-
+  const { data: providers = [] } = useAsyncValue() as Res<ProviderGroup[]>;
   return (
-    <TabList
-      ariaLabelledBy="providers-tablist-header"
-      labels={collections.map((c) => `${c.name} (${c.providers.length})`)}
-    >
-      {collections.map((c) => {
-        return (
-          <div key={c.sourceType} className="provider tabpanel-content">
-            <a href="/providers/begin-auth/msgraph">
-              Add a {c.name} provider&hellip;
-            </a>
-            <hr />
-            <ul>
-              {c.providers.map((p) => {
-                return (
-                  <li key={p.sourceId}>
-                    <dl>
-                      <dt>Tracks</dt>
-                      <dd>{p.trackCount}</dd>
-                      <dt>Created</dt>
-                      <dd>{p.createdOn}</dd>
-                      <dt>Modified</dt>
-                      <dd>{p.modifiedOn}</dd>
-                    </dl>
+    <Splitter orientation="horizontal" initialPosition="250px">
+      <Sidebar>
+        {providers.map((p) => {
+          return (
+            <SidebarSection key={p.groupName}>
+              <div className="provider-title">{METADATA[p.groupName]?.name ?? "?"}</div>
 
-                    <button onClick={(e) => handleClick(e, p.sourceId)}>
-                      Sync
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-        );
-      })}
-    </TabList>
+              {p.contentProviders.map((cp) => (
+                <SidebarLink key={cp.id} to={cp.id}>
+                  <span>{cp.id}</span>
+                  <SidebarJube>{cp.trackCount}</SidebarJube>
+                </SidebarLink>
+              ))}
+            </SidebarSection>
+          );
+        })}
+      </Sidebar>
+
+      <Outlet />
+    </Splitter>
   );
 }
 
 export default function ContentProviders() {
-  const promise = useMemo<Promise<Collections>>(async () => {
-    const { data = [] } = await getProviders();
-
-    return METADATA.map((meta) => {
-      const providers = data.find((x) => x.sourceType === meta.sourceType) ?? {
-        providers: [],
-      };
-
-      return {
-        ...meta,
-        ...providers,
-      };
-    });
-  }, []);
-
+  const data = useLoaderData();
   return (
-    <section className="manage-providers">
-      <h2 id="providers-tablist-header">Content Providers</h2>
+    <section id="my-content-providers">
       <Suspense fallback={<Loading />}>
-        <Await resolve={promise}>
+        <Await resolve={data}>
           <ProviderList />
         </Await>
       </Suspense>

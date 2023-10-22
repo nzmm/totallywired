@@ -8,7 +8,7 @@
   width: 42px;
   height: 42px;
   border-radius: 100%;
-  background: linear-gradient(45deg,red,blue);
+  background: linear-gradient(45deg, red, blue);
   padding: 3px;
 }
 
@@ -27,7 +27,7 @@
   align-items: center;
   justify-content: center;
   color: white;
-  background:linear-gradient(45deg,red,blue);
+  background: linear-gradient(45deg, red, blue);
   font-size: 15px;
   line-height: 1;
   font-weight: 500;

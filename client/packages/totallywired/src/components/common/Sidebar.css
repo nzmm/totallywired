@@ -14,13 +14,25 @@ aside {
       gap: 2px;
 
       > li {
-        > a {
-          display: block;
-          padding: 6px 8px;
-        }
+        overflow: hidden;
 
         > a {
+          display: inline-flex;
+          justify-content: space-between;
+          white-space: nowrap;
+          box-sizing: border-box;
+          gap: 5px;
+          width: 100%;
+          padding: 6px 8px;
+
+          > span:not(.jube) {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            flex-shrink: 1;
+          }
+
           > .jube {
+            flex-shrink: 0;
             color: var(--gray-12);
             font-size: smaller;
             background-color: var(--gray-3);
