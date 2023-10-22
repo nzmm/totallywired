@@ -20,7 +20,6 @@ export default function PlaylistHeader({ player, queue }: PlaylistHeaderProps) {
       },
       [0, 0],
     );
-
     return [duration(ms), l];
   }, [queue]);
 

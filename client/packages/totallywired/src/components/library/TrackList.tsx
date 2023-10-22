@@ -7,6 +7,7 @@ import TrackItem from "./TrackListItem";
 import { useToggleTrackReaction } from "../../lib/tracks/hooks";
 import { usePlayer } from "../../lib/player/hooks";
 import { Track } from "../../lib/types";
+import TrackListHeader from "./TrackListHeader";
 import "./TrackList.css";
 
 export type TrackDataProps = IVirtualListItem & Track;
@@ -40,6 +41,8 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
   };
 
   return tracks.length ? (
+    <>
+    <TrackListHeader player={player} tracks={tracks} />
     <VirtualList
       className="tracklist"
       items={tracks.map((t) => ({ ...t, height: 42 }))}
@@ -47,6 +50,7 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
       onClick={handleClick}
       onDoubleClick={handleDoubleClick}
     />
+    </>
   ) : (
     <section>
       <p>No tracks</p>
