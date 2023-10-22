@@ -6,7 +6,7 @@ export function hasChanged<T extends string | number | undefined>(
   return (cr.oldValue?.toString() ?? "") !== (cr.newValue?.toString() ?? "");
 }
 
-export function changeClassName<T extends string | number>(
+export function changeClassName<T extends string | number | undefined>(
   cr: ChangeRequest<T>,
   readOnly?: boolean,
 ) {

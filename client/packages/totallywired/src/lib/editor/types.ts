@@ -70,7 +70,7 @@ export type ReleaseUpdateCommand = {
   recordLabel: string;
   type: string;
   country: string;
-  year: number;
+  year?: number;
   coverArtUrl: string;
   tracks: TrackUpdate[];
 };

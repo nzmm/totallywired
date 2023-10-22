@@ -17,7 +17,7 @@ type ReleaseTableProps = {
 
 type ReleaseRowProps = {
   label: string;
-  cr: AttributeChangeRequest<string | number>;
+  cr: AttributeChangeRequest<string | number | undefined>;
   version: "oldValue" | "newValue";
   readOnly?: boolean;
   type?: "text" | "number";

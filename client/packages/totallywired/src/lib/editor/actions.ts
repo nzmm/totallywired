@@ -336,7 +336,7 @@ const commitChange = <T extends ChangeRequest<unknown>>(cr: T): T => {
   return { ...cr, oldValue: cr.newValue };
 };
 
-const commitAttrChange = <T extends string | number>(
+const commitAttrChange = <T extends string | number | undefined>(
   cr: AttributeChangeRequest<T>,
 ): AttributeChangeRequest<T> => {
   return cr.active && cr.approved ? { ...commitChange(cr), active: false } : cr;
