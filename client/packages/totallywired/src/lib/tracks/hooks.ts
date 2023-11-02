@@ -78,6 +78,7 @@ export const useToggleTrackReaction = () => {
 
       cxDispatch(updateTrackReaction(track, reaction));
       plDispatch(updateLikedTrackCount(reaction));
+      return reaction;
     },
     [cxDispatch, plDispatch],
   );

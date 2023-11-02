@@ -105,6 +105,13 @@
 
       > .col.liked {
         flex-shrink: 0;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+
+        & * {
+          pointer-events: none;
+        }
       }
 
       > .col.duration {

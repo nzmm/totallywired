@@ -1,6 +1,7 @@
 import { ListItemProps } from "@totallywired/ui-components";
 import { Link } from "react-router-dom";
-import { Track } from "../../lib/types";
+import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
+import type { Track } from "../../lib/types";
 
 export type TrackItemProps = ListItemProps<Track>;
 
@@ -22,7 +23,7 @@ export default function TrackItem({ top, height, ...track }: TrackItemProps) {
         </Link>
       </span>
       <button className="col liked" data-intent="react">
-        {`${track.liked}`}
+        {track.liked ? <HeartFilledIcon className="liked" /> : <HeartIcon />}
       </button>
       <span className="col duration rgutter">{`${track.displayLength}`}</span>
     </li>

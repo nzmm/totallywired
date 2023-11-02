@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   IVirtualListItem,
   VirtualList,
@@ -6,7 +7,7 @@ import {
 import TrackItem from "./TrackListItem";
 import { useToggleTrackReaction } from "../../lib/tracks/hooks";
 import { usePlayer } from "../../lib/player/hooks";
-import { Track } from "../../lib/types";
+import { ReactionType, Track } from "../../lib/types";
 import TrackListHeader from "./TrackListHeader";
 import "./TrackList.css";
 
@@ -15,6 +16,7 @@ export type TrackDataProps = IVirtualListItem & Track;
 export default function TrackList({ tracks }: { tracks: Track[] }) {
   const player = usePlayer();
   const toggleReaction = useToggleTrackReaction();
+  const [cachedTracks, setCachedTracks] = useState(tracks);
 
   const handleClick = async (
     e: React.MouseEvent<HTMLElement>,
@@ -27,8 +29,18 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
         break;
       }
       case "react": {
-        await toggleReaction(item.data);
+        const reaction = await toggleReaction(item.data);
+        setCachedTracks((prev) =>
+          prev.map((t) =>
+            t.id === item.data.id
+              ? { ...t, liked: reaction === ReactionType.Liked }
+              : t,
+          ),
+        );
         break;
+      }
+      default: {
+        console.log(target);
       }
     }
   };
@@ -45,7 +57,7 @@ export default function TrackList({ tracks }: { tracks: Track[] }) {
       <TrackListHeader player={player} tracks={tracks} />
       <VirtualList
         className="tracklist"
-        items={tracks.map((t) => ({ ...t, height: 42 }))}
+        items={cachedTracks.map((t) => ({ ...t, height: 42 }))}
         itemRenderer={TrackItem}
         onClick={handleClick}
         onDoubleClick={handleDoubleClick}
