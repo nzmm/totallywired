@@ -1,12 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-import { AudioPlayer, IS_QUEUED, PlayerTrack, PlaylistItem, TrackState } from "../player";
+import { AudioPlayer, IS_QUEUED, PlayerTrack } from "../player";
 import {
   PlayerContext,
   PlaylistsContext,
   PlaylistsDispatchContext,
   QueueContext,
 } from "./context";
-import { Track } from "../types";
 
 export const usePlayer = () => {
   return useContext(PlayerContext);
@@ -28,21 +27,22 @@ export const usePlaylistDispatch = () => {
   return useContext(PlaylistsDispatchContext);
 };
 
-export const useCurrentTrackState = (
-  player: AudioPlayer,
-): PlayerTrack => {
-  const [currentTrack, setCurrentTrack] = useState<PlayerTrack>(player.getCurrentTrack());
+export const useCurrentTrackState = (player: AudioPlayer): PlayerTrack => {
+  const [currentTrack, setCurrentTrack] = useState<PlayerTrack>(() => {
+    const { track, state } = player.getCurrentTrack();
+    return { track, state };
+  });
 
   useEffect(() => {
-    const stateChangeHandler = (playerTrack: PlayerTrack) => {
-      setCurrentTrack(playerTrack);
+    const stateChangeHandler = ({ track, state }: PlayerTrack) => {
+      setCurrentTrack({ track, state });
     };
 
     player.addEventHandler("current-state-change", stateChangeHandler);
     return () => {
       player.removeEventHandler("current-state-change", stateChangeHandler);
     };
-  }, [player]);
+  }, [setCurrentTrack, player]);
 
   return currentTrack;
 };

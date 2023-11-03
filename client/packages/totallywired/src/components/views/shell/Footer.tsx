@@ -8,6 +8,8 @@ export default function Footer() {
   const player = usePlayer();
   const { track, state } = useCurrentTrackState(player);
 
+  console.log(state);
+
   return (
     <footer>
       <div>

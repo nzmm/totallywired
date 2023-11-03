@@ -3,7 +3,9 @@ import { useParams } from "react-router-dom";
 import { Dialog } from "../components/vendor/radix-ui/Dialog";
 import Loading from "../components/common/Loading";
 
-const LazyEditor = React.lazy(() => import("../components/views/editor/AlbumEditor"));
+const LazyEditor = React.lazy(
+  () => import("../components/views/editor/AlbumEditor"),
+);
 
 export default function AlbumEditor() {
   const params = useParams();

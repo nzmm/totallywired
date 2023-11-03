@@ -19,7 +19,7 @@ function ProviderList() {
     <Splitter orientation="horizontal" initialPosition="250px">
       <Sidebar>
         <SidebarSection>
-          <SidebarLink to="/manage/providers/" >
+          <SidebarLink to="/manage/providers/">
             <span>Overview</span>
           </SidebarLink>
         </SidebarSection>

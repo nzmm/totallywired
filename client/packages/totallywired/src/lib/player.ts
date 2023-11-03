@@ -197,7 +197,9 @@ export class AudioPlayer {
   }
 
   private _getPlayer() {
-    return this._currentId === this._player0?.id ? this._player0 : this._player1;
+    return this._currentId === this._player0?.id
+      ? this._player0
+      : this._player1;
   }
 
   private _getNextPlayer() {
@@ -476,7 +478,7 @@ export class AudioPlayer {
     return (
       this._playlist.getById(this._currentId) ?? {
         track: undefined,
-        state: TrackState.Unknown
+        state: TrackState.Unknown,
       }
     );
   }

@@ -3,7 +3,10 @@ import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import { ListItemProps } from "@totallywired/ui-components";
 import { separatedNodes } from "../../helpers";
 import { usePlayer } from "../../../lib/player/hooks";
-import { useCollection, useToggleTrackReaction } from "../../../lib/tracks/hooks";
+import {
+  useCollection,
+  useToggleTrackReaction,
+} from "../../../lib/tracks/hooks";
 import { AlbumCollection, AlbumDetail } from "../../../lib/types";
 import { ReleaseArt } from "../../common/Thumbnail";
 import "./MusicCollectionListItem.css";

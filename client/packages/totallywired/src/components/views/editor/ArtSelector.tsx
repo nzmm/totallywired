@@ -31,7 +31,7 @@ export default function ArtSelector({
   artCollection,
   onSelect,
 }: ArtSelectorProps) {
-  const shortlistFor = useRef("");
+  const shortlistFor = useRef<string>();
   const [shorlist, setShortlist] = useState<[string, string][]>([]);
 
   useEffect(() => {
