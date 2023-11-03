@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build-server
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-server
 WORKDIR /app
 COPY ./server/TotallyWired ./TotallyWired
 COPY ./server/TotallyWired.WebApi ./TotallyWired.WebApi
@@ -14,7 +14,7 @@ RUN npm run build
 RUN ls -l ./packages/totallywired/dist
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0 as final
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 as final
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443

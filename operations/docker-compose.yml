@@ -22,6 +22,8 @@ services:
       - 9999:5432 
     networks:
       - dev
+    volumes:
+      - db_data:/var/lib/postgresql/data
 
   adminer:
     image: adminer
@@ -34,3 +36,11 @@ services:
 networks:
   dev:
     driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      device: /data/db_data
+      o: bind

@@ -12,7 +12,8 @@ SELECT
     r."Country",
     r."RecordLabel",
     r."MusicBrainzId",
-    r."SearchVector_EN"
+    r."SearchVector_EN",
+    r."Type"
 FROM (
      SELECT r.*
      FROM "Releases" AS r

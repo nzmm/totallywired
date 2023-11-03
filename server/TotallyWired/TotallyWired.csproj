@@ -30,6 +30,9 @@
       <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_releases.0.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
+      <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_releases.1.sql">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </EmbeddedResource>
       <EmbeddedResource Include="Infrastructure\EntityFramework\PostgreSQL\Functions\search_tracks.0.sql">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
