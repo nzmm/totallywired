@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "operations"
+		},
+		{
+			"path": "assets"
 		}
 	],
 	"settings": {

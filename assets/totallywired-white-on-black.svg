@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="300"
+   height="75.62468"
+   viewBox="0 0 79.375003 20.00903"
+   version="1.1"
+   id="svg924"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs921" />
+  <g
+     id="layer1"
+     transform="translate(-93.692524,-145.61962)">
+    <g
+       id="g1862"
+       transform="matrix(3.5098449,0,0,3.4733328,-235.15369,-360.16576)">
+      <rect
+         style="fill:#1a1a1a;stroke-width:0.025;stroke-linecap:round"
+         id="rect1066"
+         width="22.61496"
+         height="5.7607584"
+         x="93.69252"
+         y="145.61961"
+         rx="0.2"
+         ry="0.2" />
+      <g
+         aria-label="TotallyWired"
+         id="text236-6-6-5-1"
+         style="font-size:3.175px;font-family:FreeSans;-inkscape-font-specification:FreeSans;letter-spacing:-0.0635px;word-spacing:0px;fill:#ffffff;stroke:#000000;stroke-width:0.025;stroke-linecap:round">
+        <path
+           d="m 97.690177,147.2578 v 0.40958 h -0.42545 v 1.81292 h -0.4445 v -1.81292 h -0.4318 v -0.40958 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1773" />
+        <path
+           d="m 97.607165,148.36905 q 0,-0.40322 0.130175,-0.65722 0.130175,-0.254 0.339725,-0.37148 0.212725,-0.12065 0.460375,-0.12065 0.24765,0 0.4572,0.12065 0.212725,0.11748 0.3429,0.37148 0.130175,0.254 0.130175,0.65722 0,0.40323 -0.130175,0.65723 -0.130175,0.254 -0.3429,0.37465 -0.20955,0.11747 -0.4572,0.11747 -0.24765,0 -0.460375,-0.11747 -0.20955,-0.12065 -0.339725,-0.37465 -0.130175,-0.254 -0.130175,-0.65723 z m 0.46355,0 q 0,0.2413 0.06032,0.40323 0.0635,0.16192 0.168275,0.24447 0.10795,0.0794 0.238125,0.0794 0.130175,0 0.238125,-0.0794 0.111125,-0.0825 0.174625,-0.24447 0.0635,-0.16193 0.0635,-0.40323 0,-0.24447 -0.06668,-0.4064 -0.0635,-0.16192 -0.17145,-0.2413 -0.10795,-0.0794 -0.23495,-0.0794 -0.13335,0 -0.2413,0.0825 -0.104775,0.0826 -0.168275,0.24447 -0.06032,0.15875 -0.06032,0.40005 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1775" />
+        <path
+           d="m 100.70532,147.2578 v 0.40958 h -0.42545 v 1.81292 h -0.444496 v -1.81292 h -0.4318 v -0.40958 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1777" />
+        <path
+           d="m 100.54012,149.4803 v -0.073 l 0.46355,-2.14948 0.79058,0.003 0.46672,2.1463 v 0.073 h -0.46355 l -0.1016,-0.5588 h -0.59055 l -0.10477,0.5588 z m 0.62548,-0.94932 h 0.46672 l -0.15557,-0.8509 h -0.15558 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1779" />
+        <path
+           d="m 102.37527,147.2578 h 0.4445 v 1.8161 h 0.60642 v 0.4064 h -1.05092 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1781" />
+        <path
+           d="m 103.55954,147.2578 h 0.4445 v 1.8161 h 0.60643 v 0.4064 h -1.05093 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1783" />
+        <path
+           d="m 104.34694,147.2578 h 0.46355 l 0.2794,1.08903 h 0.1778 l 0.28257,-1.08903 h 0.46355 v 0.073 l -0.41592,1.44145 h -0.19368 v 0.70802 h -0.4445 v -0.70485 h -0.19685 l -0.41592,-1.44462 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1785" />
+        <path
+           d="m 106.01381,147.5578 h 0.46038 l 0.2032,1.62243 h 0.0349 l 0.22225,-1.62243 h 0.4318 l 0.22225,1.62243 h 0.0381 l 0.20003,-1.62243 h 0.46037 v 0.073 l -0.34607,2.14947 h -0.60008 l -0.17145,-1.40652 h -0.0349 l -0.17463,1.40652 h -0.60007 l -0.34608,-2.14947 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1787" />
+        <path
+           d="m 108.41411,147.5578 h 0.4445 v 2.2225 h -0.4445 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1789" />
+        <path
+           d="m 109.11896,147.5578 h 0.4445 v 2.2225 h -0.45085 z m 0.80645,0 q 0.1905,0 0.33655,0.0762 0.14922,0.073 0.23495,0.22543 0.0857,0.14922 0.0857,0.37465 0,0.23177 -0.0952,0.38735 -0.0921,0.1524 -0.2413,0.23177 -0.14605,0.0762 -0.31432,0.0762 h -0.60325 v -1.3716 z m -0.3683,0.98743 h 0.31432 q 0.0762,0 0.13335,-0.0349 0.0572,-0.0349 0.0857,-0.1016 0.0318,-0.0699 0.0318,-0.15557 0,-0.0921 -0.0318,-0.15558 -0.0286,-0.0667 -0.0857,-0.0984 -0.0571,-0.0349 -0.13335,-0.0349 h -0.31432 z m 0.1778,0.14287 0.42545,-0.01 0.42227,1.0287 v 0.073 h -0.46355 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1791" />
+        <path
+           d="m 111.89073,147.5578 v 0.4064 h -0.69533 v 0.54293 q 0.0984,-0.0381 0.20638,-0.0603 0.11112,-0.0222 0.21907,-0.0286 0.10795,-0.006 0.20003,0.006 v 0.39052 l -0.0286,0.019 q -0.073,-0.0222 -0.17145,-0.0254 -0.0953,-0.003 -0.20637,0.0127 -0.11113,0.0159 -0.21908,0.054 v 0.49847 h 0.69533 v 0.4064 h -1.13983 v -2.2225 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1793" />
+        <path
+           d="m 112.6813,147.5578 h -0.61277 v 2.2225 h 0.61277 q 0.26353,0 0.47308,-0.11747 0.20955,-0.12065 0.33337,-0.36513 0.12383,-0.24765 0.12383,-0.62865 0,-0.38417 -0.12383,-0.62865 -0.12382,-0.24447 -0.33337,-0.36195 -0.20955,-0.12065 -0.47308,-0.12065 z m -0.006,1.80023 h -0.16192 v -1.37795 h 0.16192 q 0.21273,0 0.34608,0.1778 0.13652,0.1778 0.13652,0.51117 0,0.32703 -0.13335,0.508 -0.13335,0.18098 -0.34925,0.18098 z"
+           style="font-weight:600;font-family:Phudu;-inkscape-font-specification:'Phudu Semi-Bold';stroke:none"
+           id="path1795" />
+      </g>
+    </g>
+  </g>
+</svg>
