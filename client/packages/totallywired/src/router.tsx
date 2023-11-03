@@ -25,8 +25,8 @@ import Root from "./routes/Root";
 import MusicCollection from "./routes/MusicCollection";
 import Liked from "./routes/Liked";
 import AlbumEditor from "./routes/AlbumEdit";
-import ManageProvider from "./components/manage/ManageProvider";
-import ManageProvidersLanding from "./components/manage/ManageProvidersLanding";
+import ManageProvider from "./components/views/manage/ManageProvider";
+import ManageProvidersLanding from "./components/views/manage/ManageProvidersLanding";
 
 import "./styles.css";
 

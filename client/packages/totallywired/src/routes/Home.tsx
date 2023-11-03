@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useUser } from "../lib/users/hooks";
-import Header from "../components/shell/Header";
+import Header from "../components/views/shell/Header";
 
 export default function Home() {
   const user = useUser();

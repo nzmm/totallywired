@@ -2,7 +2,7 @@ import React, { Suspense } from "react";
 import Loading from "../../components/common/Loading";
 
 const LazyManageProfile = React.lazy(
-  () => import("../../components/manage/ManageProfile"),
+  () => import("../../components/views/manage/ManageProfile"),
 );
 
 export default function Me() {
