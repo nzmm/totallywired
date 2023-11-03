@@ -29,7 +29,7 @@ export default function TrackTable({
 }: TrackTable) {
   return (
     <table className="track metadata-table">
-      <caption>Tracks</caption>
+      <caption>Tracks ({tracks.length})</caption>
 
       <thead>
         <tr className="sr-only">

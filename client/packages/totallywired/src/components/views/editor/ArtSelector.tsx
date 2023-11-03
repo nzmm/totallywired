@@ -42,7 +42,7 @@ export default function ArtSelector({
     shortlistFor.current = mbid;
   }, [mbid, coverArt, artCollection, setShortlist]);
 
-  if (shorlist.length <= 1) {
+  if (shorlist.length < 1) {
     return null;
   }
 
