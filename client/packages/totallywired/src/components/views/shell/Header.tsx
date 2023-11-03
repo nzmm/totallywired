@@ -10,9 +10,9 @@ export default function Header({ children }: HeaderProps) {
   return (
     <header>
       <div>
-        <h1 className="brand" title="TotallyWired!">
-          <Link to="/">TotallyWired</Link>
-        </h1>
+        <Link to="/" className="brand">
+          <img src="/totallywired.svg" alt="TotallyWired" height="30" />
+        </Link>
       </div>
 
       <div>{children}</div>
