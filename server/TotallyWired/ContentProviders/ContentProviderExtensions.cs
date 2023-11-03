@@ -52,7 +52,7 @@ public static class ContentProviderExtensions
 
         serviceCollection.AddSingleton(new ContentProviderRegistry(serviceProviders));
         serviceCollection.AddTransient<ContentProviderServices>();
-        serviceCollection.AddTransient<ContentProviderAuthConfirmHandler>();
+        serviceCollection.AddTransient<ContentProviderAuthRequestHandler>();
         serviceCollection.AddTransient<ContentProviderAuthConfirmHandler>();
     }
 }

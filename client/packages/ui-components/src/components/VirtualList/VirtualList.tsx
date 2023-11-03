@@ -127,8 +127,6 @@ const VirtualList = <T extends IVirtualListItem>({
         return;
       }
 
-      console.log("resize", updatedContentRect);
-
       contentRect.current = updatedContentRect;
       scrollTop.current = vlist.current.scrollTop;
       indexRange.current = [0, items.length];

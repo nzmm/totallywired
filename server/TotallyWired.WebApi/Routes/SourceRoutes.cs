@@ -47,7 +47,7 @@ public static class SourceRoutes
                 );
 
                 return success
-                    ? Results.Redirect("/lib/providers")
+                    ? Results.Redirect("/manage/providers")
                     : Results.Problem("Authorization failed");
             }
         );

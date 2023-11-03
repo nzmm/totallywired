@@ -10,26 +10,20 @@ import {
 } from "../common/Sidebar";
 import { Splitter } from "@totallywired/ui-components";
 import Loading from "../common/Loading";
+import { METADATA } from "./metadata";
 import "./ManageProviders.css";
-
-type ProviderMetadata = {
-  name: string;
-};
-
-const METADATA: Record<string, ProviderMetadata> = {
-  microsoft: {
-    name: "Microsoft OneDrive",
-  },
-  google: {
-    name: "Google Drive",
-  },
-};
 
 function ProviderList() {
   const { data: providers = [] } = useAsyncValue() as Res<ProviderGroup[]>;
   return (
     <Splitter orientation="horizontal" initialPosition="250px">
       <Sidebar>
+        <SidebarSection>
+          <SidebarLink to="/manage/providers">
+            <span>Overview</span>
+          </SidebarLink>
+        </SidebarSection>
+
         {providers.map((p) => {
           return (
             <SidebarSection key={p.groupName}>

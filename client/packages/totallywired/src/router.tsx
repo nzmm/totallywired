@@ -25,9 +25,10 @@ import Root from "./routes/Root";
 import MusicCollection from "./routes/MusicCollection";
 import Liked from "./routes/Liked";
 import AlbumEditor from "./routes/AlbumEdit";
+import ManageProvider from "./components/manage/ManageProvider";
+import ManageProvidersLanding from "./components/manage/ManageProvidersLanding";
 
 import "./styles.css";
-import ManageProvider from "./components/manage/ManageProvider";
 
 const AppRouter = createBrowserRouter([
   {
@@ -56,6 +57,10 @@ const AppRouter = createBrowserRouter([
                 path: ":sourceId",
                 element: <ManageProvider />,
                 loader: providerLoader,
+              },
+              {
+                path: "",
+                element: <ManageProvidersLanding />,
               },
             ],
           },
