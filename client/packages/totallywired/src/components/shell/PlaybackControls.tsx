@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AudioPlayer, TrackState } from "../../lib/player";
 import Progressbar from "../common/Progressbar";
 import "./PlaybackControls.css";
@@ -16,10 +16,8 @@ type PlaybackControlsProps = {
   currentState: TrackState;
 };
 
-export default function PlaybackControls({
-  player,
-  currentState,
-}: PlaybackControlsProps) {
+function TrackProgress({ player, currentState }: PlaybackControlsProps) {
+  const interval = useRef(0);
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -27,15 +25,22 @@ export default function PlaybackControls({
       return;
     }
 
-    const i = window.setInterval(() => {
+    interval.current = window.setInterval(() => {
       const prog = player.getProgress();
       const percent = Math.round(Math.min(100, prog * 100) * 2) / 2;
       setProgress(percent);
     }, 500);
 
-    return () => clearInterval(i);
+    return () => clearInterval(interval.current);
   }, [currentState, player]);
 
+  return <Progressbar progress={progress} label="Playback progress" />;
+}
+
+export default function PlaybackControls({
+  player,
+  currentState,
+}: PlaybackControlsProps) {
   const handlePlayPause = async () => {
     if (player.getPlaylistCount()) {
       player.playPause();
@@ -74,7 +79,7 @@ export default function PlaybackControls({
         </button>
       </div>
 
-      <Progressbar progress={progress} label="Playback progress" />
+      <TrackProgress player={player} currentState={currentState} />
     </div>
   );
 }

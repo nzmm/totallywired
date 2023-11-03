@@ -31,8 +31,9 @@ const VirtualList = <T extends IVirtualListItem>({
   onDragEnd,
   onDrop,
 }: VirtualListProps<T>) => {
+  const contentRect = useRef<DOMRect>();
   const scrollTop = useRef(0);
-  const pending = useRef(false);
+  const pending = useRef<number>(0);
   const vlist = useRef<HTMLDivElement>(null);
   const indexRange = useRef<NumericRange>([0, 0]);
   const pixelRange = useRef<NumericRange>([0, 0]);
@@ -104,23 +105,31 @@ const VirtualList = <T extends IVirtualListItem>({
       }
 
       scrollTop.current = top;
-      pending.current = false;
+      pending.current = 0;
     };
 
     const handleScroll = () => {
       if (pending.current) {
-        return;
+        window.cancelAnimationFrame(pending.current);
       }
-
-      pending.current = true;
-      window.requestAnimationFrame(processScroll);
+      pending.current = window.requestAnimationFrame(processScroll);
     };
 
-    const handleResize = () => {
+    const handleResize = (updatedContentRect?: DOMRect) => {
       if (!vlist.current) {
         return;
       }
+      if (
+        updatedContentRect &&
+        updatedContentRect.top === contentRect.current?.top &&
+        updatedContentRect.height === contentRect.current?.height
+      ) {
+        return;
+      }
 
+      console.log("resize", updatedContentRect);
+
+      contentRect.current = updatedContentRect;
       scrollTop.current = vlist.current.scrollTop;
       indexRange.current = [0, items.length];
       pixelRange.current = [0, height];
@@ -133,7 +142,7 @@ const VirtualList = <T extends IVirtualListItem>({
     const observer = new ResizeObserver((entries) => {
       for (const entry of entries) {
         if (entry.contentBoxSize) {
-          handleResize();
+          handleResize(entry.contentRect);
         }
       }
     });

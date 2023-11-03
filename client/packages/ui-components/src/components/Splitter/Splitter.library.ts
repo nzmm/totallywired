@@ -47,14 +47,29 @@ const getPosition = (
     : e.clientY - splitter.offsetTop;
 };
 
-const getStyles = (
+const setStyles = (
+  panelA: HTMLDivElement,
+  panelB: HTMLDivElement,
   orientation: Orientation,
   position: CSSDimension,
   minSize: CSSDimension,
 ) => {
-  return orientation === "horizontal"
-    ? [{ width: position, minWidth: minSize }, { minWidth: minSize }]
-    : [{ height: position, minHeight: minSize }, { minHeight: minSize }];
+  const positionStyle =
+    typeof position === "number" ? `${position}px` : position;
+  const minSizeStyle = typeof minSize === "number" ? `${minSize}px` : minSize;
+
+  switch (orientation) {
+    case "horizontal": {
+      panelA.style.cssText = `width: ${positionStyle}; min-width: ${minSizeStyle}`;
+      panelB.style.cssText = `min-width: ${minSizeStyle}`;
+      return;
+    }
+    case "vertical": {
+      panelA.style.cssText = `height: ${positionStyle}; min-height: ${minSizeStyle}`;
+      panelB.style.cssText = `min-height: ${minSizeStyle}`;
+      return;
+    }
+  }
 };
 
 const shiftX = (parent: HTMLElement, step: number) => {
@@ -77,5 +92,5 @@ const shiftY = (parent: HTMLElement, step: number) => {
   );
 };
 
-export { SUPPORTED_KEYS, getPosition, getStyles, shiftX, shiftY };
+export { SUPPORTED_KEYS, getPosition, setStyles, shiftX, shiftY };
 export type { CSSDimension, SplitterProps };

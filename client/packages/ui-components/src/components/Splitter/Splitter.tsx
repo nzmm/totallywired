@@ -1,10 +1,10 @@
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useCallback, useEffect, useId, useRef, useState } from "react";
 import {
   CSSDimension,
   SUPPORTED_KEYS,
   SplitterProps,
   getPosition,
-  getStyles,
+  setStyles,
   shiftX,
   shiftY,
 } from "./Splitter.library";
@@ -19,12 +19,19 @@ const Splitter = ({
   initialPosition = "50%",
 }: SplitterProps) => {
   const id = useId();
-  const ts = useRef(0);
   const splitter = useRef<HTMLDivElement>(null);
   const handle = useRef<HTMLDivElement>(null);
+  const panelA = useRef<HTMLDivElement>(null);
+  const panelB = useRef<HTMLDivElement>(null);
 
-  const [dragging, setDragging] = useState<string>("");
-  const [position, setPosition] = useState<CSSDimension>(initialPosition);
+  const setPosition = useCallback(
+    (newPos: CSSDimension) => {
+      if (panelA.current && panelB.current) {
+        setStyles(panelA.current, panelB.current, orientation, newPos, minSize);
+      }
+    },
+    [panelA, panelB, orientation, minSize],
+  );
 
   useEffect(() => {
     if (!splitter.current || !handle.current) {
@@ -46,7 +53,9 @@ const Splitter = ({
       e.dataTransfer?.setDragImage(splitter.current, -99999, -99999);
       dragOwner = id;
 
-      setDragging("dragging");
+      if (handle.current) {
+        handle.current.classList.toggle("dragging");
+      }
     };
 
     const handleDragEnd = (e: DragEvent) => {
@@ -58,11 +67,11 @@ const Splitter = ({
       }
 
       e.stopPropagation();
-
-      const pos = getPosition(e, orientation, splitter.current);
-      setPosition(pos);
-      setDragging("");
       dragOwner = null;
+
+      if (handle.current) {
+        handle.current.classList.toggle("dragging");
+      }
     };
 
     const handleDragOver = (e: DragEvent) => {
@@ -74,13 +83,7 @@ const Splitter = ({
       }
 
       e.stopPropagation();
-      const td = e.timeStamp - ts.current;
 
-      if (td < 20) {
-        return;
-      }
-
-      ts.current = e.timeStamp;
       const pos = getPosition(e, orientation, splitter.current);
       setPosition(pos);
     };
@@ -97,7 +100,8 @@ const Splitter = ({
 
       e.stopPropagation();
 
-      switch (`${orientation}.${e.key}`) {
+      const keyNav = `${orientation}.${e.key}`;
+      switch (keyNav) {
         case "horizontal.ArrowRight": {
           const pos = shiftX(parent, 5);
           setPosition(pos);
@@ -157,17 +161,15 @@ const Splitter = ({
     };
   }, [initialPosition]);
 
-  const [styleA, styleB] = getStyles(orientation, position, minSize);
-
   return (
     <div className={`split ${orientation}`} ref={splitter}>
-      <div className="panel a" style={styleA}>
+      <div className="panel a" ref={panelA}>
         {children[0]}
       </div>
 
       <div className="separator">
         <div
-          className={`handle ${dragging}`}
+          className="handle"
           draggable
           tabIndex={0}
           role="separator"
@@ -178,7 +180,7 @@ const Splitter = ({
         />
       </div>
 
-      <div className="panel b" style={styleB}>
+      <div className="panel b" ref={panelB}>
         {children[1]}
       </div>
     </div>
