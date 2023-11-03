@@ -11,6 +11,8 @@ services:
       - .env
     networks:
       - dev
+    depends_on:
+      - db
 
   db:
     image: postgres
@@ -23,7 +25,7 @@ services:
     networks:
       - dev
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data/ 
 
   adminer:
     image: adminer
@@ -37,10 +39,6 @@ networks:
   dev:
     driver: bridge
 
-volumes:
-  db_data:
+volumes: 
+  pgdata: 
     driver: local
-    driver_opts:
-      type: none
-      device: /data/db_data
-      o: bind
