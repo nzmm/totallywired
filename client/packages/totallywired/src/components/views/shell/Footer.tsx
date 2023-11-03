@@ -6,7 +6,7 @@ import "./Footer.css";
 
 export default function Footer() {
   const player = usePlayer();
-  const [track, state] = useCurrentTrackState(player);
+  const { track, state } = useCurrentTrackState(player);
 
   return (
     <footer>

@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { AudioPlayer, IS_QUEUED, PlayerTrack, TrackState } from "../player";
+import { AudioPlayer, IS_QUEUED, PlayerTrack, PlaylistItem, TrackState } from "../player";
 import {
   PlayerContext,
   PlaylistsContext,
@@ -30,18 +30,12 @@ export const usePlaylistDispatch = () => {
 
 export const useCurrentTrackState = (
   player: AudioPlayer,
-): [Track | undefined, TrackState] => {
-  const [currentState, setCurrentState] = useState<TrackState>(
-    TrackState.Unknown,
-  );
-  const [currentTrack, setCurrentTrack] = useState<Track | undefined>(
-    undefined,
-  );
+): PlayerTrack => {
+  const [currentTrack, setCurrentTrack] = useState<PlayerTrack>(player.getCurrentTrack());
 
   useEffect(() => {
-    const stateChangeHandler = ({ state, track }: PlayerTrack) => {
-      setCurrentState(state);
-      setCurrentTrack(track);
+    const stateChangeHandler = (playerTrack: PlayerTrack) => {
+      setCurrentTrack(playerTrack);
     };
 
     player.addEventHandler("current-state-change", stateChangeHandler);
@@ -50,5 +44,5 @@ export const useCurrentTrackState = (
     };
   }, [player]);
 
-  return [currentTrack, currentState];
+  return currentTrack;
 };

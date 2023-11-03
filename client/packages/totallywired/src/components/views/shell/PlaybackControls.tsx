@@ -18,7 +18,7 @@ type PlaybackControlsProps = {
 
 function TrackProgress({ player, currentState }: PlaybackControlsProps) {
   const interval = useRef(0);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState(player.getProgressPercent());
 
   useEffect(() => {
     if (!(currentState & TrackState.Playing)) {
@@ -26,8 +26,7 @@ function TrackProgress({ player, currentState }: PlaybackControlsProps) {
     }
 
     interval.current = window.setInterval(() => {
-      const prog = player.getProgress();
-      const percent = Math.round(Math.min(100, prog * 100) * 2) / 2;
+      const percent = player.getProgressPercent();
       setProgress(percent);
     }, 500);
 

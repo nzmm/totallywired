@@ -197,7 +197,7 @@ export class AudioPlayer {
   }
 
   private _getPlayer() {
-    return this._currentId === this._player0.id ? this._player0 : this._player1;
+    return this._currentId === this._player0?.id ? this._player0 : this._player1;
   }
 
   private _getNextPlayer() {
@@ -475,8 +475,8 @@ export class AudioPlayer {
   getCurrentTrack(): PlaylistItem<PlayerTrack> {
     return (
       this._playlist.getById(this._currentId) ?? {
-        i: -1,
-        state: TrackState.Unknown,
+        track: undefined,
+        state: TrackState.Unknown
       }
     );
   }
@@ -486,7 +486,18 @@ export class AudioPlayer {
    */
   getProgress() {
     const player = this._getPlayer();
+    if (!player?.currentTime || !player?.duration) {
+      return 0;
+    }
     return player.currentTime / player.duration;
+  }
+
+  /**
+   * Returns the current `HTMLAudioElement` playback progress as a percentage between 0 and 100
+   */
+  getProgressPercent() {
+    const prog = this.getProgress();
+    return Math.round(Math.min(100, prog * 100) * 2) / 2;
   }
 
   /**
