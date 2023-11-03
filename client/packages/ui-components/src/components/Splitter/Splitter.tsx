@@ -24,14 +24,11 @@ const Splitter = ({
   const panelA = useRef<HTMLDivElement>(null);
   const panelB = useRef<HTMLDivElement>(null);
 
-  const setPosition = useCallback(
-    (newPos: CSSDimension) => {
-      if (panelA.current && panelB.current) {
-        setStyles(panelA.current, panelB.current, orientation, newPos, minSize);
-      }
-    },
-    [panelA, panelB, orientation, minSize],
-  );
+  const setPosition = (newPos: CSSDimension) => {
+    if (panelA.current && panelB.current) {
+      setStyles(panelA.current, panelB.current, orientation, newPos, minSize);
+    }
+  };
 
   useEffect(() => {
     if (!splitter.current || !handle.current) {
