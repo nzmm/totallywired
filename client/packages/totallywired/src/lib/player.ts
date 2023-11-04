@@ -109,7 +109,7 @@ export class AudioPlayer {
     this._timeout = window.setTimeout(async () => {
       let { src } = nextItem;
 
-      console.log(`${nextItem.track.name}: preloading...`);
+      console.info(`${nextItem.track.name}: preloading...`);
 
       const nextPlayer = this._getNextPlayer();
       src = src ?? (await this._getUrl(nextItem.track, nextItem.id));
@@ -219,6 +219,22 @@ export class AudioPlayer {
     }
 
     await player.play();
+
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: pl.track.name,
+        artist: pl.track.artistName,
+        album: pl.track.releaseName,
+        artwork: [
+          {
+            src: `${location.origin}/api/v1/releases/${pl.track.releaseId}/art`,
+            sizes: "250x250",
+            type: "image/jpg",
+          },
+        ],
+      });
+    }
+
     return src;
   }
 
