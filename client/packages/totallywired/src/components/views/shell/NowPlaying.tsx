@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { Track, Artist } from "../../../lib/types";
 import { ReleaseArt } from "../../common/Thumbnail";
-import { useAlbum } from "../../../lib/api/hooks";
-import { separatedNodes } from "../../helpers";
 import "./NowPlaying.css";
 
 type NowPlayingProps = {
@@ -11,7 +9,6 @@ type NowPlayingProps = {
 };
 
 export default function NowPlaying({ currentTrack }: NowPlayingProps) {
-  const album = useAlbum(currentTrack?.releaseId);
   return (
     <div id="now-playing">
       <ReleaseArt releaseId={currentTrack?.releaseId} />
@@ -25,20 +22,11 @@ export default function NowPlaying({ currentTrack }: NowPlayingProps) {
             </Link>
           </div>
           <div className="artist">
-            {separatedNodes(
-              [
-                !!currentTrack.artistId,
-                <Link key="artist" to={`/lib/artists/${currentTrack.artistId}`}>
-                  {currentTrack.artistName}
-                </Link>,
-              ],
-              [
-                !!album?.year,
-                <Link key="year" to={`/lib/albums?year=${album?.year}`}>
-                  {album?.year}
-                </Link>,
-              ],
-            )}
+            {currentTrack.artistId ? (
+              <Link key="artist" to={`/lib/artists/${currentTrack.artistId}`}>
+                {currentTrack.artistName}
+              </Link>
+            ) : null}
           </div>
         </div>
       ) : null}
