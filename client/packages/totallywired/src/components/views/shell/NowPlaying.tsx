@@ -16,11 +16,6 @@ export default function NowPlaying({ currentTrack }: NowPlayingProps) {
       {currentTrack ? (
         <div className="track">
           <div className="name">{currentTrack.name}</div>
-          <div className="album">
-            <Link to={`/lib/albums/${currentTrack.releaseId}`}>
-              {currentTrack.releaseName}
-            </Link>
-          </div>
           <div className="artist">
             {currentTrack.artistId ? (
               <Link key="artist" to={`/lib/artists/${currentTrack.artistId}`}>

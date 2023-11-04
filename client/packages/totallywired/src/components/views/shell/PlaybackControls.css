@@ -17,4 +17,13 @@
       background-color: var(--gray-3);
     }
   }
+
+  & .track-progress {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    align-items: center;
+    font-size: smaller;
+    color: var(--gray-12);
+  }
 }

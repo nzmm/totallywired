@@ -13,12 +13,14 @@
      id="defs596" />
   <g
      id="layer1"
-     transform="translate(-78.72398,-128.54577)">
+     transform="translate(-78.72398,-128.54577)"
+     style="fill:#d72400;fill-opacity:0.85490197">
     <g
        id="g878"
-       transform="translate(0,-0.12425022)">
+       transform="translate(0,-0.12425022)"
+       style="fill:#d72400;fill-opacity:0.85490197">
       <rect
-         style="fill:#1a1a1a;stroke:none;stroke-width:0.0400943;stroke-linecap:round;stroke-opacity:1"
+         style="fill:#d72400;stroke:none;stroke-width:0.0400943;stroke-linecap:round;stroke-opacity:1;fill-opacity:0.85490197"
          id="rect3291"
          width="3.3010938"
          height="2.8113058"
@@ -26,7 +28,7 @@
          y="-81.535286"
          transform="rotate(90)" />
       <rect
-         style="fill:#1a1a1a;stroke:none;stroke-width:0.0400943;stroke-linecap:round;stroke-opacity:1"
+         style="fill:#d72400;stroke:none;stroke-width:0.0400943;stroke-linecap:round;stroke-opacity:1;fill-opacity:0.85490197"
          id="rect3291-7"
          width="3.3010938"
          height="2.8113058"

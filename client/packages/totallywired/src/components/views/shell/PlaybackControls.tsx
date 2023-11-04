@@ -33,7 +33,12 @@ function TrackProgress({ player, currentState }: PlaybackControlsProps) {
     return () => clearInterval(interval.current);
   }, [currentState, player]);
 
-  return <Progressbar progress={progress} label="Playback progress" />;
+  return (
+  <div className="track-progress">
+    <span>1:30</span>
+    <Progressbar progress={progress} label="Playback progress" />
+    <span>3:20</span>
+  </div>);
 }
 
 export default function PlaybackControls({
