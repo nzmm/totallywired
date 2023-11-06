@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { AudioPlayer, TrackState } from "../../../lib/player";
 import Progressbar from "../../common/Progressbar";
-import "./PlaybackControls.css";
 import { getRandomTracks } from "../../../lib/api/v1";
 import {
   PauseIcon,
@@ -10,15 +9,30 @@ import {
   TrackPreviousIcon,
   UpdateIcon,
 } from "@radix-ui/react-icons";
+import { Track } from "../../../lib/types";
+import { displayLength } from "../../../lib/utils";
+import "./PlaybackControls.css";
 
 type PlaybackControlsProps = {
   player: AudioPlayer;
+  currentTrack: Track;
   currentState: TrackState;
 };
 
-function TrackProgress({ player, currentState }: PlaybackControlsProps) {
+function TimeRemaining({ length, progress }: { length?: number; progress: number; }) {
+  if (length == null) {
+    return null;
+  }
+
+  const timeRemaining = length - (length * progress);
+  return (
+    <span>-{displayLength(timeRemaining)}</span>
+  )
+}
+
+function TrackProgress({ player, currentTrack, currentState }: PlaybackControlsProps) {
   const interval = useRef(0);
-  const [progress, setProgress] = useState(player.getProgressPercent());
+  const [progress, setProgress] = useState(player.getProgress());
 
   useEffect(() => {
     if (!(currentState & TrackState.Playing)) {
@@ -26,7 +40,7 @@ function TrackProgress({ player, currentState }: PlaybackControlsProps) {
     }
 
     interval.current = window.setInterval(() => {
-      const percent = player.getProgressPercent();
+      const percent = player.getProgress();
       setProgress(percent);
     }, 500);
 
@@ -34,15 +48,17 @@ function TrackProgress({ player, currentState }: PlaybackControlsProps) {
   }, [currentState, player]);
 
   return (
-  <div className="track-progress">
-    <span>1:30</span>
-    <Progressbar progress={progress} label="Playback progress" />
-    <span>3:20</span>
-  </div>);
+    <div className="track-progress">
+      <TimeRemaining length={currentTrack?.length} progress={progress} />
+      <Progressbar progress={progress * 100} label="Playback progress" />
+      <span>{currentTrack?.displayLength ?? ""}</span>
+    </div>
+  );
 }
 
 export default function PlaybackControls({
   player,
+  currentTrack,
   currentState,
 }: PlaybackControlsProps) {
   const handlePlayPause = async () => {
@@ -83,7 +99,7 @@ export default function PlaybackControls({
         </button>
       </div>
 
-      <TrackProgress player={player} currentState={currentState} />
+      <TrackProgress player={player} currentTrack={currentTrack} currentState={currentState} />
     </div>
   );
 }

@@ -3,6 +3,10 @@ import "./Progressbar.css";
 
 type ProgressbarProps = {
   label: string;
+
+  /**
+   * The progress as a percentage value between 0 and 100
+   */
   progress: number;
 };
 

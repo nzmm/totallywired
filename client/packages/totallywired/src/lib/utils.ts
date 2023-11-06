@@ -32,6 +32,9 @@ export const debounce = <
   };
 };
 
+/**
+ * Returns a string with time in h:m:s format
+ */
 export const duration = (ms: number) => {
   const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
   const m = Math.floor((ms / (1000 * 60)) % 60);
@@ -46,6 +49,9 @@ export const duration = (ms: number) => {
  */
 const pad0 = (n: number) => n.toString().padStart(2, "0");
 
+/**
+ * Returns a string with zero-padded time in h:m:s format
+ */
 export const displayLength = (ms: number) => {
   const h = Math.floor((ms / (1000 * 60 * 60)) % 24);
   const m = Math.floor((ms / (1000 * 60)) % 60);

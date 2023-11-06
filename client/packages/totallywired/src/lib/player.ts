@@ -229,7 +229,7 @@ export class AudioPlayer {
           {
             src: `${location.origin}/api/v1/releases/${pl.track.releaseId}/art`,
             sizes: "250x250",
-            type: "image/jpg",
+            type: "image/jpeg",
           },
         ],
       });
