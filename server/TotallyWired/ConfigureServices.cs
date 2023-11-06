@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TotallyWired.AvatarProviders;
 using TotallyWired.Infrastructure.EntityFramework;
 using TotallyWired.Contracts;
 using TotallyWired.Common;
@@ -35,6 +36,7 @@ public static class ConfigureServices
 
         // content providers
         services.AddContentProviders(config);
+        services.AddAvatarProviders();
 
         // tracks
         services.AddScoped<TrackQueryHandler>();

@@ -3,15 +3,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace TotallyWired.WebApi.Authentication;
 
-public class AuthenticationProviders
+public class AuthenticationProviders(IAuthenticationSchemeProvider schemeProvider)
 {
-    private readonly IAuthenticationSchemeProvider _schemeProvider;
     private Task<string[]>? _providerNames;
-
-    public AuthenticationProviders(IAuthenticationSchemeProvider schemeProvider)
-    {
-        _schemeProvider = schemeProvider;
-    }
 
     public Task<string[]> GetProviderNamesAsync()
     {
@@ -22,7 +16,7 @@ public class AuthenticationProviders
     {
         List<string>? providerNames = null;
 
-        var schemes = await _schemeProvider.GetAllSchemesAsync();
+        var schemes = await schemeProvider.GetAllSchemesAsync();
 
         foreach (var s in schemes)
         {

@@ -1,16 +1,12 @@
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Graph;
 using TotallyWired.Infrastructure.EntityFramework;
-using Directory = System.IO.Directory;
 using User = TotallyWired.Domain.Entities.User;
 
 namespace TotallyWired.WebApi.Authentication;
 
-// https://github.com/davidfowl/TodoApi/tree/main/Todo.Web/Server
 public static class AuthenticationExtensions
 {
     private delegate void ExternalAuthProvider(
@@ -83,7 +79,7 @@ public static class AuthenticationExtensions
         builder.Services.AddSingleton<AuthenticationProviders>();
     }
 
-    public static async Task<bool> AuthenticateUserAsync(
+    public static async Task<(bool, string)> AuthenticateUserAsync(
         this HttpContext context,
         TotallyWiredDbContext db,
         string provider
@@ -93,7 +89,7 @@ public static class AuthenticationExtensions
         var result = await context.AuthenticateAsync(AuthenticatonSchemes.ExternalScheme);
         if (!result.Succeeded)
         {
-            return false;
+            return (false, string.Empty);
         }
 
         var principal = result.Principal;
@@ -108,7 +104,7 @@ public static class AuthenticationExtensions
             || string.IsNullOrEmpty(email)
         )
         {
-            return false;
+            return (false, string.Empty);
         }
 
         var user = await db.Users.FirstOrDefaultAsync(x => x.UserName == username);
@@ -134,36 +130,10 @@ public static class AuthenticationExtensions
         await db.SaveChangesAsync();
 
         var token = result.Properties.GetString(".Token.access_token");
-        if (!string.IsNullOrEmpty(token))
-        {
-            var graphClient = new GraphServiceClient((IAuthenticationProvider)null!)
-            {
-                AuthenticationProvider = new DelegateAuthenticationProvider(request =>
-                {
-                    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                    return Task.CompletedTask;
-                })
-            };
-
-            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "avatars");
-            if (!Directory.Exists(basePath))
-            {
-                Directory.CreateDirectory(basePath);
-            }
-
-            var path = Path.Combine(basePath, $"{user.Id}.jpg");
-            await using var avatar = await graphClient.Me.Photos["64x64"].Content
-                .Request()
-                .GetAsync();
-            await using var file = new FileStream(path, FileMode.Create);
-            await avatar.CopyToAsync(file);
-        }
-
         // Write the login cookie
         await SignIn(id, user.Id, name, email, provider).ExecuteAsync(context);
 
-        return true;
+        return (true, token ?? string.Empty);
     }
 
     private static IResult SignIn(
