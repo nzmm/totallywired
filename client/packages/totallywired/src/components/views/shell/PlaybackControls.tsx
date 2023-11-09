@@ -19,18 +19,26 @@ type PlaybackControlsProps = {
   currentState: TrackState;
 };
 
-function TimeRemaining({ length, progress }: { length?: number; progress: number; }) {
+function TimeRemaining({
+  length,
+  progress,
+}: {
+  length?: number;
+  progress: number;
+}) {
   if (length == null) {
     return null;
   }
 
-  const timeRemaining = length - (length * progress);
-  return (
-    <span>-{displayLength(timeRemaining)}</span>
-  )
+  const timeRemaining = length - length * progress;
+  return <span>-{displayLength(timeRemaining)}</span>;
 }
 
-function TrackProgress({ player, currentTrack, currentState }: PlaybackControlsProps) {
+function TrackProgress({
+  player,
+  currentTrack,
+  currentState,
+}: PlaybackControlsProps) {
   const interval = useRef(0);
   const [progress, setProgress] = useState(player.getProgress());
 
@@ -99,7 +107,11 @@ export default function PlaybackControls({
         </button>
       </div>
 
-      <TrackProgress player={player} currentTrack={currentTrack} currentState={currentState} />
+      <TrackProgress
+        player={player}
+        currentTrack={currentTrack}
+        currentState={currentState}
+      />
     </div>
   );
 }

@@ -19,6 +19,7 @@ public class SourceQueryHandler(TotallyWiredDbContext context, ICurrentUser user
                     new SourceModel
                     {
                         Id = x.Id,
+                        Name = x.Name,
                         SourceType = x.Type,
                         CreatedOn = x.Created,
                         ModifiedOn = x.Modified,
@@ -27,12 +28,6 @@ public class SourceQueryHandler(TotallyWiredDbContext context, ICurrentUser user
             )
             .FirstOrDefaultAsync(cancellationToken);
 
-        if (source is null)
-        {
-            return null;
-        }
-
-        source.SourceName = Enum.GetName(source.SourceType) ?? string.Empty;
         return source;
     }
 }

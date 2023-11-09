@@ -22,11 +22,12 @@ public class SourceListQueryHandler(
             .Where(x => x.UserId == userId)
             .Select(
                 x =>
-                    new SourceListModel
+                    new SourceModel
                     {
                         Id = x.Id,
+                        Name = x.Name,
                         SourceType = x.Type,
-                        TrackCount = x.Tracks.Count()
+                        TrackCount = x.Tracks.Count
                     }
             )
             .GroupBy(x => x.SourceType, x => x)
@@ -43,7 +44,7 @@ public class SourceListQueryHandler(
             return new SourceGroupListModel
             {
                 GroupName = k,
-                ContentProviders = sourceList ?? Enumerable.Empty<SourceListModel>()
+                ContentProviders = sourceList ?? Enumerable.Empty<SourceModel>()
             };
         });
     }

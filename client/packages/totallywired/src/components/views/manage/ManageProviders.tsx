@@ -9,7 +9,7 @@ import {
   SidebarSection,
 } from "../../common/Sidebar";
 import { Splitter } from "@totallywired/ui-components";
-import { METADATA } from "./metadata";
+import { METADATA, getProviderDefaultName } from "./metadata";
 import Loading from "../../common/Loading";
 import "./ManageProviders.css";
 
@@ -33,7 +33,7 @@ function ProviderList() {
 
               {p.contentProviders.map((cp) => (
                 <SidebarLink key={cp.id} to={cp.id}>
-                  <span>{cp.id}</span>
+                  <span>{!cp.name ? getProviderDefaultName(cp) : cp.name}</span>
                   <SidebarJube>{cp.trackCount}</SidebarJube>
                 </SidebarLink>
               ))}

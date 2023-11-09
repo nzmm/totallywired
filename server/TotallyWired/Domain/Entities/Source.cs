@@ -12,6 +12,7 @@ public class Source : IEntity
     public Guid UserId { get; set; }
 
     public SourceType Type { get; set; } = default!;
+    public string Name { get; set; } = default!;
     public string AccessToken { get; set; } = default!;
     public string RefreshToken { get; set; } = default!;
     public DateTime ExpiresAt { get; set; } = default!;

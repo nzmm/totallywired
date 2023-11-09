@@ -57,8 +57,8 @@ export type ArtistDetail = Artist;
 
 export type Provider = {
   id: string;
+  name: string;
   sourceType: number;
-  sourceName: string;
   createdOn: string;
   modifiedOn: string;
   trackCount: number;

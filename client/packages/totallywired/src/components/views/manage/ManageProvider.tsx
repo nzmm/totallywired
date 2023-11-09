@@ -1,4 +1,5 @@
 import { Await, useAsyncValue, useLoaderData } from "react-router-dom";
+import { getProviderDefaultName } from "./metadata";
 import { syncProvider } from "../../../lib/api/v1";
 import { Provider } from "../../../lib/types";
 import { Res } from "../../../lib/requests";
@@ -22,10 +23,10 @@ function ManageProviderView() {
 
   return (
     <div className="provider">
-      <h2>{provider.id}</h2>
+      <h2>{provider.name || getProviderDefaultName(provider)}</h2>
 
       <dl>
-        <dt>Tracks</dt>
+        <dt>Indexed Tracks</dt>
         <dd>{provider.trackCount}</dd>
         <dt>Created</dt>
         <dd>{provider.createdOn}</dd>

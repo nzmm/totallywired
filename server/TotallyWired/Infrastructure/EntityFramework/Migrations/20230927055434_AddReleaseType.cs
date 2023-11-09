@@ -20,14 +20,14 @@ namespace TotallyWired.Infrastructure.EntityFramework.Migrations
                 defaultValue: ""
             );
 
-            migrationBuilder.ScriptMigration($"Functions", "search_releases.1.sql");
+            migrationBuilder.ScriptMigration("Functions", "search_releases.1.sql");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(name: "Type", table: "Releases");
-            migrationBuilder.ScriptMigration($"Functions", "search_releases.0.sql");
+            migrationBuilder.ScriptMigration("Functions", "search_releases.0.sql");
         }
     }
 }

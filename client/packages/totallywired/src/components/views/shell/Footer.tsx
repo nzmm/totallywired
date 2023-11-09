@@ -14,7 +14,11 @@ export default function Footer() {
       </div>
 
       <div>
-        <PlaybackControls player={player} currentTrack={track} currentState={state} />
+        <PlaybackControls
+          player={player}
+          currentTrack={track}
+          currentState={state}
+        />
       </div>
 
       <div>
