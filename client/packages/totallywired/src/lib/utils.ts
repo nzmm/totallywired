@@ -3,13 +3,19 @@
  * If a `limit` value is supplied, the the result array length will not exceed the `limit` value.
  */
 export const shuffle = <T>(source: T[], limit?: number) => {
-  limit = Math.min(source.length, limit ?? source.length);
+  limit ??= source.length;
+
+  if (limit <= 0 || source.length === 0) {
+    return [];
+  }
+
+  limit = Math.min(source.length, limit);
 
   const indices = Array.from({ length: source.length }, (_, i) => i);
   const result: T[] = [];
 
   while (result.length < limit) {
-    const seed = Math.round(Math.random() * indices.length);
+    const seed = Math.floor(Math.random() * indices.length);
     const [randomIndex] = indices.splice(seed, 1);
     result.push(source[randomIndex]);
   }

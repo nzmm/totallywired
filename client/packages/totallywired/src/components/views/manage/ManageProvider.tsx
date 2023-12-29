@@ -3,27 +3,31 @@ import { getProviderDefaultName } from "./metadata";
 import { syncProvider } from "../../../lib/api/v1";
 import { Provider } from "../../../lib/types";
 import { Res } from "../../../lib/requests";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Loading from "../../common/Loading";
+import ToggleInput from "../../common/ToggleInput";
+
+const handleClick = async (
+  e: React.MouseEvent<HTMLButtonElement>,
+  sourceId: string,
+) => {
+  e.preventDefault();
+  await syncProvider(sourceId);
+};
 
 function ManageProviderView() {
   const { data: provider } = useAsyncValue() as Res<Provider>;
+  const [title, setTitle] = useState(
+    provider?.name || getProviderDefaultName(provider),
+  );
 
   if (!provider) {
     return null;
   }
 
-  const handleClick = async (
-    e: React.MouseEvent<HTMLButtonElement>,
-    sourceId: string,
-  ) => {
-    e.preventDefault();
-    await syncProvider(sourceId);
-  };
-
   return (
     <div className="provider">
-      <h2>{provider.name || getProviderDefaultName(provider)}</h2>
+      <ToggleInput name="provider-name" value={title} onSubmit={setTitle} />
 
       <dl>
         <dt>Indexed Tracks</dt>
@@ -36,7 +40,10 @@ function ManageProviderView() {
 
       <hr></hr>
 
-      <button onClick={(e) => handleClick(e, provider.id)}>Sync</button>
+      <div className="actions">
+        <button onClick={(e) => handleClick(e, provider.id)}>Sync</button>
+        <button>Remove</button>
+      </div>
     </div>
   );
 }
