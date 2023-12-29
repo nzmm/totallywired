@@ -16,7 +16,7 @@ export default function PlaylistHeader({ player, queue }: PlaylistHeaderProps) {
         if (cur.state & TrackState.Finished) {
           return [ms, l];
         }
-        return [ms + cur.track.length, l + 1];
+        return [ms + cur.track.length ?? 0, l + 1];
       },
       [0, 0],
     );

@@ -13,7 +13,11 @@ export const METADATA: Record<string, ProviderMetadata> = {
   },
 };
 
-export const getProviderDefaultName = (provider: Provider) => {
+export const getProviderDefaultName = (provider: Provider | undefined) => {
+  if (!provider) {
+    return "Music collection";
+  }
+
   const shortId = provider.id.split("-").slice(-1)[0].slice(-5);
   return `Music collection (${shortId})`;
 };

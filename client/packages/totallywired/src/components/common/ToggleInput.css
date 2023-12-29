@@ -1,0 +1,83 @@
+.toggle-input {
+  &:not(.editing) > fieldset {
+    background-color: var(--gray-1);
+    border: 2px solid var(--gray-1);
+
+    &:hover {
+      background-color: var(--gray-3);
+      border: 2px solid var(--gray-3);
+
+      & svg {
+        opacity: 1;
+      }
+    }
+  }
+
+  &.editing > fieldset {
+    background-color: var(--blue-8);
+    border: 2px solid var(--blue-8);
+  }
+
+  > fieldset {
+    padding: 0;
+    border-radius: 3px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2px;
+
+    > input[type="text"] {
+      padding: 3px;
+      background-color: transparent;
+      border: 0;
+      margin: 1px;
+      margin-right: 0px;
+      border-radius: 1px;
+
+      &:read-only {
+        outline: none;
+      }
+
+      &:not(:read-only) {
+        background-color: var(--gray-1);
+      }
+    }
+
+    > label {
+      border: 0;
+      margin: 0;
+      padding: 2px 4px;
+      height: 100%;
+      position: relative;
+      display: block;
+
+      > input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        z-index: -1;
+        padding: 0;
+        margin: 0;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+
+        &:focus + svg {
+          border: 2px solid black;
+        }
+      }
+
+      > svg {
+        vertical-align: middle;
+        opacity: 0.6;
+      }
+    }
+
+    > button {
+      border: 0;
+      margin: 0;
+      padding: 2px 4px;
+      background-color: transparent;
+    }
+  }
+}
