@@ -11,5 +11,11 @@
 
   & .provider {
     margin: 30px;
+
+    & .actions {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
   }
 }
