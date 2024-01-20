@@ -14,8 +14,5 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "lerna": "^7.0.2",
     "prettier": "^3.0.3"
-  },
-  "dependencies": {
-    "@radix-ui/react-toast": "^1.1.5"
   }
 }

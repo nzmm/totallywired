@@ -1,5 +1,4 @@
 using TotallyWired.Contracts;
-using TotallyWired.Domain.Enums;
 
 namespace TotallyWired.ContentProviders;
 
